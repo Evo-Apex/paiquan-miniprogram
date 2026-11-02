@@ -2,10 +2,10 @@
  * ALGS 拉斯维加斯季后赛 · 最终成绩（离线快照）。
  *
  * ⚠️ 只写有据可查的事实，来源写在 source 里，界面上会显示。
- *   两个独立来源交叉核对过（2026-11-02）：
- *     - players.com.ua《Team Liquid Wins ALGS 2026 Split 2 Playoffs》
- *     - 游民星空《ALGS拉斯维加斯季后赛落幕，CN APEX鏖战四日无缘冠军》
- *   两处在冠军（Team Liquid）、决赛分数（91）、中国战队名次（WOL 第 7 / 61 分）上一致。
+ *   2026-11-02 用 ApexLegendsStatus 官方赛事页（Y6-Split2/ALGS-Playoffs/Global/Finals）
+ *   逐项核对：20 队名次、分数、击杀数全部一致；队名改成官方写法
+ *   （WhiteGrimReaper / NinjasinPyjamas）。报道来源 players.com.ua 与游民星空
+ *   在冠军（Team Liquid 91 分）与 WOL 第 7（61 分）上与官方一致。
  *
  * ⚠️ 没有的东西不许编：
  *   - 官方没有公布逐选手的击杀/伤害明细，所以这里只放**阵容名单**，不放编造的选手数据；
@@ -15,7 +15,7 @@
  */
 module.exports = {
   updated: "2026-11-02",
-  source: "ALGS 官方赛果 · players.com.ua / 游民星空（2026-11-02）",
+  source: "ApexLegendsStatus 官方赛事页（Y6-Split2 季后赛决赛成绩）· 2026-11-02 核对",
 
   event: {
     name: "ALGS 2026 · Split 2 季后赛",
@@ -41,16 +41,26 @@ module.exports = {
 
   // 决赛前 10（打完 9 局）
   standings: [
-    { rank: 1, team: "Team Liquid", points: 91, prize: "$600,000" },
-    { rank: 2, team: "Team Vision", points: 80, prize: "$300,000" },
-    { rank: 3, team: "Forged Wolves", points: 76, prize: "$200,000" },
-    { rank: 4, team: "Aurora", points: 71 },
-    { rank: 5, team: "Alliance", points: 65 },
-    { rank: 6, team: "White Grim Reaper", points: 64 },
-    { rank: 7, team: "Wolves Esports", points: 61 },
-    { rank: 8, team: "Ninjas in Pyjamas", points: 53 },
-    { rank: 9, team: "Crazy Thieves", points: 48 },
-    { rank: 10, team: "Team WaR", points: 48 }
+    { rank: 1, team: "Team Liquid", points: 91, kills: 43, prize: "$600,000",},
+    { rank: 2, team: "Team Vision", points: 80, kills: 43, prize: "$300,000",},
+    { rank: 3, team: "Forged Wolves", points: 76, kills: 39, prize: "$200,000",},
+    { rank: 4, team: "Aurora", points: 71, kills: 42, },
+    { rank: 5, team: "Alliance", points: 65, kills: 28, },
+    { rank: 6, team: "WhiteGrimReaper", points: 64, kills: 34, },
+    { rank: 7, team: "Wolves Esports", points: 61, kills: 31, },
+    { rank: 8, team: "NinjasinPyjamas", points: 53, kills: 24, },
+    { rank: 9, team: "Crazy Thieves", points: 48, kills: 30, },
+    { rank: 10, team: "Team WaR", points: 48, kills: 27, },
+    { rank: 11, team: "Team RRQ", points: 47, kills: 25, },
+    { rank: 12, team: "Sentinels", points: 47, kills: 29, },
+    { rank: 13, team: "GaiminGladiators", points: 43, kills: 26, },
+    { rank: 14, team: "Geekay Esports", points: 37, kills: 25, },
+    { rank: 15, team: "ShopifyRebellion", points: 34, kills: 18, },
+    { rank: 16, team: "Team Falcons", points: 34, kills: 14, },
+    { rank: 17, team: "AG GLOBAL", points: 34, kills: 14, },
+    { rank: 18, team: "PVISION", points: 32, kills: 16, },
+    { rank: 19, team: "KINOTROPE CLUB", points: 26, kills: 10, },
+    { rank: 20, team: "REJECT", points: 22, kills: 9, },
   ],
 
   // 中国大陆三队

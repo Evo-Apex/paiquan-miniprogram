@@ -19,6 +19,7 @@ function build(lang, raw) {
       rank: String(s.rank),
       team: s.team,
       points: String(s.points),
+      kills: s.kills == null ? "" : String(s.kills),
       prize: s.prize || "",
       cn: s.team === "Wolves Esports"   // 中国大陆最好成绩，界面高亮
     };
@@ -62,6 +63,7 @@ function build(lang, raw) {
     rankHead: T.resRank,
     teamHead: T.resTeam,
     pointsHead: T.resPointsHead,
+    killsHead: T.resKillsHead,
     gamesText: ev.games ? T.resGames.replace("{n}", String(ev.games)) : "",
     rows: rows,
 

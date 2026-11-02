@@ -70,11 +70,13 @@
     <view class="rs-tr rs-th">
       <text class="rs-c-rank">{{result.rankHead}}</text>
       <text class="rs-c-team">{{result.teamHead}}</text>
+      <text class="rs-c-kills">{{result.killsHead}}</text>
       <text class="rs-c-pts">{{result.pointsHead}}</text>
     </view>
     <view wx:for="{{result.rows}}" wx:key="rank" class="rs-tr {{item.cn ? 'rs-tr-cn' : ''}}">
       <text class="rs-c-rank">{{item.rank}}</text>
       <text class="rs-c-team">{{item.team}}</text>
+      <text class="rs-c-kills">{{item.kills}}</text>
       <text class="rs-c-pts">{{item.points}}</text>
     </view>
   </view>

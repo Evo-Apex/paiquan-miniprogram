@@ -481,3 +481,15 @@
   margin-top: var(--sp-6);
   margin-bottom: var(--sp-3);
 }
+
+/* 名次表的击杀列：比分数窄、比名次宽 */
+.rs-c-kills {
+  width: 88rpx;
+  text-align: right;
+  font-size: var(--fs-sub);
+  color: var(--ink2);
+}
+.rs-th .rs-c-kills {
+  font-size: var(--fs-min);
+  color: var(--ink3);
+}
