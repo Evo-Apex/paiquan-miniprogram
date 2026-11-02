@@ -634,7 +634,12 @@ git update-index --no-skip-worktree project.config.json miniprogram/app.js
 - **最底下「数据来源 ›」** → `pro/sources/`：Liquipedia 署名、上次同步时间、照片说明、粉丝工具声明（页面上不放这些）。
 
 **占位**（设计稿注释里定的）：选手照片拿到 EA 授权之前用剪影（`pro/assets/silhouette.svg`）；队标用队名缩写（Team Liquid → TL）；
-队友头像用名字首字母。小程序本来也加载不了外部网站的图片，真要放照片得打进包里。
+队友头像用名字首字母。小程序本来也加载不了外部网站的图片，真要放照片得打进包里或放云存储。
+
+**照片现状（2026-11-02）**：August 拿到了 EA 的授权，可以用 ALGS 官网的选手定妆照（透明底的半身照；图片站 `content.algstools.com`
+加 `?format=webp&width=480` 只有 22 KB）。但"哪个选手是哪张图"只在 `algs.ea.com` 页面背后的接口里，它的 robots.txt 是 `Disallow: /`
+（连搜索引擎都不许访问 `/api`），所以**不写程序去抓名单**，August 决定先不放照片。以后放：名单向 EA 要或手动收集 → 照片存云存储（国内快、
+不碰外部域名）→ 大卡里有照片放照片、没有照旧剪影；webp 要先在 iPhone 真机试（包里的 webp iPhone 显示不了，网络图片没试过）。
 
 **为什么用定时器、不现查**：Liquipedia 每小时只给 60 次请求。所以 `apex` 的定时器（每 5 分钟）每次最多发 1 个请求
 （每小时最多 12 次，两次至少隔 4 分钟），一轮 = 每场赛事的参赛名单 1 次 + 资料 / 队伍经历各 40 人 1 次
