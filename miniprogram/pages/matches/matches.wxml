@@ -103,19 +103,6 @@
   </view>
   <view class="rs-note">{{result.playersNote}}</view>
 
-  <!-- 中国大陆战队 -->
-  <view class="sec-head">
-    <text class="sec-title">{{result.cnTitle}}</text>
-  </view>
-  <view class="rs-cn" wx:for="{{result.cnRows}}" wx:key="team">
-    <view class="rs-cn-top">
-      <text class="rs-cn-team">{{item.team}}</text>
-      <text class="rs-cn-result">{{item.result}}</text>
-    </view>
-    <text wx:if="{{item.players}}" class="rs-cn-players">{{item.players}}</text>
-    <text wx:if="{{item.note}}" class="rs-cn-note">{{item.note}}</text>
-  </view>
-
   <view class="rs-format">{{result.formatText}}</view>
   <view class="rs-src">{{result.sourceText}}</view>
 </block>

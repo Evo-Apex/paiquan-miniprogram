@@ -25,17 +25,6 @@ function build(lang, raw) {
     };
   });
 
-  var cnRows = (d.cn || []).map(function (c) {
-    return {
-      team: c.team,
-      short: c.short || c.team,
-      result: c.result,
-      points: c.points == null ? "" : String(c.points),
-      players: (c.players || []).join(" · "),
-      note: c.note || ""
-    };
-  });
-
   var pl = d.players || {};
   var pRows = (pl.rows || []).map(function (x) {
     return {
@@ -84,9 +73,6 @@ function build(lang, raw) {
     damageHead: T.resDamageHead,
     killsKingText: king.player ? T.resKillsKing.replace("{p}", king.player).replace("{n}", String(king.kills)) : "",
     playerRows: pRows,
-    cnTitle: T.resCnTitle,
-    cnRows: cnRows,
-
     formatText: d.format ? T.resFormat.replace("{f}", d.format) : "",
     source: d.source || ""
   };

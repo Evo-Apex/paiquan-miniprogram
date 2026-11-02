@@ -568,7 +568,6 @@ function vmFieldNames() {
   const rv = matchresult.build("zh");
   collect(rv);
   rv.rows.forEach(collect);
-  rv.cnRows.forEach(collect);
   rv.playerRows.forEach(collect);
 
   return keys;

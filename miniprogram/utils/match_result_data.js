@@ -83,31 +83,4 @@ module.exports = {
     ]
   },
 
-  // 中国大陆三队
-  cn: [
-    {
-      team: "Wolves Esports",
-      short: "WOL",
-      result: "决赛第 7",
-      points: 61,
-      players: ["QQ", "CrazyCong", "Floating"],
-      note: "败者组一路杀进决赛；第 8 局掉人，差 2 分没开赛点"
-    },
-    {
-      team: "VKG",
-      short: "VKG",
-      result: "败者组第 16",
-      points: null,
-      players: [],
-      note: "败者组第一轮止步"
-    },
-    {
-      team: "PXX",
-      short: "PXX",
-      result: "败者组第 17",
-      points: null,
-      players: [],
-      note: "受签证影响，选手 XD 带两名小将出战"
-    }
-  ]
 };
