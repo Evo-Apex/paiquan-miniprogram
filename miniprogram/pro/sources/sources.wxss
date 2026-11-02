@@ -1,0 +1,4 @@
+/* 数据来源说明页：卡片、标题和选手页同一套（.pp-wrap / .pp-card / .pp-head / .pp-h） */
+@import "../player/player.wxss";
+
+.ps-p { display: block; margin-bottom: var(--sp-4); font-size: var(--fs-body); color: var(--ink2); line-height: 1.7; }

@@ -5,8 +5,9 @@
  * 选手页一天被打开的次数远不止 60。所以拆成两半：
  *
  *   定时器（index.js 的 Timer，每 5 分钟一次）→ tick()：**每次最多发 1 个请求**（每小时最多 12 次），
- *     一轮 = 每场赛事 1 次（参赛名单）+ 选手资料 / 队伍经历各 40 人 1 次 + 历届成绩 5 人 1 次，
- *     季后赛 40 队 120 人大约 30 次、两个多小时抓完；抓完歇到 24 小时后再来一轮。
+ *     一轮 = 每场赛事 1 次（参赛名单）+ 选手资料 / 队伍经历各 40 人 1 次
+ *       + 他们待过的战队的历史名单 30 队 1 次（算队友用）+ 历届成绩 5 人 1 次，
+ *     季后赛 40 队 121 人、待过 339 支队，大约 45 次、四个小时抓完；抓完歇到 24 小时后再来一轮。
  *   前端 → proPlayer / proRoster：只读数据库，不碰 Liquipedia。
  *
  * 收录谁：site_config 集合里 _id = "pro_events" 的 list（赛事页面名），没有就用 DEFAULT_EVENTS。
@@ -18,7 +19,7 @@
 var lp = require("./liquipedia");
 
 var DEFAULT_EVENTS = ["Apex_Legends_Global_Series/2026/Split_2/Playoffs"];
-var BATCH = { players: 40, squads: 40, results: 5 };
+var BATCH = { players: 40, squads: 40, teams: 30, results: 5 };
 var CYCLE_MS = 24 * 3600 * 1000;     // 一轮抓完后隔多久再抓
 var MIN_GAP_MS = 4 * 60 * 1000;      // 两次请求至少隔 4 分钟（万一定时器被改成每分钟一次，也不会超额）
 var MAX_FAILS = 3;
@@ -43,6 +44,9 @@ function planCycle(events) {
   return events.map(function (e) { return { kind: "event", event: e }; }).concat([{ kind: "plan" }]);
 }
 
+/** 不花请求的标记步：plan（名单到了，展开成选手的几步）、planTeams（队伍经历到了，展开成战队名单的几步） */
+function isMarker(item) { return !!item && (item.kind === "plan" || item.kind === "planTeams"); }
+
 /** 所有赛事名单里的选手页面名（去重，按赛事、名次的顺序） */
 function rosterPages(state) {
   var pages = [];
@@ -61,12 +65,31 @@ function expandPlan(state) {
   return [].concat(
     chunk(pages, BATCH.players).map(function (c) { return { kind: "players", pages: c }; }),
     chunk(pages, BATCH.squads).map(function (c) { return { kind: "squads", pages: c }; }),
+    [{ kind: "planTeams" }],
     chunk(pages, BATCH.results).map(function (c) { return { kind: "results", pages: c }; })
   );
 }
 
+/** 队伍经历都到了：这些选手作为正式队员待过的所有战队，每 30 支查一次历史名单 */
+function expandTeams(state) {
+  var teams = (state.teamPages || []).slice().sort();
+  return chunk(teams, BATCH.teams).map(function (c) { return { kind: "teams", pages: c }; });
+}
+
+function expandMarker(item, state) {
+  return item.kind === "plan" ? expandPlan(state) : expandTeams(state);
+}
+
 function emptyState() {
-  return { queue: [], events: [], rosters: {}, cycleAt: 0, doneAt: 0, lastRequestAt: 0 };
+  return { queue: [], events: [], rosters: {}, teamPages: [], cycleAt: 0, doneAt: 0, lastRequestAt: 0 };
+}
+
+/** 拆半重查（一次返回到了 API 上限，可能截掉了一部分）：两半插在当前这一步后面 */
+function splitAfter(state, item) {
+  var mid = Math.ceil(item.pages.length / 2);
+  state.queue.splice(state.queue.indexOf(item) + 1, 0,
+    { kind: item.kind, pages: item.pages.slice(0, mid) },
+    { kind: item.kind, pages: item.pages.slice(mid) });
 }
 
 /** 做一步（发一个请求 + 存结果）。返回 true = 这一步完成，可以出队 */
@@ -91,6 +114,13 @@ function runStep(item, state, deps, now) {
   if (item.kind === "squads") {
     return lp.fetchSquads(item.pages, deps).then(function (map) {
       if (!map) return false;
+      // 记下这些选手作为正式队员待过的队，后面查这些队的历史名单算队友
+      state.teamPages = state.teamPages || [];
+      Object.keys(map).forEach(function (page) {
+        (map[page] || []).forEach(function (h) {
+          if (h.type === "player" && h.teamPage && state.teamPages.indexOf(h.teamPage) < 0) state.teamPages.push(h.teamPage);
+        });
+      });
       return Promise.all(item.pages.map(function (page) {
         return store.savePlayer(page, { history: map[page] || [], historyAt: now });
       })).then(function () { return true; });
@@ -101,14 +131,23 @@ function runStep(item, state, deps, now) {
       if (!r) return false;
       // 一次返回到了上限：可能截掉了老比赛，拆成两半重查（不存这次不完整的）
       if (r.full && item.pages.length > 1) {
-        var mid = Math.ceil(item.pages.length / 2);
-        state.queue.splice(1, 0,
-          { kind: "results", pages: item.pages.slice(0, mid) },
-          { kind: "results", pages: item.pages.slice(mid) });
+        splitAfter(state, item);
         return true;
       }
       return Promise.all(item.pages.map(function (page) {
         return store.savePlayer(page, { results: r.rows[page] || [], resultsAt: now });
+      })).then(function () { return true; });
+    });
+  }
+  if (item.kind === "teams") {
+    return lp.fetchTeams(item.pages, deps).then(function (r) {
+      if (!r) return false;
+      if (r.full && item.pages.length > 1) {
+        splitAfter(state, item);
+        return true;
+      }
+      return Promise.all(item.pages.map(function (team) {
+        return store.saveTeam(team, { members: r.rows[team] || [], at: now });
       })).then(function () { return true; });
     });
   }
@@ -137,15 +176,16 @@ function tick(deps) {
       start = Promise.resolve(store.readEvents()).then(function (list) {
         state.events = cleanEvents(list) || DEFAULT_EVENTS.slice();
         state.queue = planCycle(state.events);
+        state.teamPages = [];
         state.cycleAt = now;
       });
     }
 
     return start.then(function () {
-      // plan 标记不花请求：名单已经到了，展开成选手的几步
-      while (state.queue.length && state.queue[0].kind === "plan") {
-        state.queue.shift();
-        state.queue = expandPlan(state).concat(state.queue);
+      // 标记步不花请求：要的东西已经到了，展开成实际的几步
+      while (state.queue.length && isMarker(state.queue[0])) {
+        var marker = state.queue.shift();
+        state.queue = expandMarker(marker, state).concat(state.queue);
       }
       if (!state.queue.length) {
         state.doneAt = now;
@@ -184,23 +224,53 @@ function latest() {
   return m;
 }
 
-/** 选手页：一位选手存下来的全部内容。数据库里没有 → data:null（页面写"还没有这位选手的资料"） */
+function todayIso(ms) {
+  var d = new Date(ms + 8 * 3600 * 1000);   // 北京时间的日期
+  var p = function (x) { return (x < 10 ? "0" : "") + x; };
+  return d.getUTCFullYear() + "-" + p(d.getUTCMonth() + 1) + "-" + p(d.getUTCDate());
+}
+
+/**
+ * 合作过的队友：读这名选手待过的队的历史名单，算重叠（liquipedia.mates），
+ * 再看每个队友我们有没有资料（有才能点进他的页面）。战队名单还没抓到 → null（页面不出这一块）。
+ */
+function matesOf(page, history, deps) {
+  var teams = [];
+  (history || []).forEach(function (h) {
+    if (h.type === "player" && h.teamPage && teams.indexOf(h.teamPage) < 0) teams.push(h.teamPage);
+  });
+  if (!teams.length || !deps.store.readTeams) return Promise.resolve(null);
+  return Promise.resolve(deps.store.readTeams(teams)).then(function (map) {
+    if (!map || !Object.keys(map).length) return null;
+    var list = lp.mates(page, map, todayIso((deps.now || Date.now)()));
+    return Promise.resolve(deps.store.readBriefs(list.map(function (m) { return m.page; }))).then(function (briefs) {
+      briefs = briefs || {};
+      return list.map(function (m) { return Object.assign({}, m, { hasPage: !!briefs[m.page] }); });
+    });
+  });
+}
+
+/** 选手页：一位选手存下来的全部内容 + 队友。数据库里没有 → data:null（页面写"还没有这位选手的资料"） */
 function proPlayer(event, deps) {
   var page = event && event.page;
   if (!validPage(page)) return Promise.resolve({ ok: false, kind: "badinput", message: "选手参数不对" });
   if (!deps.store) return Promise.resolve({ ok: true, kind: "ok", message: "", data: null });
   return Promise.resolve(deps.store.readPlayer(page)).then(function (doc) {
     if (!doc) return { ok: true, kind: "ok", message: "", data: null };
-    return {
-      ok: true, kind: "ok", message: "",
-      data: {
-        page: page,
-        profile: doc.profile || null,
-        history: Array.isArray(doc.history) ? doc.history : null,
-        results: Array.isArray(doc.results) ? doc.results : null,
-        at: latest(doc.profileAt, doc.historyAt, doc.resultsAt)
-      }
-    };
+    var history = Array.isArray(doc.history) ? doc.history : null;
+    return matesOf(page, history, deps).catch(function () { return null; }).then(function (mates) {
+      return {
+        ok: true, kind: "ok", message: "",
+        data: {
+          page: page,
+          profile: doc.profile || null,
+          history: history,
+          results: Array.isArray(doc.results) ? doc.results : null,
+          mates: mates,
+          at: latest(doc.profileAt, doc.historyAt, doc.resultsAt)
+        }
+      };
+    });
   });
 }
 
@@ -255,6 +325,7 @@ module.exports = {
   // 给测试用
   _planCycle: planCycle,
   _expandPlan: expandPlan,
+  _todayIso: todayIso,
   _cleanEvents: cleanEvents,
   DEFAULT_EVENTS: DEFAULT_EVENTS,
   BATCH: BATCH,

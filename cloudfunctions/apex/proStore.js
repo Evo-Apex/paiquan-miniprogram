@@ -4,6 +4,7 @@
  *   pro_players：一位选手一条（_id 由页面名编码而来），
  *                { page, profile, profileAt, history, historyAt, results, resultsAt }
  *   pro_meta：   只有一条 _id = "state"：同步进度（队列、上次请求时间）+ 各赛事的参赛名单
+ *   pro_teams：  一支战队一条，{ page, members: [历史上的正式队员], at }（算"合作过的队友"用）
  *
  * 收录哪些赛事读 site_config 集合的 _id = "pro_events"（{ list: [赛事页面名] }），读不到返回 null。
  *
@@ -11,6 +12,7 @@
  */
 
 var PLAYERS = "pro_players";
+var TEAMS = "pro_teams";
 var META = "pro_meta";
 var STATE_ID = "state";
 
@@ -96,6 +98,31 @@ function createProStore(cloud) {
       } catch (e) {
         return null;
       }
+    },
+
+    /** 一支战队的历史名单（整条覆盖） */
+    saveTeam: async function (page, data) {
+      try {
+        await ensure(TEAMS);
+        await db.collection(TEAMS).doc(docId(page)).set({ data: Object.assign({ page: page }, data) });
+        return true;
+      } catch (e) {
+        console.warn("写战队名单失败（" + page + "）：" + msgOf(e));
+        return false;
+      }
+    },
+
+    /** 一批战队的历史名单：{ 战队页面名: [队员, ...] } */
+    readTeams: async function (pages) {
+      var out = {};
+      if (!pages || !pages.length) return out;
+      try {
+        var res = await db.collection(TEAMS).where({ page: _.in(pages.slice(0, 200)) }).limit(1000).get();
+        (res.data || []).forEach(function (d) { if (Array.isArray(d.members)) out[d.page] = d.members; });
+      } catch (e) {
+        console.warn("读战队名单失败：" + msgOf(e));
+      }
+      return out;
     },
 
     /** 一批选手的简要信息（队员弹层用）：{ 页面名: { id, nat, input } } */

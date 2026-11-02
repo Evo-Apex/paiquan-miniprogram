@@ -1,5 +1,5 @@
 /**
- * Liquipedia 数据库 API（LPDB v3）：职业选手的资料、队伍经历、历届成绩。
+ * Liquipedia 数据库 API（LPDB v3）：职业选手的资料、队伍经历、历届成绩、合作过的队友。
  *
  * 2026-11-02 拿到授权（Key 是 August 申请的），给「比赛」页的选手页供数。
  * 条款里决定做法的几条（https://liquipedia.net/api-terms-of-use）：
@@ -269,6 +269,102 @@ function fetchResults(pages, deps) {
     });
 }
 
+/* ---------------- 队友（2026-11，照 August 的选手页设计稿） ---------------- */
+
+var TEAM_COLS = "pagename,link,id,role,type,status,joindate,leavedate";
+var TEAM_LIMIT = 1000;
+
+/** 一支队历史名单里的一名队员（squadplayer，只要 type = player） */
+function normMember(row) {
+  if (!row || !row.link) return null;
+  return {
+    page: linkToPage(row.link),
+    id: String(row.id || row.link),
+    join: date10(row.joindate),
+    leave: date10(row.leavedate),
+    status: String(row.status || ""),
+    role: String(row.role || "")
+  };
+}
+
+/**
+ * 一批战队的历史队员 → { rows: { 战队页面名: [队员, ...] }, full: bool }。
+ * full = 返回到了上限，可能截掉了一部分 —— 调用方拆小重查（同 fetchResults）。
+ */
+function fetchTeams(teamPages, deps) {
+  var cond = "(" + anyOf("pagename", teamPages) + ") AND [[type::player]]";
+  return query("squadplayer", { conditions: cond, query: TEAM_COLS, limit: TEAM_LIMIT }, deps)
+    .then(function (rows) {
+      if (rows === null) return null;
+      var out = {};
+      teamPages.forEach(function (t) { out[t] = []; });
+      var seen = {};
+      rows.forEach(function (r) {
+        if (!out[r.pagename]) return;
+        var m = normMember(r);
+        if (!m) return;
+        var k = r.pagename + "|" + m.page + "|" + m.join + "|" + m.role;
+        if (seen[k]) return;
+        seen[k] = true;
+        out[r.pagename].push(m);
+      });
+      return { rows: out, full: rows.length >= TEAM_LIMIT };
+    });
+}
+
+/** "2024-05-28" → 天数（UTC）；不是完整日期 → null */
+function dayNum(d) {
+  var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(d || ""));
+  if (!m) return null;
+  return Math.floor(Date.UTC(Number(m[1]), Number(m[2]) - 1, Number(m[3])) / 86400000);
+}
+
+/** 一段在队时间的结束日：有离队日就用；还在队（active、没离队日）用今天；别的（离队日没记）算不出 → null */
+function stintEnd(m, today) {
+  if (m.leave) return dayNum(m.leave);
+  return m.status === "active" ? today : null;
+}
+
+/**
+ * 合作过的队友：同一支队、在队时间有重叠的人。
+ * @param page   这名选手的页面名
+ * @param teams  { 战队页面名: [队员, ...] }（这名选手待过的队的历史名单）
+ * @param todayIso 今天（"YYYY-MM-DD"，还在队的人算到今天）
+ * @returns [{ page, id, teams: [队名], days: 一起的天数, current: 现在还是队友 }]，现在的队友在前，其余按一起的时间从长到短；最多 40 人
+ *
+ * 日期不全（加入或离队日期没记）的那一段不算 —— 算不出一起多久，宁可少一个人也不编时长。
+ */
+function mates(page, teams, todayIso) {
+  var today = dayNum(todayIso);
+  var acc = {};
+  Object.keys(teams || {}).forEach(function (tp) {
+    var ms = teams[tp] || [];
+    var mine = ms.filter(function (m) { return m.page === page; });
+    if (!mine.length) return;
+    ms.forEach(function (o) {
+      if (o.page === page) return;
+      mine.forEach(function (me) {
+        var a1 = dayNum(me.join);
+        var b1 = stintEnd(me, today);
+        var a2 = dayNum(o.join);
+        var b2 = stintEnd(o, today);
+        if (a1 === null || a2 === null || b1 === null || b2 === null) return;
+        var days = Math.min(b1, b2) - Math.max(a1, a2);
+        if (days < 1) return;
+        var x = acc[o.page] || (acc[o.page] = { page: o.page, id: o.id, teams: [], days: 0, current: false });
+        x.days += days;
+        var tn = teamName(tp);
+        if (x.teams.indexOf(tn) < 0) x.teams.push(tn);
+        if (!me.leave && me.status === "active" && !o.leave && o.status === "active") x.current = true;
+      });
+    });
+  });
+  return Object.keys(acc).map(function (k) { return acc[k]; }).sort(function (a, b) {
+    if (a.current !== b.current) return a.current ? -1 : 1;
+    return b.days - a.days;
+  }).slice(0, 40);
+}
+
 module.exports = {
   buildUrl: buildUrl,
   query: query,
@@ -283,5 +379,9 @@ module.exports = {
   fetchPlayers: fetchPlayers,
   fetchSquads: fetchSquads,
   fetchResults: fetchResults,
-  RESULT_LIMIT: RESULT_LIMIT
+  fetchTeams: fetchTeams,
+  normMember: normMember,
+  mates: mates,
+  RESULT_LIMIT: RESULT_LIMIT,
+  TEAM_LIMIT: TEAM_LIMIT
 };

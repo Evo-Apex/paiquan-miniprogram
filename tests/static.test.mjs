@@ -321,7 +321,7 @@ const AD_PAGES = ["home", "maps", "predator"];
    （原来的 pages/mapview「交互地图」已删，所以这里也没有它了。） */
 // 2026-10-27：加了「我的」（me）和分包 evo 里 Evo 战绩的三个子页面（写成 "evo/matches" 这样带分包目录的名字）
 // 2026-11：比赛页去掉广告位时从 AD_PAGES 拿掉了，这些检查也跟着漏了它，这里补回来；加了分包 pro 的选手页
-const PAGE_NAMES = AD_PAGES.concat(["matches", "games", "wheel", "ringguessr", "ringpick", "me", "evo/matches", "evo/match", "evo/bind", "pro/player"]);
+const PAGE_NAMES = AD_PAGES.concat(["matches", "games", "wheel", "ringguessr", "ringpick", "me", "evo/matches", "evo/match", "evo/bind", "pro/player", "pro/sources"]);
 const pageDir = (n) => (n.indexOf("/") >= 0 ? path.join(MP, n) : path.join(MP, "pages", n));
 const pageBase = (n) => path.basename(n);
 const pageJsPath = (n) => path.join(pageDir(n), pageBase(n) + ".js");
@@ -590,14 +590,29 @@ function vmFieldNames() {
     profile: { page: "P", id: "P", name: "N", localName: "", nats: ["China"], region: "Asia", birth: "2000-01-01",
       status: "Active", teamPage: "T", team: "T", earnings: 1, input: "Controller", roles: [], legends: ["Wraith"] },
     history: [{ teamPage: "T", team: "T", join: "2020-01-01", leave: "", status: "active", type: "player", role: "Captain" }],
-    results: [{ date: "2026-01-01", event: "E", tournament: "E", tier: "1", tierType: "Showmatch", place: "1", prize: 1, team: "T" }] },
+    results: [{ date: "2026-01-01", event: "E", tournament: "E", tier: "1", tierType: "", place: "1", prize: 1, team: "T" }],
+    mates: [{ page: "Q", id: "Q", teams: ["T"], days: 100, current: true, hasPage: true },
+      { page: "R", id: "R", teams: ["T"], days: 50, current: false, hasPage: false }] },
   "zh", Date.UTC(2026, 10, 2));
+  const pvT = i18n.T("zh");
   collect(pv);
-  pv.cells.forEach(collect);
+  pv.facts.forEach(collect);
+  collect(pv.team);
+  collect({ text: "", last: "" });            // 退役时的 v.retired
+  pv.profile.forEach(collect);
+  collect(pv.mates);
+  pv.mates.now.forEach(collect);
+  pv.mates.past.forEach(collect);
+  collect(playerView.visibleMates(pv.mates, false, pvT));
   pv.legends.forEach(collect);
+  collect(pv.career);
+  pv.career.strip.forEach(collect);
+  pv.career.axis.forEach(collect);
+  pv.career.items.forEach(collect);
   collect(pv.results);
-  pv.results.all.forEach(collect);
-  pv.history.forEach(collect);
+  const pvRes = playerView.visibleResults(pv.results, "major", false, pvT);
+  collect(pvRes);
+  pvRes.rows.forEach(collect);
 
   return keys;
 }

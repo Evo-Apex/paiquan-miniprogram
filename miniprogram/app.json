@@ -24,7 +24,8 @@
       "root": "pro",
       "name": "pro",
       "pages": [
-        "player/player"
+        "player/player",
+        "sources/sources"
       ]
     }
   ],
