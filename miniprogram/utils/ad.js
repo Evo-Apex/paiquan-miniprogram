@@ -44,7 +44,6 @@ var AD_UNITS = {
   //    而比赛页的 WXML 里一直有个 adbox + `adUnitFor("matches")` ——
   //    键名对不上 → **那个广告位从来没生效过**（永远拿到空串，组件不渲染）。
   //    现在把键名改成 matches，比赛页的广告才真的会出现。
-  matches: "adunit-419d525ab9b59819",
   // 猜圈页：**只在本局结束时**才出现（玩的时候不挡地图、不贴按钮）。
   ringguessr: "adunit-419d525ab9b59819"
 };

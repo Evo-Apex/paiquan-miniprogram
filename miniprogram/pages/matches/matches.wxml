@@ -274,12 +274,7 @@
     <view class="note">{{next.caveat}}</view>
   </block>
 
-  <!-- 广告位：未配置 unit-id 时整个组件不渲染（见 utils/ad.js）。
-       放在「下一场比赛」之后、「ALGS 赛场」之前 —— 这是本页第一个真正的分段处；
-       原来贴在页脚上方，等于没人看得到（曝光只来自滚动中途）。 -->
-  <view class="adbox">
-    <ad wx:if="{{adUnit}}" unit-id="{{adUnit}}" ad-intervals="60" binderror="onAdError"></ad>
-  </view>
+    </view>
 
   <!-- ================= ALGS 职业赛场 =================
        官方赛事（冠军赛 / 季后赛 / 职业联赛…）的赛后统计：战队名次 + 英雄选取率 +

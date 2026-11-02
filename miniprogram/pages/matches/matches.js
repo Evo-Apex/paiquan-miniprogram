@@ -13,7 +13,6 @@
  */
 var i18n = require("../../utils/i18n.js");
 var theme = require("../../utils/theme.js");
-var ad = require("../../utils/ad.js");
 var vm = require("../../utils/viewmodel.js");
 var algs = require("../../utils/algs.js");
 var nextmatch = require("../../utils/nextmatch.js");
@@ -63,12 +62,7 @@ Page({
     fmtOpen: false,
     lang: i18n.getLang(),
     T: i18n.T(i18n.getLang()),
-    theme: theme.getTheme(),
-    adUnit: ad.adUnitFor("matches")
-  },
-
-  onAdError: function (e) {
-    console.warn("广告加载失败", e && e.detail);
+    theme: theme.getTheme()
   },
 
   /** 切换最终成绩的分段。只认白名单，不拿 dataset 直接当分支 */
