@@ -1,0 +1,12 @@
+.ps-head { margin-bottom: var(--sp-2); }
+.ps-wrap { min-height: 100vh; padding: var(--sp-5) var(--sp-5) var(--sp-16); background: var(--bg); }
+.ps-name { display: block; font-size: var(--fs-title); font-weight: var(--fw-bold); color: var(--ink); }
+.ps-team { display: block; margin-top: var(--sp-1); font-size: var(--fs-min); color: var(--ink3); }
+.ps-chart { width: 100%; height: 640rpx; margin: var(--sp-2) 0 var(--sp-4); }
+.ps-nums { border-top: 1rpx solid var(--line); }
+.ps-num { display: flex; align-items: baseline; padding: var(--sp-3) 0; border-bottom: 1rpx solid var(--line); }
+.ps-num-head { border-bottom-color: transparent; padding-bottom: var(--sp-1); }
+.ps-k { flex: 1; font-size: var(--fs-sub); color: var(--ink2); }
+.ps-v { width: 190rpx; text-align: right; font-size: var(--fs-body); font-weight: var(--fw-bold); color: var(--ink); }
+.ps-a { width: 170rpx; text-align: right; font-size: var(--fs-min); color: var(--ink3); }
+.ps-num-head .ps-k, .ps-num-head .ps-v, .ps-num-head .ps-a { font-size: var(--fs-min); font-weight: var(--fw-body); color: var(--ink3); }

@@ -94,6 +94,9 @@ function mpFiles(exts) {
     for (const name of readdirSync(dir)) {
       const p = path.join(dir, name);
       if (statSync(p).isDirectory()) { walk(p); continue; }
+      // 例外：第三方 vendor（ECharts 打包产物）不参与外链检查。
+      // 里面的 http 地址是许可证文本和 XML 命名空间常量，不是网络请求。
+      if (/ec-canvas[\\/]/.test(p)) continue;
       if (exts.some((e) => p.endsWith(e))) out.push(p);
     }
   })(path.join(ROOT, "miniprogram"));

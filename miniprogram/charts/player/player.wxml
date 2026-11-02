@@ -1,0 +1,22 @@
+<!-- 选手能力雷达（ECharts）。图形负责形状，下面的数字表负责可信。 -->
+<view class="ps-wrap theme-{{theme}}" data-lang="{{lang}}">
+  <view class="ps-head">
+    <text class="ps-name">{{player}}</text>
+    <text class="ps-team">{{team}}</text>
+  </view>
+  <view class="ps-chart">
+    <ec-canvas id="radar" canvas-id="radar" ec="{{ec}}"></ec-canvas>
+  </view>
+  <view class="ps-nums">
+    <view class="ps-num ps-num-head">
+      <text class="ps-k">{{T.resPlayerHead}}</text>
+      <text class="ps-v">{{T.resRadarSelf}}</text>
+      <text class="ps-a">{{T.resRadarAvg}}</text>
+    </view>
+    <view class="ps-num" wx:for="{{nums}}" wx:key="k">
+      <text class="ps-k">{{item.k}}</text>
+      <text class="ps-v">{{item.v}}</text>
+      <text class="ps-a">{{item.a}}</text>
+    </view>
+  </view>
+</view>

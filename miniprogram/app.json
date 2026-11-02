@@ -12,6 +12,11 @@
   ],
   "subpackages": [
     {
+      "root": "charts",
+      "name": "charts",
+      "pages": ["player/player"]
+    },
+    {
       "root": "evo",
       "name": "evo",
       "pages": [

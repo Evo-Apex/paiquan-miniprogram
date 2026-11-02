@@ -176,29 +176,6 @@
   </block>
 
 
-  <!-- 选手能力六边形：点选手榜某一行打开 -->
-  <view wx:if="{{pModal}}" class="rm-mask" bindtap="onClosePlayer">
-    <view class="rm-card" catchtap="noop">
-      <view class="rm-head">
-        <text class="rm-name">{{pModal.player}}</text>
-        <text class="rm-team">{{pModal.team}}</text>
-      </view>
-      <canvas type="2d" id="radar" class="rm-canvas"></canvas>
-      <view class="rm-legend">
-        <view class="rm-lg"><view class="rm-dot rm-dot-avg"></view><text class="rm-lg-t">{{result.radarAvg}}</text></view>
-        <view class="rm-lg"><view class="rm-dot rm-dot-me"></view><text class="rm-lg-t">{{result.radarSelf}}</text></view>
-      </view>
-      <view class="rm-nums">
-        <view class="rm-num" wx:for="{{pModal.nums}}" wx:key="k">
-          <text class="rm-num-k">{{item.k}}</text>
-          <text class="rm-num-v">{{item.v}}</text>
-          <text class="rm-num-a">{{item.a}}</text>
-        </view>
-      </view>
-      <view class="rm-close" bindtap="onClosePlayer">{{T.resClose}}</view>
-    </view>
-  </view>
-
   <view class="rs-format">{{result.formatText}}</view>
   <view class="rs-src">{{result.sourceText}}</view>
 </block>

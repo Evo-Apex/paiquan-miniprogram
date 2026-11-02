@@ -319,7 +319,7 @@ const AD_PAGES = ["home", "maps", "predator", "matches"];
    新加的页面要加进来 —— 这几条正是抓"字段写错/标签没闭合/类名拼错"的网。
    （原来的 pages/mapview「交互地图」已删，所以这里也没有它了。） */
 // 2026-10-27：加了「我的」（me）和分包 evo 里 Evo 战绩的三个子页面（写成 "evo/matches" 这样带分包目录的名字）
-const PAGE_NAMES = AD_PAGES.concat(["games", "wheel", "ringguessr", "ringpick", "me", "evo/matches", "evo/match", "evo/bind"]);
+const PAGE_NAMES = AD_PAGES.concat(["games", "wheel", "ringguessr", "ringpick", "me", "evo/matches", "evo/match", "evo/bind", "charts/player"]);
 const pageDir = (n) => (n.indexOf("/") >= 0 ? path.join(MP, n) : path.join(MP, "pages", n));
 const pageBase = (n) => path.basename(n);
 const pageJsPath = (n) => path.join(pageDir(n), pageBase(n) + ".js");
@@ -571,7 +571,7 @@ function vmFieldNames() {
   rv.playerRows.forEach(collect);
   rv.gameRows.forEach(collect);
   rv.teamRows.forEach(collect);
-  // 选手六边形弹层里的逐项对照行（k 名称 / v 个人值 / a 全场平均）
+  // 选手雷达页的数字行（k 名称 / v 个人值 / a 全场平均）
   ["k", "v", "a"].forEach((k) => keys.add(k));
   rv.legendRows.forEach(collect);
 
