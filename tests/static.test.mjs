@@ -569,6 +569,7 @@ function vmFieldNames() {
   collect(rv);
   rv.rows.forEach(collect);
   rv.cnRows.forEach(collect);
+  rv.playerRows.forEach(collect);
 
   return keys;
 }

@@ -493,3 +493,35 @@
   font-size: var(--fs-min);
   color: var(--ink3);
 }
+
+/* 选手榜：选手名 + 战队两行，击杀/伤害右对齐 */
+.rs-c-player {
+  flex: 1;
+  min-width: 0;
+}
+.rs-p-name {
+  display: block;
+  font-size: var(--fs-body);
+  color: var(--ink);
+}
+.rs-p-team {
+  display: block;
+  margin-top: 2rpx;
+  font-size: var(--fs-min);
+  color: var(--ink3);
+}
+.rs-th .rs-c-player {
+  font-size: var(--fs-min);
+  color: var(--ink3);
+}
+.rs-king {
+  margin-bottom: var(--sp-3);
+  font-size: var(--fs-sub);
+  color: var(--accent-ink);
+}
+.rs-note {
+  margin-top: var(--sp-3);
+  font-size: var(--fs-min);
+  color: var(--ink3);
+  line-height: 1.6;
+}

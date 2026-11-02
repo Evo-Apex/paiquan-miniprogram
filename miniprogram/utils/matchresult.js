@@ -36,6 +36,17 @@ function build(lang, raw) {
     };
   });
 
+  var pl = d.players || {};
+  var pRows = (pl.rows || []).map(function (x) {
+    return {
+      player: x.player || "",
+      team: x.team || "",
+      kills: x.kills == null ? "" : String(x.kills),
+      damage: x.damage == null ? "" : String(x.damage)
+    };
+  });
+  var king = pl.killsKing || {};
+
   return {
     updated: d.updated || "",
     updatedText: T.resUpdated.replace("{d}", d.updated || ""),
@@ -67,6 +78,12 @@ function build(lang, raw) {
     gamesText: ev.games ? T.resGames.replace("{n}", String(ev.games)) : "",
     rows: rows,
 
+    playersTitle: T.resPlayersTitle,
+    playersNote: (pl.total ? T.resPlayersNote.replace("{n}", String(pl.total)) : ""),
+    playerHead: T.resPlayerHead,
+    damageHead: T.resDamageHead,
+    killsKingText: king.player ? T.resKillsKing.replace("{p}", king.player).replace("{n}", String(king.kills)) : "",
+    playerRows: pRows,
     cnTitle: T.resCnTitle,
     cnRows: cnRows,
 

@@ -81,6 +81,28 @@
     </view>
   </view>
 
+  <!-- 选手榜：决赛 9 局汇总，伤害前 10 -->
+  <view class="sec-head">
+    <text class="sec-title">{{result.playersTitle}}</text>
+  </view>
+  <view wx:if="{{result.killsKingText}}" class="rs-king">{{result.killsKingText}}</view>
+  <view class="rs-table">
+    <view class="rs-tr rs-th">
+      <text class="rs-c-player">{{result.playerHead}}</text>
+      <text class="rs-c-kills">{{result.killsHead}}</text>
+      <text class="rs-c-pts">{{result.damageHead}}</text>
+    </view>
+    <view wx:for="{{result.playerRows}}" wx:key="player" class="rs-tr">
+      <view class="rs-c-player">
+        <text class="rs-p-name">{{item.player}}</text>
+        <text class="rs-p-team">{{item.team}}</text>
+      </view>
+      <text class="rs-c-kills">{{item.kills}}</text>
+      <text class="rs-c-pts">{{item.damage}}</text>
+    </view>
+  </view>
+  <view class="rs-note">{{result.playersNote}}</view>
+
   <!-- 中国大陆战队 -->
   <view class="sec-head">
     <text class="sec-title">{{result.cnTitle}}</text>

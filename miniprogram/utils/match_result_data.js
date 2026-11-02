@@ -63,6 +63,26 @@ module.exports = {
     { rank: 20, team: "REJECT", points: 22, kills: 9, },
   ],
 
+  // 选手榜（决赛 9 局汇总，官方赛果页的 Players Statistics 表，2026-11-02 抓取）
+  // 只取伤害前 10：60 人的全表放进来太重，而且手机上一屏看不完。
+  players: {
+    metric: "damage",
+    total: 60,
+    killsKing: { player: "VSN carter", team: "Team Vision", kills: 21 },
+    rows: [
+      { player: "FWG kaydnw", team: "Forged Wolves", kills: 15, damage: 11343 },
+      { player: "TL PanicApex", team: "Team Liquid", kills: 17, damage: 10619 },
+      { player: "CRT Koyful", team: "Crazy Thieves", kills: 13, damage: 9885 },
+      { player: "WOL Floating", team: "Wolves Esports", kills: 9, damage: 9871 },
+      { player: "FLCN ImperialHal", team: "Team Falcons", kills: 6, damage: 8902 },
+      { player: "AURA Effect", team: "Aurora", kills: 14, damage: 8861 },
+      { player: "WAR Uxako", team: "Team WaR", kills: 9, damage: 8620 },
+      { player: "TL Zer0", team: "Team Liquid", kills: 17, damage: 8557 },
+      { player: "RRQ Prycyy", team: "Team RRQ", kills: 8, damage: 8259 },
+      { player: "FWG Dark", team: "Forged Wolves", kills: 14, damage: 7993 },
+    ]
+  },
+
   // 中国大陆三队
   cn: [
     {
