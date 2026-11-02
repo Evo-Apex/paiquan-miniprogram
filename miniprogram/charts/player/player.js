@@ -81,25 +81,36 @@ Page({
     var me = DIMS.map(function (k) { return row.stats[k] || 0; });
     var avg = DIMS.map(function (k) { return (f[k] && f[k].avg) || 0; });
 
+    // 参考的做法：轴名和数值写在一起（"场均伤害 340.51"），比纯轴名信息量大，
+    // 也不用悬停/看表。这里照做：indicator.name = 标签 + 空格 + 数值。
+    var fmt = function (k, i) {
+      var v = me[i];
+      return labels[i] + " " + (Math.round(v * 100) / 100);
+    };
+
+    var playerColor = dark ? "#ff4d9e" : "#c2185b";   // 选手：品红
+    var avgColor = dark ? "#8b7cf0" : "#6a5acd";      // 赛段平均：紫，虚线
+    var nameColor = dark ? "#e8e2f0" : "#3a3348";
+
     return {
       backgroundColor: "transparent",
       legend: {
-        bottom: 0,
-        itemWidth: 14,
+        top: 0,
+        itemWidth: 16,
         itemHeight: 8,
-        textStyle: { color: dark ? "#9aa4b4" : "#545f6e", fontSize: 11 },
+        textStyle: { color: dark ? "#b9b3c9" : "#5f586e", fontSize: 11 },
         data: [T.resRadarAvg, T.resRadarSelf]
       },
       radar: {
-        center: ["50%", "46%"],
-        radius: "62%",
+        center: ["50%", "52%"],
+        radius: "58%",
         splitNumber: 4,
-        axisName: { color: dark ? "#9aa4b4" : "#545f6e", fontSize: 11 },
-        splitLine: { lineStyle: { color: dark ? "#2b3140" : "#e2e5eb" } },
+        axisName: { color: nameColor, fontSize: 11, fontWeight: "bold" },
+        splitLine: { lineStyle: { color: dark ? "rgba(255,255,255,0.22)" : "#dfe3ea" } },
         splitArea: { show: false },
-        axisLine: { lineStyle: { color: dark ? "#2b3140" : "#e2e5eb" } },
+        axisLine: { lineStyle: { color: dark ? "rgba(255,255,255,0.18)" : "#e2e5eb" } },
         indicator: DIMS.map(function (k, i) {
-          return { name: labels[i], max: (f[k] && f[k].max) || 1 };
+          return { name: fmt(k, i), max: (f[k] && f[k].max) || 1 };
         })
       },
       series: [{
@@ -109,19 +120,20 @@ Page({
           {
             value: avg,
             name: T.resRadarAvg,
-            lineStyle: { type: "dashed", width: 1.5, color: dark ? "#8b95a6" : "#7b8595" },
-            itemStyle: { color: dark ? "#8b95a6" : "#7b8595" },
+            lineStyle: { type: "dashed", width: 1.5, color: avgColor },
+            itemStyle: { color: avgColor },
             areaStyle: { opacity: 0 }
           },
           {
             value: me,
             name: T.resRadarSelf,
-            lineStyle: { width: 2, color: dark ? "#ff5a52" : "#c62828" },
-            itemStyle: { color: dark ? "#ff5a52" : "#c62828" },
-            areaStyle: { opacity: 0.18, color: dark ? "#ff5a52" : "#c62828" }
+            lineStyle: { width: 2, color: playerColor },
+            itemStyle: { color: playerColor },
+            areaStyle: { opacity: 0.35, color: playerColor }
           }
         ]
       }]
     };
+  }
   }
 });
