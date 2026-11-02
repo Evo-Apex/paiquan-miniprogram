@@ -630,6 +630,3 @@
   border-color: var(--accent);
 }
 
-
-/* 选手榜可点的那一行 */
-.rs-tr-tap:active { opacity: 0.6; }

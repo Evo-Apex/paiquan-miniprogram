@@ -79,16 +79,6 @@ Page({
     this.setData({ rseg: k });
   },
 
-  /** 点选手榜某一行 → 分包里的 ECharts 雷达页 */
-  onOpenPlayer: function (e) {
-    var i = Number(e.currentTarget.dataset.i);
-    var rows = (this.data.result && this.data.result.playerRows) || [];
-    if (!rows[i] || !rows[i].stats) return;
-    try {
-      wx.navigateTo({ url: "/charts/player/player?p=" + i });
-    } catch (err) { /* 页面栈满了，微信自己会提示 */ }
-  },
-
   onTogglePanel: function () {
     this.setData({ panelOpen: !this.data.panelOpen });
   },

@@ -103,7 +103,7 @@
       <text class="rs-c-kills">{{result.killsHead}}</text>
       <text class="rs-c-pts">{{result.damageHead}}</text>
     </view>
-    <view wx:for="{{result.playerRows}}" wx:key="player" class="rs-tr rs-tr-tap" data-i="{{index}}" bindtap="onOpenPlayer">
+    <view wx:for="{{result.playerRows}}" wx:key="player" class="rs-tr">
       <view class="rs-c-player">
         <text class="rs-p-name">{{item.player}}</text>
         <text class="rs-p-team">{{item.team}}</text>
