@@ -78,7 +78,6 @@ function build(lang, raw) {
     champPrize: ch.prize || ev.championPrize || "",
     champPlayers: (ch.players || []).join(" · "),
     champCoach: ch.coach ? T.resCoach.replace("{n}", ch.coach) : "",
-    champNote: ch.note || "",
 
     tableTitle: T.resTableTitle,
     rankHead: T.resRank,

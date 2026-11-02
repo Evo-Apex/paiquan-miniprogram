@@ -376,13 +376,6 @@
   font-size: var(--fs-min);
   color: #ffffff;
 }
-.rs-champ-note {
-  display: block;
-  margin-top: var(--sp-3);
-  font-size: var(--fs-min);
-  color: #ffffff;
-  line-height: 1.5;
-}
 
 /* 名次表：三列，名次/战队/分数 */
 .rs-table {

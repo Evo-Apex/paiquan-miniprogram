@@ -35,8 +35,7 @@ module.exports = {
     team: "Team Liquid",
     points: 91,
     players: ["Zer0", "Sikezz", "Panic"],
-    coach: "Kapreme",
-    note: "第 7 局到赛点，第 9 局在风暴点拿下捍卫者"
+    coach: "Kapreme"
   },
 
   // 决赛前 10（打完 9 局）

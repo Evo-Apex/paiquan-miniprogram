@@ -58,7 +58,6 @@
       <text class="rs-champ-coach">{{result.champCoach}}</text>
       <text class="rs-champ-prize">{{result.champPrize}}</text>
     </view>
-    <text class="rs-champ-note">{{result.champNote}}</text>
   </view>
 
   <!-- 分段切换：排名 / 选手 / 每局 / 英雄。只渲染选中的那一块，页面不至于长到没法读 -->
