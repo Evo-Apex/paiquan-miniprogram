@@ -55,6 +55,8 @@ Page({
     next: null,
   // 拉斯维加斯季后赛最终成绩（2026-11-02）：那场打完了，用它替掉「下一场比赛」
   result: null,
+  // 最终成绩的分段：rank 排名 / players 选手 / games 每局 / legends 英雄
+  rseg: "rank",
     // 点开的队伍（底部弹层）。null = 没开
     openTeam: null,
     // 「赛制」展开状态（默认收起，不占第一屏）
@@ -67,6 +69,14 @@ Page({
 
   onAdError: function (e) {
     console.warn("广告加载失败", e && e.detail);
+  },
+
+  /** 切换最终成绩的分段。只认白名单，不拿 dataset 直接当分支 */
+  onRSeg: function (e) {
+    var k = e.currentTarget.dataset.k;
+    if (["rank", "players", "games", "legends"].indexOf(k) < 0) return;
+    if (k === this.data.rseg) return;
+    this.setData({ rseg: k });
   },
 
   onTogglePanel: function () {

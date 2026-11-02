@@ -61,6 +61,15 @@
     <text class="rs-champ-note">{{result.champNote}}</text>
   </view>
 
+  <!-- 分段切换：排名 / 选手 / 每局 / 英雄。只渲染选中的那一块，页面不至于长到没法读 -->
+  <view class="rs-seg">
+    <view class="rs-seg-i {{rseg === 'rank' ? 'rs-seg-on' : ''}}" data-k="rank" bindtap="onRSeg">{{result.tableTitle}}</view>
+    <view class="rs-seg-i {{rseg === 'players' ? 'rs-seg-on' : ''}}" data-k="players" bindtap="onRSeg">{{result.playersTitle}}</view>
+    <view class="rs-seg-i {{rseg === 'games' ? 'rs-seg-on' : ''}}" data-k="games" bindtap="onRSeg">{{result.gamesTitle}}</view>
+    <view class="rs-seg-i {{rseg === 'legends' ? 'rs-seg-on' : ''}}" data-k="legends" bindtap="onRSeg">{{result.legendsTitle}}</view>
+  </view>
+
+<block wx:if="{{rseg === 'rank'}}">
   <!-- 决赛前 10 -->
   <view class="sec-head">
     <text class="sec-title">{{result.tableTitle}}</text>
@@ -80,7 +89,9 @@
       <text class="rs-c-pts">{{item.points}}</text>
     </view>
   </view>
+  </block>
 
+<block wx:if="{{rseg === 'players'}}">
   <!-- 选手榜：决赛 9 局汇总，伤害前 10 -->
   <view class="sec-head">
     <text class="sec-title">{{result.playersTitle}}</text>
@@ -102,7 +113,9 @@
     </view>
   </view>
   <view class="rs-note">{{result.playersNote}}</view>
+  </block>
 
+<block wx:if="{{rseg === 'games'}}">
   <!-- 每局战况 -->
   <view class="sec-head">
     <text class="sec-title">{{result.gamesTitle}}</text>
@@ -121,7 +134,9 @@
       </view>
     </view>
   </view>
+  </block>
 
+<block wx:if="{{rseg === 'legends'}}">
   <!-- 英雄选取率 -->
   <view class="sec-head">
     <text class="sec-title">{{result.legendsTitle}}</text>
@@ -136,6 +151,7 @@
       <text class="rs-legend-picks">{{item.picksText}}</text>
     </view>
   </view>
+  </block>
 
   <view class="rs-format">{{result.formatText}}</view>
   <view class="rs-src">{{result.sourceText}}</view>

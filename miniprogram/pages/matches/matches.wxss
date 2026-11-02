@@ -610,3 +610,29 @@
   font-size: var(--fs-min);
   color: var(--ink3);
 }
+
+/* 分段切换：和 ALGS 赛事那条 chip 一致的手感 */
+.rs-seg {
+  display: flex;
+  margin-top: var(--sp-5);
+  margin-bottom: var(--sp-5);
+}
+.rs-seg-i {
+  flex: 1;
+  padding: var(--sp-2) 0;
+  margin-right: var(--sp-2);
+  text-align: center;
+  font-size: var(--fs-min);
+  color: var(--ink2);
+  background: var(--card);
+  border: 1rpx solid var(--line);
+  border-radius: var(--r-sm);
+}
+.rs-seg-i:last-child {
+  margin-right: 0;
+}
+.rs-seg-on {
+  color: #ffffff;
+  background: var(--accent);
+  border-color: var(--accent);
+}
