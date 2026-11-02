@@ -361,7 +361,16 @@ try {
 /* ---------------- 4. WXSS：rpx -> px ---------------- */
 let css = fs.readFileSync(path.join(MP, "app.wxss"), "utf8");
 const pageCss = path.join(PAGE_DIR, PAGE_BASE + ".wxss");
-if (fs.existsSync(pageCss)) css += "\n" + fs.readFileSync(pageCss, "utf8");
+/** 读 wxss，把 @import "相对路径"; 换成那个文件的内容（Evo、选手页的样式都靠它共用；浏览器不认 .wxss 的 @import） */
+function readWxss(file, depth) {
+  const src = fs.readFileSync(file, "utf8");
+  if (depth > 4) return src;
+  return src.replace(/@import\s+["']([^"']+)["'];?/g, (m, rel) => {
+    const f = path.resolve(path.dirname(file), rel);
+    return fs.existsSync(f) ? readWxss(f, depth + 1) : "";
+  });
+}
+if (fs.existsSync(pageCss)) css += "\n" + readWxss(pageCss, 0);
 // ⚠️ 必须带 m 标志：`page {` 都在行首，没有 m 的话 ^ 只匹配整个字符串开头，
 //    结果一条都没替换到 —— 变量全失效、黑底黑字、截图全黑（我踩了两次）。
 css = css.replace(/^page(\s*\{)/gm, "body$1");
