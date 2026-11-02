@@ -9,6 +9,8 @@
  * 数据在 utils/match_result_data.js（主包），分包可以 require 主包的模块。
  * 六轴按全场 60 人的最大值归一化，所以满格 = 全会第一。
  */
+import * as echarts from "../ec-canvas/echarts";
+
 var i18n = require("../../utils/i18n.js");
 var theme = require("../../utils/theme.js");
 var RAW = require("../../utils/match_result_data.js");
@@ -57,7 +59,8 @@ Page({
     this.setData({
       ec: {
         onInit: function (canvas, width, height, dpr) {
-          var chart = echarts.init(canvas, null, { width: width, height: height, devicePixelRatio: dpr });
+          var E = echarts && echarts.init ? echarts : (echarts && echarts.default) || echarts;
+          var chart = E.init(canvas, null, { width: width, height: height, devicePixelRatio: dpr });
           canvas.setChart(chart);
           chart.setOption(self.buildOption());
           self._chart = chart;
