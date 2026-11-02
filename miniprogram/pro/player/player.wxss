@@ -1,5 +1,6 @@
 /* 选手页，照 August 的设计稿（设计稿的 px × 2 = 这里的 rpx）。
    颜色只用 app.wxss 的令牌（var(--x)）；大卡用 --hero-*（两套主题下都是深色底，同首页的大卡）。
+   大卡里的分隔线用 --hero-track：--hero-line 在浅色主题下和卡片底色一样（首页大卡故意不要外框），画线会看不见。
    字号只用令牌档位：ID 用 --fs-hero（首页大卡那一档，AI-CONTEXT §7 已写明选手页大卡也用），其余是 7 档正文字号。
    字重：800 只给 ID（拉丁字母）和名次数字；中文一律 700，免得合成加粗发虚。
    .msg 用 app.wxss 的 */
@@ -74,7 +75,7 @@
   min-width: 0;
   display: flex;
   flex-direction: column;
-  border-left: 1rpx solid var(--hero-line);
+  border-left: 1rpx solid var(--hero-track);
 }
 .pp-fact:first-child { border-left: none; }
 .pp-fact-v { font-size: var(--fs-head); font-weight: var(--fw-bold); color: var(--hero-ink); font-variant-numeric: tabular-nums; }
@@ -86,7 +87,7 @@
   align-items: center;
   justify-content: center;
   padding: 24rpx 32rpx;
-  border-top: 1rpx solid var(--hero-line);
+  border-top: 1rpx solid var(--hero-track);
 }
 .pp-logo {
   width: 60rpx;
