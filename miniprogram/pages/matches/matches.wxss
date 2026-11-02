@@ -310,3 +310,174 @@
   text-overflow: ellipsis;
 }
 .nx-player-m { flex: 0 0 auto; font-size: var(--fs-min); color: var(--ink3); margin-left: var(--sp-3); }
+
+/* ============================================================
+   比赛专区 · 最终成绩（2026-11-02）
+   只有冠军卡用强调色底，其余靠排版和细线；所有颜色走变量。
+   ============================================================ */
+.rs-event {
+  margin-bottom: var(--sp-4);
+}
+.rs-event-name {
+  display: block;
+  font-size: var(--fs-head);
+  font-weight: var(--fw-bold);
+  color: var(--ink);
+}
+.rs-event-meta {
+  display: block;
+  margin-top: var(--sp-2);
+  font-size: var(--fs-min);
+  color: var(--ink3);
+  line-height: 1.6;
+}
+
+.rs-champ {
+  padding: var(--sp-5);
+  border-radius: var(--r-xl);
+  background: var(--accent);
+}
+.rs-champ-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+.rs-champ-label {
+  font-size: var(--fs-min);
+  font-weight: var(--fw-bold);
+  color: #ffffff;
+}
+.rs-champ-points {
+  font-size: var(--fs-head);
+  font-weight: var(--fw-num);
+  color: #ffffff;
+}
+.rs-champ-team {
+  display: block;
+  margin-top: var(--sp-2);
+  font-size: var(--fs-title);
+  font-weight: var(--fw-bold);
+  color: #ffffff;
+  line-height: 1.25;
+}
+.rs-champ-players {
+  display: block;
+  margin-top: var(--sp-2);
+  font-size: var(--fs-body);
+  color: #ffffff;
+}
+.rs-champ-foot {
+  display: flex;
+  justify-content: space-between;
+  margin-top: var(--sp-3);
+}
+.rs-champ-coach,
+.rs-champ-prize {
+  font-size: var(--fs-min);
+  color: #ffffff;
+}
+.rs-champ-note {
+  display: block;
+  margin-top: var(--sp-3);
+  font-size: var(--fs-min);
+  color: #ffffff;
+  line-height: 1.5;
+}
+
+/* 名次表：三列，名次/战队/分数 */
+.rs-table {
+  border-top: 1rpx solid var(--line);
+}
+.rs-tr {
+  display: flex;
+  align-items: baseline;
+  padding: var(--sp-3) 0;
+  border-bottom: 1rpx solid var(--line);
+}
+.rs-th .rs-c-rank,
+.rs-th .rs-c-team,
+.rs-th .rs-c-pts {
+  font-size: var(--fs-min);
+  font-weight: var(--fw-body);
+  color: var(--ink3);
+}
+.rs-c-rank {
+  width: 72rpx;
+  font-size: var(--fs-sub);
+  color: var(--ink3);
+}
+.rs-c-team {
+  flex: 1;
+  min-width: 0;
+  font-size: var(--fs-body);
+  color: var(--ink);
+}
+.rs-c-pts {
+  width: 96rpx;
+  text-align: right;
+  font-size: var(--fs-body);
+  font-weight: var(--fw-bold);
+  color: var(--ink);
+}
+/* 中国大陆最好成绩那一行：左侧一条强调色 */
+.rs-tr-cn .rs-c-team {
+  font-weight: var(--fw-bold);
+  color: var(--accent-ink);
+}
+
+/* 中国大陆三队 */
+.rs-cn {
+  margin-bottom: var(--sp-3);
+  padding: var(--sp-4);
+  background: var(--card);
+  border: 1rpx solid var(--line);
+  border-radius: var(--r-lg);
+}
+.rs-cn-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+.rs-cn-team {
+  font-size: var(--fs-body);
+  font-weight: var(--fw-bold);
+  color: var(--ink);
+}
+.rs-cn-result {
+  font-size: var(--fs-sub);
+  color: var(--accent-ink);
+}
+.rs-cn-players {
+  display: block;
+  margin-top: var(--sp-2);
+  font-size: var(--fs-sub);
+  color: var(--ink2);
+}
+.rs-cn-note {
+  display: block;
+  margin-top: var(--sp-2);
+  font-size: var(--fs-min);
+  color: var(--ink3);
+  line-height: 1.55;
+}
+
+.rs-format {
+  margin-top: var(--sp-4);
+  font-size: var(--fs-min);
+  color: var(--ink3);
+  line-height: 1.6;
+}
+.rs-src {
+  margin-top: var(--sp-3);
+  font-size: var(--fs-min);
+  color: var(--ink3);
+}
+
+/* 区块标题行：左标题右提示 */
+.sec-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-top: var(--sp-6);
+  margin-bottom: var(--sp-3);
+}

@@ -746,6 +746,14 @@ describe("比赛页 · 下一场比赛", () => {
   test("onLoad 立刻就有下一场（本地快照，不发云函数请求）", () => {
     const { inst, calls } = loadPage("matches", {});
     inst.onLoad();
+    // 2026-11-02 拉斯维加斯那场打完之后，快照里没有未来的比赛了。
+    // 这时这一页显示「最终成绩」而不是「下一场比赛」——两种状态都要成立。
+    if (!inst.data.next) {
+      assert.ok(inst.data.result, "没有下一场时必须显示最终成绩");
+      assert.ok(inst.data.result.rows.length >= 10, "最终成绩至少要有前 10");
+      assert.deepEqual(actionsOf(calls), [], "最终成绩也是本地数据，不该请求云函数");
+      return;
+    }
     assert.ok(inst.data.next, "onLoad 之后 next 必须有值");
     assert.equal(inst.data.next.groups.length, 4);
     assert.equal(inst.data.next.activeGroup, "A");
@@ -756,6 +764,7 @@ describe("比赛页 · 下一场比赛", () => {
   test("切分组：A → B，队伍列表跟着换", () => {
     const { inst } = loadPage("matches", {});
     inst.onLoad();
+    if (!inst.data.next) return;  // 赛程已全部结束，没有分组可切
     const firstA = inst.data.next.teams[0].name;
     inst.onNextGroup({ currentTarget: { dataset: { k: "B" } } });
     assert.equal(inst.data.next.activeGroup, "B");
@@ -770,6 +779,7 @@ describe("比赛页 · 下一场比赛", () => {
   test("点队伍 → 打开队员弹层；关掉后清空", () => {
     const { inst } = loadPage("matches", {});
     inst.onLoad();
+    if (!inst.data.next) return;  // 赛程已全部结束，没有队伍可点
     inst.onTeam({ currentTarget: { dataset: { i: 0 } } });
     const t = inst.data.openTeam;
     assert.ok(t, "点完应该有 openTeam");
@@ -789,8 +799,14 @@ describe("比赛页 · 下一场比赛", () => {
     inst.onLoad();
     i18n.setLang("en");
     inst.onShow();
-    assert.equal(inst.data.next.eventLabel, "ALGS Playoffs");
-    assert.match(inst.data.next.statusText, /in \d+ (day|hour|min)/);
+    if (inst.data.next) {
+      assert.equal(inst.data.next.eventLabel, "ALGS Playoffs");
+      assert.match(inst.data.next.statusText, /in \d+ (day|hour|min)/);
+    } else {
+      // 没有下一场时，切语言不该把最终成绩弄丢或弄成空白
+      assert.equal(inst.data.result.title, "Final results");
+      assert.ok(inst.data.result.champTeam, "冠军战队名不能为空");
+    }
     i18n.setLang("zh");
   });
 
@@ -814,6 +830,8 @@ describe("比赛页 · 下一场比赛", () => {
     const { inst } = loadPage("matches", {});
     inst.onLoad();
     assert.equal(inst.data.fmtOpen, false, "默认必须收起，不占第一屏");
+    // 赛程全部结束、这一页改成最终成绩时没有 next，赛制折叠就无从谈起
+    if (!inst.data.next) return;
     assert.ok(inst.data.next.format, "真实快照必须带赛制（赛事页 info-banner）");
     inst.onFormat();
     assert.equal(inst.data.fmtOpen, true);

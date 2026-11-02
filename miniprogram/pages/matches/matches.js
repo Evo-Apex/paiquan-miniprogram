@@ -17,6 +17,7 @@ var ad = require("../../utils/ad.js");
 var vm = require("../../utils/viewmodel.js");
 var algs = require("../../utils/algs.js");
 var nextmatch = require("../../utils/nextmatch.js");
+var matchresult = require("../../utils/matchresult.js");
 // 职业选手统计与图鉴放在「排位专区」（用户 2026-10 的决定）——
 // 这一页只留真正的赛事内容：ALGS 官方赛场的战队名次 / 英雄选取率 / 三人组合。
 // 2026-10-18 起，页首多了一块「下一场比赛」：赛程 + 分组 + 队员（离线快照）。
@@ -52,6 +53,8 @@ Page({
     algs: null,
     // 比赛专区 · 下一场比赛：赛程 / 分组 / 队员（本地离线快照，见 utils/nextmatch.js）
     next: null,
+  // 拉斯维加斯季后赛最终成绩（2026-11-02）：那场打完了，用它替掉「下一场比赛」
+  result: null,
     // 点开的队伍（底部弹层）。null = 没开
     openTeam: null,
     // 「赛制」展开状态（默认收起，不占第一屏）
@@ -113,7 +116,9 @@ Page({
     this.setData({
       algs: algs.buildAll(this._algsId, this.data.lang),
       // 时间在视图模型里算：快照是静态的，"还有几天"必须按打开页面的那一刻算
-      next: nextmatch.build(this.data.lang, Date.now(), this._nextGroup),
+      // 赛程全部打完时 build() 返回 hasNext=false：那就不显示「下一场比赛」，只显示最终成绩
+      next: (function (nx) { return nx && nx.hasNext ? nx : null; })(nextmatch.build(this.data.lang, Date.now(), this._nextGroup)),
+      result: matchresult.build(this.data.lang),
       openTeam: null
     });
   },

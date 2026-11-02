@@ -563,6 +563,13 @@ function vmFieldNames() {
   // 未开启的分支也要覆盖
   const raw2 = Object.assign({}, raw); delete raw2.wildcard;
   vm.buildModes(core.normalizeRotation(raw2)).forEach((m) => { collect(m); (m.nexts || []).forEach(collect); });
+  // 比赛页「最终成绩」（2026-11-02）：结果视图模型的字段
+  const matchresult = require(path.join(MP, "utils", "matchresult.js"));
+  const rv = matchresult.build("zh");
+  collect(rv);
+  rv.rows.forEach(collect);
+  rv.cnRows.forEach(collect);
+
   return keys;
 }
 

@@ -31,7 +31,72 @@
     <text class="msg-body">{{err.message}}</text>
   </view>
 
-  <!-- ================= 比赛专区 · 下一场比赛 =================
+  <!-- ================= 比赛专区 · 最终成绩 =================
+     2026-11-02 拉斯维加斯季后赛打完后加的：原来这里放「下一场比赛」，
+     赛程全打完就没有下一场了，改成放最终成绩（冠军 / 决赛前 10 / 中国大陆三队）。
+     数据是离线快照（utils/match_result_data.js），来源逐条可查，页面上标注。 -->
+<block wx:if="{{result}}">
+  <view class="sec-head">
+    <text class="sec-title">{{result.title}}</text>
+    <text class="sec-hint">{{result.updatedText}}</text>
+  </view>
+
+  <view class="rs-event">
+    <text class="rs-event-name">{{result.eventName}}</text>
+    <text class="rs-event-meta">{{result.metaText}}</text>
+  </view>
+
+  <!-- 冠军卡：整页唯一用强调色底的地方 -->
+  <view class="rs-champ">
+    <view class="rs-champ-top">
+      <text class="rs-champ-label">{{result.champLabel}}</text>
+      <text class="rs-champ-points">{{result.champPoints}}</text>
+    </view>
+    <text class="rs-champ-team">{{result.champTeam}}</text>
+    <text class="rs-champ-players">{{result.champPlayers}}</text>
+    <view class="rs-champ-foot">
+      <text class="rs-champ-coach">{{result.champCoach}}</text>
+      <text class="rs-champ-prize">{{result.champPrize}}</text>
+    </view>
+    <text class="rs-champ-note">{{result.champNote}}</text>
+  </view>
+
+  <!-- 决赛前 10 -->
+  <view class="sec-head">
+    <text class="sec-title">{{result.tableTitle}}</text>
+    <text class="sec-hint">{{result.gamesText}}</text>
+  </view>
+  <view class="rs-table">
+    <view class="rs-tr rs-th">
+      <text class="rs-c-rank">{{result.rankHead}}</text>
+      <text class="rs-c-team">{{result.teamHead}}</text>
+      <text class="rs-c-pts">{{result.pointsHead}}</text>
+    </view>
+    <view wx:for="{{result.rows}}" wx:key="rank" class="rs-tr {{item.cn ? 'rs-tr-cn' : ''}}">
+      <text class="rs-c-rank">{{item.rank}}</text>
+      <text class="rs-c-team">{{item.team}}</text>
+      <text class="rs-c-pts">{{item.points}}</text>
+    </view>
+  </view>
+
+  <!-- 中国大陆战队 -->
+  <view class="sec-head">
+    <text class="sec-title">{{result.cnTitle}}</text>
+  </view>
+  <view class="rs-cn" wx:for="{{result.cnRows}}" wx:key="team">
+    <view class="rs-cn-top">
+      <text class="rs-cn-team">{{item.team}}</text>
+      <text class="rs-cn-result">{{item.result}}</text>
+    </view>
+    <text wx:if="{{item.players}}" class="rs-cn-players">{{item.players}}</text>
+    <text wx:if="{{item.note}}" class="rs-cn-note">{{item.note}}</text>
+  </view>
+
+  <view class="rs-format">{{result.formatText}}</view>
+  <view class="rs-src">{{result.sourceText}}</view>
+</block>
+
+<!-- ================= 比赛专区 · 下一场比赛 =================
        2026-10-18 用户要求：一打开先看到「未来最近一场比赛」的分组与时间安排；
        官方还没排期时只显示分组；点队伍看队员。
        数据是离线快照（utils/next_match_data.js，由 直播识别/build_next_match.mjs 生成），
