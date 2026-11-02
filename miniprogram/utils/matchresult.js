@@ -88,6 +88,8 @@ function build(lang, raw) {
     champPoints: ch.points == null ? "" : T.resPoints.replace("{n}", String(ch.points)),
     champPrize: ch.prize || ev.championPrize || "",
     champPlayers: (ch.players || []).join(" · "),
+    // 冠军队员一个个列出来：拿到 Liquipedia 名单后能点进选手页（utils/prolink.js）
+    champList: (ch.players || []).slice(),
     champCoach: ch.coach ? T.resCoach.replace("{n}", ch.coach) : "",
 
     tableTitle: T.resTableTitle,

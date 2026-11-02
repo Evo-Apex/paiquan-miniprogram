@@ -743,7 +743,9 @@ describe("分享", () => {
    赛程 / 分组 / 队员全部来自本地快照，不联网；交互是切组 + 点队伍看队员。
    ============================================================ */
 describe("比赛页 · 下一场比赛", () => {
-  test("onLoad 立刻就有下一场（本地快照，不发云函数请求）", () => {
+  // 2026-11 起比赛页多了一个云函数调用 proRoster（只读数据库里的 Liquipedia 参赛名单，用来连到选手页）。
+  // 内容本身还是本地快照：onLoad 当场就渲染出来，不等这个调用。
+  test("onLoad 立刻就有内容（本地快照）；唯一的云函数调用是参赛名单 proRoster", () => {
     const { inst, calls } = loadPage("matches", {});
     inst.onLoad();
     // 2026-11-02 拉斯维加斯那场打完之后，快照里没有未来的比赛了。
@@ -751,14 +753,14 @@ describe("比赛页 · 下一场比赛", () => {
     if (!inst.data.next) {
       assert.ok(inst.data.result, "没有下一场时必须显示最终成绩");
       assert.ok(inst.data.result.rows.length >= 10, "最终成绩至少要有前 10");
-      assert.deepEqual(actionsOf(calls), [], "最终成绩也是本地数据，不该请求云函数");
+      assert.deepEqual(actionsOf(calls), ["proRoster"], "只该要参赛名单，内容是本地数据");
       return;
     }
     assert.ok(inst.data.next, "onLoad 之后 next 必须有值");
     assert.equal(inst.data.next.groups.length, 4);
     assert.equal(inst.data.next.activeGroup, "A");
     assert.equal(inst.data.next.teams.length, 10);
-    assert.deepEqual(actionsOf(calls), [], "这一块是本地数据，不该请求云函数");
+    assert.deepEqual(actionsOf(calls), ["proRoster"], "只该要参赛名单，内容是本地数据");
   });
 
   test("切分组：A → B，队伍列表跟着换", () => {
@@ -837,6 +839,73 @@ describe("比赛页 · 下一场比赛", () => {
     assert.equal(inst.data.fmtOpen, true);
     inst.onFormat();
     assert.equal(inst.data.fmtOpen, false);
+  });
+});
+
+/* ============================================================
+   比赛页 → 选手页（2026-11，数据来自 Liquipedia）
+   参赛名单由云函数 proRoster 给（只读数据库）；名单到了，冠军队员、名次行、选手榜才能点。
+   ============================================================ */
+describe("比赛页 · 连到选手页", () => {
+  // 一份最小的名单：冠军 Team Liquid（三人）+ 名次 11 的 Rex Regum Qeon（ALS 叫 Team RRQ，只能靠名次对上）
+  const roster = {
+    event: "Apex_Legends_Global_Series/2026/Split_2/Playoffs",
+    teams: [
+      { place: "1", team: "Team Liquid", players: [
+        { page: "Zer0", id: "Zer0", nat: "Australia", input: "Mouse & Keyboard" },
+        { page: "Sikezz", id: "Sikezz", nat: "United Kingdom", input: "Controller" },
+        { page: "Panic_(American_player)", id: "Panic", nat: "United States", input: "Controller" },
+      ] },
+      { place: "11", team: "Rex Regum Qeon", players: [
+        { page: "Prycyy", id: "Prycyy", nat: "Indonesia", input: "Controller" },
+      ] },
+    ],
+  };
+  const rosterOk = { ok: true, kind: "ok", message: "", data: roster };
+
+  test("名单到了：冠军队员、名次行、选手榜行连上；对不上的不能点", async () => {
+    const { inst } = loadPage("matches", { responses: { proRoster: rosterOk } });
+    inst.onLoad();
+    await flush();
+    const r = inst.data.result;
+    if (!r) return;   // 快照换成了别的比赛，这条测试的名单就不对了
+    assert.deepEqual(r.champChips.map((c) => c.page), ["Zer0", "Sikezz", "Panic_(American_player)"]);
+    const row = (team) => r.rows.find((x) => x.team === team);
+    assert.equal(row("Team Liquid").ti, 0);
+    assert.equal(row("Team RRQ").ti, 1, "Team RRQ 名字对不上，按名次 11 对到 Rex Regum Qeon");
+    assert.equal(row("Team Vision").ti, -1, "名单里没有的队不能点");
+    const panic = r.playerRows.find((x) => /PanicApex/.test(x.player));
+    if (panic) assert.equal(panic.page, "Panic_(American_player)", "TL PanicApex 去掉队名缩写后对到 Panic");
+  });
+
+  test("点名次行 → 弹层里是三名队员（带国籍 · 键鼠/手柄）；点队员 → 选手页", async () => {
+    const { inst } = loadPage("matches", { responses: { proRoster: rosterOk } });
+    const urls = [];
+    global.wx.navigateTo = (o) => urls.push(o.url);
+    inst.onLoad();
+    await flush();
+    if (!inst.data.result) return;
+    inst.onRankTeam({ currentTarget: { dataset: { ti: 0 } } });
+    const t = inst.data.openTeam;
+    assert.equal(t.name, "Team Liquid");
+    assert.equal(t.groupName, "第 1 名");
+    assert.deepEqual(t.players.map((p) => p.meta), ["澳大利亚 · 键鼠", "英国 · 手柄", "美国 · 手柄"]);
+    inst.onOpenPlayer({ currentTarget: { dataset: { page: t.players[2].page } } });
+    assert.deepEqual(urls, ["/pro/player/player?page=Panic_(American_player)"]);
+    // 没连上的（page 为空）点了没反应
+    inst.onOpenPlayer({ currentTarget: { dataset: { page: "" } } });
+    inst.onRankTeam({ currentTarget: { dataset: { ti: -1 } } });
+    assert.equal(urls.length, 1);
+  });
+
+  test("名单要不到（云函数挂了）：内容照常，什么都不能点", async () => {
+    const { inst } = loadPage("matches", { failAll: true });
+    inst.onLoad();
+    await flush();
+    if (!inst.data.result) return;
+    assert.ok(inst.data.result.rows.length >= 10, "最终成绩照常显示");
+    assert.equal(inst.data.result.champChips, undefined, "没有名单就不出队员块，照旧一行字");
+    assert.ok(inst.data.result.rows.every((x) => !(x.ti >= 0)));
   });
 });
 

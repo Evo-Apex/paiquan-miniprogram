@@ -1,0 +1,91 @@
+<view class="wrap theme-{{theme}}" data-lang="{{lang}}">
+  <!-- 读取中：和读好后的头部差不多高的空卡片，免得页面跳 -->
+  <view wx:if="{{state === 'loading'}}" class="panel pp-skel"></view>
+
+  <view wx:elif="{{state === 'error'}}" class="msg msg-err">
+    <text class="msg-title">{{T.proLoadFail}}</text>
+    <view class="pp-retry" hover-class="pp-pressed" bindtap="onRetry">{{T.proRetry}}</view>
+  </view>
+
+  <view wx:elif="{{state === 'empty'}}" class="msg msg-info">
+    <text class="msg-title">{{T.proEmpty}}</text>
+    <text class="msg-body">{{T.proEmptyBody}}</text>
+  </view>
+
+  <block wx:else>
+    <!-- 头部：ID、真名、战队、现役；下面是资料格和生涯奖金。哪项没有就不出那一格 -->
+    <view class="panel">
+      <view class="pp-head-top">
+        <text class="pp-id">{{v.id}}</text>
+        <text wx:if="{{v.status}}" class="pp-status">{{v.status}}</text>
+      </view>
+      <text wx:if="{{v.realName}}" class="pp-real">{{v.realName}}</text>
+      <text wx:if="{{v.team}}" class="pp-team">{{v.team}}</text>
+
+      <view wx:if="{{v.cells.length}}" class="pp-cells">
+        <view class="pp-cell" wx:for="{{v.cells}}" wx:key="k">
+          <text class="pp-k">{{item.k}}</text>
+          <text class="pp-v">{{item.v}}</text>
+        </view>
+      </view>
+      <view wx:if="{{v.earnings}}" class="pp-earn">
+        <text class="pp-k">{{v.earningsLabel}}</text>
+        <text class="pp-earn-v">{{v.earnings}}</text>
+      </view>
+    </view>
+
+    <!-- 常用传奇：Liquipedia 上写的，头像用图鉴里的 -->
+    <block wx:if="{{v.legends.length}}">
+      <view class="sec-title">{{T.proLegends}}</view>
+      <view class="panel pp-legends">
+        <view class="pp-legend" wx:for="{{v.legends}}" wx:key="key">
+          <image wx:if="{{item.hasIcon}}" class="pp-legend-ic" src="{{item.icon}}" mode="aspectFill"></image>
+          <text class="pp-legend-n">{{item.name}}</text>
+        </view>
+      </view>
+    </block>
+
+    <!-- 历届成绩：默认只列大赛，标题下面「大赛 ｜ 全部」切换（用户 2026-11-02 定的）；
+         一场大赛都没有时不给切换，直接列全部 -->
+    <block wx:if="{{v.results.has}}">
+      <view class="sec-title">
+        {{T.proResults}}
+        <text wx:if="{{!v.results.canToggle}}" class="sec-hint">{{showAll ? v.results.countAll : v.results.countMajor}}</text>
+      </view>
+      <view wx:if="{{v.results.canToggle}}" class="pp-seg">
+        <view class="pp-seg-i {{showAll ? '' : 'pp-seg-on'}}" data-k="major" bindtap="onResSeg">{{v.results.countMajor}}</view>
+        <view class="pp-seg-i {{showAll ? 'pp-seg-on' : ''}}" data-k="all" bindtap="onResSeg">{{v.results.countAll}}</view>
+      </view>
+      <view class="panel pp-list">
+        <view class="pp-res" wx:for="{{showAll ? v.results.all : v.results.major}}" wx:key="key">
+          <view class="pp-res-l">
+            <text class="pp-res-t">{{item.tournament}}</text>
+            <text class="pp-res-s">{{item.date}} · {{item.team}}<text wx:if="{{item.tag}}"> · {{item.tag}}</text></text>
+          </view>
+          <view class="pp-res-r">
+            <text class="pp-place {{item.top3 ? 'pp-place-top' : ''}}">{{item.place}}</text>
+            <text wx:if="{{item.prize}}" class="pp-prize">{{item.prize}}</text>
+          </view>
+        </view>
+      </view>
+      <view wx:if="{{!showAll}}" class="note">{{T.proMajorNote}}</view>
+    </block>
+
+    <!-- 队伍经历：新的在前；现在所在的队用实心点 + 「至今」 -->
+    <block wx:if="{{v.history.length}}">
+      <view class="sec-title">{{T.proHistory}}</view>
+      <view class="panel pp-list">
+        <view class="pp-hist" wx:for="{{v.history}}" wx:key="key">
+          <view class="pp-dot {{item.current ? 'pp-dot-on' : ''}}"></view>
+          <view class="pp-hist-l">
+            <text class="pp-hist-t">{{item.team}}</text>
+            <text wx:if="{{item.role}}" class="pp-role">{{item.role}}</text>
+          </view>
+          <text class="pp-hist-r">{{item.range}}</text>
+        </view>
+      </view>
+    </block>
+
+    <view class="foot">{{v.sourceText}}</view>
+  </block>
+</view>

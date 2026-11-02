@@ -1,0 +1,142 @@
+/* 选手页。颜色只用 app.wxss 的令牌（var(--x)，深浅主题跟着 .wrap 换）；
+   字号只用 7 档令牌，间距落在 4rpx 网格上，字重只用 400 / 700 / 800（AI-CONTEXT §7）。
+   .panel / .sec-title / .sec-hint / .msg / .note / .foot 用 app.wxss 的 */
+
+.pp-pressed { opacity: 0.7; }
+.pp-skel { height: 360rpx; box-sizing: border-box; }
+
+.pp-retry {
+  display: inline-block;
+  margin-top: var(--sp-4);
+  padding: var(--sp-3) var(--sp-8);
+  min-height: 80rpx;
+  box-sizing: border-box;
+  line-height: 56rpx;
+  border: 1rpx solid currentColor;
+  border-radius: var(--r-full);
+  font-size: var(--fs-sub);
+  font-weight: var(--fw-bold);
+}
+
+/* ---------- 头部 ---------- */
+.pp-head-top { display: flex; align-items: center; }
+.pp-id {
+  flex: 1;
+  min-width: 0;
+  font-size: var(--fs-display);
+  font-weight: var(--fw-num);
+  color: var(--ink);
+  line-height: 1.25;
+  word-break: break-all;
+}
+.pp-status {
+  flex: none;
+  margin-left: var(--sp-3);
+  padding: var(--sp-1) var(--sp-3);
+  border: 1rpx solid var(--line);
+  border-radius: var(--r-full);
+  font-size: var(--fs-min);
+  color: var(--ink2);
+}
+.pp-real { display: block; margin-top: var(--sp-2); font-size: var(--fs-body); color: var(--ink2); }
+.pp-team { display: block; margin-top: var(--sp-1); font-size: var(--fs-body); font-weight: var(--fw-bold); color: var(--ink); }
+
+/* 资料格：两列，每格一个小标题 + 值 */
+.pp-cells {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: var(--sp-5);
+  border-top: 1rpx solid var(--line);
+}
+.pp-cell { width: 50%; box-sizing: border-box; padding-top: var(--sp-4); padding-right: var(--sp-3); }
+.pp-k { display: block; font-size: var(--fs-min); color: var(--ink3); }
+.pp-v { display: block; margin-top: var(--sp-1); font-size: var(--fs-section); font-weight: var(--fw-bold); color: var(--ink); }
+
+.pp-earn {
+  margin-top: var(--sp-4);
+  padding-top: var(--sp-4);
+  border-top: 1rpx solid var(--line);
+}
+.pp-earn-v {
+  display: block;
+  margin-top: var(--sp-1);
+  font-size: var(--fs-title);
+  font-weight: var(--fw-num);
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- 常用传奇 ---------- */
+.pp-legends { display: flex; flex-wrap: wrap; padding-bottom: var(--sp-2); }
+.pp-legend { display: flex; align-items: center; margin: 0 var(--sp-8) var(--sp-4) 0; }
+.pp-legend-ic {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: var(--r-md);
+  background: var(--sunken);
+  margin-right: var(--sp-3);
+}
+.pp-legend-n { font-size: var(--fs-body); font-weight: var(--fw-bold); color: var(--ink); }
+
+/* ---------- 成绩、经历：一行一条 ---------- */
+.pp-list { padding-top: var(--sp-2); padding-bottom: var(--sp-2); }
+
+.pp-res {
+  display: flex;
+  align-items: center;
+  padding: var(--sp-4) 0;
+  border-bottom: 1rpx solid var(--line);
+}
+.pp-res:last-child { border-bottom: none; }
+.pp-res-l { flex: 1; min-width: 0; }
+.pp-res-t { display: block; font-size: var(--fs-body); color: var(--ink); line-height: 1.4; }
+.pp-res-s { display: block; margin-top: var(--sp-1); font-size: var(--fs-min); color: var(--ink3); }
+.pp-res-r { flex: none; margin-left: var(--sp-4); text-align: right; }
+.pp-place {
+  display: block;
+  font-size: var(--fs-section);
+  font-weight: var(--fw-bold);
+  color: var(--ink2);
+  font-variant-numeric: tabular-nums;
+}
+/* 前三：名次文字本身已经写了"第 1"，颜色只是加强（颜色不单独表意） */
+.pp-place-top { color: var(--accent-ink); }
+.pp-prize { display: block; margin-top: var(--sp-1); font-size: var(--fs-min); color: var(--ink3); font-variant-numeric: tabular-nums; }
+
+/* 「大赛 ｜ 全部」：和比赛页分段一样的手感，热区 ≥ 80rpx */
+.pp-seg { display: flex; margin-bottom: var(--sp-4); }
+.pp-seg-i {
+  flex: 1;
+  min-height: 80rpx;
+  line-height: 80rpx;
+  text-align: center;
+  font-size: var(--fs-sub);
+  color: var(--ink2);
+  background: var(--card);
+  border: 1rpx solid var(--line);
+}
+.pp-seg-i:first-child { border-radius: var(--r-sm) 0 0 var(--r-sm); border-right: none; }
+.pp-seg-i:last-child { border-radius: 0 var(--r-sm) var(--r-sm) 0; }
+.pp-seg-on { color: #ffffff; font-weight: var(--fw-bold); background: var(--accent); border-color: var(--accent); }
+
+.pp-hist {
+  display: flex;
+  align-items: center;
+  padding: var(--sp-4) 0;
+  border-bottom: 1rpx solid var(--line);
+}
+.pp-hist:last-child { border-bottom: none; }
+.pp-dot {
+  flex: none;
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: var(--r-full);
+  border: 2rpx solid var(--ink3);
+  box-sizing: border-box;
+  margin-right: var(--sp-4);
+}
+.pp-dot-on { background: var(--accent); border-color: var(--accent); }
+.pp-hist-l { flex: 1; min-width: 0; }
+.pp-hist-t { display: block; font-size: var(--fs-body); font-weight: var(--fw-bold); color: var(--ink); }
+.pp-role { display: block; margin-top: var(--sp-1); font-size: var(--fs-min); color: var(--ink3); }
+.pp-hist-r { flex: none; margin-left: var(--sp-4); font-size: var(--fs-sub); color: var(--ink2); font-variant-numeric: tabular-nums; }

@@ -53,7 +53,15 @@
       <text class="rs-champ-points">{{result.champPoints}}</text>
     </view>
     <text class="rs-champ-team">{{result.champTeam}}</text>
-    <text class="rs-champ-players">{{result.champPlayers}}</text>
+    <!-- 拿到 Liquipedia 名单后，冠军队员一人一块，点进选手页；没拿到就照旧一行字 -->
+    <view wx:if="{{result.champChips.length}}" class="rs-chips">
+      <view wx:for="{{result.champChips}}" wx:key="name" class="rs-chip"
+            data-page="{{item.page}}" bindtap="onOpenPlayer" hover-class="{{item.page ? 'rs-chip-hover' : 'none'}}">
+        <text class="rs-chip-n">{{item.name}}</text>
+        <text wx:if="{{item.page}}" class="rs-chip-x">›</text>
+      </view>
+    </view>
+    <text wx:else class="rs-champ-players">{{result.champPlayers}}</text>
     <view class="rs-champ-foot">
       <text class="rs-champ-coach">{{result.champCoach}}</text>
       <text class="rs-champ-prize">{{result.champPrize}}</text>
@@ -81,12 +89,16 @@
       <text class="rs-c-team">{{result.teamHead}}</text>
       <text class="rs-c-kills">{{result.killsHead}}</text>
       <text class="rs-c-pts">{{result.pointsHead}}</text>
+      <text class="rs-c-go"></text>
     </view>
-    <view wx:for="{{result.rows}}" wx:key="rank" class="rs-tr {{item.cn ? 'rs-tr-cn' : ''}}">
+    <!-- 对上 Liquipedia 名单的队（ti ≥ 0）能点：弹层看三名队员 → 选手页 -->
+    <view wx:for="{{result.rows}}" wx:key="rank" class="rs-tr {{item.cn ? 'rs-tr-cn' : ''}} {{item.ti >= 0 ? 'rs-tr-tap' : ''}}"
+          data-ti="{{item.ti}}" bindtap="onRankTeam" hover-class="{{item.ti >= 0 ? 'rs-tr-hover' : 'none'}}">
       <text class="rs-c-rank">{{item.rank}}</text>
       <text class="rs-c-team">{{item.team}}</text>
       <text class="rs-c-kills">{{item.kills}}</text>
       <text class="rs-c-pts">{{item.points}}</text>
+      <text class="rs-c-go">{{item.ti >= 0 ? '›' : ''}}</text>
     </view>
   </view>
   </block>
@@ -102,14 +114,17 @@
       <text class="rs-c-player">{{result.playerHead}}</text>
       <text class="rs-c-kills">{{result.killsHead}}</text>
       <text class="rs-c-pts">{{result.damageHead}}</text>
+      <text class="rs-c-go"></text>
     </view>
-    <view wx:for="{{result.playerRows}}" wx:key="player" class="rs-tr">
+    <view wx:for="{{result.playerRows}}" wx:key="player" class="rs-tr"
+          data-page="{{item.page}}" bindtap="onOpenPlayer" hover-class="{{item.page ? 'rs-tr-hover' : 'none'}}">
       <view class="rs-c-player">
         <text class="rs-p-name">{{item.player}}</text>
         <text class="rs-p-team">{{item.team}}</text>
       </view>
       <text class="rs-c-kills">{{item.kills}}</text>
       <text class="rs-c-pts">{{item.damage}}</text>
+      <text class="rs-c-go">{{item.page ? '›' : ''}}</text>
     </view>
   </view>
   <view class="rs-note">{{result.playersNote}}</view>
@@ -391,9 +406,12 @@
         <view class="nx-sheet-x" bindtap="onCloseTeam">{{T.nextClose}}</view>
       </view>
       <block wx:if="{{openTeam.hasPlayers}}">
-        <view class="nx-player" wx:for="{{openTeam.players}}" wx:key="name">
+        <!-- 有 page 的（来自 Liquipedia 名单）能点进选手页 -->
+        <view class="nx-player {{item.page ? 'nx-player-tap' : ''}}" wx:for="{{openTeam.players}}" wx:key="name"
+              data-page="{{item.page}}" bindtap="onOpenPlayer" hover-class="{{item.page ? 'nx-team-hover' : 'none'}}">
           <text class="nx-player-n">{{item.name}}</text>
           <text wx:if="{{item.meta}}" class="nx-player-m">{{item.meta}}</text>
+          <text wx:if="{{item.page}}" class="nx-team-x">›</text>
         </view>
       </block>
       <view wx:else class="nx-note">{{T.nextNoRoster}}</view>

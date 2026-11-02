@@ -12,18 +12,23 @@
  * API Key 从云函数的环境变量读，不写在代码里、也不下发到小程序端。
  * 在「云开发控制台 → 云函数 → apex → 配置 → 环境变量」里加一条：
  *     ALS_API_KEY = 你的 Apex Legends Status API Key
+ * 比赛页的选手页（2026-11）还要一条（没配就不抓，选手页显示"还没有资料"，别的功能不受影响）：
+ *     LIQUIPEDIA_API_KEY = Liquipedia 数据库 API 的 Key
  */
 const { handle } = require("./handler");
 
 let snapshots = null;
 let playerStore = null;
 let rotationLog = null;
+let proStore = null;
 let getOpenid = null;
 try {
   const cloud = require("wx-server-sdk");
   cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
   snapshots = require("./store").createStore(cloud);
   playerStore = require("./playerStore").createPlayerStore(cloud);
+  // 职业选手数据（Liquipedia）：定时器抓、前端读，见 proSync.js
+  proStore = require("./proStore").createProStore(cloud);
   // 轮换记录器：给"接下来两天几点打哪张图"的表供数（玩法那部分不用记，可以外推）
   rotationLog = require("./rotationLog").createLog(cloud);
   // 追踪按 openid 隔离（每人最多 5 个）。定时触发器触发的轮询没有用户上下文，openid 为空即可。
@@ -35,6 +40,19 @@ try {
   };
 } catch (e) {
   console.warn("存储没初始化成功，追踪/涨幅功能会缺失：" + (e && e.message ? e.message : String(e)));
+}
+
+// 定时器顺带抓一点职业选手数据（每次最多 1 个请求，见 proSync.js）。
+// 自己包一层 try：Liquipedia 挂了、Key 没配，都不能影响轮询和轮换记录。
+async function syncPro() {
+  try {
+    const { tick } = require("./proSync");
+    const r = await tick({ apiKey: (process.env.LIQUIPEDIA_API_KEY || "").trim(), store: proStore });
+    return r && r.did ? r.did : "";
+  } catch (e) {
+    console.warn("选手数据同步失败：" + (e && e.message ? e.message : String(e)));
+    return "error";
+  }
 }
 
 exports.main = async (event) => {
@@ -79,9 +97,21 @@ exports.main = async (event) => {
         }
       }
 
-      return { ok: true, kind: "ok", message: "poll done", data: Object.assign({}, result, { rotationLogged: logged }) };
+      const proDid = await syncPro();
+      return { ok: true, kind: "ok", message: "poll done", data: Object.assign({}, result, { rotationLogged: logged, proSync: proDid }) };
     } catch (e) {
+      await syncPro();
       return { ok: false, kind: "internal", message: "轮询失败：" + (e && e.message ? e.message : String(e)) };
+    }
+  }
+
+  // 职业选手（比赛页的选手页）：只读数据库，不现查 Liquipedia（它每小时只给 60 次）
+  if (event && (event.action === "proPlayer" || event.action === "proRoster")) {
+    try {
+      const pro = require("./proSync");
+      return await pro[event.action](event, { store: proStore });
+    } catch (e) {
+      return { ok: false, kind: "internal", message: "选手数据读取失败：" + (e && e.message ? e.message : String(e)) };
     }
   }
 

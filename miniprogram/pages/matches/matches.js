@@ -8,8 +8,9 @@
  *   两者受众和使用时机都不一样（看比赛 vs 查分数线），挤在一页要滑很久。
  *   拆开后：比赛页 = 职业/赛事，排位专区 = 天梯。
  *
- * 本页**全部是本地离线数据**（prostats_data / codex_data / algs_data），
- * 不联网、不耗云函数配额 —— 所以 onLoad 同步就能渲染出来，不用等网络。
+ * 本页的内容**全部是本地离线数据**（match_result_data / next_match_data / algs_data），
+ * 所以 onLoad 同步就能渲染出来，不用等网络。唯一的云函数调用是 proRoster（2026-11）：
+ * 只读数据库里的参赛名单，用来把战队、选手名连到选手页，不碰任何上游。
  */
 var i18n = require("../../utils/i18n.js");
 var theme = require("../../utils/theme.js");
@@ -17,6 +18,10 @@ var vm = require("../../utils/viewmodel.js");
 var algs = require("../../utils/algs.js");
 var nextmatch = require("../../utils/nextmatch.js");
 var matchresult = require("../../utils/matchresult.js");
+var cloud = require("../../utils/cloud.js");
+var prolink = require("../../utils/prolink.js");
+// 2026-11 起能点进选手页（分包 pro/，数据来自 Liquipedia）：这一页的内容仍是本地快照、立刻渲染，
+// 另外向云函数要一份参赛名单（proRoster，只读数据库）把战队、选手名连到选手页；要不到就不能点，别的照旧。
 // 职业选手统计与图鉴放在「排位专区」（用户 2026-10 的决定）——
 // 这一页只留真正的赛事内容：ALGS 官方赛场的战队名次 / 英雄选取率 / 三人组合。
 // 2026-10-18 起，页首多了一块「下一场比赛」：赛程 + 分组 + 队员（离线快照）。
@@ -92,6 +97,17 @@ Page({
   onLoad: function () {
     this.setData(navMetrics());
     this.rebuild();
+    this.loadRoster();
+  },
+
+  /** 参赛名单（Liquipedia）：到了以后重算一遍，名次行、选手名就能点了 */
+  loadRoster: function () {
+    var self = this;
+    return cloud.callCloud({ action: "proRoster" }).then(function (r) {
+      if (!r.ok || !r.data || !Array.isArray(r.data.teams)) return;
+      self._roster = r.data;
+      self.rebuild();
+    });
   },
 
   onShow: function () {
@@ -122,9 +138,37 @@ Page({
       // 时间在视图模型里算：快照是静态的，"还有几天"必须按打开页面的那一刻算
       // 赛程全部打完时 build() 返回 hasNext=false：那就不显示「下一场比赛」，只显示最终成绩
       next: (function (nx) { return nx && nx.hasNext ? nx : null; })(nextmatch.build(this.data.lang, Date.now(), this._nextGroup)),
-      result: matchresult.build(this.data.lang),
+      result: this._roster
+        ? prolink.decorate(matchresult.build(this.data.lang), this._roster, this.data.lang)
+        : matchresult.build(this.data.lang),
       openTeam: null
     });
+  },
+
+  /** 点名次表的一行 → 底部弹层看这队的三名队员（和「下一场比赛」点队伍是同一个弹层） */
+  onRankTeam: function (e) {
+    var i = Number(e.currentTarget.dataset.ti);
+    var r = this.data.result;
+    if (!r || !r.rosterTeams || !(i >= 0) || !r.rosterTeams[i]) return;
+    var t = r.rosterTeams[i];
+    this.setData({
+      openTeam: {
+        name: t.name,
+        icon: "",
+        hasIcon: false,
+        groupName: t.place ? i18n.t(this.data.lang, "resTeamPlace").replace("{n}", t.place) : "",
+        players: t.players || [],
+        hasPlayers: !!(t.players && t.players.length),
+        countText: i18n.t(this.data.lang, "nextPlayerCount").replace("{n}", (t.players || []).length)
+      }
+    });
+  },
+
+  /** 点选手名 → 选手页（没连上 Liquipedia 的名字 data-page 是空的，点了没反应） */
+  onOpenPlayer: function (e) {
+    var page = e.currentTarget.dataset.page;
+    if (!page) return;
+    wx.navigateTo({ url: "/pro/player/player?page=" + encodeURIComponent(page) });
   },
 
   /** 切 ALGS 赛事 */
