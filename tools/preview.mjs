@@ -142,7 +142,10 @@ global.wx = {
 
 let pageDef = null;
 global.Page = (def) => { pageDef = def; };
-const pagePath = path.join(MP, "pages", page, page + ".js");
+// 分包里的页面写成 "pro/player" 这样带分包目录的名字（和 tests/static.test.mjs 同一个写法）
+const PAGE_DIR = page.indexOf("/") >= 0 ? path.join(MP, page) : path.join(MP, "pages", page);
+const PAGE_BASE = path.basename(page);
+const pagePath = path.join(PAGE_DIR, PAGE_BASE + ".js");
 if (!fs.existsSync(pagePath)) throw new Error("找不到页面 " + pagePath);
 require(pagePath);
 
@@ -181,7 +184,12 @@ inst.data.T = i18n.T(lang);
 inst.data.theme = theme;
 inst.data.panelOpen = false;
 
-inst.onLoad({});
+// 页面的打开参数（如选手页的 ?page=Zer0）：PREVIEW_OPTIONS='{"page":"Zer0"}'
+let LOAD_OPTIONS = {};
+if (process.env.PREVIEW_OPTIONS) {
+  try { LOAD_OPTIONS = JSON.parse(process.env.PREVIEW_OPTIONS); } catch (e) { console.error("preview: PREVIEW_OPTIONS 不是 JSON", e.message); }
+}
+inst.onLoad(LOAD_OPTIONS);
 // onReady 也要跑：页面在那里量元素框（猜圈页记地图位置就靠它）
 if (typeof inst.onReady === "function") inst.onReady();
 if (playerId && inst.onProChip) inst.onProChip({ currentTarget: { dataset: { id: playerId } } });
@@ -340,7 +348,7 @@ function renderSiblings(node, scope) {
   return render(Object.assign({}, node, { attrs: a }), scope);
 }
 
-const wxml = fs.readFileSync(path.join(MP, "pages", page, page + ".wxml"), "utf8");
+const wxml = fs.readFileSync(path.join(PAGE_DIR, PAGE_BASE + ".wxml"), "utf8");
 const tree = parse(wxml);
 let body = "";
 try {
@@ -352,7 +360,7 @@ try {
 
 /* ---------------- 4. WXSS：rpx -> px ---------------- */
 let css = fs.readFileSync(path.join(MP, "app.wxss"), "utf8");
-const pageCss = path.join(MP, "pages", page, page + ".wxss");
+const pageCss = path.join(PAGE_DIR, PAGE_BASE + ".wxss");
 if (fs.existsSync(pageCss)) css += "\n" + fs.readFileSync(pageCss, "utf8");
 // ⚠️ 必须带 m 标志：`page {` 都在行首，没有 m 的话 ^ 只匹配整个字符串开头，
 //    结果一条都没替换到 —— 变量全失效、黑底黑字、截图全黑（我踩了两次）。
