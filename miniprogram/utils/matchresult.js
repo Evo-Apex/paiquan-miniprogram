@@ -31,7 +31,8 @@ function build(lang, raw) {
       player: x.player || "",
       team: x.team || "",
       kills: x.kills == null ? "" : String(x.kills),
-      damage: x.damage == null ? "" : String(x.damage)
+      damage: x.damage == null ? "" : String(x.damage),
+      stats: x.stats || null
     };
   });
   var king = pl.killsKing || {};
@@ -96,6 +97,11 @@ function build(lang, raw) {
     killsHead: T.resKillsHead,
     gamesText: ev.games ? T.resGames.replace("{n}", String(ev.games)) : "",
     rows: rows,
+
+    radarField: pl.field || null,
+    radarTitle: T.resRadarTitle,
+    radarAvg: T.resRadarAvg,
+    radarSelf: T.resRadarSelf,
 
     teamStatsTitle: T.resTeamStatsTitle,
     teamHead: T.resTeam,

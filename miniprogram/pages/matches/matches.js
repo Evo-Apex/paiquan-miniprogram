@@ -57,6 +57,8 @@ Page({
   result: null,
   // 最终成绩的分段：rank 排名 / players 选手 / games 每局 / legends 英雄
   rseg: "rank",
+  // 选手六边形弹层：null = 没开
+  pModal: null,
     // 点开的队伍（底部弹层）。null = 没开
     openTeam: null,
     // 「赛制」展开状态（默认收起，不占第一屏）
@@ -77,6 +79,104 @@ Page({
     if (["rank", "players", "games", "legends"].indexOf(k) < 0) return;
     if (k === this.data.rseg) return;
     this.setData({ rseg: k });
+  },
+
+  /** 点选手榜某一行 → 打开六边形弹层 */
+  onOpenPlayer: function (e) {
+    var i = Number(e.currentTarget.dataset.i);
+    var rows = (this.data.result && this.data.result.playerRows) || [];
+    var row = rows[i];
+    if (!row || !row.stats) return;
+    var f = this.data.result.radarField || {};
+    var T = this.data.T;
+    var labels = [
+      ["kills", T.radarKills], ["dmg", T.radarDmg], ["knocks", T.radarKnocks],
+      ["assists", T.radarAssists], ["kd", T.radarKd], ["kp", T.radarKp]
+    ];
+    var nums = labels.map(function (x) {
+      var k = x[0];
+      return { k: x[1], v: String(row.stats[k]), a: String((f[k] && f[k].avg) || "") };
+    });
+    this.setData({ pModal: { player: row.player, team: row.team, stats: row.stats, nums: nums } });
+    var self = this;
+    // 等节点渲染出来再画
+    wx.nextTick(function () { self.drawRadar(row.stats); });
+  },
+
+  onClosePlayer: function () { this.setData({ pModal: null }); },
+  noop: function () {},
+
+  /** 画六边形：外圈 = 全场 80 分位，所以数据特别好的会"破框" */
+  drawRadar: function (stats) {
+    var self = this;
+    wx.createSelectorQuery().select("#radar").fields({ node: true, size: true }).exec(function (res) {
+      if (!res || !res[0] || !res[0].node) return;
+      var canvas = res[0].node;
+      var ctx = canvas.getContext("2d");
+      var dpr = (wx.getWindowInfo ? wx.getWindowInfo().pixelRatio : 2) || 2;
+      var W = res[0].width, H = res[0].height;
+      canvas.width = W * dpr; canvas.height = H * dpr;
+      ctx.scale(dpr, dpr);
+      ctx.clearRect(0, 0, W, H);
+
+      var dark = self.data.theme !== "light";
+      var grid = dark ? "#2b3140" : "#e2e5eb";
+      var ink3 = dark ? "#8b95a6" : "#5f6a79";
+      var avgC = dark ? "#8b95a6" : "#7b8595";
+      var meC = dark ? "#ff5a52" : "#c62828";
+
+      var cx = W / 2, cy = H / 2, R = Math.min(W, H) / 2 - 34;
+      var f = self.data.result.radarField || {};
+      var keys = ["kills", "dmg", "knocks", "assists", "kd", "kp"];
+      // 网格：4 圈，最外圈是全场 80 分位 -> 超出者画到框外
+      var rings = [0.2, 0.4, 0.6, 0.8];
+      var pt = function (ratio, i) {
+        var a = -Math.PI / 2 + i * Math.PI / 3;
+        return [cx + Math.cos(a) * R * ratio, cy + Math.sin(a) * R * ratio];
+      };
+      ctx.strokeStyle = grid; ctx.lineWidth = 1;
+      rings.forEach(function (r) {
+        ctx.beginPath();
+        for (var i = 0; i < 6; i++) { var p = pt(r, i); i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]); }
+        ctx.closePath(); ctx.stroke();
+      });
+      for (var i = 0; i < 6; i++) {
+        var p = pt(1, i);
+        ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(p[0], p[1]); ctx.stroke();
+      }
+
+      var poly = function (vals, stroke, fill, dash) {
+        ctx.beginPath();
+        for (var i = 0; i < 6; i++) {
+          var q = pt(vals[i], i);
+          i ? ctx.lineTo(q[0], q[1]) : ctx.moveTo(q[0], q[1]);
+        }
+        ctx.closePath();
+        if (fill) { ctx.fillStyle = fill; ctx.fill(); }
+        ctx.setLineDash(dash || []);
+        ctx.strokeStyle = stroke; ctx.lineWidth = 2; ctx.stroke();
+        ctx.setLineDash([]);
+      };
+      var norm = function (src) {
+        return keys.map(function (k) {
+          var mx = (f[k] && f[k].max) || 1;
+          return Math.min(1.25, (src[k] || 0) / mx);
+        });
+      };
+      var avgVals = keys.map(function (k) { return (((f[k] && f[k].avg) || 0) / ((f[k] && f[k].max) || 1)); });
+      poly(avgVals, avgC, null, [4, 4]);
+      poly(norm(stats), meC, dark ? "rgba(255,90,82,0.16)" : "rgba(198,40,40,0.12)", []);
+
+      ctx.fillStyle = ink3;
+      ctx.font = "11px sans-serif";
+      ctx.textAlign = "center";
+      var T = self.data.T;
+      var names = [T.radarKills, T.radarDmg, T.radarKnocks, T.radarAssists, T.radarKd, T.radarKp];
+      names.forEach(function (n, i) {
+        var q = pt(1.16, i);
+        ctx.fillText(n, q[0], q[1] + 4);
+      });
+    });
   },
 
   onTogglePanel: function () {

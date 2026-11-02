@@ -120,19 +120,21 @@ module.exports = {
   players: {
     metric: "damage",
     total: 60,
-    killsKing: { player: "VSN carter", team: "Team Vision", kills: 21 },
+    field: {"kills": {"max": 21, "avg": 8.8}, "assists": {"max": 18, "avg": 8.4}, "knocks": {"max": 26, "avg": 12.2}, "dmg": {"max": 11343, "avg": 6421.6}, "kd": {"max": 3.0, "avg": 1.0}, "kp": {"max": 100.0, "avg": 65.3}},
     rows: [
-      { player: "FWG kaydnw", team: "Forged Wolves", kills: 15, damage: 11343 },
-      { player: "TL PanicApex", team: "Team Liquid", kills: 17, damage: 10619 },
-      { player: "CRT Koyful", team: "Crazy Thieves", kills: 13, damage: 9885 },
-      { player: "WOL Floating", team: "Wolves Esports", kills: 9, damage: 9871 },
-      { player: "FLCN ImperialHal", team: "Team Falcons", kills: 6, damage: 8902 },
-      { player: "AURA Effect", team: "Aurora", kills: 14, damage: 8861 },
-      { player: "WAR Uxako", team: "Team WaR", kills: 9, damage: 8620 },
-      { player: "TL Zer0", team: "Team Liquid", kills: 17, damage: 8557 },
-      { player: "RRQ Prycyy", team: "Team RRQ", kills: 8, damage: 8259 },
-      { player: "FWG Dark", team: "Forged Wolves", kills: 14, damage: 7993 },
+      { player: "FWG kaydnw", team: "Forged Wolves", kills: 15, damage: 11343, stats: { kills: 15, assists: 10, knocks: 21, dmg: 11343, kd: 1.88, kp: 64.1 } },
+      { player: "TL PanicApex", team: "Team Liquid", kills: 17, damage: 10619, stats: { kills: 17, assists: 15, knocks: 24, dmg: 10619, kd: 2.13, kp: 74.4 } },
+      { player: "CRT Koyful", team: "Crazy Thieves", kills: 13, damage: 9885, stats: { kills: 13, assists: 12, knocks: 16, dmg: 9885, kd: 1.44, kp: 83.3 } },
+      { player: "WOL Floating", team: "Wolves Esports", kills: 9, damage: 9871, stats: { kills: 9, assists: 13, knocks: 13, dmg: 9871, kd: 0.82, kp: 71.0 } },
+      { player: "FLCN ImperialHal", team: "Team Falcons", kills: 6, damage: 8902, stats: { kills: 6, assists: 6, knocks: 14, dmg: 8902, kd: 0.67, kp: 85.7 } },
+      { player: "AURA Effect", team: "Aurora", kills: 14, damage: 8861, stats: { kills: 14, assists: 9, knocks: 18, dmg: 8861, kd: 1.56, kp: 54.8 } },
+      { player: "WAR Uxako", team: "Team WaR", kills: 9, damage: 8620, stats: { kills: 9, assists: 12, knocks: 16, dmg: 8620, kd: 0.9, kp: 77.8 } },
+      { player: "TL Zer0", team: "Team Liquid", kills: 17, damage: 8557, stats: { kills: 17, assists: 12, knocks: 19, dmg: 8557, kd: 2.43, kp: 67.4 } },
+      { player: "RRQ Prycyy", team: "Team RRQ", kills: 8, damage: 8259, stats: { kills: 8, assists: 7, knocks: 11, dmg: 8259, kd: 0.73, kp: 60.0 } },
+      { player: "FWG Dark", team: "Forged Wolves", kills: 14, damage: 7993, stats: { kills: 14, assists: 11, knocks: 17, dmg: 7993, kd: 1.4, kp: 64.1 } },
     ]
   },
+
+
 
 };

@@ -571,6 +571,8 @@ function vmFieldNames() {
   rv.playerRows.forEach(collect);
   rv.gameRows.forEach(collect);
   rv.teamRows.forEach(collect);
+  // 选手六边形弹层里的逐项对照行（k 名称 / v 个人值 / a 全场平均）
+  ["k", "v", "a"].forEach((k) => keys.add(k));
   rv.legendRows.forEach(collect);
 
   return keys;
