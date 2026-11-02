@@ -57,6 +57,16 @@ function build(lang, raw) {
     };
   });
 
+  var teamRows = (d.teamStats || []).map(function (x) {
+    return {
+      team: x.team || "",
+      dmg: String(x.dmg == null ? "" : x.dmg),
+      kills: String(x.kills == null ? "" : x.kills),
+      knocks: String(x.knocks == null ? "" : x.knocks),
+      taken: String(x.taken == null ? "" : x.taken)
+    };
+  });
+
   return {
     updated: d.updated || "",
     updatedText: T.resUpdated.replace("{d}", d.updated || ""),
@@ -86,6 +96,13 @@ function build(lang, raw) {
     killsHead: T.resKillsHead,
     gamesText: ev.games ? T.resGames.replace("{n}", String(ev.games)) : "",
     rows: rows,
+
+    teamStatsTitle: T.resTeamStatsTitle,
+    teamHead: T.resTeam,
+    dmgHead: T.resDmgHead,
+    knocksHead: T.resKnocksHead,
+    takenHead: T.resTakenHead,
+    teamRows: teamRows,
 
     gamesTitle: T.resGamesTitle,
     gamesText: T.resGames.replace("{n}", String(gameRows.length)),

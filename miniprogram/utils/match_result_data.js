@@ -63,6 +63,32 @@ module.exports = {
   ],
 
 
+
+  // 战队数据（决赛 9 局汇总）：伤害、击倒、承受伤害、名次分
+  // 来自官方赛果页的 Teams Statistics 表，按伤害从高到低。
+  teamStats: [
+    { team: "Team Liquid", dmg: 26445, kills: 43, knocks: 57, taken: 25475, place: 48 },
+    { team: "Forged Wolves", dmg: 25482, kills: 39, knocks: 51, taken: 22237, place: 37 },
+    { team: "Crazy Thieves", dmg: 22815, kills: 30, knocks: 39, taken: 18947, place: 18 },
+    { team: "Team Falcons", dmg: 22752, kills: 14, knocks: 28, taken: 16811, place: 20 },
+    { team: "Wolves Esports", dmg: 22060, kills: 31, knocks: 45, taken: 20989, place: 30 },
+    { team: "Sentinels", dmg: 21746, kills: 29, knocks: 39, taken: 19642, place: 18 },
+    { team: "Team Vision", dmg: 21225, kills: 43, knocks: 52, taken: 16853, place: 37 },
+    { team: "Team WaR", dmg: 21068, kills: 27, knocks: 45, taken: 23308, place: 21 },
+    { team: "Alliance", dmg: 21016, kills: 28, knocks: 46, taken: 18400, place: 37 },
+    { team: "Aurora", dmg: 20806, kills: 42, knocks: 52, taken: 17627, place: 29 },
+    { team: "Team RRQ", dmg: 19928, kills: 25, knocks: 30, taken: 21701, place: 22 },
+    { team: "GaiminGladiators", dmg: 19000, kills: 26, knocks: 34, taken: 19125, place: 17 },
+    { team: "NinjasinPyjamas", dmg: 18523, kills: 24, knocks: 33, taken: 19373, place: 29 },
+    { team: "WhiteGrimReaper", dmg: 17576, kills: 34, knocks: 44, taken: 14818, place: 30 },
+    { team: "PVISION", dmg: 16664, kills: 16, knocks: 26, taken: 16435, place: 16 },
+    { team: "AG GLOBAL", dmg: 16490, kills: 14, knocks: 24, taken: 17789, place: 20 },
+    { team: "Geekay Esports", dmg: 15801, kills: 25, knocks: 34, taken: 15828, place: 12 },
+    { team: "ShopifyRebellion", dmg: 14808, kills: 18, knocks: 26, taken: 15076, place: 16 },
+    { team: "REJECT", dmg: 12442, kills: 9, knocks: 14, taken: 13896, place: 13 },
+    { team: "KINOTROPE CLUB", dmg: 8646, kills: 10, knocks: 15, taken: 13776, place: 16 },
+  ],
+
   // 每局战况（9 局：地图 + 前三名，冠军带击杀数）
   // 数据来自官方赛果页的 Score matrix，逐局按名次排序取前三。
   games: [

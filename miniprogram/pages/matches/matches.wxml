@@ -65,6 +65,7 @@
     <view class="rs-seg-i {{rseg === 'rank' ? 'rs-seg-on' : ''}}" data-k="rank" bindtap="onRSeg">{{result.tableTitle}}</view>
     <view class="rs-seg-i {{rseg === 'players' ? 'rs-seg-on' : ''}}" data-k="players" bindtap="onRSeg">{{result.playersTitle}}</view>
     <view class="rs-seg-i {{rseg === 'games' ? 'rs-seg-on' : ''}}" data-k="games" bindtap="onRSeg">{{result.gamesTitle}}</view>
+    <view class="rs-seg-i {{rseg === 'teams' ? 'rs-seg-on' : ''}}" data-k="teams" bindtap="onRSeg">{{result.teamStatsTitle}}</view>
     <view class="rs-seg-i {{rseg === 'legends' ? 'rs-seg-on' : ''}}" data-k="legends" bindtap="onRSeg">{{result.legendsTitle}}</view>
   </view>
 
@@ -112,6 +113,28 @@
     </view>
   </view>
   <view class="rs-note">{{result.playersNote}}</view>
+  </block>
+
+  <!-- 战队数据 -->
+  <block wx:if="{{rseg === 'teams'}}">
+    <view class="sec-head">
+      <text class="sec-title">{{result.teamStatsTitle}}</text>
+      <text class="sec-hint">{{result.gamesText}}</text>
+    </view>
+    <view class="rs-table">
+      <view class="rs-tr rs-th">
+        <text class="rs-c-team">{{result.teamHead}}</text>
+        <text class="rs-c-kills">{{result.dmgHead}}</text>
+        <text class="rs-c-kills">{{result.knocksHead}}</text>
+        <text class="rs-c-pts">{{result.takenHead}}</text>
+      </view>
+      <view wx:for="{{result.teamRows}}" wx:key="team" class="rs-tr">
+        <text class="rs-c-team">{{item.team}}</text>
+        <text class="rs-c-kills">{{item.dmg}}</text>
+        <text class="rs-c-kills">{{item.knocks}}</text>
+        <text class="rs-c-pts">{{item.taken}}</text>
+      </view>
+    </view>
   </block>
 
 <block wx:if="{{rseg === 'games'}}">
