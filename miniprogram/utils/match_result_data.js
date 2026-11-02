@@ -63,6 +63,33 @@ module.exports = {
     { rank: 20, team: "REJECT", points: 22, kills: 9, },
   ],
 
+
+  // 每局战况（9 局：地图 + 前三名，冠军带击杀数）
+  // 数据来自官方赛果页的 Score matrix，逐局按名次排序取前三。
+  games: [
+    { no: 1, map: "Storm Point", first: "Forged Wolves", firstKills: 11, second: "Team WaR", third: "NinjasinPyjamas" },
+    { no: 2, map: "Olympus", first: "Alliance", firstKills: 5, second: "Wolves Esports", third: "Team Liquid" },
+    { no: 3, map: "E-District", first: "Team Vision", firstKills: 11, second: "Alliance", third: "ShopifyRebellion" },
+    { no: 4, map: "World's Edge", first: "NinjasinPyjamas", firstKills: 9, second: "Team Falcons", third: "WhiteGrimReaper" },
+    { no: 5, map: "World's Edge", first: "WhiteGrimReaper", firstKills: 8, second: "Alliance", third: "Forged Wolves" },
+    { no: 6, map: "E-District", first: "Team Vision", firstKills: 18, second: "KINOTROPE CLUB", third: "Geekay Esports" },
+    { no: 7, map: "Olympus", first: "Team Liquid", firstKills: 13, second: "Forged Wolves", third: "Team Vision" },
+    { no: 8, map: "Storm Point", first: "Aurora", firstKills: 11, second: "Crazy Thieves", third: "Team Liquid" },
+    { no: 9, map: "Storm Point", first: "Team Liquid", firstKills: 6, second: "Team RRQ", third: "Wolves Esports" },
+  ],
+
+  // 英雄选取率：60 名选手 × 9 局的选择次数汇总（共 531 次），取前 8
+  legends: [
+    { name: "Wattson", picks: 70, pct: 13.2 },
+    { name: "Pathfinder", picks: 57, pct: 10.7 },
+    { name: "Wraith", picks: 54, pct: 10.2 },
+    { name: "Gibraltar", picks: 48, pct: 9.0 },
+    { name: "Rampart", picks: 43, pct: 8.1 },
+    { name: "Seer", picks: 41, pct: 7.7 },
+    { name: "Alter", picks: 35, pct: 6.6 },
+    { name: "Mad Maggie", picks: 31, pct: 5.8 },
+  ],
+
   // 选手榜（决赛 9 局汇总，官方赛果页的 Players Statistics 表，2026-11-02 抓取）
   // 只取伤害前 10：60 人的全表放进来太重，而且手机上一屏看不完。
   players: {

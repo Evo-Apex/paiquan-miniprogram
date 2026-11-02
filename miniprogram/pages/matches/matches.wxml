@@ -103,6 +103,40 @@
   </view>
   <view class="rs-note">{{result.playersNote}}</view>
 
+  <!-- 每局战况 -->
+  <view class="sec-head">
+    <text class="sec-title">{{result.gamesTitle}}</text>
+    <text class="sec-hint">{{result.gamesText}}</text>
+  </view>
+  <view class="rs-games">
+    <view class="rs-game" wx:for="{{result.gameRows}}" wx:key="no">
+      <view class="rs-game-head">
+        <text class="rs-game-no">{{item.noText}}</text>
+        <text class="rs-game-map">{{item.map}}</text>
+        <text class="rs-game-kills">{{item.killsText}}</text>
+      </view>
+      <view class="rs-game-row">
+        <text class="rs-game-1">{{item.first}}</text>
+        <text class="rs-game-23">{{item.second}} · {{item.third}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 英雄选取率 -->
+  <view class="sec-head">
+    <text class="sec-title">{{result.legendsTitle}}</text>
+  </view>
+  <view class="rs-legends">
+    <view class="rs-legend" wx:for="{{result.legendRows}}" wx:key="name">
+      <view class="rs-legend-top">
+        <text class="rs-legend-name">{{item.name}}</text>
+        <text class="rs-legend-pct">{{item.pctText}}</text>
+      </view>
+      <view class="rs-bar"><view class="rs-bar-fill" style="width: {{item.barW}}%;"></view></view>
+      <text class="rs-legend-picks">{{item.picksText}}</text>
+    </view>
+  </view>
+
   <view class="rs-format">{{result.formatText}}</view>
   <view class="rs-src">{{result.sourceText}}</view>
 </block>

@@ -525,3 +525,88 @@
   color: var(--ink3);
   line-height: 1.6;
 }
+
+/* 每局战况 */
+.rs-games {
+  border-top: 1rpx solid var(--line);
+}
+.rs-game {
+  padding: var(--sp-3) 0;
+  border-bottom: 1rpx solid var(--line);
+}
+.rs-game-head {
+  display: flex;
+  align-items: baseline;
+}
+.rs-game-no {
+  font-size: var(--fs-sub);
+  font-weight: var(--fw-bold);
+  color: var(--ink);
+}
+.rs-game-map {
+  flex: 1;
+  min-width: 0;
+  margin-left: var(--sp-3);
+  font-size: var(--fs-min);
+  color: var(--ink3);
+}
+.rs-game-kills {
+  font-size: var(--fs-min);
+  color: var(--accent-ink);
+}
+.rs-game-row {
+  display: flex;
+  align-items: baseline;
+  margin-top: var(--sp-1);
+}
+.rs-game-1 {
+  font-size: var(--fs-body);
+  color: var(--ink);
+}
+.rs-game-23 {
+  flex: 1;
+  min-width: 0;
+  margin-left: var(--sp-3);
+  font-size: var(--fs-min);
+  color: var(--ink3);
+  text-align: right;
+}
+
+/* 英雄选取率 */
+.rs-legends {
+  margin-top: var(--sp-2);
+}
+.rs-legend {
+  margin-bottom: var(--sp-4);
+}
+.rs-legend-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+.rs-legend-name {
+  font-size: var(--fs-body);
+  color: var(--ink);
+}
+.rs-legend-pct {
+  font-size: var(--fs-sub);
+  font-weight: var(--fw-bold);
+  color: var(--accent-ink);
+}
+.rs-bar {
+  height: 8rpx;
+  margin-top: var(--sp-2);
+  border-radius: var(--r-full);
+  background: var(--track);
+}
+.rs-bar-fill {
+  height: 8rpx;
+  border-radius: var(--r-full);
+  background: var(--accent);
+}
+.rs-legend-picks {
+  display: block;
+  margin-top: var(--sp-1);
+  font-size: var(--fs-min);
+  color: var(--ink3);
+}

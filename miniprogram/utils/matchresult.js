@@ -36,6 +36,27 @@ function build(lang, raw) {
   });
   var king = pl.killsKing || {};
 
+  var maxPct = Math.max.apply(null, [1].concat((d.legends || []).map(function (x) { return x.pct || 0; })));
+  var gameRows = (d.games || []).map(function (g) {
+    return {
+      no: String(g.no),
+      noText: T.resGameNo.replace("{n}", String(g.no)),
+      map: g.map || "",
+      first: g.first || "",
+      killsText: g.firstKills == null ? "" : T.resGameKills.replace("{n}", String(g.firstKills)),
+      second: g.second || "",
+      third: g.third || ""
+    };
+  });
+  var legendRows = (d.legends || []).map(function (x) {
+    return {
+      name: x.name || "",
+      picksText: T.resLegendPicks.replace("{n}", String(x.picks)),
+      pctText: (x.pct == null ? "" : String(x.pct)) + "%",
+      barW: Math.round((x.pct || 0) * 100 / maxPct)
+    };
+  });
+
   return {
     updated: d.updated || "",
     updatedText: T.resUpdated.replace("{d}", d.updated || ""),
@@ -66,6 +87,13 @@ function build(lang, raw) {
     killsHead: T.resKillsHead,
     gamesText: ev.games ? T.resGames.replace("{n}", String(ev.games)) : "",
     rows: rows,
+
+    gamesTitle: T.resGamesTitle,
+    gamesText: T.resGames.replace("{n}", String(gameRows.length)),
+    gameRows: gameRows,
+    legendsTitle: T.resLegendsTitle,
+    legendsNote: T.resLegendsNote,
+    legendRows: legendRows,
 
     playersTitle: T.resPlayersTitle,
     playersNote: (pl.total ? T.resPlayersNote.replace("{n}", String(pl.total)) : ""),
