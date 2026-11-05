@@ -29,14 +29,20 @@ module.exports = {
         {
           "zh": "艾克赛尔",
           "en": "Axle",
-          "n": 45,
-          "pct": 11.1
+          "n": 26,
+          "pct": 6.4
         },
         {
           "zh": "动力小子",
           "en": "Octane",
           "n": 23,
           "pct": 5.7
+        },
+        {
+          "zh": "罗芭",
+          "en": "Loba",
+          "n": 21,
+          "pct": 5.2
         },
         {
           "zh": "疯马吉",
@@ -61,12 +67,6 @@ module.exports = {
           "en": "Alter",
           "n": 12,
           "pct": 3.0
-        },
-        {
-          "zh": "罗芭",
-          "en": "Loba",
-          "n": 2,
-          "pct": 0.5
         },
         {
           "zh": "班加罗尔",
@@ -98,15 +98,15 @@ module.exports = {
           "heroes": [
             "亡灵",
             "变换",
-            "艾克赛尔"
+            "罗芭"
           ],
           "en": [
             "Revenant",
             "Alter",
-            "Axle"
+            "Loba"
           ],
           "n": 2,
-          "pct": 20.0
+          "pct": 15.4
         },
         {
           "heroes": [
@@ -120,7 +120,21 @@ module.exports = {
             "Axle"
           ],
           "n": 2,
-          "pct": 20.0
+          "pct": 15.4
+        },
+        {
+          "heroes": [
+            "亡灵",
+            "探路者",
+            "罗芭"
+          ],
+          "en": [
+            "Revenant",
+            "Pathfinder",
+            "Loba"
+          ],
+          "n": 2,
+          "pct": 15.4
         },
         {
           "heroes": [
@@ -134,7 +148,21 @@ module.exports = {
             "Axle"
           ],
           "n": 1,
-          "pct": 10.0
+          "pct": 7.7
+        },
+        {
+          "heroes": [
+            "亡灵",
+            "变换",
+            "艾克赛尔"
+          ],
+          "en": [
+            "Revenant",
+            "Alter",
+            "Axle"
+          ],
+          "n": 1,
+          "pct": 7.7
         },
         {
           "heroes": [
@@ -148,7 +176,7 @@ module.exports = {
             "Axle"
           ],
           "n": 1,
-          "pct": 10.0
+          "pct": 7.7
         },
         {
           "heroes": [
@@ -162,21 +190,21 @@ module.exports = {
             "Axle"
           ],
           "n": 1,
-          "pct": 10.0
+          "pct": 7.7
         },
         {
           "heroes": [
             "探路者",
             "疯马吉",
-            "艾克赛尔"
+            "罗芭"
           ],
           "en": [
             "Pathfinder",
             "Mad Maggie",
-            "Axle"
+            "Loba"
           ],
           "n": 1,
-          "pct": 10.0
+          "pct": 7.7
         },
         {
           "heroes": [
@@ -190,7 +218,7 @@ module.exports = {
             "Mad Maggie"
           ],
           "n": 1,
-          "pct": 10.0
+          "pct": 7.7
         },
         {
           "heroes": [
@@ -204,7 +232,7 @@ module.exports = {
             "Pathfinder"
           ],
           "n": 1,
-          "pct": 10.0
+          "pct": 7.7
         }
       ],
       "weapons": [
@@ -1385,7 +1413,7 @@ module.exports = {
           "pct": 12.2
         },
         {
-          "zh": "班加罗尔",
+          "zh": "罗芭",
           "n": 2,
           "pct": 1.0
         },
@@ -1945,8 +1973,8 @@ module.exports = {
           "pct": 6.7
         },
         {
-          "zh": "沃特森",
-          "en": "Wattson",
+          "zh": "万蒂奇",
+          "en": "Vantage",
           "n": 4,
           "pct": 1.9
         }
@@ -2348,7 +2376,7 @@ module.exports = {
           "pct": 10.5
         },
         {
-          "zh": "班加罗尔",
+          "zh": "地平线",
           "n": 1,
           "pct": 1.1
         }
@@ -2390,8 +2418,8 @@ module.exports = {
         {
           "zh": "罗芭",
           "en": "Loba",
-          "n": 12,
-          "pct": 6.9
+          "n": 13,
+          "pct": 7.4
         },
         {
           "zh": "琉雀",
@@ -2404,12 +2432,6 @@ module.exports = {
           "en": "Bangalore",
           "n": 5,
           "pct": 2.9
-        },
-        {
-          "zh": "艾克赛尔",
-          "en": "Axle",
-          "n": 1,
-          "pct": 0.6
         },
         {
           "zh": "亡灵",
@@ -2479,12 +2501,12 @@ module.exports = {
           "heroes": [
             "希尔",
             "罗芭",
-            "艾克赛尔"
+            "罗芭"
           ],
           "en": [
             "Seer",
             "Loba",
-            "Axle"
+            "Loba"
           ],
           "n": 1,
           "pct": 11.1
@@ -3001,9 +3023,9 @@ module.exports = {
           "pct": 65.1
         },
         {
-          "zh": "班加罗尔",
-          "n": 9,
-          "pct": 7.0
+          "zh": "疯马吉",
+          "n": 13,
+          "pct": 10.1
         },
         {
           "zh": "恶灵",
@@ -3014,11 +3036,6 @@ module.exports = {
           "zh": "琉雀",
           "n": 5,
           "pct": 3.9
-        },
-        {
-          "zh": "探路者",
-          "n": 4,
-          "pct": 3.1
         }
       ]
     },
@@ -3080,16 +3097,16 @@ module.exports = {
           "pct": 3.3
         },
         {
-          "zh": "沃特森",
-          "en": "Wattson",
-          "n": 3,
-          "pct": 3.3
-        },
-        {
           "zh": "变换",
           "en": "Alter",
-          "n": 1,
-          "pct": 1.1
+          "n": 2,
+          "pct": 2.2
+        },
+        {
+          "zh": "沃特森",
+          "en": "Wattson",
+          "n": 2,
+          "pct": 2.2
         },
         {
           "zh": "艾克赛尔",
@@ -3533,14 +3550,14 @@ module.exports = {
         {
           "zh": "罗芭",
           "en": "Loba",
-          "n": 17,
-          "pct": 17.7
+          "n": 19,
+          "pct": 19.8
         },
         {
           "zh": "希尔",
           "en": "Seer",
-          "n": 6,
-          "pct": 6.2
+          "n": 5,
+          "pct": 5.2
         },
         {
           "zh": "艾克赛尔",
@@ -3557,12 +3574,6 @@ module.exports = {
         {
           "zh": "密客",
           "en": "Crypto",
-          "n": 1,
-          "pct": 1.0
-        },
-        {
-          "zh": "导管",
-          "en": "Conduit",
           "n": 1,
           "pct": 1.0
         },
@@ -4179,6 +4190,12 @@ module.exports = {
           "pct": 15.3
         },
         {
+          "zh": "班加罗尔",
+          "en": "Bangalore",
+          "n": 7,
+          "pct": 9.7
+        },
+        {
           "zh": "希尔",
           "en": "Seer",
           "n": 6,
@@ -4209,45 +4226,25 @@ module.exports = {
           "pct": 6.9
         },
         {
-          "zh": "班加罗尔",
-          "en": "Bangalore",
-          "n": 5,
-          "pct": 6.9
-        },
-        {
-          "zh": "艾克赛尔",
-          "en": "Axle",
-          "n": 3,
-          "pct": 4.2
-        },
-        {
-          "zh": "导管",
-          "en": "Conduit",
-          "n": 2,
-          "pct": 2.8
-        },
-        {
           "zh": "变换",
           "en": "Alter",
           "n": 2,
           "pct": 2.8
+        },
+        {
+          "zh": "艾克赛尔",
+          "en": "Axle",
+          "n": 2,
+          "pct": 2.8
+        },
+        {
+          "zh": "罗芭",
+          "en": "Loba",
+          "n": 1,
+          "pct": 1.4
         }
       ],
       "combos": [
-        {
-          "heroes": [
-            "动力小子",
-            "探路者",
-            "班加罗尔"
-          ],
-          "en": [
-            "Octane",
-            "Pathfinder",
-            "Bangalore"
-          ],
-          "n": 2,
-          "pct": 28.6
-        },
         {
           "heroes": [
             "探路者",
@@ -4260,7 +4257,7 @@ module.exports = {
             "Sparrow"
           ],
           "n": 2,
-          "pct": 28.6
+          "pct": 40.0
         },
         {
           "heroes": [
@@ -4274,21 +4271,21 @@ module.exports = {
             "Mad Maggie"
           ],
           "n": 1,
-          "pct": 14.3
+          "pct": 20.0
         },
         {
           "heroes": [
             "动力小子",
-            "导管",
-            "探路者"
+            "探路者",
+            "班加罗尔"
           ],
           "en": [
             "Octane",
-            "Conduit",
-            "Pathfinder"
+            "Pathfinder",
+            "Bangalore"
           ],
           "n": 1,
-          "pct": 14.3
+          "pct": 20.0
         },
         {
           "heroes": [
@@ -4302,7 +4299,7 @@ module.exports = {
             "Axle"
           ],
           "n": 1,
-          "pct": 14.3
+          "pct": 20.0
         }
       ],
       "weapons": [
