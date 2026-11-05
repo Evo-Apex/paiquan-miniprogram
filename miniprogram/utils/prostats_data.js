@@ -1487,8 +1487,8 @@ module.exports = {
           "pct": 1.2
         },
         {
-          "zh": "纽卡斯尔",
-          "en": "Newcastle",
+          "zh": "沃特森",
+          "en": "Wattson",
           "n": 2,
           "pct": 1.2
         },
@@ -2843,37 +2843,43 @@ module.exports = {
       "role": "主播",
       "source": "B站直播回放 2026-11-04 起（S29）· 90 帧",
       "hours": 0,
-      "note": "英雄覆盖 63.6% · 未人工核验",
+      "note": "英雄覆盖 64.1% · 未人工核验",
       "heroes": [
         {
           "zh": "亡灵",
           "en": "Revenant",
           "n": 71,
-          "pct": 50.7
+          "pct": 50.4
         },
         {
           "zh": "动力小子",
           "en": "Octane",
           "n": 33,
-          "pct": 23.6
+          "pct": 23.4
         },
         {
           "zh": "探路者",
           "en": "Pathfinder",
           "n": 20,
-          "pct": 14.3
+          "pct": 14.2
         },
         {
-          "zh": "暴雷",
-          "en": "Fuse",
+          "zh": "命脉",
+          "en": "Lifeline",
           "n": 12,
-          "pct": 8.6
+          "pct": 8.5
         },
         {
           "zh": "密客",
           "en": "Crypto",
           "n": 4,
-          "pct": 2.9
+          "pct": 2.8
+        },
+        {
+          "zh": "暴雷",
+          "en": "Fuse",
+          "n": 1,
+          "pct": 0.7
         }
       ],
       "combos": [
@@ -2889,7 +2895,21 @@ module.exports = {
             "Pathfinder"
           ],
           "n": 1,
-          "pct": 100.0
+          "pct": 50.0
+        },
+        {
+          "heroes": [
+            "亡灵",
+            "命脉",
+            "密客"
+          ],
+          "en": [
+            "Revenant",
+            "Lifeline",
+            "Crypto"
+          ],
+          "n": 1,
+          "pct": 50.0
         }
       ],
       "weapons": [
@@ -3069,8 +3089,8 @@ module.exports = {
         {
           "zh": "暴雷",
           "en": "Fuse",
-          "n": 8,
-          "pct": 8.8
+          "n": 11,
+          "pct": 12.1
         },
         {
           "zh": "罗芭",
@@ -3087,12 +3107,6 @@ module.exports = {
         {
           "zh": "动力小子",
           "en": "Octane",
-          "n": 3,
-          "pct": 3.3
-        },
-        {
-          "zh": "兰帕特",
-          "en": "Rampart",
           "n": 3,
           "pct": 3.3
         },
@@ -3119,20 +3133,6 @@ module.exports = {
         {
           "heroes": [
             "亡灵",
-            "兰帕特",
-            "探路者"
-          ],
-          "en": [
-            "Revenant",
-            "Rampart",
-            "Pathfinder"
-          ],
-          "n": 1,
-          "pct": 33.3
-        },
-        {
-          "heroes": [
-            "亡灵",
             "探路者",
             "暴雷"
           ],
@@ -3142,7 +3142,7 @@ module.exports = {
             "Fuse"
           ],
           "n": 1,
-          "pct": 33.3
+          "pct": 50.0
         },
         {
           "heroes": [
@@ -3156,7 +3156,7 @@ module.exports = {
             "Fuse"
           ],
           "n": 1,
-          "pct": 33.3
+          "pct": 50.0
         }
       ],
       "weapons": [
@@ -4175,89 +4175,89 @@ module.exports = {
       "role": "主播",
       "source": "B站直播回放 2026-11-04 起（S29）· 35 帧",
       "hours": 0,
-      "note": "英雄覆盖 83.7% · 未人工核验",
+      "note": "英雄覆盖 89.5% · 未人工核验",
       "heroes": [
         {
           "zh": "探路者",
           "en": "Pathfinder",
           "n": 21,
-          "pct": 29.2
+          "pct": 27.3
         },
         {
           "zh": "动力小子",
           "en": "Octane",
           "n": 11,
-          "pct": 15.3
+          "pct": 14.3
+        },
+        {
+          "zh": "命脉",
+          "en": "Lifeline",
+          "n": 10,
+          "pct": 13.0
         },
         {
           "zh": "班加罗尔",
           "en": "Bangalore",
           "n": 7,
-          "pct": 9.7
+          "pct": 9.1
         },
         {
           "zh": "希尔",
           "en": "Seer",
           "n": 6,
-          "pct": 8.3
+          "pct": 7.8
         },
         {
-          "zh": "琉雀",
-          "en": "Sparrow",
+          "zh": "密客",
+          "en": "Crypto",
           "n": 6,
-          "pct": 8.3
+          "pct": 7.8
         },
         {
           "zh": "亡灵",
           "en": "Revenant",
           "n": 6,
-          "pct": 8.3
+          "pct": 7.8
         },
         {
           "zh": "疯马吉",
           "en": "Mad Maggie",
           "n": 5,
-          "pct": 6.9
-        },
-        {
-          "zh": "暴雷",
-          "en": "Fuse",
-          "n": 5,
-          "pct": 6.9
+          "pct": 6.5
         },
         {
           "zh": "变换",
           "en": "Alter",
           "n": 2,
-          "pct": 2.8
+          "pct": 2.6
         },
         {
           "zh": "艾克赛尔",
           "en": "Axle",
           "n": 2,
-          "pct": 2.8
+          "pct": 2.6
         },
         {
           "zh": "罗芭",
           "en": "Loba",
           "n": 1,
-          "pct": 1.4
+          "pct": 1.3
         }
       ],
       "combos": [
         {
           "heroes": [
-            "探路者",
-            "暴雷",
-            "琉雀"
+            "命脉",
+            "密客",
+            "探路者"
           ],
           "en": [
-            "Pathfinder",
-            "Fuse",
-            "Sparrow"
+            "Lifeline",
+            "Crypto",
+            "Pathfinder"
           ],
-          "n": 2,
-          "pct": 40.0
+          "n": 3,
+          "pct": 50.0
         },
         {
           "heroes": [
@@ -4271,7 +4271,7 @@ module.exports = {
             "Mad Maggie"
           ],
           "n": 1,
-          "pct": 20.0
+          "pct": 16.7
         },
         {
           "heroes": [
@@ -4285,7 +4285,7 @@ module.exports = {
             "Bangalore"
           ],
           "n": 1,
-          "pct": 20.0
+          "pct": 16.7
         },
         {
           "heroes": [
@@ -4299,7 +4299,7 @@ module.exports = {
             "Axle"
           ],
           "n": 1,
-          "pct": 20.0
+          "pct": 16.7
         }
       ],
       "weapons": [
@@ -4412,9 +4412,9 @@ module.exports = {
       ],
       "selfHeroes": [
         {
-          "zh": "琉雀",
-          "n": 19,
-          "pct": 28.8
+          "zh": "密客",
+          "n": 17,
+          "pct": 25.8
         },
         {
           "zh": "探路者",
@@ -4430,6 +4430,11 @@ module.exports = {
           "zh": "变换",
           "n": 6,
           "pct": 9.1
+        },
+        {
+          "zh": "琉雀",
+          "n": 2,
+          "pct": 3.0
         },
         {
           "zh": "疯马吉",
