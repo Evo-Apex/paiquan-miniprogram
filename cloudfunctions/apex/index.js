@@ -108,10 +108,10 @@ exports.main = async (event) => {
   // 集合不存在（第一次用就是这样）或读失败时**静默退回内置兜底值**，
   // 绝不把错误抛给用户 —— 页面上少一行倒计时，比弹一个报错好得多。
   //
-  // SEASON_FALLBACK = 2026-11-04 01:00 (UTC+8)，按游戏内"通行证剩余 21d6h"推的。
+  // SEASON_FALLBACK = 2027-02-10 01:00 (UTC+8)，按游戏内"第31赛季剩余 96 天"推的（2026-11-06 记）。
   // 小时级，所以误差在 ±1 小时内；换赛季去控制台改 site_config 即可。
   if (event && event.action === "config") {
-    const SEASON_FALLBACK = 1793725200;
+    const SEASON_FALLBACK = 1802192400;
     const cfg = { season: SEASON_FALLBACK, events: [], matches: [] };
     try {
       const res = await cloud.database().collection("site_config").limit(20).get();

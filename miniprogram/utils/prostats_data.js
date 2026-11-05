@@ -2,8 +2,8 @@
 // 数据来源：B站直播回放的离线识别（同域模板匹配 + 武器名 OCR）。
 // ⚠️ 未经人工核验，仅供预览。
 module.exports = {
-  "updated": "2026-11-05",
-  "season": "S29",
+  "updated": "2026-11-06",
+  "season": "S31",
   "players": [
     {
       "id": "fengchun",
