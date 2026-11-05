@@ -115,11 +115,22 @@ exports.main = async (event) => {
     const cfg = { season: SEASON_FALLBACK, events: [], matches: [] };
     try {
       const res = await cloud.database().collection("site_config").limit(20).get();
+      // 控制台「添加记录」不会用你在对话框里填的文档 ID，一律自己生成一个
+      // （2026-11-06 实测两次：prostats 和 site_config 都被换成了 b548…/6677…）。
+      // 所以只认 _id === "season" 的话，用户照文档建完记录却读不到，极难排查。
+      // 这里改成：优先认 _id === "season"；没有就收下**任何带 endTs 的记录**（取最大的那个）。
+      // 带 list 的是 events/matches，跳过。
+      let byId = 0, anyEnd = 0;
       (res.data || []).forEach(function (doc) {
-        if (doc._id === "season" && doc.endTs) cfg.season = Number(doc.endTs) || SEASON_FALLBACK;
-        if (doc._id === "events" && Array.isArray(doc.list)) cfg.events = doc.list;
-        if (doc._id === "matches" && Array.isArray(doc.list)) cfg.matches = doc.list;
+        if (doc._id === "events" && Array.isArray(doc.list)) { cfg.events = doc.list; return; }
+        if (doc._id === "matches" && Array.isArray(doc.list)) { cfg.matches = doc.list; return; }
+        if (!doc.endTs || Array.isArray(doc.list)) return;
+        const t = Number(doc.endTs);
+        if (!isFinite(t) || t <= 0) return;
+        if (doc._id === "season") byId = t;
+        else if (t > anyEnd) anyEnd = t;
       });
+      cfg.season = byId || anyEnd || SEASON_FALLBACK;
     } catch (e) {
       // 集合还没建：保持兜底值，什么都不说
     }
