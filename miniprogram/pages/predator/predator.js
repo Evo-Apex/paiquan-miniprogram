@@ -148,6 +148,7 @@ Page({
   onLoad: function (options) {
     this.setData(navMetrics());   // 自定义导航栏尺寸（状态栏 + 胶囊位置）
     this.rebuildPro();            // 职业统计是本地数据，先渲染出来（不等网络）
+    this.refreshProFromCloud();   // 再问一次云端：有更新的数据就换掉重绘（失败保持现状）
     this.refresh();
     this.fetchRank();             // 段位分布（网络，失败就整块不显示）
     this.fetchConfig();           // 赛季倒计时（网络，失败就整行不显示）
@@ -160,6 +161,21 @@ Page({
       this.setData({ playerInput: q.player || q.uid, platformIndex: q.platformIndex });
       this.doLookup(q.player || q.uid, q.uid);
     }
+  },
+
+  /**
+   * 主播数据热更新：云端有更新的就换掉包内快照并重绘。
+   *
+   * 三条约束（都是踩过的）：
+   *   1. 只问一次（utils/prostats.js 里用 FETCHED 兜住），切页/重进不重复烧配额；
+   *   2. 失败**什么都不做** —— 包内那份还在，页面照常；
+   *   3. 换完必须 rebuildPro 重绘，不然界面上还是旧数据。
+   */
+  refreshProFromCloud: function () {
+    var self = this;
+    prostats.refresh(function (changed) {
+      if (changed) self.rebuildPro();
+    });
   },
 
   /**

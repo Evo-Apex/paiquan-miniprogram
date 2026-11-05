@@ -43,7 +43,8 @@ var UPSTREAM_PATH = {
 };
 
 // 允许的 action 集中放一处，免得以后加接口时漏改某个 if
-var ACTIONS = ["rotation", "predator", "player", "servers", "esports", "trackAdd", "trackList", "trackRemove"];
+var ACTIONS = ["rotation", "predator", "player", "servers", "esports", "trackAdd", "trackList", "trackRemove",
+  "prostats", "prostatsSet"];
 
 function buildUrl(action, event, deps, asUid) {
   var base = ((deps && deps.baseUrl) || BASE).replace(/\/+$/, "");
@@ -116,10 +117,41 @@ async function handle(event, deps) {
     }
     return { ok: true, kind: "ok", message: "", data: { schedule: sch, standings: st }, cached: false };
   }
+  // 主播排位数据（热更新）：读云数据库里的那一条，读不到就让前端用包内快照。
+  // 和 esports 一样放在 nokey 检查**之前** —— 这条路完全不碰上游 API。
+  if (action === "prostats") {
+    if (!deps.prostats) {
+      return { ok: false, kind: "unsupported", message: "热更新仅微信小程序可用。" };
+    }
+    var hot = await deps.prostats.read();
+    if (!hot || !hot.players || !hot.players.length) {
+      return { ok: false, kind: "empty", message: "云端还没有主播数据。" };
+    }
+    return { ok: true, kind: "ok", message: "", data: hot, cached: false };
+  }
+
+  // 写入口：给识别脚本推送用。**token 只存在云函数环境变量里**，
+  // 小程序端不持有它（客户端发的 prostatsSet 一律会被拒），所以不能靠它改数据。
+  if (action === "prostatsSet") {
+    var expect = String(deps.prostatsToken || "").trim();
+    if (!expect || String(event.token || "") !== expect) {
+      return { ok: false, kind: "forbidden", message: "没有写入权限。" };
+    }
+    if (!deps.prostats) {
+      return { ok: false, kind: "unsupported", message: "云端存储没初始化，无法写入。" };
+    }
+    var payload = event.payload;
+    if (!payload || !Array.isArray(payload.players) || !payload.players.length) {
+      return { ok: false, kind: "badparam", message: "payload 不合法。" };
+    }
+    var wrote = await deps.prostats.write(payload);
+    if (!wrote) return { ok: false, kind: "internal", message: "写入失败，请检查 prostats 集合。" };
+    return { ok: true, kind: "ok", message: "", data: { players: payload.players.length } };
+  }
+
   if (!deps.apiKey) {
     return { ok: false, kind: "nokey", message: core.MSG.nokey };
-  }
-  // 追踪（增删查）走数据库，和上面"查上游"是两条独立的路
+  }  // 追踪（增删查）走数据库，和上面"查上游"是两条独立的路
   if (action === "trackAdd" || action === "trackList" || action === "trackRemove") {
     return await handleTrack(event, deps);
   }

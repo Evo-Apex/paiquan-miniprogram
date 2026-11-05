@@ -19,6 +19,7 @@ let snapshots = null;
 let playerStore = null;
 let rotationLog = null;
 let getOpenid = null;
+let prostats = null;
 try {
   const cloud = require("wx-server-sdk");
   cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
@@ -26,6 +27,8 @@ try {
   playerStore = require("./playerStore").createPlayerStore(cloud);
   // 轮换记录器：给"接下来两天几点打哪张图"的表供数（玩法那部分不用记，可以外推）
   rotationLog = require("./rotationLog").createLog(cloud);
+  // 主播排位数据（英雄/阵容/配枪）的热更新仓库
+  prostats = require("./prostatsStore").createProstatsStore(cloud);
   // 追踪按 openid 隔离（每人最多 5 个）。定时触发器触发的轮询没有用户上下文，openid 为空即可。
   getOpenid = function () {
     try {
@@ -169,6 +172,9 @@ exports.main = async (event) => {
       apiKey: apiKey,
       snapshots: snapshots,
       playerStore: playerStore,
+      prostats: prostats,
+      // 只从环境变量读：写入口的 token 绝不能出现在小程序包里
+      prostatsToken: (process.env.PROSTATS_TOKEN || "").trim(),
       openid: getOpenid ? getOpenid() : "",
     });
   } catch (e) {

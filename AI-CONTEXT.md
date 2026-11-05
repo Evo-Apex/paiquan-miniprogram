@@ -115,6 +115,8 @@ pages/maps.wxml  {{...}}  ← 只渲染，不含业务判断
 | `pickrates` | 英雄选取率（分段位） | 解析 `apexlegendsstatus.com` 网页 | 1 小时 | — |
 | `rankdist` | 段位分布（实时） | `/lib/php/rankdistrib.php?unranked=yes`（JSON） | 6 小时 | — |
 | `teams` | 战队专区（名单 + 当前分） | `curated_roster_resolved.json` + `/bridge` | 30 分钟 | — |
+| `prostats` | 主播排位数据（英雄/阵容/武器/配枪）的热更新读取 | 云数据库 `prostats/current` | — | `prostats`（可缺，缺了用包内快照） |
+| `prostatsSet` | 同上，**写入**。只认云函数环境变量 `PROSTATS_TOKEN`，小程序端不持有 | 云数据库 | — | `prostats` |
 | `Timer` | 定时轮询追踪名单 + 顺手记一条轮换 | — | — | 同上 |
 
 **数据库集合（5 个，都要在云开发控制台手动建）**
