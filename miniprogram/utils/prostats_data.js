@@ -12,61 +12,67 @@ module.exports = {
       "role": "主播",
       "source": "B站直播回放 2026-11-04 起（S29）· 239 帧",
       "hours": 0,
-      "note": "英雄覆盖 78.3% · 未人工核验",
+      "note": "英雄覆盖 85.3% · 未人工核验",
       "heroes": [
         {
           "zh": "探路者",
           "en": "Pathfinder",
-          "n": 137,
-          "pct": 33.8
+          "n": 138,
+          "pct": 31.3
         },
         {
           "zh": "亡灵",
           "en": "Revenant",
-          "n": 134,
-          "pct": 33.1
+          "n": 137,
+          "pct": 31.1
+        },
+        {
+          "zh": "命脉",
+          "en": "Lifeline",
+          "n": 32,
+          "pct": 7.3
         },
         {
           "zh": "艾克赛尔",
           "en": "Axle",
-          "n": 26,
-          "pct": 6.4
+          "n": 25,
+          "pct": 5.7
         },
         {
           "zh": "动力小子",
           "en": "Octane",
           "n": 23,
-          "pct": 5.7
+          "pct": 5.2
         },
         {
           "zh": "罗芭",
           "en": "Loba",
-          "n": 21,
-          "pct": 5.2
+          "n": 22,
+          "pct": 5.0
         },
         {
           "zh": "疯马吉",
           "en": "Mad Maggie",
           "n": 18,
-          "pct": 4.4
+          "pct": 4.1
         },
         {
           "zh": "暴雷",
           "en": "Fuse",
           "n": 16,
-          "pct": 4.0
+          "pct": 3.6
+        },
+        {
+          "zh": "变换",
+          "en": "Alter",
+          "n": 14,
+          "pct": 3.2
         },
         {
           "zh": "密客",
           "en": "Crypto",
           "n": 12,
-          "pct": 3.0
-        },
-        {
-          "zh": "变换",
-          "en": "Alter",
-          "n": 12,
-          "pct": 3.0
+          "pct": 2.7
         },
         {
           "zh": "班加罗尔",
@@ -79,18 +85,6 @@ module.exports = {
           "en": "Catalyst",
           "n": 2,
           "pct": 0.5
-        },
-        {
-          "zh": "沃特森",
-          "en": "Wattson",
-          "n": 1,
-          "pct": 0.2
-        },
-        {
-          "zh": "恶灵",
-          "en": "Wraith",
-          "n": 1,
-          "pct": 0.2
         }
       ],
       "combos": [
@@ -166,20 +160,6 @@ module.exports = {
         },
         {
           "heroes": [
-            "亡灵",
-            "沃特森",
-            "艾克赛尔"
-          ],
-          "en": [
-            "Revenant",
-            "Wattson",
-            "Axle"
-          ],
-          "n": 1,
-          "pct": 7.7
-        },
-        {
-          "heroes": [
             "动力小子",
             "探路者",
             "艾克赛尔"
@@ -216,6 +196,20 @@ module.exports = {
             "Crypto",
             "Pathfinder",
             "Mad Maggie"
+          ],
+          "n": 1,
+          "pct": 7.7
+        },
+        {
+          "heroes": [
+            "亡灵",
+            "命脉",
+            "探路者"
+          ],
+          "en": [
+            "Revenant",
+            "Lifeline",
+            "Pathfinder"
           ],
           "n": 1,
           "pct": 7.7
@@ -595,13 +589,13 @@ module.exports = {
       "selfHeroes": [
         {
           "zh": "亡灵",
-          "n": 146,
-          "pct": 61.1
+          "n": 150,
+          "pct": 62.8
         },
         {
           "zh": "探路者",
-          "n": 69,
-          "pct": 28.9
+          "n": 70,
+          "pct": 29.3
         },
         {
           "zh": "变换",
@@ -610,8 +604,8 @@ module.exports = {
         },
         {
           "zh": "恶灵",
-          "n": 4,
-          "pct": 1.7
+          "n": 3,
+          "pct": 1.3
         },
         {
           "zh": "班加罗尔",
@@ -632,47 +626,53 @@ module.exports = {
       "role": "主播",
       "source": "B站直播回放 2026-11-04 起（S29）· 206 帧",
       "hours": 0,
-      "note": "英雄覆盖 62.4% · 未人工核验",
+      "note": "英雄覆盖 65.7% · 未人工核验",
       "heroes": [
         {
           "zh": "亡灵",
           "en": "Revenant",
-          "n": 159,
-          "pct": 50.2
+          "n": 166,
+          "pct": 49.7
         },
         {
           "zh": "希尔",
           "en": "Seer",
           "n": 129,
-          "pct": 40.7
+          "pct": 38.6
         },
         {
           "zh": "探路者",
           "en": "Pathfinder",
           "n": 11,
-          "pct": 3.5
+          "pct": 3.3
         },
         {
           "zh": "疯马吉",
           "en": "Mad Maggie",
           "n": 9,
-          "pct": 2.8
+          "pct": 2.7
+        },
+        {
+          "zh": "命脉",
+          "en": "Lifeline",
+          "n": 6,
+          "pct": 1.8
+        },
+        {
+          "zh": "班加罗尔",
+          "en": "Bangalore",
+          "n": 6,
+          "pct": 1.8
         },
         {
           "zh": "沃特森",
           "en": "Wattson",
           "n": 4,
-          "pct": 1.3
+          "pct": 1.2
         },
         {
           "zh": "导管",
           "en": "Conduit",
-          "n": 2,
-          "pct": 0.6
-        },
-        {
-          "zh": "班加罗尔",
-          "en": "Bangalore",
           "n": 2,
           "pct": 0.6
         },
@@ -683,7 +683,22 @@ module.exports = {
           "pct": 0.3
         }
       ],
-      "combos": [],
+      "combos": [
+        {
+          "heroes": [
+            "亡灵",
+            "命脉",
+            "希尔"
+          ],
+          "en": [
+            "Revenant",
+            "Lifeline",
+            "Seer"
+          ],
+          "n": 3,
+          "pct": 100.0
+        }
+      ],
       "weapons": [
         {
           "zh": "复仇女神连发突击步枪",
@@ -1030,8 +1045,8 @@ module.exports = {
       "selfHeroes": [
         {
           "zh": "亡灵",
-          "n": 184,
-          "pct": 76.3
+          "n": 195,
+          "pct": 80.9
         },
         {
           "zh": "卡特莉丝",
@@ -1057,34 +1072,60 @@ module.exports = {
       "role": "主播",
       "source": "B站直播回放 2026-11-04 起（S29）· 177 帧",
       "hours": 0,
-      "note": "英雄覆盖 68.4% · 未人工核验",
+      "note": "英雄覆盖 69.5% · 未人工核验",
       "heroes": [
         {
           "zh": "亡灵",
           "en": "Revenant",
-          "n": 153,
-          "pct": 48.4
+          "n": 154,
+          "pct": 48.0
         },
         {
           "zh": "密客",
           "en": "Crypto",
           "n": 136,
-          "pct": 43.0
+          "pct": 42.4
         },
         {
           "zh": "探路者",
           "en": "Pathfinder",
           "n": 26,
-          "pct": 8.2
+          "pct": 8.1
+        },
+        {
+          "zh": "命脉",
+          "en": "Lifeline",
+          "n": 3,
+          "pct": 0.9
         },
         {
           "zh": "班加罗尔",
           "en": "Bangalore",
           "n": 1,
           "pct": 0.3
+        },
+        {
+          "zh": "动力小子",
+          "en": "Octane",
+          "n": 1,
+          "pct": 0.3
         }
       ],
       "combos": [
+        {
+          "heroes": [
+            "亡灵",
+            "命脉",
+            "密客"
+          ],
+          "en": [
+            "Revenant",
+            "Lifeline",
+            "Crypto"
+          ],
+          "n": 2,
+          "pct": 66.7
+        },
         {
           "heroes": [
             "亡灵",
@@ -1097,7 +1138,7 @@ module.exports = {
             "Pathfinder"
           ],
           "n": 1,
-          "pct": 100.0
+          "pct": 33.3
         }
       ],
       "weapons": [
@@ -1436,73 +1477,73 @@ module.exports = {
       "role": "主播",
       "source": "B站直播回放 2026-11-04 起（S29）· 139 帧",
       "hours": 0,
-      "note": "英雄覆盖 58.0% · 未人工核验",
+      "note": "英雄覆盖 65.1% · 未人工核验",
       "heroes": [
+        {
+          "zh": "亡灵",
+          "en": "Revenant",
+          "n": 70,
+          "pct": 36.5
+        },
         {
           "zh": "罗芭",
           "en": "Loba",
-          "n": 45,
-          "pct": 26.3
+          "n": 55,
+          "pct": 28.6
         },
         {
           "zh": "探路者",
           "en": "Pathfinder",
-          "n": 33,
-          "pct": 19.3
-        },
-        {
-          "zh": "疯马吉",
-          "en": "Mad Maggie",
-          "n": 26,
-          "pct": 15.2
-        },
-        {
-          "zh": "亡灵",
-          "en": "Revenant",
-          "n": 26,
-          "pct": 15.2
-        },
-        {
-          "zh": "艾克赛尔",
-          "en": "Axle",
-          "n": 17,
-          "pct": 9.9
+          "n": 34,
+          "pct": 17.7
         },
         {
           "zh": "变换",
           "en": "Alter",
           "n": 13,
-          "pct": 7.6
+          "pct": 6.8
+        },
+        {
+          "zh": "艾克赛尔",
+          "en": "Axle",
+          "n": 7,
+          "pct": 3.6
         },
         {
           "zh": "希尔",
           "en": "Seer",
-          "n": 5,
-          "pct": 2.9
-        },
-        {
-          "zh": "恶灵",
-          "en": "Wraith",
-          "n": 2,
-          "pct": 1.2
+          "n": 6,
+          "pct": 3.1
         },
         {
           "zh": "沃特森",
           "en": "Wattson",
           "n": 2,
-          "pct": 1.2
+          "pct": 1.0
+        },
+        {
+          "zh": "疯马吉",
+          "en": "Mad Maggie",
+          "n": 2,
+          "pct": 1.0
+        },
+        {
+          "zh": "班加罗尔",
+          "en": "Bangalore",
+          "n": 1,
+          "pct": 0.5
         },
         {
           "zh": "密客",
           "en": "Crypto",
           "n": 1,
-          "pct": 0.6
+          "pct": 0.5
         },
         {
           "zh": "动力小子",
           "en": "Octane",
           "n": 1,
-          "pct": 0.6
+          "pct": 0.5
         }
       ],
       "combos": [
@@ -1517,22 +1558,22 @@ module.exports = {
             "Pathfinder",
             "Loba"
           ],
-          "n": 4,
-          "pct": 57.1
+          "n": 2,
+          "pct": 50.0
         },
         {
           "heroes": [
-            "亡灵",
             "探路者",
-            "艾克赛尔"
+            "班加罗尔",
+            "罗芭"
           ],
           "en": [
-            "Revenant",
             "Pathfinder",
-            "Axle"
+            "Bangalore",
+            "Loba"
           ],
-          "n": 2,
-          "pct": 28.6
+          "n": 1,
+          "pct": 25.0
         },
         {
           "heroes": [
@@ -1546,7 +1587,7 @@ module.exports = {
             "Mad Maggie"
           ],
           "n": 1,
-          "pct": 14.3
+          "pct": 25.0
         }
       ],
       "weapons": [
@@ -1907,8 +1948,8 @@ module.exports = {
         },
         {
           "zh": "希尔",
-          "n": 14,
-          "pct": 13.1
+          "n": 15,
+          "pct": 14.0
         },
         {
           "zh": "罗芭",
@@ -1917,13 +1958,8 @@ module.exports = {
         },
         {
           "zh": "探路者",
-          "n": 8,
-          "pct": 7.5
-        },
-        {
-          "zh": "恶灵",
-          "n": 2,
-          "pct": 1.9
+          "n": 9,
+          "pct": 8.4
         }
       ]
     },
@@ -1934,49 +1970,55 @@ module.exports = {
       "role": "主播",
       "source": "B站直播回放 2026-11-04 起（S29）· 108 帧",
       "hours": 0,
-      "note": "英雄覆盖 86.7% · 未人工核验",
+      "note": "英雄覆盖 88.8% · 未人工核验",
       "heroes": [
         {
           "zh": "疯马吉",
           "en": "Mad Maggie",
           "n": 71,
-          "pct": 34.0
+          "pct": 33.2
         },
         {
           "zh": "探路者",
           "en": "Pathfinder",
           "n": 61,
-          "pct": 29.2
+          "pct": 28.5
         },
         {
           "zh": "亡灵",
           "en": "Revenant",
           "n": 21,
-          "pct": 10.0
+          "pct": 9.8
+        },
+        {
+          "zh": "动力小子",
+          "en": "Octane",
+          "n": 20,
+          "pct": 9.3
         },
         {
           "zh": "希尔",
           "en": "Seer",
           "n": 20,
-          "pct": 9.6
-        },
-        {
-          "zh": "动力小子",
-          "en": "Octane",
-          "n": 18,
-          "pct": 8.6
+          "pct": 9.3
         },
         {
           "zh": "琉雀",
           "en": "Sparrow",
           "n": 14,
-          "pct": 6.7
+          "pct": 6.5
         },
         {
           "zh": "万蒂奇",
           "en": "Vantage",
           "n": 4,
           "pct": 1.9
+        },
+        {
+          "zh": "班加罗尔",
+          "en": "Bangalore",
+          "n": 3,
+          "pct": 1.4
         }
       ],
       "combos": [
@@ -2389,55 +2431,55 @@ module.exports = {
       "role": "主播",
       "source": "B站直播回放 2026-11-04 起（S29）· 102 帧",
       "hours": 0,
-      "note": "英雄覆盖 83.3% · 未人工核验",
+      "note": "英雄覆盖 86.2% · 未人工核验",
       "heroes": [
         {
           "zh": "探路者",
           "en": "Pathfinder",
-          "n": 62,
-          "pct": 35.4
+          "n": 67,
+          "pct": 37.0
         },
         {
           "zh": "疯马吉",
           "en": "Mad Maggie",
-          "n": 50,
-          "pct": 28.6
+          "n": 58,
+          "pct": 32.0
         },
         {
           "zh": "动力小子",
           "en": "Octane",
           "n": 20,
-          "pct": 11.4
+          "pct": 11.0
         },
         {
           "zh": "希尔",
           "en": "Seer",
           "n": 17,
-          "pct": 9.7
-        },
-        {
-          "zh": "罗芭",
-          "en": "Loba",
-          "n": 13,
-          "pct": 7.4
+          "pct": 9.4
         },
         {
           "zh": "琉雀",
           "en": "Sparrow",
           "n": 7,
-          "pct": 4.0
+          "pct": 3.9
+        },
+        {
+          "zh": "罗芭",
+          "en": "Loba",
+          "n": 5,
+          "pct": 2.8
         },
         {
           "zh": "班加罗尔",
           "en": "Bangalore",
           "n": 5,
-          "pct": 2.9
+          "pct": 2.8
         },
         {
           "zh": "亡灵",
           "en": "Revenant",
-          "n": 1,
-          "pct": 0.6
+          "n": 2,
+          "pct": 1.1
         }
       ],
       "combos": [
@@ -2452,22 +2494,8 @@ module.exports = {
             "Pathfinder",
             "Mad Maggie"
           ],
-          "n": 3,
-          "pct": 33.3
-        },
-        {
-          "heroes": [
-            "动力小子",
-            "探路者",
-            "疯马吉"
-          ],
-          "en": [
-            "Octane",
-            "Pathfinder",
-            "Mad Maggie"
-          ],
           "n": 2,
-          "pct": 22.2
+          "pct": 40.0
         },
         {
           "heroes": [
@@ -2481,49 +2509,35 @@ module.exports = {
             "Mad Maggie"
           ],
           "n": 1,
-          "pct": 11.1
+          "pct": 20.0
         },
         {
           "heroes": [
             "动力小子",
             "探路者",
-            "罗芭"
+            "疯马吉"
           ],
           "en": [
             "Octane",
             "Pathfinder",
-            "Loba"
+            "Mad Maggie"
           ],
           "n": 1,
-          "pct": 11.1
+          "pct": 20.0
         },
         {
           "heroes": [
             "希尔",
-            "罗芭",
+            "疯马吉",
             "罗芭"
           ],
           "en": [
             "Seer",
-            "Loba",
+            "Mad Maggie",
             "Loba"
           ],
           "n": 1,
-          "pct": 11.1
-        },
-        {
-          "heroes": [
-            "希尔",
-            "探路者",
-            "罗芭"
-          ],
-          "en": [
-            "Seer",
-            "Pathfinder",
-            "Loba"
-          ],
-          "n": 1,
-          "pct": 11.1
+          "pct": 20.0
         }
       ],
       "weapons": [
@@ -2816,18 +2830,13 @@ module.exports = {
       "selfHeroes": [
         {
           "zh": "疯马吉",
-          "n": 58,
-          "pct": 45.3
+          "n": 68,
+          "pct": 53.1
         },
         {
           "zh": "探路者",
-          "n": 16,
-          "pct": 12.5
-        },
-        {
-          "zh": "罗芭",
-          "n": 10,
-          "pct": 7.8
+          "n": 21,
+          "pct": 16.4
         },
         {
           "zh": "亡灵",
@@ -2843,43 +2852,37 @@ module.exports = {
       "role": "主播",
       "source": "B站直播回放 2026-11-04 起（S29）· 90 帧",
       "hours": 0,
-      "note": "英雄覆盖 64.1% · 未人工核验",
+      "note": "英雄覆盖 68.2% · 未人工核验",
       "heroes": [
         {
           "zh": "亡灵",
           "en": "Revenant",
-          "n": 71,
-          "pct": 50.4
+          "n": 74,
+          "pct": 49.3
         },
         {
           "zh": "动力小子",
           "en": "Octane",
-          "n": 33,
-          "pct": 23.4
+          "n": 38,
+          "pct": 25.3
         },
         {
           "zh": "探路者",
           "en": "Pathfinder",
           "n": 20,
-          "pct": 14.2
+          "pct": 13.3
         },
         {
           "zh": "命脉",
           "en": "Lifeline",
-          "n": 12,
-          "pct": 8.5
+          "n": 14,
+          "pct": 9.3
         },
         {
           "zh": "密客",
           "en": "Crypto",
           "n": 4,
-          "pct": 2.8
-        },
-        {
-          "zh": "暴雷",
-          "en": "Fuse",
-          "n": 1,
-          "pct": 0.7
+          "pct": 2.7
         }
       ],
       "combos": [
@@ -3039,8 +3042,8 @@ module.exports = {
       "selfHeroes": [
         {
           "zh": "亡灵",
-          "n": 84,
-          "pct": 65.1
+          "n": 86,
+          "pct": 66.7
         },
         {
           "zh": "疯马吉",
@@ -3066,67 +3069,61 @@ module.exports = {
       "role": "主播",
       "source": "B站直播回放 2026-11-04 起（S29）· 69 帧",
       "hours": 0,
-      "note": "英雄覆盖 74.6% · 未人工核验",
+      "note": "英雄覆盖 77.9% · 未人工核验",
       "heroes": [
         {
           "zh": "亡灵",
           "en": "Revenant",
-          "n": 30,
-          "pct": 33.0
+          "n": 31,
+          "pct": 32.6
         },
         {
           "zh": "疯马吉",
           "en": "Mad Maggie",
-          "n": 20,
-          "pct": 22.0
+          "n": 22,
+          "pct": 23.2
         },
         {
           "zh": "探路者",
           "en": "Pathfinder",
           "n": 13,
-          "pct": 14.3
+          "pct": 13.7
         },
         {
           "zh": "暴雷",
           "en": "Fuse",
-          "n": 11,
-          "pct": 12.1
+          "n": 12,
+          "pct": 12.6
         },
         {
           "zh": "罗芭",
           "en": "Loba",
           "n": 5,
-          "pct": 5.5
+          "pct": 5.3
         },
         {
           "zh": "恶灵",
           "en": "Wraith",
           "n": 4,
-          "pct": 4.4
+          "pct": 4.2
         },
         {
           "zh": "动力小子",
           "en": "Octane",
           "n": 3,
-          "pct": 3.3
+          "pct": 3.2
         },
         {
           "zh": "变换",
           "en": "Alter",
-          "n": 2,
-          "pct": 2.2
+          "n": 3,
+          "pct": 3.2
         },
         {
           "zh": "沃特森",
           "en": "Wattson",
           "n": 2,
-          "pct": 2.2
-        },
-        {
-          "zh": "艾克赛尔",
-          "en": "Axle",
-          "n": 1,
-          "pct": 1.1
+          "pct": 2.1
         }
       ],
       "combos": [
@@ -3490,14 +3487,14 @@ module.exports = {
       ],
       "selfHeroes": [
         {
-          "zh": "亡灵",
-          "n": 56,
-          "pct": 28.6
+          "zh": "疯马吉",
+          "n": 62,
+          "pct": 31.6
         },
         {
-          "zh": "疯马吉",
-          "n": 51,
-          "pct": 26.0
+          "zh": "亡灵",
+          "n": 57,
+          "pct": 29.1
         },
         {
           "zh": "沃特森",
@@ -3505,19 +3502,14 @@ module.exports = {
           "pct": 9.2
         },
         {
-          "zh": "罗芭",
-          "n": 8,
-          "pct": 4.1
+          "zh": "探路者",
+          "n": 14,
+          "pct": 7.1
         },
         {
           "zh": "暴雷",
           "n": 4,
           "pct": 2.0
-        },
-        {
-          "zh": "探路者",
-          "n": 2,
-          "pct": 1.0
         },
         {
           "zh": "恶灵",
@@ -3855,31 +3847,37 @@ module.exports = {
       "role": "主播",
       "source": "B站直播回放 2026-11-04 起（S29）· 40 帧",
       "hours": 0,
-      "note": "英雄覆盖 73.3% · 未人工核验",
+      "note": "英雄覆盖 74.3% · 未人工核验",
       "heroes": [
         {
           "zh": "亡灵",
           "en": "Revenant",
           "n": 34,
-          "pct": 45.9
+          "pct": 45.3
         },
         {
           "zh": "探路者",
           "en": "Pathfinder",
           "n": 28,
-          "pct": 37.8
+          "pct": 37.3
         },
         {
           "zh": "疯马吉",
           "en": "Mad Maggie",
           "n": 10,
-          "pct": 13.5
+          "pct": 13.3
         },
         {
           "zh": "希尔",
           "en": "Seer",
           "n": 2,
           "pct": 2.7
+        },
+        {
+          "zh": "动力小子",
+          "en": "Octane",
+          "n": 1,
+          "pct": 1.3
         }
       ],
       "combos": [
@@ -4165,6 +4163,11 @@ module.exports = {
           "zh": "亡灵",
           "n": 67,
           "pct": 77.9
+        },
+        {
+          "zh": "动力小子",
+          "n": 1,
+          "pct": 1.2
         }
       ]
     },
@@ -4175,55 +4178,55 @@ module.exports = {
       "role": "主播",
       "source": "B站直播回放 2026-11-04 起（S29）· 35 帧",
       "hours": 0,
-      "note": "英雄覆盖 89.5% · 未人工核验",
+      "note": "英雄覆盖 90.7% · 未人工核验",
       "heroes": [
         {
           "zh": "探路者",
           "en": "Pathfinder",
           "n": 21,
-          "pct": 27.3
+          "pct": 26.9
+        },
+        {
+          "zh": "命脉",
+          "en": "Lifeline",
+          "n": 11,
+          "pct": 14.1
         },
         {
           "zh": "动力小子",
           "en": "Octane",
           "n": 11,
-          "pct": 14.3
-        },
-        {
-          "zh": "命脉",
-          "en": "Lifeline",
-          "n": 10,
-          "pct": 13.0
+          "pct": 14.1
         },
         {
           "zh": "班加罗尔",
           "en": "Bangalore",
           "n": 7,
-          "pct": 9.1
+          "pct": 9.0
         },
         {
           "zh": "希尔",
           "en": "Seer",
           "n": 6,
-          "pct": 7.8
+          "pct": 7.7
         },
         {
           "zh": "密客",
           "en": "Crypto",
           "n": 6,
-          "pct": 7.8
+          "pct": 7.7
         },
         {
           "zh": "亡灵",
           "en": "Revenant",
           "n": 6,
-          "pct": 7.8
+          "pct": 7.7
         },
         {
           "zh": "疯马吉",
           "en": "Mad Maggie",
           "n": 5,
-          "pct": 6.5
+          "pct": 6.4
         },
         {
           "zh": "变换",
@@ -4413,8 +4416,8 @@ module.exports = {
       "selfHeroes": [
         {
           "zh": "密客",
-          "n": 17,
-          "pct": 25.8
+          "n": 18,
+          "pct": 27.3
         },
         {
           "zh": "探路者",
@@ -4432,14 +4435,14 @@ module.exports = {
           "pct": 9.1
         },
         {
-          "zh": "琉雀",
+          "zh": "疯马吉",
           "n": 2,
           "pct": 3.0
         },
         {
-          "zh": "疯马吉",
-          "n": 2,
-          "pct": 3.0
+          "zh": "琉雀",
+          "n": 1,
+          "pct": 1.5
         },
         {
           "zh": "亡灵",
