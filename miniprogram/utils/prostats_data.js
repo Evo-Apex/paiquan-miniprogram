@@ -12,37 +12,37 @@ module.exports = {
       "role": "主播",
       "source": "B站直播回放 2026-11-04 起（S29）· 239 帧",
       "hours": 0,
-      "note": "英雄覆盖 77.4% · 未人工核验",
+      "note": "英雄覆盖 78.3% · 未人工核验",
       "heroes": [
         {
           "zh": "探路者",
           "en": "Pathfinder",
           "n": 137,
-          "pct": 34.2
+          "pct": 33.8
         },
         {
           "zh": "亡灵",
           "en": "Revenant",
-          "n": 129,
-          "pct": 32.2
+          "n": 134,
+          "pct": 33.1
         },
         {
           "zh": "艾克赛尔",
           "en": "Axle",
           "n": 45,
-          "pct": 11.2
+          "pct": 11.1
         },
         {
           "zh": "动力小子",
           "en": "Octane",
           "n": 23,
-          "pct": 5.8
+          "pct": 5.7
         },
         {
           "zh": "疯马吉",
           "en": "Mad Maggie",
           "n": 18,
-          "pct": 4.5
+          "pct": 4.4
         },
         {
           "zh": "暴雷",
@@ -97,6 +97,20 @@ module.exports = {
         {
           "heroes": [
             "亡灵",
+            "变换",
+            "艾克赛尔"
+          ],
+          "en": [
+            "Revenant",
+            "Alter",
+            "Axle"
+          ],
+          "n": 2,
+          "pct": 20.0
+        },
+        {
+          "heroes": [
+            "亡灵",
             "探路者",
             "艾克赛尔"
           ],
@@ -106,7 +120,7 @@ module.exports = {
             "Axle"
           ],
           "n": 2,
-          "pct": 25.0
+          "pct": 20.0
         },
         {
           "heroes": [
@@ -120,21 +134,21 @@ module.exports = {
             "Axle"
           ],
           "n": 1,
-          "pct": 12.5
+          "pct": 10.0
         },
         {
           "heroes": [
             "亡灵",
-            "变换",
+            "沃特森",
             "艾克赛尔"
           ],
           "en": [
             "Revenant",
-            "Alter",
+            "Wattson",
             "Axle"
           ],
           "n": 1,
-          "pct": 12.5
+          "pct": 10.0
         },
         {
           "heroes": [
@@ -148,7 +162,7 @@ module.exports = {
             "Axle"
           ],
           "n": 1,
-          "pct": 12.5
+          "pct": 10.0
         },
         {
           "heroes": [
@@ -162,7 +176,7 @@ module.exports = {
             "Axle"
           ],
           "n": 1,
-          "pct": 12.5
+          "pct": 10.0
         },
         {
           "heroes": [
@@ -176,7 +190,7 @@ module.exports = {
             "Mad Maggie"
           ],
           "n": 1,
-          "pct": 12.5
+          "pct": 10.0
         },
         {
           "heroes": [
@@ -190,7 +204,7 @@ module.exports = {
             "Pathfinder"
           ],
           "n": 1,
-          "pct": 12.5
+          "pct": 10.0
         }
       ],
       "weapons": [
@@ -553,8 +567,8 @@ module.exports = {
       "selfHeroes": [
         {
           "zh": "亡灵",
-          "n": 141,
-          "pct": 59.0
+          "n": 146,
+          "pct": 61.1
         },
         {
           "zh": "探路者",
@@ -595,8 +609,8 @@ module.exports = {
         {
           "zh": "亡灵",
           "en": "Revenant",
-          "n": 157,
-          "pct": 49.5
+          "n": 159,
+          "pct": 50.2
         },
         {
           "zh": "希尔",
@@ -623,26 +637,20 @@ module.exports = {
           "pct": 1.3
         },
         {
-          "zh": "罗芭",
-          "en": "Loba",
-          "n": 3,
-          "pct": 0.9
-        },
-        {
           "zh": "导管",
           "en": "Conduit",
           "n": 2,
           "pct": 0.6
         },
         {
-          "zh": "变换",
-          "en": "Alter",
-          "n": 1,
-          "pct": 0.3
+          "zh": "班加罗尔",
+          "en": "Bangalore",
+          "n": 2,
+          "pct": 0.6
         },
         {
-          "zh": "恶灵",
-          "en": "Wraith",
+          "zh": "罗芭",
+          "en": "Loba",
           "n": 1,
           "pct": 0.3
         }
@@ -994,8 +1002,8 @@ module.exports = {
       "selfHeroes": [
         {
           "zh": "亡灵",
-          "n": 182,
-          "pct": 75.5
+          "n": 184,
+          "pct": 76.3
         },
         {
           "zh": "卡特莉丝",
@@ -1011,11 +1019,6 @@ module.exports = {
           "zh": "暴雷",
           "n": 5,
           "pct": 2.1
-        },
-        {
-          "zh": "罗芭",
-          "n": 2,
-          "pct": 0.8
         }
       ]
     },
@@ -1031,8 +1034,8 @@ module.exports = {
         {
           "zh": "亡灵",
           "en": "Revenant",
-          "n": 152,
-          "pct": 48.1
+          "n": 153,
+          "pct": 48.4
         },
         {
           "zh": "密客",
@@ -1047,14 +1050,8 @@ module.exports = {
           "pct": 8.2
         },
         {
-          "zh": "变换",
-          "en": "Alter",
-          "n": 1,
-          "pct": 0.3
-        },
-        {
-          "zh": "罗芭",
-          "en": "Loba",
+          "zh": "班加罗尔",
+          "en": "Bangalore",
           "n": 1,
           "pct": 0.3
         }
@@ -1379,8 +1376,8 @@ module.exports = {
       "selfHeroes": [
         {
           "zh": "亡灵",
-          "n": 159,
-          "pct": 80.7
+          "n": 160,
+          "pct": 81.2
         },
         {
           "zh": "疯马吉",
@@ -1401,11 +1398,6 @@ module.exports = {
           "zh": "探路者",
           "n": 1,
           "pct": 0.5
-        },
-        {
-          "zh": "罗芭",
-          "n": 1,
-          "pct": 0.5
         }
       ]
     },
@@ -1421,8 +1413,8 @@ module.exports = {
         {
           "zh": "罗芭",
           "en": "Loba",
-          "n": 41,
-          "pct": 24.0
+          "n": 45,
+          "pct": 26.3
         },
         {
           "zh": "探路者",
@@ -1433,14 +1425,14 @@ module.exports = {
         {
           "zh": "疯马吉",
           "en": "Mad Maggie",
-          "n": 28,
-          "pct": 16.4
+          "n": 26,
+          "pct": 15.2
         },
         {
           "zh": "亡灵",
           "en": "Revenant",
-          "n": 24,
-          "pct": 14.0
+          "n": 26,
+          "pct": 15.2
         },
         {
           "zh": "艾克赛尔",
@@ -1455,16 +1447,16 @@ module.exports = {
           "pct": 7.6
         },
         {
-          "zh": "恶灵",
-          "en": "Wraith",
-          "n": 7,
-          "pct": 4.1
-        },
-        {
           "zh": "希尔",
           "en": "Seer",
-          "n": 4,
-          "pct": 2.3
+          "n": 5,
+          "pct": 2.9
+        },
+        {
+          "zh": "恶灵",
+          "en": "Wraith",
+          "n": 2,
+          "pct": 1.2
         },
         {
           "zh": "纽卡斯尔",
@@ -1886,9 +1878,9 @@ module.exports = {
           "pct": 23.4
         },
         {
-          "zh": "恶灵",
-          "n": 16,
-          "pct": 15.0
+          "zh": "希尔",
+          "n": 14,
+          "pct": 13.1
         },
         {
           "zh": "罗芭",
@@ -1899,6 +1891,11 @@ module.exports = {
           "zh": "探路者",
           "n": 8,
           "pct": 7.5
+        },
+        {
+          "zh": "恶灵",
+          "n": 2,
+          "pct": 1.9
         }
       ]
     },
@@ -1909,25 +1906,25 @@ module.exports = {
       "role": "主播",
       "source": "B站直播回放 2026-11-04 起（S29）· 108 帧",
       "hours": 0,
-      "note": "英雄覆盖 86.3% · 未人工核验",
+      "note": "英雄覆盖 86.7% · 未人工核验",
       "heroes": [
         {
           "zh": "疯马吉",
           "en": "Mad Maggie",
           "n": 71,
-          "pct": 34.1
+          "pct": 34.0
         },
         {
           "zh": "探路者",
           "en": "Pathfinder",
-          "n": 59,
-          "pct": 28.4
+          "n": 61,
+          "pct": 29.2
         },
         {
           "zh": "亡灵",
           "en": "Revenant",
-          "n": 20,
-          "pct": 9.6
+          "n": 21,
+          "pct": 10.0
         },
         {
           "zh": "希尔",
@@ -1939,7 +1936,7 @@ module.exports = {
           "zh": "动力小子",
           "en": "Octane",
           "n": 18,
-          "pct": 8.7
+          "pct": 8.6
         },
         {
           "zh": "琉雀",
@@ -1952,12 +1949,6 @@ module.exports = {
           "en": "Wattson",
           "n": 4,
           "pct": 1.9
-        },
-        {
-          "zh": "恶灵",
-          "en": "Wraith",
-          "n": 2,
-          "pct": 1.0
         }
       ],
       "combos": [
@@ -2343,23 +2334,18 @@ module.exports = {
       "selfHeroes": [
         {
           "zh": "探路者",
-          "n": 48,
-          "pct": 50.5
+          "n": 50,
+          "pct": 52.6
         },
         {
           "zh": "亡灵",
-          "n": 24,
-          "pct": 25.3
+          "n": 25,
+          "pct": 26.3
         },
         {
           "zh": "疯马吉",
           "n": 10,
           "pct": 10.5
-        },
-        {
-          "zh": "恶灵",
-          "n": 2,
-          "pct": 2.1
         },
         {
           "zh": "班加罗尔",
@@ -2398,14 +2384,14 @@ module.exports = {
         {
           "zh": "希尔",
           "en": "Seer",
-          "n": 19,
-          "pct": 10.9
+          "n": 17,
+          "pct": 9.7
         },
         {
           "zh": "罗芭",
           "en": "Loba",
-          "n": 9,
-          "pct": 5.1
+          "n": 12,
+          "pct": 6.9
         },
         {
           "zh": "琉雀",
@@ -2414,20 +2400,14 @@ module.exports = {
           "pct": 4.0
         },
         {
-          "zh": "变换",
-          "en": "Alter",
+          "zh": "班加罗尔",
+          "en": "Bangalore",
           "n": 5,
           "pct": 2.9
         },
         {
           "zh": "艾克赛尔",
           "en": "Axle",
-          "n": 1,
-          "pct": 0.6
-        },
-        {
-          "zh": "恶灵",
-          "en": "Wraith",
           "n": 1,
           "pct": 0.6
         },
@@ -3054,8 +3034,8 @@ module.exports = {
         {
           "zh": "亡灵",
           "en": "Revenant",
-          "n": 27,
-          "pct": 29.7
+          "n": 30,
+          "pct": 33.0
         },
         {
           "zh": "疯马吉",
@@ -3106,12 +3086,6 @@ module.exports = {
           "pct": 3.3
         },
         {
-          "zh": "希尔",
-          "en": "Seer",
-          "n": 3,
-          "pct": 3.3
-        },
-        {
           "zh": "变换",
           "en": "Alter",
           "n": 1,
@@ -3128,20 +3102,6 @@ module.exports = {
         {
           "heroes": [
             "亡灵",
-            "探路者",
-            "暴雷"
-          ],
-          "en": [
-            "Revenant",
-            "Pathfinder",
-            "Fuse"
-          ],
-          "n": 2,
-          "pct": 40.0
-        },
-        {
-          "heroes": [
-            "亡灵",
             "兰帕特",
             "探路者"
           ],
@@ -3151,21 +3111,21 @@ module.exports = {
             "Pathfinder"
           ],
           "n": 1,
-          "pct": 20.0
+          "pct": 33.3
         },
         {
           "heroes": [
+            "亡灵",
             "探路者",
-            "暴雷",
-            "罗芭"
+            "暴雷"
           ],
           "en": [
+            "Revenant",
             "Pathfinder",
-            "Fuse",
-            "Loba"
+            "Fuse"
           ],
           "n": 1,
-          "pct": 20.0
+          "pct": 33.3
         },
         {
           "heroes": [
@@ -3179,7 +3139,7 @@ module.exports = {
             "Fuse"
           ],
           "n": 1,
-          "pct": 20.0
+          "pct": 33.3
         }
       ],
       "weapons": [
@@ -3514,8 +3474,8 @@ module.exports = {
       "selfHeroes": [
         {
           "zh": "亡灵",
-          "n": 54,
-          "pct": 27.6
+          "n": 56,
+          "pct": 28.6
         },
         {
           "zh": "疯马吉",
@@ -3529,8 +3489,8 @@ module.exports = {
         },
         {
           "zh": "罗芭",
-          "n": 10,
-          "pct": 5.1
+          "n": 8,
+          "pct": 4.1
         },
         {
           "zh": "暴雷",
@@ -3559,6 +3519,12 @@ module.exports = {
       "note": "英雄覆盖 88.9% · 未人工核验",
       "heroes": [
         {
+          "zh": "亡灵",
+          "en": "Revenant",
+          "n": 34,
+          "pct": 35.4
+        },
+        {
           "zh": "探路者",
           "en": "Pathfinder",
           "n": 29,
@@ -3567,32 +3533,20 @@ module.exports = {
         {
           "zh": "罗芭",
           "en": "Loba",
-          "n": 24,
-          "pct": 25.0
-        },
-        {
-          "zh": "艾克赛尔",
-          "en": "Axle",
-          "n": 11,
-          "pct": 11.5
-        },
-        {
-          "zh": "亡灵",
-          "en": "Revenant",
-          "n": 11,
-          "pct": 11.5
+          "n": 17,
+          "pct": 17.7
         },
         {
           "zh": "希尔",
           "en": "Seer",
-          "n": 10,
-          "pct": 10.4
+          "n": 6,
+          "pct": 6.2
         },
         {
-          "zh": "恶灵",
-          "en": "Wraith",
-          "n": 5,
-          "pct": 5.2
+          "zh": "艾克赛尔",
+          "en": "Axle",
+          "n": 4,
+          "pct": 4.2
         },
         {
           "zh": "万蒂奇",
@@ -3622,59 +3576,31 @@ module.exports = {
       "combos": [
         {
           "heroes": [
-            "万蒂奇",
-            "探路者",
-            "罗芭"
-          ],
-          "en": [
-            "Vantage",
-            "Pathfinder",
-            "Loba"
-          ],
-          "n": 2,
-          "pct": 16.7
-        },
-        {
-          "heroes": [
             "亡灵",
             "探路者",
-            "艾克赛尔"
+            "罗芭"
           ],
           "en": [
             "Revenant",
             "Pathfinder",
-            "Axle"
-          ],
-          "n": 2,
-          "pct": 16.7
-        },
-        {
-          "heroes": [
-            "希尔",
-            "探路者",
-            "罗芭"
-          ],
-          "en": [
-            "Seer",
-            "Pathfinder",
             "Loba"
           ],
-          "n": 2,
-          "pct": 16.7
+          "n": 4,
+          "pct": 57.1
         },
         {
           "heroes": [
+            "亡灵",
             "动力小子",
-            "探路者",
-            "罗芭"
+            "探路者"
           ],
           "en": [
+            "Revenant",
             "Octane",
-            "Pathfinder",
-            "Loba"
+            "Pathfinder"
           ],
           "n": 1,
-          "pct": 8.3
+          "pct": 14.3
         },
         {
           "heroes": [
@@ -3688,63 +3614,21 @@ module.exports = {
             "Pathfinder"
           ],
           "n": 1,
-          "pct": 8.3
+          "pct": 14.3
         },
         {
           "heroes": [
             "亡灵",
-            "希尔",
-            "探路者"
-          ],
-          "en": [
-            "Revenant",
-            "Seer",
-            "Pathfinder"
-          ],
-          "n": 1,
-          "pct": 8.3
-        },
-        {
-          "heroes": [
             "探路者",
-            "罗芭",
             "艾克赛尔"
           ],
           "en": [
+            "Revenant",
             "Pathfinder",
-            "Loba",
             "Axle"
           ],
           "n": 1,
-          "pct": 8.3
-        },
-        {
-          "heroes": [
-            "探路者",
-            "罗芭",
-            "罗芭"
-          ],
-          "en": [
-            "Pathfinder",
-            "Loba",
-            "Loba"
-          ],
-          "n": 1,
-          "pct": 8.3
-        },
-        {
-          "heroes": [
-            "恶灵",
-            "探路者",
-            "罗芭"
-          ],
-          "en": [
-            "Wraith",
-            "Pathfinder",
-            "Loba"
-          ],
-          "n": 1,
-          "pct": 8.3
+          "pct": 14.3
         }
       ],
       "weapons": [
@@ -3942,14 +3826,9 @@ module.exports = {
       ],
       "selfHeroes": [
         {
-          "zh": "罗芭",
-          "n": 36,
-          "pct": 60.0
-        },
-        {
           "zh": "亡灵",
-          "n": 16,
-          "pct": 26.7
+          "n": 52,
+          "pct": 86.7
         },
         {
           "zh": "探路者",
@@ -3970,8 +3849,8 @@ module.exports = {
         {
           "zh": "亡灵",
           "en": "Revenant",
-          "n": 31,
-          "pct": 41.9
+          "n": 34,
+          "pct": 45.9
         },
         {
           "zh": "探路者",
@@ -3984,12 +3863,6 @@ module.exports = {
           "en": "Mad Maggie",
           "n": 10,
           "pct": 13.5
-        },
-        {
-          "zh": "罗芭",
-          "en": "Loba",
-          "n": 3,
-          "pct": 4.1
         },
         {
           "zh": "希尔",
@@ -4279,13 +4152,8 @@ module.exports = {
       "selfHeroes": [
         {
           "zh": "亡灵",
-          "n": 52,
-          "pct": 60.5
-        },
-        {
-          "zh": "罗芭",
-          "n": 15,
-          "pct": 17.4
+          "n": 67,
+          "pct": 77.9
         }
       ]
     },
@@ -4305,22 +4173,10 @@ module.exports = {
           "pct": 29.2
         },
         {
-          "zh": "疯马吉",
-          "en": "Mad Maggie",
-          "n": 11,
-          "pct": 15.3
-        },
-        {
           "zh": "动力小子",
           "en": "Octane",
           "n": 11,
           "pct": 15.3
-        },
-        {
-          "zh": "变换",
-          "en": "Alter",
-          "n": 7,
-          "pct": 9.7
         },
         {
           "zh": "希尔",
@@ -4335,8 +4191,26 @@ module.exports = {
           "pct": 8.3
         },
         {
+          "zh": "亡灵",
+          "en": "Revenant",
+          "n": 6,
+          "pct": 8.3
+        },
+        {
+          "zh": "疯马吉",
+          "en": "Mad Maggie",
+          "n": 5,
+          "pct": 6.9
+        },
+        {
           "zh": "暴雷",
           "en": "Fuse",
+          "n": 5,
+          "pct": 6.9
+        },
+        {
+          "zh": "班加罗尔",
+          "en": "Bangalore",
           "n": 5,
           "pct": 6.9
         },
@@ -4351,19 +4225,25 @@ module.exports = {
           "en": "Conduit",
           "n": 2,
           "pct": 2.8
+        },
+        {
+          "zh": "变换",
+          "en": "Alter",
+          "n": 2,
+          "pct": 2.8
         }
       ],
       "combos": [
         {
           "heroes": [
             "动力小子",
-            "变换",
-            "探路者"
+            "探路者",
+            "班加罗尔"
           ],
           "en": [
             "Octane",
-            "Alter",
-            "Pathfinder"
+            "Pathfinder",
+            "Bangalore"
           ],
           "n": 2,
           "pct": 28.6
@@ -4412,13 +4292,13 @@ module.exports = {
         },
         {
           "heroes": [
+            "亡灵",
             "变换",
-            "疯马吉",
             "艾克赛尔"
           ],
           "en": [
+            "Revenant",
             "Alter",
-            "Mad Maggie",
             "Axle"
           ],
           "n": 1,
@@ -4560,7 +4440,7 @@ module.exports = {
           "pct": 3.0
         },
         {
-          "zh": "罗芭",
+          "zh": "亡灵",
           "n": 1,
           "pct": 1.5
         }
