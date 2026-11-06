@@ -12,25 +12,31 @@ module.exports = {
       "role": "主播",
       "source": "B站直播回放 · 第31赛季排位 · 224 帧",
       "hours": 0,
-      "note": "英雄覆盖 66.0% · 未人工核验",
+      "note": "英雄覆盖 71.2% · 未人工核验",
       "heroes": [
         {
           "zh": "亡灵",
           "en": "Revenant",
           "n": 189,
-          "pct": 51.2
+          "pct": 47.5
         },
         {
           "zh": "命脉",
           "en": "Lifeline",
           "n": 174,
-          "pct": 47.2
+          "pct": 43.7
+        },
+        {
+          "zh": "疯马吉",
+          "en": "Mad Maggie",
+          "n": 28,
+          "pct": 7.0
         },
         {
           "zh": "变换",
           "en": "Alter",
-          "n": 3,
-          "pct": 0.8
+          "n": 4,
+          "pct": 1.0
         },
         {
           "zh": "班加罗尔",
@@ -49,6 +55,20 @@ module.exports = {
         {
           "heroes": [
             "亡灵",
+            "命脉",
+            "疯马吉"
+          ],
+          "en": [
+            "Revenant",
+            "Lifeline",
+            "Mad Maggie"
+          ],
+          "n": 2,
+          "pct": 66.7
+        },
+        {
+          "heroes": [
+            "亡灵",
             "变换",
             "命脉"
           ],
@@ -58,7 +78,7 @@ module.exports = {
             "Lifeline"
           ],
           "n": 1,
-          "pct": 100.0
+          "pct": 33.3
         }
       ],
       "weapons": [
@@ -424,43 +444,55 @@ module.exports = {
       "role": "主播",
       "source": "B站直播回放 · 第31赛季排位 · 216 帧",
       "hours": 0,
-      "note": "英雄覆盖 50.9% · 未人工核验",
+      "note": "英雄覆盖 55.5% · 未人工核验",
       "heroes": [
         {
           "zh": "亡灵",
           "en": "Revenant",
           "n": 143,
-          "pct": 58.6
+          "pct": 53.8
         },
         {
           "zh": "命脉",
           "en": "Lifeline",
           "n": 46,
-          "pct": 18.9
+          "pct": 17.3
         },
         {
           "zh": "罗芭",
           "en": "Loba",
           "n": 25,
-          "pct": 10.2
+          "pct": 9.4
         },
         {
           "zh": "探路者",
           "en": "Pathfinder",
           "n": 17,
-          "pct": 7.0
+          "pct": 6.4
+        },
+        {
+          "zh": "疯马吉",
+          "en": "Mad Maggie",
+          "n": 12,
+          "pct": 4.5
+        },
+        {
+          "zh": "密客",
+          "en": "Crypto",
+          "n": 10,
+          "pct": 3.8
         },
         {
           "zh": "变换",
           "en": "Alter",
           "n": 10,
-          "pct": 4.1
+          "pct": 3.8
         },
         {
           "zh": "班加罗尔",
           "en": "Bangalore",
           "n": 3,
-          "pct": 1.2
+          "pct": 1.1
         }
       ],
       "combos": [
@@ -476,7 +508,7 @@ module.exports = {
             "Loba"
           ],
           "n": 1,
-          "pct": 50.0
+          "pct": 25.0
         },
         {
           "heroes": [
@@ -490,7 +522,35 @@ module.exports = {
             "Pathfinder"
           ],
           "n": 1,
-          "pct": 50.0
+          "pct": 25.0
+        },
+        {
+          "heroes": [
+            "密客",
+            "探路者",
+            "疯马吉"
+          ],
+          "en": [
+            "Crypto",
+            "Pathfinder",
+            "Mad Maggie"
+          ],
+          "n": 1,
+          "pct": 25.0
+        },
+        {
+          "heroes": [
+            "命脉",
+            "探路者",
+            "疯马吉"
+          ],
+          "en": [
+            "Lifeline",
+            "Pathfinder",
+            "Mad Maggie"
+          ],
+          "n": 1,
+          "pct": 25.0
         }
       ],
       "weapons": [
@@ -862,6 +922,21 @@ module.exports = {
           "pct": 17.1
         },
         {
+          "zh": "变换",
+          "n": 6,
+          "pct": 2.8
+        },
+        {
+          "zh": "恶灵",
+          "n": 3,
+          "pct": 1.4
+        },
+        {
+          "zh": "班加罗尔",
+          "n": 3,
+          "pct": 1.4
+        },
+        {
           "zh": "疯马吉",
           "n": 2,
           "pct": 0.9
@@ -875,28 +950,49 @@ module.exports = {
       "role": "主播",
       "source": "B站直播回放 · 第31赛季排位 · 155 帧",
       "hours": 0,
-      "note": "英雄覆盖 60.0% · 未人工核验",
+      "note": "英雄覆盖 87.8% · 未人工核验",
       "heroes": [
         {
           "zh": "亡灵",
           "en": "Revenant",
           "n": 146,
-          "pct": 57.3
+          "pct": 39.1
+        },
+        {
+          "zh": "密客",
+          "en": "Crypto",
+          "n": 118,
+          "pct": 31.6
         },
         {
           "zh": "命脉",
           "en": "Lifeline",
           "n": 108,
-          "pct": 42.4
+          "pct": 29.0
         },
         {
           "zh": "班加罗尔",
           "en": "Bangalore",
           "n": 1,
-          "pct": 0.4
+          "pct": 0.3
         }
       ],
-      "combos": [],
+      "combos": [
+        {
+          "heroes": [
+            "亡灵",
+            "命脉",
+            "密客"
+          ],
+          "en": [
+            "Revenant",
+            "Lifeline",
+            "Crypto"
+          ],
+          "n": 7,
+          "pct": 100.0
+        }
+      ],
       "weapons": [
         {
           "zh": "L-STAR能量机枪",
@@ -1233,46 +1329,60 @@ module.exports = {
       "role": "主播",
       "source": "B站直播回放 · 第31赛季排位 · 132 帧",
       "hours": 0,
-      "note": "英雄覆盖 40.0% · 未人工核验",
+      "note": "英雄覆盖 70.9% · 未人工核验",
       "heroes": [
+        {
+          "zh": "探路者",
+          "en": "Pathfinder",
+          "n": 97,
+          "pct": 48.0
+        },
         {
           "zh": "罗芭",
           "en": "Loba",
           "n": 51,
-          "pct": 44.7
+          "pct": 25.2
         },
         {
           "zh": "亡灵",
           "en": "Revenant",
           "n": 39,
-          "pct": 34.2
+          "pct": 19.3
         },
         {
-          "zh": "探路者",
-          "en": "Pathfinder",
-          "n": 13,
-          "pct": 11.4
+          "zh": "命脉",
+          "en": "Lifeline",
+          "n": 8,
+          "pct": 4.0
         },
         {
           "zh": "希尔",
           "en": "Seer",
           "n": 5,
-          "pct": 4.4
-        },
-        {
-          "zh": "命脉",
-          "en": "Lifeline",
-          "n": 4,
-          "pct": 3.5
+          "pct": 2.5
         },
         {
           "zh": "沃特森",
           "en": "Wattson",
           "n": 2,
-          "pct": 1.8
+          "pct": 1.0
         }
       ],
       "combos": [
+        {
+          "heroes": [
+            "亡灵",
+            "探路者",
+            "罗芭"
+          ],
+          "en": [
+            "Revenant",
+            "Pathfinder",
+            "Loba"
+          ],
+          "n": 3,
+          "pct": 50.0
+        },
         {
           "heroes": [
             "亡灵",
@@ -1285,21 +1395,7 @@ module.exports = {
             "Seer"
           ],
           "n": 2,
-          "pct": 40.0
-        },
-        {
-          "heroes": [
-            "亡灵",
-            "探路者",
-            "罗芭"
-          ],
-          "en": [
-            "Revenant",
-            "Pathfinder",
-            "Loba"
-          ],
-          "n": 2,
-          "pct": 40.0
+          "pct": 33.3
         },
         {
           "heroes": [
@@ -1313,7 +1409,7 @@ module.exports = {
             "Loba"
           ],
           "n": 1,
-          "pct": 20.0
+          "pct": 16.7
         }
       ],
       "weapons": [
@@ -1668,6 +1764,11 @@ module.exports = {
       ],
       "selfHeroes": [
         {
+          "zh": "探路者",
+          "n": 76,
+          "pct": 55.9
+        },
+        {
           "zh": "亡灵",
           "n": 22,
           "pct": 16.2
@@ -1676,11 +1777,6 @@ module.exports = {
           "zh": "希尔",
           "n": 14,
           "pct": 10.3
-        },
-        {
-          "zh": "探路者",
-          "n": 11,
-          "pct": 8.1
         },
         {
           "zh": "罗芭",
@@ -1696,52 +1792,67 @@ module.exports = {
       "role": "主播",
       "source": "B站直播回放 · 第31赛季排位 · 115 帧",
       "hours": 0,
-      "note": "英雄覆盖 43.1% · 未人工核验",
+      "note": "英雄覆盖 62.3% · 未人工核验",
       "heroes": [
+        {
+          "zh": "疯马吉",
+          "en": "Mad Maggie",
+          "n": 47,
+          "pct": 31.5
+        },
         {
           "zh": "探路者",
           "en": "Pathfinder",
           "n": 36,
-          "pct": 35.0
+          "pct": 24.2
         },
         {
           "zh": "亡灵",
           "en": "Revenant",
           "n": 28,
-          "pct": 27.2
+          "pct": 18.8
         },
         {
           "zh": "命脉",
           "en": "Lifeline",
           "n": 20,
-          "pct": 19.4
+          "pct": 13.4
         },
         {
           "zh": "罗芭",
           "en": "Loba",
           "n": 7,
-          "pct": 6.8
+          "pct": 4.7
         },
         {
           "zh": "班加罗尔",
           "en": "Bangalore",
           "n": 7,
-          "pct": 6.8
+          "pct": 4.7
         },
         {
           "zh": "动力小子",
           "en": "Octane",
           "n": 4,
-          "pct": 3.9
-        },
-        {
-          "zh": "疯马吉",
-          "en": "Mad Maggie",
-          "n": 1,
-          "pct": 1.0
+          "pct": 2.7
         }
       ],
-      "combos": [],
+      "combos": [
+        {
+          "heroes": [
+            "动力小子",
+            "探路者",
+            "疯马吉"
+          ],
+          "en": [
+            "Octane",
+            "Pathfinder",
+            "Mad Maggie"
+          ],
+          "n": 1,
+          "pct": 100.0
+        }
+      ],
       "weapons": [
         {
           "zh": "复仇女神连发突击步枪",
@@ -2108,43 +2219,49 @@ module.exports = {
       "role": "主播",
       "source": "B站直播回放 · 第31赛季排位 · 108 帧",
       "hours": 0,
-      "note": "英雄覆盖 74.4% · 未人工核验",
+      "note": "英雄覆盖 79.1% · 未人工核验",
       "heroes": [
         {
           "zh": "探路者",
           "en": "Pathfinder",
           "n": 64,
-          "pct": 40.8
+          "pct": 38.3
         },
         {
           "zh": "疯马吉",
           "en": "Mad Maggie",
           "n": 53,
-          "pct": 33.8
+          "pct": 31.7
         },
         {
           "zh": "动力小子",
           "en": "Octane",
           "n": 17,
-          "pct": 10.8
+          "pct": 10.2
         },
         {
           "zh": "亡灵",
           "en": "Revenant",
-          "n": 12,
-          "pct": 7.6
+          "n": 14,
+          "pct": 8.4
+        },
+        {
+          "zh": "命脉",
+          "en": "Lifeline",
+          "n": 8,
+          "pct": 4.8
         },
         {
           "zh": "罗芭",
           "en": "Loba",
           "n": 5,
-          "pct": 3.2
+          "pct": 3.0
         },
         {
           "zh": "班加罗尔",
           "en": "Bangalore",
           "n": 5,
-          "pct": 3.2
+          "pct": 3.0
         },
         {
           "zh": "希尔",
@@ -2166,7 +2283,21 @@ module.exports = {
             "Mad Maggie"
           ],
           "n": 1,
-          "pct": 100.0
+          "pct": 50.0
+        },
+        {
+          "heroes": [
+            "亡灵",
+            "探路者",
+            "疯马吉"
+          ],
+          "en": [
+            "Revenant",
+            "Pathfinder",
+            "Mad Maggie"
+          ],
+          "n": 1,
+          "pct": 50.0
         }
       ],
       "weapons": [
@@ -2495,25 +2626,31 @@ module.exports = {
       "role": "主播",
       "source": "B站直播回放 · 第31赛季排位 · 80 帧",
       "hours": 0,
-      "note": "英雄覆盖 54.9% · 未人工核验",
+      "note": "英雄覆盖 63.1% · 未人工核验",
       "heroes": [
         {
           "zh": "亡灵",
           "en": "Revenant",
           "n": 65,
-          "pct": 60.7
+          "pct": 52.8
         },
         {
           "zh": "动力小子",
           "en": "Octane",
           "n": 29,
-          "pct": 27.1
+          "pct": 23.6
+        },
+        {
+          "zh": "探路者",
+          "en": "Pathfinder",
+          "n": 16,
+          "pct": 13.0
         },
         {
           "zh": "命脉",
           "en": "Lifeline",
           "n": 13,
-          "pct": 12.1
+          "pct": 10.6
         }
       ],
       "combos": [],
@@ -2651,6 +2788,11 @@ module.exports = {
           "zh": "疯马吉",
           "n": 10,
           "pct": 8.6
+        },
+        {
+          "zh": "探路者",
+          "n": 1,
+          "pct": 0.9
         }
       ]
     },
@@ -2661,37 +2803,37 @@ module.exports = {
       "role": "主播",
       "source": "B站直播回放 · 第31赛季排位 · 52 帧",
       "hours": 0,
-      "note": "英雄覆盖 84.5% · 未人工核验",
+      "note": "英雄覆盖 87.4% · 未人工核验",
       "heroes": [
         {
           "zh": "亡灵",
           "en": "Revenant",
           "n": 39,
-          "pct": 44.8
+          "pct": 43.3
         },
         {
           "zh": "探路者",
           "en": "Pathfinder",
           "n": 24,
-          "pct": 27.6
+          "pct": 26.7
         },
         {
           "zh": "罗芭",
           "en": "Loba",
           "n": 19,
-          "pct": 21.8
+          "pct": 21.1
+        },
+        {
+          "zh": "命脉",
+          "en": "Lifeline",
+          "n": 5,
+          "pct": 5.6
         },
         {
           "zh": "万蒂奇",
           "en": "Vantage",
           "n": 2,
-          "pct": 2.3
-        },
-        {
-          "zh": "命脉",
-          "en": "Lifeline",
-          "n": 2,
-          "pct": 2.3
+          "pct": 2.2
         },
         {
           "zh": "动力小子",
@@ -2713,7 +2855,7 @@ module.exports = {
             "Loba"
           ],
           "n": 3,
-          "pct": 60.0
+          "pct": 42.9
         },
         {
           "heroes": [
@@ -2727,7 +2869,7 @@ module.exports = {
             "Pathfinder"
           ],
           "n": 1,
-          "pct": 20.0
+          "pct": 14.3
         },
         {
           "heroes": [
@@ -2741,7 +2883,35 @@ module.exports = {
             "Pathfinder"
           ],
           "n": 1,
-          "pct": 20.0
+          "pct": 14.3
+        },
+        {
+          "heroes": [
+            "亡灵",
+            "命脉",
+            "探路者"
+          ],
+          "en": [
+            "Revenant",
+            "Lifeline",
+            "Pathfinder"
+          ],
+          "n": 1,
+          "pct": 14.3
+        },
+        {
+          "heroes": [
+            "亡灵",
+            "命脉",
+            "罗芭"
+          ],
+          "en": [
+            "Revenant",
+            "Lifeline",
+            "Loba"
+          ],
+          "n": 1,
+          "pct": 14.3
         }
       ],
       "weapons": [
@@ -2988,12 +3158,22 @@ module.exports = {
           "pct": 6.5
         },
         {
+          "zh": "密客",
+          "n": 3,
+          "pct": 3.2
+        },
+        {
           "zh": "命脉",
           "n": 2,
           "pct": 2.2
         },
         {
           "zh": "班加罗尔",
+          "n": 1,
+          "pct": 1.1
+        },
+        {
+          "zh": "动力小子",
           "n": 1,
           "pct": 1.1
         }
@@ -3006,49 +3186,49 @@ module.exports = {
       "role": "主播",
       "source": "B站直播回放 · 第31赛季排位 · 41 帧",
       "hours": 0,
-      "note": "英雄覆盖 73.3% · 未人工核验",
+      "note": "英雄覆盖 77.8% · 未人工核验",
       "heroes": [
         {
           "zh": "亡灵",
           "en": "Revenant",
           "n": 29,
-          "pct": 43.9
+          "pct": 41.4
         },
         {
           "zh": "探路者",
           "en": "Pathfinder",
           "n": 11,
-          "pct": 16.7
+          "pct": 15.7
         },
         {
           "zh": "暴雷",
           "en": "Fuse",
           "n": 11,
-          "pct": 16.7
+          "pct": 15.7
+        },
+        {
+          "zh": "命脉",
+          "en": "Lifeline",
+          "n": 9,
+          "pct": 12.9
         },
         {
           "zh": "罗芭",
           "en": "Loba",
           "n": 5,
-          "pct": 7.6
-        },
-        {
-          "zh": "命脉",
-          "en": "Lifeline",
-          "n": 5,
-          "pct": 7.6
+          "pct": 7.1
         },
         {
           "zh": "恶灵",
           "en": "Wraith",
           "n": 4,
-          "pct": 6.1
+          "pct": 5.7
         },
         {
           "zh": "变换",
           "en": "Alter",
           "n": 1,
-          "pct": 1.5
+          "pct": 1.4
         }
       ],
       "combos": [
@@ -3425,6 +3605,11 @@ module.exports = {
           "zh": "探路者",
           "n": 16,
           "pct": 11.0
+        },
+        {
+          "zh": "恶灵",
+          "n": 2,
+          "pct": 1.4
         }
       ]
     },
@@ -3435,49 +3620,55 @@ module.exports = {
       "role": "主播",
       "source": "B站直播回放 · 第31赛季排位 · 38 帧",
       "hours": 0,
-      "note": "英雄覆盖 63.4% · 未人工核验",
+      "note": "英雄覆盖 65.6% · 未人工核验",
       "heroes": [
         {
           "zh": "探路者",
           "en": "Pathfinder",
           "n": 14,
-          "pct": 23.7
+          "pct": 23.0
         },
         {
           "zh": "命脉",
           "en": "Lifeline",
           "n": 12,
-          "pct": 20.3
+          "pct": 19.7
         },
         {
           "zh": "密客",
           "en": "Crypto",
           "n": 10,
-          "pct": 16.9
+          "pct": 16.4
         },
         {
           "zh": "动力小子",
           "en": "Octane",
           "n": 10,
-          "pct": 16.9
+          "pct": 16.4
         },
         {
           "zh": "班加罗尔",
           "en": "Bangalore",
           "n": 6,
-          "pct": 10.2
+          "pct": 9.8
         },
         {
           "zh": "亡灵",
           "en": "Revenant",
           "n": 6,
-          "pct": 10.2
+          "pct": 9.8
+        },
+        {
+          "zh": "变换",
+          "en": "Alter",
+          "n": 2,
+          "pct": 3.3
         },
         {
           "zh": "罗芭",
           "en": "Loba",
           "n": 1,
-          "pct": 1.7
+          "pct": 1.6
         }
       ],
       "combos": [
@@ -3653,13 +3844,23 @@ module.exports = {
       "selfHeroes": [
         {
           "zh": "密客",
-          "n": 34,
-          "pct": 35.4
+          "n": 36,
+          "pct": 37.5
         },
         {
           "zh": "探路者",
           "n": 14,
           "pct": 14.6
+        },
+        {
+          "zh": "恶灵",
+          "n": 7,
+          "pct": 7.3
+        },
+        {
+          "zh": "变换",
+          "n": 7,
+          "pct": 7.3
         },
         {
           "zh": "疯马吉",
@@ -3680,25 +3881,31 @@ module.exports = {
       "role": "主播",
       "source": "B站直播回放 · 第31赛季排位 · 38 帧",
       "hours": 0,
-      "note": "英雄覆盖 75.8% · 未人工核验",
+      "note": "英雄覆盖 84.2% · 未人工核验",
       "heroes": [
         {
           "zh": "亡灵",
           "en": "Revenant",
           "n": 33,
-          "pct": 45.8
+          "pct": 41.2
         },
         {
           "zh": "探路者",
           "en": "Pathfinder",
           "n": 25,
-          "pct": 34.7
+          "pct": 31.2
         },
         {
           "zh": "命脉",
           "en": "Lifeline",
-          "n": 14,
-          "pct": 19.4
+          "n": 21,
+          "pct": 26.2
+        },
+        {
+          "zh": "动力小子",
+          "en": "Octane",
+          "n": 1,
+          "pct": 1.2
         }
       ],
       "combos": [
@@ -3714,7 +3921,21 @@ module.exports = {
             "Pathfinder"
           ],
           "n": 3,
-          "pct": 100.0
+          "pct": 75.0
+        },
+        {
+          "heroes": [
+            "亡灵",
+            "动力小子",
+            "探路者"
+          ],
+          "en": [
+            "Revenant",
+            "Octane",
+            "Pathfinder"
+          ],
+          "n": 1,
+          "pct": 25.0
         }
       ],
       "weapons": [
@@ -3986,9 +4207,24 @@ module.exports = {
           "pct": 51.5
         },
         {
+          "zh": "变换",
+          "n": 13,
+          "pct": 10.0
+        },
+        {
           "zh": "希尔",
           "n": 5,
           "pct": 3.8
+        },
+        {
+          "zh": "动力小子",
+          "n": 2,
+          "pct": 1.5
+        },
+        {
+          "zh": "密客",
+          "n": 2,
+          "pct": 1.5
         },
         {
           "zh": "疯马吉",
@@ -4014,22 +4250,49 @@ module.exports = {
       "role": "主播",
       "source": "B站直播回放 · 第31赛季排位 · 30 帧",
       "hours": 0,
-      "note": "英雄覆盖 61.8% · 未人工核验",
+      "note": "英雄覆盖 97.4% · 未人工核验",
       "heroes": [
+        {
+          "zh": "动力小子",
+          "en": "Octane",
+          "n": 25,
+          "pct": 33.8
+        },
         {
           "zh": "命脉",
           "en": "Lifeline",
           "n": 24,
-          "pct": 51.1
+          "pct": 32.4
         },
         {
           "zh": "亡灵",
           "en": "Revenant",
           "n": 23,
-          "pct": 48.9
+          "pct": 31.1
+        },
+        {
+          "zh": "密客",
+          "en": "Crypto",
+          "n": 2,
+          "pct": 2.7
         }
       ],
-      "combos": [],
+      "combos": [
+        {
+          "heroes": [
+            "亡灵",
+            "动力小子",
+            "命脉"
+          ],
+          "en": [
+            "Revenant",
+            "Octane",
+            "Lifeline"
+          ],
+          "n": 3,
+          "pct": 100.0
+        }
+      ],
       "weapons": [
         {
           "zh": "VK-47平行步枪",
@@ -4188,6 +4451,11 @@ module.exports = {
       ],
       "selfHeroes": [
         {
+          "zh": "动力小子",
+          "n": 60,
+          "pct": 30.9
+        },
+        {
           "zh": "亡灵",
           "n": 56,
           "pct": 28.9
@@ -4198,9 +4466,14 @@ module.exports = {
           "pct": 21.1
         },
         {
-          "zh": "动力小子",
-          "n": 5,
-          "pct": 2.6
+          "zh": "密客",
+          "n": 11,
+          "pct": 5.7
+        },
+        {
+          "zh": "变换",
+          "n": 3,
+          "pct": 1.5
         },
         {
           "zh": "探路者",
@@ -4216,25 +4489,31 @@ module.exports = {
       "role": "主播",
       "source": "B站直播回放 · 第31赛季排位 · 26 帧",
       "hours": 0,
-      "note": "英雄覆盖 26.8% · 未人工核验",
+      "note": "英雄覆盖 28.6% · 未人工核验",
       "heroes": [
         {
           "zh": "亡灵",
           "en": "Revenant",
           "n": 7,
-          "pct": 46.7
+          "pct": 43.8
         },
         {
           "zh": "探路者",
           "en": "Pathfinder",
           "n": 6,
-          "pct": 40.0
+          "pct": 37.5
         },
         {
           "zh": "万蒂奇",
           "en": "Vantage",
           "n": 2,
-          "pct": 13.3
+          "pct": 12.5
+        },
+        {
+          "zh": "班加罗尔",
+          "en": "Bangalore",
+          "n": 1,
+          "pct": 6.2
         }
       ],
       "combos": [],
@@ -4298,6 +4577,280 @@ module.exports = {
           "zh": "亡灵",
           "n": 16,
           "pct": 30.2
+        },
+        {
+          "zh": "班加罗尔",
+          "n": 3,
+          "pct": 5.7
+        }
+      ]
+    },
+    {
+      "id": "tec-ck空白（apex）",
+      "name": "TEC-ck空白（APEX）",
+      "tag": "",
+      "role": "主播",
+      "source": "B站直播回放 · 第31赛季排位 · 21 帧",
+      "hours": 0,
+      "note": "英雄覆盖 30.2% · 未人工核验",
+      "heroes": [
+        {
+          "zh": "探路者",
+          "en": "Pathfinder",
+          "n": 11,
+          "pct": 84.6
+        },
+        {
+          "zh": "罗芭",
+          "en": "Loba",
+          "n": 1,
+          "pct": 7.7
+        },
+        {
+          "zh": "命脉",
+          "en": "Lifeline",
+          "n": 1,
+          "pct": 7.7
+        }
+      ],
+      "combos": [],
+      "weapons": [
+        {
+          "zh": "L-STAR能量机枪",
+          "zhShort": "L-STAR",
+          "en": "L-STAR",
+          "n": 8,
+          "pct": 17.8
+        },
+        {
+          "zh": "赫姆洛克突击步枪",
+          "zhShort": "赫姆洛克",
+          "en": "Hemlok",
+          "n": 8,
+          "pct": 17.8
+        },
+        {
+          "zh": "C.A.R冲锋枪",
+          "zhShort": "C.A.R",
+          "en": "C.A.R.",
+          "n": 6,
+          "pct": 13.3
+        },
+        {
+          "zh": "猎兽冲锋枪",
+          "zhShort": "猎兽",
+          "en": "Prowler",
+          "n": 5,
+          "pct": 11.1
+        },
+        {
+          "zh": "复仇女神连发突击步枪",
+          "zhShort": "复仇女神",
+          "en": "Nemesis",
+          "n": 5,
+          "pct": 11.1
+        },
+        {
+          "zh": "辅助手枪",
+          "zhShort": "辅助",
+          "en": "Wingman",
+          "n": 4,
+          "pct": 8.9
+        },
+        {
+          "zh": "R-99冲锋枪",
+          "zhShort": "R-99",
+          "en": "R-99",
+          "n": 2,
+          "pct": 4.4
+        },
+        {
+          "zh": "EVA-8自动霰弹枪",
+          "zhShort": "EVA-8自动",
+          "en": "EVA-8",
+          "n": 2,
+          "pct": 4.4
+        },
+        {
+          "zh": "莫桑比克霰弹枪",
+          "zhShort": "莫桑比克",
+          "en": "Mozambique",
+          "n": 2,
+          "pct": 4.4
+        },
+        {
+          "zh": "哈沃克步枪",
+          "zhShort": "哈沃克",
+          "en": "Havoc",
+          "n": 1,
+          "pct": 2.2
+        },
+        {
+          "zh": "电能冲锋枪",
+          "zhShort": "电能",
+          "en": "Volt",
+          "n": 1,
+          "pct": 2.2
+        },
+        {
+          "zh": "VK-47平行步枪",
+          "zhShort": "VK-47平行",
+          "en": "VK-47 Flatline",
+          "n": 1,
+          "pct": 2.2
+        }
+      ],
+      "weaponPairs": [
+        {
+          "zh": [
+            "C.A.R",
+            "L-STAR"
+          ],
+          "zhFull": [
+            "C.A.R冲锋枪",
+            "L-STAR能量机枪"
+          ],
+          "en": [
+            "C.A.R.",
+            "L-STAR"
+          ],
+          "n": 4,
+          "pct": 25.0
+        },
+        {
+          "zh": [
+            "赫姆洛克",
+            "R-99"
+          ],
+          "zhFull": [
+            "赫姆洛克突击步枪",
+            "R-99冲锋枪"
+          ],
+          "en": [
+            "Hemlok",
+            "R-99"
+          ],
+          "n": 2,
+          "pct": 12.5
+        },
+        {
+          "zh": [
+            "赫姆洛克",
+            "猎兽"
+          ],
+          "zhFull": [
+            "赫姆洛克突击步枪",
+            "猎兽冲锋枪"
+          ],
+          "en": [
+            "Hemlok",
+            "Prowler"
+          ],
+          "n": 2,
+          "pct": 12.5
+        },
+        {
+          "zh": [
+            "EVA-8自动",
+            "赫姆洛克"
+          ],
+          "zhFull": [
+            "EVA-8自动霰弹枪",
+            "赫姆洛克突击步枪"
+          ],
+          "en": [
+            "EVA-8",
+            "Hemlok"
+          ],
+          "n": 2,
+          "pct": 12.5
+        },
+        {
+          "zh": [
+            "莫桑比克",
+            "复仇女神"
+          ],
+          "zhFull": [
+            "莫桑比克霰弹枪",
+            "复仇女神连发突击步枪"
+          ],
+          "en": [
+            "Mozambique",
+            "Nemesis"
+          ],
+          "n": 2,
+          "pct": 12.5
+        },
+        {
+          "zh": [
+            "C.A.R",
+            "哈沃克"
+          ],
+          "zhFull": [
+            "C.A.R冲锋枪",
+            "哈沃克步枪"
+          ],
+          "en": [
+            "C.A.R.",
+            "Havoc"
+          ],
+          "n": 1,
+          "pct": 6.2
+        },
+        {
+          "zh": [
+            "赫姆洛克",
+            "辅助"
+          ],
+          "zhFull": [
+            "赫姆洛克突击步枪",
+            "辅助手枪"
+          ],
+          "en": [
+            "Hemlok",
+            "Wingman"
+          ],
+          "n": 1,
+          "pct": 6.2
+        },
+        {
+          "zh": [
+            "复仇女神",
+            "猎兽"
+          ],
+          "zhFull": [
+            "复仇女神连发突击步枪",
+            "猎兽冲锋枪"
+          ],
+          "en": [
+            "Nemesis",
+            "Prowler"
+          ],
+          "n": 1,
+          "pct": 6.2
+        },
+        {
+          "zh": [
+            "VK-47平行",
+            "电能"
+          ],
+          "zhFull": [
+            "VK-47平行步枪",
+            "电能冲锋枪"
+          ],
+          "en": [
+            "VK-47 Flatline",
+            "Volt"
+          ],
+          "n": 1,
+          "pct": 6.2
+        }
+      ],
+      "selfHeroes": [
+        {
+          "zh": "探路者",
+          "n": 23,
+          "pct": 52.3
         }
       ]
     },
@@ -4308,25 +4861,31 @@ module.exports = {
       "role": "主播",
       "source": "B站直播回放 · 第31赛季排位 · 20 帧",
       "hours": 0,
-      "note": "英雄覆盖 24.5% · 未人工核验",
+      "note": "英雄覆盖 38.8% · 未人工核验",
       "heroes": [
+        {
+          "zh": "探路者",
+          "en": "Pathfinder",
+          "n": 7,
+          "pct": 36.8
+        },
         {
           "zh": "命脉",
           "en": "Lifeline",
           "n": 5,
-          "pct": 41.7
+          "pct": 26.3
         },
         {
           "zh": "罗芭",
           "en": "Loba",
           "n": 4,
-          "pct": 33.3
+          "pct": 21.1
         },
         {
           "zh": "亡灵",
           "en": "Revenant",
           "n": 3,
-          "pct": 25.0
+          "pct": 15.8
         }
       ],
       "combos": [],
@@ -4592,7 +5151,13 @@ module.exports = {
           "pct": 7.1
         }
       ],
-      "selfHeroes": []
+      "selfHeroes": [
+        {
+          "zh": "探路者",
+          "n": 9,
+          "pct": 28.1
+        }
+      ]
     }
   ]
 };
