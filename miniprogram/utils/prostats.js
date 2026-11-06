@@ -15,8 +15,29 @@
 
 var i18n = require("./i18n.js");
 var core = require("./core.js");
-var DATA = require("./prostats_data.js");
 var codex = require("./codex_data.js");
+
+/**
+ * 数据来源：**包内快照 + 云端热更新**。
+ *
+ * 包内那份（prostats_data.js）是兜底：断网、云环境没配、集合还没建，都得能看。
+ * 云端那份放在云数据库 `prostats/current`，识别脚本推一次就全端生效，
+ * 不用重新发版（发版要审核，改一次数据等一天）。读云端走云函数，
+ * 而不是小程序直连数据库 —— 少配一份集合权限，也不用担心被改。
+ *
+ * DATA 是**可变的**：setHot 会把云端那份换进来。页面读 buildAll 拿的永远是最新。
+ */
+var SNAPSHOT = require("./prostats_data.js");
+// 注意：这里**不能**让 DATA 直接指向 SNAPSHOT —— 热更新是把内容换进来，
+// 而 module.exports.DATA 是同一个对象的引用。换成新对象会让外面拿的那份变旧
+// （测试里读 prostats.DATA 就会读到大盘数据，页面也会不同步）。
+var DATA = {
+  season: SNAPSHOT.season || "",
+  updated: SNAPSHOT.updated || "",
+  players: SNAPSHOT.players || []
+};
+var HOT = false;      // 当前用的数据是不是云端来的
+var FETCHED = false;  // 本次启动是否已经问过云端（问一次就够，别每次切页都烧配额）
 
 /* 中文名 -> 头像路径（图鉴那份数据里已经有） */
 var ICON = {};
@@ -247,3 +268,71 @@ function buildAll_view(activeId, lang) {
 }
 
 module.exports = { DATA: DATA, buildAll: buildAll_view, chipList: chipList, playerById: playerById, ICON: ICON };
+
+/* ============================================================
+   云端热更新
+   ============================================================ */
+
+/**
+ * 校验云端 payload。宁可不换，也不能把半截数据换上去 ——
+ * 换上去之后页面就是一片空白，而用户完全不知道发生了什么。
+ */
+function validPayload(p) {
+  if (!p || typeof p !== "object") return false;
+  if (!Array.isArray(p.players) || !p.players.length) return false;
+  for (var i = 0; i < p.players.length; i++) {
+    var x = p.players[i];
+    if (!x || !x.id || !x.name) return false;
+    if (!Array.isArray(x.heroes) || !Array.isArray(x.combos) || !Array.isArray(x.weapons)) return false;
+  }
+  return true;
+}
+
+/**
+ * 用云端数据替换包内快照。返回是否真的换了（测试直接调它，不碰 wx）。
+ */
+function setHot(payload) {
+  if (!validPayload(payload)) return false;
+  // 原地改，保持对象引用不变（见 DATA 定义处的注释）
+  DATA.season = String(payload.season || (SNAPSHOT.season || ""));
+  DATA.updated = String(payload.updated || "");
+  DATA.players = payload.players;
+  HOT = true;
+  return true;
+}
+
+/** 恢复成包内快照（云端数据被判定有问题时用；也方便测试） */
+function useSnapshot() {
+  DATA.season = SNAPSHOT.season || "";
+  DATA.updated = SNAPSHOT.updated || "";
+  DATA.players = SNAPSHOT.players || [];
+  HOT = false;
+  return true;
+}
+
+function isHot() { return HOT; }
+
+/**
+ * 拉一次云端数据。
+ * **永远回调，绝不抛异常**：这里失败只是"数据旧一点"，不该让页面报错。
+ * @param {function(boolean)} cb 参数 = 是否真的换了数据
+ */
+function refresh(cb) {
+  var done = typeof cb === "function" ? cb : function () {};
+  if (FETCHED) { done(false); return; }
+  FETCHED = true;
+
+  var cloud = require("./cloud.js");
+  cloud.callCloud({ action: "prostats" }).then(function (r) {
+    if (!r || !r.ok || !r.data) { done(false); return; }
+    done(setHot(r.data));
+  }, function () {
+    done(false);
+  });
+}
+
+module.exports.refresh = refresh;
+module.exports.setHot = setHot;
+module.exports.useSnapshot = useSnapshot;
+module.exports.isHot = isHot;
+module.exports.validPayload = validPayload;

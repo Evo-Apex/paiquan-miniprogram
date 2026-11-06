@@ -322,14 +322,26 @@ describe("地图页", () => {
    猎杀榜页
    ============================================================ */
 describe("排位专区页", () => {
-  test("onLoad 请求分数线 + 段位分布 + 赛季倒计时（战队专区当前隐藏）", async () => {
+  test("onLoad 请求分数线 + 段位分布 + 赛季倒计时 + 主播数据（战队专区当前隐藏）", async () => {
     const { inst, calls } = loadPage("predator", { responses: { predator: predatorResult() } });
     inst.onLoad();
     await flush();
+    // prostats 是主播数据热更新（2026-11-05 新增）：先渲染包内快照，再问云端一次，
+    // 云端有更新的就换掉重绘。顺序上是**先本地后云端**，所以它排在最前面。
     // rankdist 是本赛季段位分布（2026-10-16 新增，见 cloudfunctions/apex/rankdist.js）。
     // config 是赛季倒计时 —— 2026-10-16 用户要求从战绩页搬到**排位专区顶部**，
     // 所以它现在也在这个列表里。
-    assert.deepEqual(actionsOf(calls), ["predator", "rankdist", "config"]);
+    assert.deepEqual(actionsOf(calls), ["prostats", "predator", "rankdist", "config"]);
+  });
+
+  test("云端没有主播数据时不影响渲染（回落包内快照）", async () => {
+    // 默认桩里 prostats 返回空 → refresh 判定失败 → 不换数据。
+    // 这条防的是"云端没数据把页面搞空白"。
+    const { inst } = loadPage("predator", { responses: { predator: predatorResult() } });
+    inst.onLoad();
+    await flush();
+    assert.ok(inst.data.pro && inst.data.pro.chips.length >= 2, "包内快照必须还在");
+    assert.ok(inst.data.pro.stat.hasHeroes, "头条英雄不能因为云端没数据就消失");
   });
 
   test("平台卡片建出来并带千分位", async () => {

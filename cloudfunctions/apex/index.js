@@ -22,6 +22,7 @@ let playerStore = null;
 let rotationLog = null;
 let proStore = null;
 let getOpenid = null;
+let prostats = null;
 try {
   const cloud = require("wx-server-sdk");
   cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
@@ -31,6 +32,8 @@ try {
   proStore = require("./proStore").createProStore(cloud);
   // 轮换记录器：给"接下来两天几点打哪张图"的表供数（玩法那部分不用记，可以外推）
   rotationLog = require("./rotationLog").createLog(cloud);
+  // 主播排位数据（英雄/阵容/配枪）的热更新仓库
+  prostats = require("./prostatsStore").createProstatsStore(cloud);
   // 追踪按 openid 隔离（每人最多 5 个）。定时触发器触发的轮询没有用户上下文，openid 为空即可。
   getOpenid = function () {
     try {
@@ -135,18 +138,29 @@ exports.main = async (event) => {
   // 集合不存在（第一次用就是这样）或读失败时**静默退回内置兜底值**，
   // 绝不把错误抛给用户 —— 页面上少一行倒计时，比弹一个报错好得多。
   //
-  // SEASON_FALLBACK = 2026-11-04 01:00 (UTC+8)，按游戏内"通行证剩余 21d6h"推的。
+  // SEASON_FALLBACK = 2027-02-10 01:00 (UTC+8)，按游戏内"第31赛季剩余 96 天"推的（2026-11-06 记）。
   // 小时级，所以误差在 ±1 小时内；换赛季去控制台改 site_config 即可。
   if (event && event.action === "config") {
-    const SEASON_FALLBACK = 1793725200;
+    const SEASON_FALLBACK = 1802192400;
     const cfg = { season: SEASON_FALLBACK, events: [], matches: [] };
     try {
       const res = await cloud.database().collection("site_config").limit(20).get();
+      // 控制台「添加记录」不会用你在对话框里填的文档 ID，一律自己生成一个
+      // （2026-11-06 实测两次：prostats 和 site_config 都被换成了 b548…/6677…）。
+      // 所以只认 _id === "season" 的话，用户照文档建完记录却读不到，极难排查。
+      // 这里改成：优先认 _id === "season"；没有就收下**任何带 endTs 的记录**（取最大的那个）。
+      // 带 list 的是 events/matches，跳过。
+      let byId = 0, anyEnd = 0;
       (res.data || []).forEach(function (doc) {
-        if (doc._id === "season" && doc.endTs) cfg.season = Number(doc.endTs) || SEASON_FALLBACK;
-        if (doc._id === "events" && Array.isArray(doc.list)) cfg.events = doc.list;
-        if (doc._id === "matches" && Array.isArray(doc.list)) cfg.matches = doc.list;
+        if (doc._id === "events" && Array.isArray(doc.list)) { cfg.events = doc.list; return; }
+        if (doc._id === "matches" && Array.isArray(doc.list)) { cfg.matches = doc.list; return; }
+        if (!doc.endTs || Array.isArray(doc.list)) return;
+        const t = Number(doc.endTs);
+        if (!isFinite(t) || t <= 0) return;
+        if (doc._id === "season") byId = t;
+        else if (t > anyEnd) anyEnd = t;
       });
+      cfg.season = byId || anyEnd || SEASON_FALLBACK;
     } catch (e) {
       // 集合还没建：保持兜底值，什么都不说
     }
@@ -199,6 +213,9 @@ exports.main = async (event) => {
       apiKey: apiKey,
       snapshots: snapshots,
       playerStore: playerStore,
+      prostats: prostats,
+      // 只从环境变量读：写入口的 token 绝不能出现在小程序包里
+      prostatsToken: (process.env.PROSTATS_TOKEN || "").trim(),
       openid: getOpenid ? getOpenid() : "",
     });
   } catch (e) {

@@ -117,6 +117,8 @@ pages/maps.wxml  {{...}}  ← 只渲染，不含业务判断
 | `teams` | 战队专区（名单 + 当前分） | `curated_roster_resolved.json` + `/bridge` | 30 分钟 | — |
 | `proRoster` | 比赛页：一场赛事的参赛队伍和队员（Liquipedia，带国籍、键鼠/手柄），用来把名次行、选手名连到选手页 | 只读数据库 | — | `pro_meta`、`pro_players` |
 | `proPlayer` | 选手页：一位选手的资料、队伍经历、历届成绩、合作过的队友（Liquipedia） | 只读数据库 | — | `pro_players`、`pro_teams` |
+| `prostats` | 主播排位数据（英雄/阵容/武器/配枪）的热更新读取 | 云数据库 `prostats/current` | — | `prostats`（可缺，缺了用包内快照） |
+| `prostatsSet` | 同上，**写入**。只认云函数环境变量 `PROSTATS_TOKEN`，小程序端不持有 | 云数据库 | — | `prostats` |
 | `Timer` | 定时轮询追踪名单 + 顺手记一条轮换 + 抓一点职业选手数据（每次最多 1 个 Liquipedia 请求，见 §18） | Liquipedia 数据库 API（`LIQUIPEDIA_API_KEY`） | 一轮抓完歇 24 小时 | 同上 + `pro_meta`、`pro_players`、`pro_teams` |
 
 **数据库集合（5 个，都要在云开发控制台手动建）**
