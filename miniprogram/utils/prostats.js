@@ -290,15 +290,27 @@ function validPayload(p) {
 
 /**
  * 用云端数据替换包内快照。返回是否真的换了（测试直接调它，不碰 wx）。
+ *
+ * ⚠️ **云端比包内旧就不换**（2026-11-08 用户反馈「英雄组合好像没更新」）。
+ * 当时云端还留着上一版数据，而 setHot 不比较日期，于是刚发出去的新包
+ * 一启动就被旧云端数据盖掉了：英雄选取看着变了，组合却是上一版的。
+ * 热更新的意义是"补上还没发版的更新"，往回退没有任何好处。
  */
 function setHot(payload) {
   if (!validPayload(payload)) return false;
+  if (!_notOlder(payload.updated, DATA.updated)) return false;
   // 原地改，保持对象引用不变（见 DATA 定义处的注释）
   DATA.season = String(payload.season || (SNAPSHOT.season || ""));
   DATA.updated = String(payload.updated || "");
   DATA.players = payload.players;
   HOT = true;
   return true;
+}
+
+/** a 是否不早于 b（都是 YYYY-MM-DD；任一方缺失就放行，退回原来的行为） */
+function _notOlder(a, b) {
+  if (!a || !b) return true;
+  return String(a) >= String(b);
 }
 
 /** 恢复成包内快照（云端数据被判定有问题时用；也方便测试） */

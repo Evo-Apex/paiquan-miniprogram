@@ -169,3 +169,36 @@ describe("排位专区 · 视图模型", () => {
     assert.match(en.nText, /loadouts$/);
   });
 });
+
+describe("职业选手数据 · 云端热更新的方向", () => {
+  // 用户 2026-11-08 反馈「英雄组合那里好像没更新」。
+  // 根因不是数据没生成，而是 setHot 不看日期：包内已经是新版，
+  // 云端还留着上一版，一启动就被旧数据盖掉了。
+  const POOL = (name) => ([{
+    id: "probe", name, heroes: [], combos: [], weapons: [], weaponPairs: [], selfHeroes: [],
+  }]);
+
+  test("云端比包内旧 → 不换（宁可显示包内的新数据）", () => {
+    const before = prostats.DATA.updated;
+    const ok = prostats.setHot({ updated: "2000-01-01", season: "S29", players: POOL("旧人") });
+    assert.equal(ok, false, "更旧的云端数据不该覆盖包内数据");
+    assert.equal(prostats.isHot(), false);
+    assert.equal(prostats.DATA.updated, before, "被拒绝之后 updated 不能被动过");
+    assert.ok(prostats.DATA.players.some((p) => p.name !== "旧人"));
+  });
+
+  test("云端同一天或更新 → 照常换", () => {
+    const same = prostats.setHot({
+      updated: prostats.DATA.updated, season: "S31", players: POOL("同日"),
+    });
+    assert.equal(same, true, "同一天的热更新应当被接受");
+    assert.equal(prostats.isHot(), true);
+
+    const newer = prostats.setHot({ updated: "2999-01-01", season: "S31", players: POOL("未来的") });
+    assert.equal(newer, true);
+
+    // ⚠️ 复原：这个模块的 DATA 是模块级状态，不还回去后面的用例全废
+    prostats.useSnapshot();
+    assert.equal(prostats.isHot(), false);
+  });
+});
