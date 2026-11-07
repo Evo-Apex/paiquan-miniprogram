@@ -87,6 +87,15 @@ function ordinal(n, lang) {
   return ["th", "st", "nd", "rd"][v % 10] || "th";
 }
 
+/** 加入日期 → "2025 年 1 月加入" / "Joined January 2025"；没有日期 → "" */
+function sinceText(join, lang, T) {
+  var m = /^(\d{4})-(\d{2})/.exec(String(join || ""));
+  if (!m) return "";
+  return lang === "en"
+    ? T.proSince.replace("{m}", MONTH_EN[Number(m[2]) - 1]).replace("{y}", m[1])
+    : T.proSince.replace("{y}", m[1]).replace("{m}", String(Number(m[2])));
+}
+
 function isMajor(r) {
   return (r.tier === "1" || r.tier === "2") && !r.tierType;
 }
@@ -109,14 +118,7 @@ function heroOf(p, hist, lang, T, nowMs) {
     out.retired = { text: T.proRetired, last: last ? T.proLastTeam.replace("{t}", last) : "" };
   } else if (p.team) {
     var cur = hist.filter(function (h) { return h.teamPage === p.teamPage && !h.leave; })[0];
-    var since = "";
-    var m = cur && /^(\d{4})-(\d{2})/.exec(cur.join || "");
-    if (m) {
-      since = lang === "en"
-        ? T.proSince.replace("{m}", MONTH_EN[Number(m[2]) - 1]).replace("{y}", m[1])
-        : T.proSince.replace("{y}", m[1]).replace("{m}", String(Number(m[2])));
-    }
-    out.team = { name: p.team, initials: initials(p.team), since: since };
+    out.team = { name: p.team, page: p.teamPage || "", initials: initials(p.team), since: cur ? sinceText(cur.join, lang, T) : "" };
   }
   return out;
 }
@@ -168,7 +170,7 @@ function legendsOf(p, lang) {
  * 战队经历：时长色条（老的在左、现在的队标红）+ 时间线（新的在前）。
  * 色条只用日期齐全的几段；时间线全列。
  */
-function careerOf(hist, lang, T, nowMs) {
+function careerOf(hist, lang, T, nowMs, teamPages) {
   if (!hist.length) return { has: false };
   var t = today(nowMs);
   var nowM = t.y * 12 + t.m - 1;
@@ -178,6 +180,7 @@ function careerOf(hist, lang, T, nowMs) {
     var end = h.leave ? ym(h.leave) : "";
     return {
       key: i + "|" + h.teamPage + "|" + h.join,
+      page: teamPages[h.teamPage] ? h.teamPage : "",   // 有战队页才能点进去
       team: h.team || h.teamPage,
       sub: names.role(h.role, lang),
       range: start ? (start + " – " + end) : (end ? "? – " + end : ""),
@@ -279,7 +282,7 @@ function visibleMates(mates, open, T) {
 }
 
 /**
- * @param raw  proPlayer 的 data（{ page, profile, history, results, mates, at }）
+ * @param raw  proPlayer 的 data（{ page, profile, history, results, mates, teamPages, at }）
  * @param lang "zh" / "en"
  * @param nowMs 打开页面的时刻（算年龄、在队时长）
  */
@@ -293,10 +296,15 @@ function player(raw, lang, nowMs) {
   // 中文界面下，本国文字的名字是中日韩文字就一起写（王耀 · Wang Yao）；俄文、泰文这些不写
   if (p && lang !== "en" && p.localName && hasCJK(p.localName)) real = real ? p.localName + " · " + real : p.localName;
 
+  // 有战队页的队（{ 页面名: true }）：大卡上现在的战队、战队经历那几行能点进去
+  var teamPages = (raw && raw.teamPages) || {};
   var hero = heroOf(p, hist, lang, T, nowMs);
+  if (hero.team && !teamPages[hero.team.page]) hero.team.page = "";
   return {
     id: p ? p.id : String(page).replace(/_\(.*\)$/, "").replace(/_/g, " "),
     hasProfile: !!p,
+    // 选手照片（云存储的 cloud:// 地址，ALGS 定妆照）；没有 → ""，大卡用剪影
+    photo: String((raw && raw.photo) || ""),
     realName: real,
     facts: hero.facts,
     team: hero.team,
@@ -304,7 +312,7 @@ function player(raw, lang, nowMs) {
     profile: profileOf(p, lang, T),
     mates: matesOf(raw && raw.mates, !!hero.retired, lang, T),
     legends: legendsOf(p, lang),
-    career: careerOf(hist, lang, T, nowMs),
+    career: careerOf(hist, lang, T, nowMs, teamPages),
     results: resultsOf(raw && raw.results, p ? p.team : "", lang, T),
     at: Number(raw && raw.at) || 0
   };
@@ -330,6 +338,11 @@ module.exports = {
   duration: duration,
   initials: initials,
   isMajor: isMajor,
+  // 战队页（teamview.js）也用
+  resultsOf: resultsOf,
+  sinceText: sinceText,
+  firstChar: firstChar,
+  ym: ym,
   RES_FIRST: RES_FIRST,
   MATES_FIRST: MATES_FIRST
 };

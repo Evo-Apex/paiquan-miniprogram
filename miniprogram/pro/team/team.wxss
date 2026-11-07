@@ -1,0 +1,131 @@
+/* 战队页，照 August 的战队页设计稿；卡片、标题、行、成绩这些和选手页同一套（pp-*），这里只写战队页自己的（tp-*）。
+   颜色只用 app.wxss 的令牌；大卡、选手卡用 --hero-*（两套主题下都是深色底）。
+   字号只用令牌档位：队名用 --fs-hero（同选手页的 ID），队名缩写方块用 --fs-big。 */
+@import "../player/player.wxss";
+
+.tp-skel { height: 640rpx; }
+
+/* ---------- 大卡 ---------- */
+.tp-top {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 72rpx 32rpx 36rpx;
+  text-align: center;
+  background: radial-gradient(60% 60% at 50% 30%, var(--hero-track), transparent 70%);
+}
+/* 队名缩写：切角方块（队标拿到授权之前的占位，同选手页的小队标） */
+.tp-logo {
+  width: 176rpx;
+  height: 176rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--fs-big);
+  font-weight: var(--fw-num);
+  color: var(--hero-ink);
+  background: var(--hero-track);
+  clip-path: polygon(0 0, 100% 0, 100% 72%, 72% 100%, 0 100%);
+}
+.tp-name {
+  margin-top: 36rpx;
+  font-size: var(--fs-hero);
+  font-weight: var(--fw-num);
+  line-height: 1.15;
+  color: var(--hero-ink);
+  word-break: break-word;
+}
+/* 赛区标签：左边红底缩写，右边浅底名字，右端斜切（设计稿） */
+.tp-badge { display: flex; align-items: stretch; margin-top: var(--sp-6); }
+.tp-badge-code {
+  display: flex;
+  align-items: center;
+  padding: 0 var(--sp-5);
+  min-height: 56rpx;
+  font-size: var(--fs-sub);
+  font-weight: var(--fw-num);
+  color: #ffffff;   /* 压在 --accent 上的白字（app.wxss 已核对 4.85:1） */
+  background: var(--accent);
+}
+.tp-badge-label {
+  display: flex;
+  align-items: center;
+  padding: 0 40rpx 0 var(--sp-5);
+  min-height: 56rpx;
+  font-size: var(--fs-sub);
+  font-weight: var(--fw-bold);
+  color: var(--hero-bg);
+  background: var(--hero-ink);
+  clip-path: polygon(0 0, 100% 0, calc(100% - 20rpx) 100%, 0 100%);
+}
+.tp-badge-code + .tp-badge-label { border-left: none; }
+
+/* ---------- 现役阵容：选手卡一排三张（多了换行），深色底 + 剪影，名字压在渐变上 ---------- */
+.tp-cards { display: flex; flex-wrap: wrap; margin-right: -16rpx; }
+.tp-pcard {
+  position: relative;
+  width: calc((100% - 48rpx) / 3);
+  height: 296rpx;
+  margin: 0 16rpx 16rpx 0;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  background: var(--hero-bg);
+  border-radius: var(--r-lg);
+}
+.tp-sil { width: 160rpx; height: 192rpx; margin-top: 28rpx; }
+/* 照片：宽度铺满、从头顶往下放，腰部以下被卡片切掉（再被渐变盖住） */
+.tp-photo { position: absolute; left: 0; top: 16rpx; width: 100%; }
+.tp-pfade {
+  position: absolute;
+  left: 0; right: 0; top: 0; bottom: 0;
+  background: linear-gradient(180deg, transparent 45%, var(--hero-bg) 82%);
+}
+.tp-pplate {
+  position: absolute;
+  left: 0; right: 0; bottom: 18rpx;
+  padding: 0 var(--sp-3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.tp-pname {
+  max-width: 100%;
+  font-size: var(--fs-head);
+  font-weight: var(--fw-num);
+  line-height: 1.2;
+  color: var(--hero-ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.tp-pname-long { font-size: var(--fs-body); }
+.tp-pmeta {
+  margin-top: 4rpx;
+  max-width: 100%;
+  font-size: var(--fs-min);
+  color: var(--hero-ink2);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* 选手卡下面的教练、替补：和卡片之间一条线（设计稿） */
+.tp-staff { margin-top: var(--sp-2); border-top: 1rpx solid var(--line); }
+
+/* ---------- 阵容变动：+ / − 方块（+ 用强调色填充，− 用灰底）---------- */
+.tp-sign {
+  width: 48rpx;
+  height: 48rpx;
+  flex: none;
+  margin-right: 24rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--fs-head);
+  font-weight: var(--fw-bold);
+  line-height: 1;
+  border-radius: var(--r-sm);
+}
+.tp-sign-in { color: #ffffff; background: var(--accent); }   /* 白字压 --accent，同 .langsw-on */
+.tp-sign-out { color: var(--ink2); background: var(--track); }

@@ -43,6 +43,8 @@
   background: radial-gradient(60% 70% at 50% 30%, var(--hero-track), transparent 70%);
 }
 .pp-sil { width: 440rpx; height: 528rpx; margin-top: 32rpx; }
+/* 照片（透明底抠图，腰部截断）：定高、宽度随图，底边压进渐变里 */
+.pp-photo { height: 560rpx; margin-top: 40rpx; }
 /* 下半截渐变进卡片底色，ID 压在渐变上 */
 .pp-fade {
   position: absolute;
@@ -107,6 +109,7 @@
 .pp-center { text-align: center; }
 .pp-hteam-n { display: block; font-size: var(--fs-body); font-weight: var(--fw-bold); color: var(--hero-ink); }
 .pp-hteam-s { display: block; font-size: var(--fs-min); color: var(--hero-ink2); }
+.pp-hchev { flex: none; margin-left: var(--sp-5); font-size: var(--fs-head); color: var(--hero-ink2); }
 
 /* ---------- 卡片 ---------- */
 .pp-card {
@@ -203,6 +206,7 @@
 .pp-axis { display: flex; justify-content: space-between; margin: var(--sp-2) 0 var(--sp-6); }
 .pp-axis-i { font-size: var(--fs-min); color: var(--ink3); font-variant-numeric: tabular-nums; }
 .pp-tli { position: relative; display: flex; align-items: flex-start; padding-bottom: 28rpx; }
+.pp-tli .pp-chev { padding-top: 4rpx; }
 .pp-tli:last-child { padding-bottom: 0; }
 .pp-tli::after {
   content: "";

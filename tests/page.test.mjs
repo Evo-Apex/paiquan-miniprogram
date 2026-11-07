@@ -866,12 +866,12 @@ describe("比赛页 · 连到选手页", () => {
   const roster = {
     event: "Apex_Legends_Global_Series/2026/Split_2/Playoffs",
     teams: [
-      { place: "1", team: "Team Liquid", players: [
+      { place: "1", team: "Team Liquid", teamPage: "Team_Liquid", players: [
         { page: "Zer0", id: "Zer0", nat: "Australia", input: "Mouse & Keyboard" },
         { page: "Sikezz", id: "Sikezz", nat: "United Kingdom", input: "Controller" },
         { page: "Panic_(American_player)", id: "Panic", nat: "United States", input: "Controller" },
       ] },
-      { place: "11", team: "Rex Regum Qeon", players: [
+      { place: "11", team: "Rex Regum Qeon", teamPage: "", players: [
         { page: "Prycyy", id: "Prycyy", nat: "Indonesia", input: "Controller" },
       ] },
     ],
@@ -913,6 +913,24 @@ describe("比赛页 · 连到选手页", () => {
     assert.equal(urls.length, 1);
   });
 
+  test("有战队页的队：冠军队名能点、弹层第一行是「战队主页」；没有战队页的队没有这一行", async () => {
+    const { inst } = loadPage("matches", { responses: { proRoster: rosterOk } });
+    const urls = [];
+    global.wx.navigateTo = (o) => urls.push(o.url);
+    inst.onLoad();
+    await flush();
+    if (!inst.data.result) return;
+    assert.equal(inst.data.result.champTeamPage, "Team_Liquid");
+    inst.onRankTeam({ currentTarget: { dataset: { ti: 0 } } });
+    assert.equal(inst.data.openTeam.teamPage, "Team_Liquid");
+    inst.onOpenTeam({ currentTarget: { dataset: { page: inst.data.openTeam.teamPage } } });
+    assert.deepEqual(urls, ["/pro/team/team?page=Team_Liquid"]);
+    inst.onRankTeam({ currentTarget: { dataset: { ti: 1 } } });
+    assert.equal(inst.data.openTeam.teamPage, "");
+    inst.onOpenTeam({ currentTarget: { dataset: { page: "" } } });
+    assert.equal(urls.length, 1, "没有战队页的点了没反应");
+  });
+
   test("名单要不到（云函数挂了）：内容照常，什么都不能点", async () => {
     const { inst } = loadPage("matches", { failAll: true });
     inst.onLoad();
@@ -920,7 +938,86 @@ describe("比赛页 · 连到选手页", () => {
     if (!inst.data.result) return;
     assert.ok(inst.data.result.rows.length >= 10, "最终成绩照常显示");
     assert.equal(inst.data.result.champChips, undefined, "没有名单就不出队员块，照旧一行字");
+    assert.ok(!inst.data.result.champTeamPage, "冠军队名也不能点");
     assert.ok(inst.data.result.rows.every((x) => !(x.ti >= 0)));
+  });
+});
+
+/* ============================================================
+   战队页（2026-11-07，分包 pro/team；数据来自 Liquipedia，云函数 proTeam 只读数据库）
+   ============================================================ */
+describe("战队页", () => {
+  const mem = (id, o) => Object.assign({ page: id, id, type: "player", nat: "", join: "2025-01-01", leave: "", status: "active", role: "", hasPage: true }, o);
+  const data = {
+    page: "Team_Liquid", at: 1,
+    info: { page: "Team_Liquid", name: "Team Liquid", region: "North America", status: "active", created: "", disbanded: "", earnings: 100 },
+    members: [mem("A"), mem("B", { hasPage: false }), mem("C"),
+      ...Array.from({ length: 7 }, (_, i) => mem("F" + i, { join: "2020-01-01", leave: "2021-01-0" + (i + 1), status: "former" }))],
+    results: [{ date: "2026-01-01", event: "E", tournament: "E", tier: "1", tierType: "", place: "1", prize: 1, team: "Team Liquid" }],
+    transfers: Array.from({ length: 6 }, (_, i) => ({ date: "2025-0" + (i + 1) + "-01", page: "A", id: "A", nat: "", move: "join", from: "", to: "", k1: "player", k2: "player", r1: "", r2: "", hasPage: true })),
+  };
+
+  test("读到了：每块都出，阵容变动先 4 次、历任队员先 5 个，点「查看全部」才全列", async () => {
+    const { inst, calls } = loadPage("pro/team", { responses: { proTeam: { ok: true, kind: "ok", message: "", data } } });
+    inst.onLoad({ page: "Team_Liquid" });
+    await flush();
+    assert.deepEqual(calls.filter((c) => c.name === "apex").map((c) => c.data), [{ action: "proTeam", page: "Team_Liquid" }]);
+    assert.equal(inst.data.state, "ready");
+    assert.equal(inst.data.v.roster.cards.length, 3);
+    assert.equal(inst.data.moves.rows.length, 4);
+    assert.equal(inst.data.former.rows.length, 5);
+    inst.onMovesMore();
+    inst.onFormerMore();
+    assert.equal(inst.data.moves.rows.length, 6);
+    assert.equal(inst.data.former.rows.length, 7);
+  });
+
+  test("点选手 → 选手页；没收录的人点了没反应", async () => {
+    const { inst } = loadPage("pro/team", { responses: { proTeam: { ok: true, kind: "ok", message: "", data } } });
+    const urls = [];
+    global.wx.navigateTo = (o) => urls.push(o.url);
+    inst.onLoad({ page: "Team_Liquid" });
+    await flush();
+    const cards = inst.data.v.roster.cards;
+    cards.forEach((c) => inst.onOpenPlayer({ currentTarget: { dataset: { page: c.page } } }));
+    assert.deepEqual(urls, ["/pro/player/player?page=A", "/pro/player/player?page=C"]);
+  });
+
+  test("选手卡照片加载失败：这张卡换回剪影，展开别的块重算时也不再试", async () => {
+    const withPhoto = Object.assign({}, data, { members: data.members.map((m) => (m.id === "A" ? Object.assign({}, m, { photo: "cloud://e.b/a_card.webp" }) : m)) });
+    const { inst } = loadPage("pro/team", { responses: { proTeam: { ok: true, kind: "ok", message: "", data: withPhoto } } });
+    inst.onLoad({ page: "Team_Liquid" });
+    await flush();
+    assert.equal(inst.data.v.roster.cards[0].photo, "cloud://e.b/a_card.webp");
+    inst.onCardPhotoError({ currentTarget: { dataset: { i: 0 } } });
+    assert.equal(inst.data.v.roster.cards[0].photo, "");
+    inst.onMovesMore();
+    assert.equal(inst.data.v.roster.cards[0].photo, "", "重算以后还是剪影");
+  });
+
+  test("数据库里没有这支队：写「还没有这支战队的资料」；云函数挂了：出错 + 重试", async () => {
+    const empty = loadPage("pro/team", { responses: { proTeam: { ok: true, kind: "ok", message: "", data: null } } }).inst;
+    empty.onLoad({ page: "Nobody" });
+    await flush();
+    assert.equal(empty.data.state, "empty");
+    const bad = loadPage("pro/team", { failAll: true }).inst;
+    bad.onLoad({ page: "Team_Liquid" });
+    await flush();
+    assert.equal(bad.data.state, "error");
+  });
+});
+
+describe("选手页 · 照片", () => {
+  test("大卡照片加载失败：换回剪影，重算也不再试", async () => {
+    const raw = { page: "Zer0", photo: "cloud://e.b/p_Zer0_hero.webp", profile: { id: "Zer0", nats: [], legends: [] }, history: [], results: null, mates: null, teamPages: {}, at: 1 };
+    const { inst } = loadPage("pro/player", { responses: { proPlayer: { ok: true, kind: "ok", message: "", data: raw } } });
+    inst.onLoad({ page: "Zer0" });
+    await flush();
+    assert.equal(inst.data.v.photo, "cloud://e.b/p_Zer0_hero.webp");
+    inst.onPhotoError();
+    assert.equal(inst.data.v.photo, "");
+    inst.onResMore();
+    assert.equal(inst.data.v.photo, "");
   });
 });
 

@@ -87,7 +87,7 @@
 | `nextmatch.js` | 17 KB | 下一场比赛：赛程树/分组/队员/赛制 → 视图模型（北京时间 UTC+8） |
 | `prolink.js` | 5 KB | 比赛页的战队名、选手名（ALS 写法）→ Liquipedia 选手页面名（2026-11，AI-CONTEXT §18） |
 | `pronames.js` | 5 KB | Liquipedia 取值的中文叫法：国籍 / 赛区 / 键鼠手柄 / 队里身份 / 比赛类型 |
-| `../pro/`（分包） | — | 选手页 `pro/player/`、数据来源说明 `pro/sources/`、视图模型 `pro/utils/view.js`、剪影占位图 `pro/assets/silhouette.svg`（数据来自 Liquipedia） |
+| `../pro/`（分包） | — | 选手页 `pro/player/`、战队页 `pro/team/`（2026-11-07）、数据来源说明 `pro/sources/`、视图模型 `pro/utils/view.js` / `teamview.js`、剪影占位图 `pro/assets/silhouette.svg`（数据来自 Liquipedia） |
 | `prostats.js` | 11 KB | 职业选手排位数据 → 视图模型（英雄选取率/组合/枪械） |
 | `rankdist.js` | 4 KB | 段位分布 → 视图模型（含"你在哪"的位置换算） |
 | `wheel_data.js` | 11 KB | 轮盘：候选池（读 codex）+ 扇形几何（留在主包：小游戏分类页也要用） |
@@ -133,9 +133,10 @@
 | `pickrates.js` | 180 | 英雄选取率：解析网页，缓存 1 小时 |
 | `rankdist.js` | 130 | 段位分布：抓 `/lib/php/rankdistrib.php` JSON，缓存 6 小时 |
 | `teams.js` | 80 | 战队专区：读名单 + 并行查分，缓存 30 分钟 |
-| `liquipedia.js` | 400 | Liquipedia 数据库 API：拼请求、取数、归一化、算队友重叠（每小时只给 60 次，所以只由定时器调） |
-| `proSync.js` | 330 | 选手数据：定时器每次一步（≤1 个请求）+ `proPlayer`（带队友）/ `proRoster` 读取接口 |
-| `proStore.js` | 150 | `pro_players` / `pro_teams` / `pro_meta` 三个集合的读写（第一次写入时自动建） |
+| `liquipedia.js` | 550 | Liquipedia 数据库 API：拼请求、取数、归一化（选手、战队、成绩、转会）、算队友重叠（每小时只给 60 次，所以只由定时器调） |
+| `proSync.js` | 430 | 选手、战队数据：定时器每次一步（≤1 个请求）+ `proPlayer`（带队友）/ `proRoster` / `proTeam` 读取接口 |
+| `proPhotos.js` | 40 | 选手照片：页面名 → 云存储的 cloud:// 地址；对照表 `pro_photos.json` 由 `tools/build_pro_photos.py` 生成 |
+| `proStore.js` | 190 | `pro_players` / `pro_teams` / `pro_meta` 三个集合的读写（第一次写入时自动建） |
 | `snapshot.js` | 70 | 猎杀快照纯逻辑（按小时分桶、20~28h 窗口挑基准） |
 | `store.js` | 90 | 猎杀快照数据库读写（错误全部降级） |
 | `playerSnapshots.js` | 60 | 玩家快照纯逻辑 |
@@ -186,7 +187,8 @@
 | `prostats.test.mjs` | 14 | 职业选手数据 |
 | `algs.test.mjs` | 21 | ALGS 快照 |
 | `nextmatch.test.mjs` | 30 | 下一场比赛 |
-| `pro.test.mjs` | 34 | 选手页（Liquipedia）：归一化 / 定时同步 / 读取接口 / 队友 / 视图模型 / 名字连接 |
+| `pro.test.mjs` | 50 | 选手页、战队（Liquipedia）：归一化 / 定时同步 / 读取接口 / 队友 / 视图模型 / 名字连接 |
+| `proteam.test.mjs` | 14 | 战队页视图模型 |
 | `comps.test.mjs` | 14 | 职业组合解析 |
 | `pickrates.test.mjs` | 14 | 英雄选取率解析 |
 | `rankdist.test.mjs` | 15 | 段位分布 |
@@ -209,6 +211,7 @@
 | `scan-hardcoded-colors.mjs` | 扫硬编码色值 |
 | `fix-type-floor.mjs` / `fix-accent-border.mjs` | 一次性修正脚本（历史遗留，只作参考） |
 | `build_team_icons.mjs` | 抓 ALGS 队标 → `assets/teams/` |
+| `build_pro_photos.py` | 选手照片：ALGS 定妆照对到 Liquipedia 页面名、压成 WebP（传云存储），生成 `cloudfunctions/apex/pro_photos.json`（AI-CONTEXT §18） |
 | `make-*-tabicon.py` | 生成 tabBar 图标 |
 | `make-home-assets.py` | 生成「首页」tab 图标和首页导航栏的品牌标 `logo-mark.png`（Noto Sans SC） |
 | `icon.html` / `tabicons.html` | 图标预览页 |

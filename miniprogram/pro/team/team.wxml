@@ -1,0 +1,121 @@
+<view class="wrap theme-{{theme}} pp-wrap" data-lang="{{lang}}">
+  <!-- 读取中：和读好后的大卡差不多高的空卡片，免得页面跳 -->
+  <view wx:if="{{state === 'loading'}}" class="pp-hero tp-skel"></view>
+
+  <view wx:elif="{{state === 'error'}}" class="msg msg-err">
+    <text class="msg-title">{{T.proTeamLoadFail}}</text>
+    <view class="pp-retry" hover-class="pp-pressed" bindtap="onRetry">{{T.proRetry}}</view>
+  </view>
+
+  <view wx:elif="{{state === 'empty'}}" class="msg msg-info">
+    <text class="msg-title">{{T.proTeamEmpty}}</text>
+    <text class="msg-body">{{T.proTeamEmptyBody}}</text>
+  </view>
+
+  <block wx:else>
+    <!-- 大卡（两套主题都是深色底）：队名缩写的切角方块（队标拿到授权之前的占位）、队名、赛区标签；
+         下面进入 Apex /（解散）/ 累计奖金，哪项没有就少一格 -->
+    <view class="pp-hero">
+      <view class="tp-top">
+        <view class="tp-logo">{{v.initials}}</view>
+        <text class="tp-name">{{v.name}}</text>
+        <view wx:if="{{v.badge}}" class="tp-badge">
+          <text wx:if="{{v.badge.code}}" class="tp-badge-code">{{v.badge.code}}</text>
+          <text class="tp-badge-label">{{v.badge.label}}</text>
+        </view>
+      </view>
+      <view wx:if="{{v.facts.length}}" class="pp-facts">
+        <view class="pp-fact" wx:for="{{v.facts}}" wx:key="k">
+          <text class="pp-fact-v">{{item.v}}</text>
+          <text class="pp-fact-k">{{item.k}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 现役阵容：正式队员一张卡（照片拿到授权之前用剪影），教练、替补一行一个；收录了的人才能点进去 -->
+    <view wx:if="{{v.roster.has}}" class="pp-card">
+      <view class="pp-head"><text class="pp-h">{{T.proRoster}}</text><text class="pp-hs">{{v.roster.countText}}</text></view>
+      <view wx:if="{{v.roster.cards.length}}" class="tp-cards">
+        <view class="tp-pcard" wx:for="{{v.roster.cards}}" wx:key="key"
+              data-page="{{item.page}}" bindtap="onOpenPlayer" hover-class="{{item.page ? 'pp-pressed' : 'none'}}">
+          <!-- 照片在云存储（WebP 要加 webp 属性）；没有或加载失败 → 剪影 -->
+          <image wx:if="{{item.photo}}" class="tp-photo" src="{{item.photo}}" mode="widthFix" webp="{{true}}"
+                 data-i="{{index}}" binderror="onCardPhotoError"></image>
+          <image wx:else class="tp-sil" src="/pro/assets/silhouette.svg" mode="aspectFit"></image>
+          <view class="tp-pfade"></view>
+          <view class="tp-pplate">
+            <text class="tp-pname {{item.long ? 'tp-pname-long' : ''}}">{{item.name}}</text>
+            <text wx:if="{{item.meta}}" class="tp-pmeta">{{item.meta}}</text>
+          </view>
+        </view>
+      </view>
+      <view wx:if="{{v.roster.rows.length}}" class="pp-past {{v.roster.cards.length ? 'tp-staff' : ''}}">
+        <view class="pp-prow" wx:for="{{v.roster.rows}}" wx:key="key"
+              data-page="{{item.page}}" bindtap="onOpenPlayer" hover-class="{{item.page ? 'pp-pressed' : 'none'}}">
+          <view class="pp-ava">{{item.initial}}</view>
+          <view class="pp-grow">
+            <text class="pp-name">{{item.name}}</text>
+            <text class="pp-small">{{item.text}}</text>
+          </view>
+          <text class="pp-chev">{{item.page ? '›' : ''}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 重要比赛成绩：同选手页（S、A 级先 5 场）；奖金就是这支队的，不再标"全队奖金" -->
+    <view wx:if="{{v.results.has}}" class="pp-card">
+      <view class="pp-head"><text class="pp-h">{{T.proResults}}</text><text class="pp-hs">{{res.sub}}</text></view>
+      <view class="pp-res">
+        <view class="pp-row {{item.win ? 'pp-row-win' : ''}}" wx:for="{{res.rows}}" wx:key="key">
+          <view class="pp-place"><text class="pp-place-n">{{item.place}}</text><text wx:if="{{item.sup}}" class="pp-sup">{{item.sup}}</text></view>
+          <view class="pp-grow">
+            <text class="pp-name">{{item.event}}</text>
+            <text class="pp-small">{{item.sub}}</text>
+          </view>
+          <view wx:if="{{item.prize}}" class="pp-prize"><text class="pp-prize-v">{{item.prize}}</text></view>
+        </view>
+      </view>
+      <view wx:if="{{res.moreText}}" class="pp-more" bindtap="onResMore" hover-class="pp-pressed">{{res.moreText}}</view>
+      <view wx:if="{{res.minorText}}" class="pp-quiet" bindtap="onResMinor" hover-class="pp-pressed">{{res.minorText}}</view>
+      <view wx:if="{{res.majorText}}" class="pp-quiet" bindtap="onResMajor" hover-class="pp-pressed">{{res.majorText}}</view>
+    </view>
+
+    <!-- 阵容变动：+ 进了阵容（强调色块），− 离开阵容（灰块）；先 4 次 -->
+    <view wx:if="{{v.moves.has}}" class="pp-card">
+      <view class="pp-head"><text class="pp-h">{{T.proMoves}}</text><text class="pp-hs">{{moves.sub}}</text></view>
+      <view class="pp-past">
+        <view class="pp-prow" wx:for="{{moves.rows}}" wx:key="key"
+              data-page="{{item.page}}" bindtap="onOpenPlayer" hover-class="{{item.page ? 'pp-pressed' : 'none'}}">
+          <view class="tp-sign tp-sign-{{item.sign}}">{{item.sign === 'in' ? '+' : '−'}}</view>
+          <view class="pp-grow">
+            <text class="pp-name">{{item.name}}</text>
+            <text class="pp-small">{{item.text}}</text>
+          </view>
+          <text class="pp-dur">{{item.date}}</text>
+          <text class="pp-chev">{{item.page ? '›' : ''}}</text>
+        </view>
+      </view>
+      <view wx:if="{{moves.moreText}}" class="pp-more" bindtap="onMovesMore" hover-class="pp-pressed">{{moves.moreText}}</view>
+    </view>
+
+    <!-- 历任队员：一人一行，最早加入 – 最后离队，在队时间几段相加（日期不全就不写时长） -->
+    <view wx:if="{{v.former.has}}" class="pp-card">
+      <view class="pp-head"><text class="pp-h">{{T.proFormer}}</text><text class="pp-hs">{{v.former.countText}}</text></view>
+      <view class="pp-past">
+        <view class="pp-prow" wx:for="{{former.rows}}" wx:key="key"
+              data-page="{{item.page}}" bindtap="onOpenPlayer" hover-class="{{item.page ? 'pp-pressed' : 'none'}}">
+          <view class="pp-ava">{{item.initial}}</view>
+          <view class="pp-grow">
+            <text class="pp-name">{{item.name}}</text>
+            <text wx:if="{{item.range}}" class="pp-small">{{item.range}}</text>
+          </view>
+          <text wx:if="{{item.dur}}" class="pp-dur">{{item.dur}}</text>
+          <text class="pp-chev">{{item.page ? '›' : ''}}</text>
+        </view>
+      </view>
+      <view wx:if="{{former.moreText}}" class="pp-more" bindtap="onFormerMore" hover-class="pp-pressed">{{former.moreText}}</view>
+    </view>
+
+    <view class="pp-srclink" bindtap="onSources" hover-class="pp-pressed">{{T.proSources}}<text class="pp-chev">›</text></view>
+  </block>
+</view>

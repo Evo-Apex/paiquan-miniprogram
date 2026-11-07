@@ -1,5 +1,5 @@
-// 职业选手（Liquipedia）的测试：云函数的归一化 / 定时同步 / 两个读取接口，
-// 选手页的视图模型，比赛页名字对 Liquipedia 的连接。
+// 职业选手、战队（Liquipedia）的测试：云函数的归一化 / 定时同步 / 三个读取接口，
+// 选手页的视图模型，比赛页名字对 Liquipedia 的连接。战队页的视图模型在 proteam.test.mjs。
 // 样本的形状照 2026-11-02 实测的 LPDB v3 返回裁小（字段名、取值写法都和真的一样）。
 
 import { test, describe } from "node:test";
@@ -76,10 +76,16 @@ function memStore() {
     readEvents: async () => null,
     savePlayer: async (page, patch) => { players[page] = Object.assign({ page }, players[page] || {}, patch); return true; },
     readPlayer: async (page) => players[page] || null,
-    saveTeam: async (page, data) => { teams[page] = Object.assign({ page }, data); return true; },
+    saveTeam: async (page, patch) => { teams[page] = Object.assign({ page }, teams[page] || {}, patch); return true; },
+    readTeam: async (page) => teams[page] || null,
     readTeams: async (pages) => {
       const o = {};
-      pages.forEach((p) => { if (teams[p]) o[p] = teams[p].members; });
+      pages.forEach((p) => { if (teams[p] && Array.isArray(teams[p].members)) o[p] = teams[p].members; });
+      return o;
+    },
+    teamIndex: async (pages) => {
+      const o = {};
+      pages.forEach((p) => { if (teams[p]) o[p] = true; });
       return o;
     },
     readBriefs: async (pages) => {
@@ -161,36 +167,57 @@ describe("liquipedia.js 归一化", () => {
 describe("proSync 定时同步", () => {
   const T0 = Date.UTC(2026, 10, 2, 12, 0, 0);
   const handlers = () => ({
-    placement: (q) => (q.conditions.indexOf("[[parent::") === 0
-      ? [placement({ placement: "16", opponentname: "Team Falcons", tournament: "ALGS: 2026 Split 2 Playoffs", opponentplayers: { p1: "ImperialHal", p2: "Wxltzy", p3: "Gild" } })]
-      : RESULTS),
+    // placement 有三种查法：一场赛事的名单（[[parent::…]]）、选手的成绩（[[opponentplayers_p1::…]]）、战队的成绩（[[opponentname::…]]）
+    placement: (q) => {
+      if (q.conditions.indexOf("[[parent::") === 0) {
+        return [placement({ placement: "16", opponentname: "Team Falcons", tournament: "ALGS: 2026 Split 2 Playoffs", opponentplayers: { p1: "ImperialHal", p2: "Wxltzy", p3: "Gild" } })];
+      }
+      if (q.conditions.indexOf("[[opponentname::") === 0) return RESULTS.filter((r) => r.opponentname === "Team Falcons");
+      return RESULTS;
+    },
     player: () => [HAL],
-    // squadplayer 有两种查法：按选手（[[link::…]]，队伍经历）和按战队（"(…) AND [[type::player]]"，历史名单算队友）
-    squadplayer: (q) => (q.conditions.indexOf("(") === 0
-      ? [{ pagename: "Team_Falcons", link: "ImperialHal", id: "ImperialHal", role: "", type: "player", status: "active", joindate: "2024-05-28", leavedate: "0000-01-01" },
-         { pagename: "Team_Falcons", link: "Gild", id: "Gild", role: "", type: "player", status: "active", joindate: "2025-01-01", leavedate: "0000-01-01" }]
+    // squadplayer 有两种查法：按选手（[[link::…]]，队伍经历）和按战队（[[pagename::…]]，历史名单：算队友、战队页的阵容）
+    squadplayer: (q) => (q.conditions.indexOf("[[pagename::") === 0
+      ? [{ pagename: "Team_Falcons", link: "ImperialHal", id: "ImperialHal", role: "", type: "player", status: "active", joindate: "2024-05-28", leavedate: "0000-01-01", nationality: "United States" },
+         { pagename: "Team_Falcons", link: "Gild", id: "Gild", role: "", type: "player", status: "active", joindate: "2025-01-01", leavedate: "0000-01-01" },
+         { pagename: "Team_Falcons", link: "Raven", id: "Raven", role: "Head Coach", type: "staff", status: "active", joindate: "2024-05-28", leavedate: "0000-01-01" },
+         { pagename: "Team_Falcons", link: "Someone", id: "Someone", role: "Streamer", type: "staff", status: "active", joindate: "2024-05-28", leavedate: "0000-01-01" }]
       : [{ pagename: "Team_Falcons", link: "ImperialHal", role: "", type: "player", status: "active", joindate: "2024-05-28", leavedate: "0000-01-01" }]),
+    team: () => [{ pagename: "Team_Falcons", name: "Team Falcons", region: "North America", status: "active", createdate: "2017-01-01", disbanddate: "0000-01-01", earnings: 3000000 }],
+    transfer: () => [
+      { player: "Gild", nationality: "United States", fromteam: "Team Liquid", toteam: "Team Falcons", role1: "", role2: "", date: "2025-01-01 00:00:00" },
+      { player: "Someone", nationality: "", fromteam: "", toteam: "Team Falcons", role1: "", role2: "Streamer", date: "2024-06-01 00:00:00" },
+    ],
   });
 
-  test("一次 tick 最多 1 个请求；一轮 = 名单 → 资料 → 经历 → 战队名单 → 成绩，抓完歇 24 小时", async () => {
+  test("一次 tick 最多 1 个请求；一轮 = 名单 → 资料 → 经历 → 战队（名单、资料、成绩、转会）→ 成绩，抓完歇 24 小时", async () => {
     const store = memStore();
     const f = fakeLpdb(handlers());
     let t = T0;
     const deps = { apiKey: "k", store, fetchImpl: f.impl, now: () => t };
     const dids = [];
-    for (let i = 0; i < 7; i++) {
+    for (let i = 0; i < 10; i++) {
       const before = f.calls.length;
       dids.push((await sync.tick(deps)).did);
       assert.ok(f.calls.length - before <= 1, "一次 tick 不能超过 1 个请求");
       t += 5 * 60 * 1000;
     }
-    assert.deepEqual(dids.slice(0, 5), ["ok:event", "ok:players", "ok:squads", "ok:teams", "ok:results"]);
-    assert.equal(dids[5], "fresh", "抓完了就歇着");
+    assert.deepEqual(dids.slice(0, 8), ["ok:event", "ok:players", "ok:squads", "ok:teams", "ok:teamInfo", "ok:teamResults", "ok:transfers", "ok:results"]);
+    assert.equal(dids[8], "fresh", "抓完了就歇着");
     assert.equal(store.players.ImperialHal.profile.id, "ImperialHal");
     assert.equal(store.players.Wxltzy.history.length, 0, "名单里有但经历没查到的，存空数组（查过了、确实没有）");
     assert.equal(store.players.ImperialHal.results.length, 5);
-    assert.deepEqual(store.teams.Team_Falcons.members.map((m) => m.page), ["ImperialHal", "Gild"], "经历里出现过的战队都要查历史名单");
-    assert.match(f.calls[3].params.conditions, /^\(\[\[pagename::Team_Falcons\]\]\) AND \[\[type::player\]\]$/);
+    const tf = store.teams.Team_Falcons;
+    assert.deepEqual(tf.members.map((m) => m.page), ["ImperialHal", "Gild", "Raven"], "经历里出现过的战队都要查历史名单；教练留下，主播不要");
+    assert.equal(tf.members[0].nat, "United States");
+    assert.equal(f.calls[3].params.conditions, "[[pagename::Team_Falcons]]");
+    assert.equal(tf.info.region, "North America");
+    assert.equal(tf.info.disbanded, "", "0000-01-01 = 没解散");
+    assert.equal(f.calls[5].params.conditions, "[[opponentname::Team Falcons]]", "战队成绩按队名查（空格写法）");
+    assert.equal(tf.results.length, 4, "还没打的、个人奖项不算；Red Bull 那条参赛方不是这支队");
+    assert.equal(f.calls[6].params.conditions, "[[fromteam::Team Falcons]] OR [[toteam::Team Falcons]]");
+    assert.deepEqual(tf.transfers.map((x) => [x.id, x.move, x.from]), [["Gild", "join", "Team Liquid"]], "主播的加入不算阵容变动");
+    for (const k of ["membersAt", "infoAt", "resultsAt", "transfersAt"]) assert.ok(tf[k] > 0, k + " 要记下");
     // 24 小时后重新来一轮
     t = T0 + sync.CYCLE_MS + 60 * 1000;
     assert.equal((await sync.tick(deps)).did, "ok:event");
@@ -290,10 +317,189 @@ describe("proPlayer / proRoster", () => {
     assert.equal((await sync.proRoster({ event: "Other" }, { store })).data, null);
   });
 
+  test("proPlayer 带 teamPages：他待过的队里有战队页的那些（战队经历能点进去）", async () => {
+    const store = memStore();
+    await store.savePlayer("Zer0", { profile: { id: "Zer0", nats: [] }, history: [
+      { teamPage: "Team_Liquid", team: "Team Liquid", join: "2025-11-05", leave: "", status: "active", type: "player", role: "" },
+      { teamPage: "DarkZero", team: "DarkZero", join: "2022-01-01", leave: "2025-11-05", status: "former", type: "player", role: "" },
+    ] });
+    await store.saveTeam("Team_Liquid", { members: [{ page: "Zer0", id: "Zer0", join: "2025-11-05", leave: "", status: "active", role: "" }] });
+    const r = await sync.proPlayer({ page: "Zer0" }, { store, now: () => Date.UTC(2026, 10, 2) });
+    assert.deepEqual(r.data.teamPages, { Team_Liquid: true });
+  });
+
+  test("proRoster：有战队页的队带 teamPage，没有的是空字符串", async () => {
+    const store = memStore();
+    await store.writeState({ events: ["E"], rosters: { E: { name: "T", teams: [
+      { place: "1", team: "Team Liquid", players: [] }, { place: "2", team: "Team Falcons", players: [] },
+    ] } }, queue: [] });
+    await store.saveTeam("Team_Liquid", { members: [] });
+    const r = await sync.proRoster({}, { store });
+    assert.deepEqual(r.data.teams.map((t) => t.teamPage), ["Team_Liquid", ""]);
+  });
+
   test("文档 _id：只有字母数字和 - _，括号、空格编码掉，不同页面不会撞", () => {
     assert.equal(docId("Zer0"), "p_Zer0");
     assert.match(docId("Panic_(American_player)"), /^p_[A-Za-z0-9_~-]+$/);
     assert.notEqual(docId("a b"), docId("a_b"));
+  });
+});
+
+/* ---------------- 战队页的云端部分（2026-11） ---------------- */
+
+describe("战队：队员表、转会、成绩、proTeam", () => {
+  // 照 2026-11-07 实测的 Team Liquid 转会记录裁的（role1 = 在原来那队的身份，role2 = 去新队以后的身份）
+  const tr = (player, fromteam, toteam, role1, role2, date) => ({ player, nationality: "", fromteam, toteam, role1, role2, date: date + " 00:00:00" });
+  const TL = [
+    tr("Tiltedwinnie", "Team Liquid", "ROC Esports", "Inactive Coach", "Coach", "2026-04-21"),
+    tr("Fuhhnq", "Team Liquid", "", "Inactive", "", "2026-04-16"),
+    tr("Kapreme", "", "Team Liquid", "", "Coach", "2026-03-24"),
+    tr("Panic (American player)", "", "Team Liquid", "", "", "2026-02-19"),
+    tr("Fuhhnq", "Team Liquid", "Team Liquid", "", "Inactive", "2026-02-18"),
+    tr("Pistillo", "Team Liquid", "Team Liquid", "Coach", "Manager", "2025-11-05"),
+    tr("Zer0", "Team Falcons", "Team Liquid", "Inactive", "", "2025-11-05"),
+    tr("TiffaJessi", "Team Liquid", "", "Streamer", "", "2023-12-02"),
+    tr("FunFPS", "Complexity Gaming", "Team Liquid", "Streamer", "", "2021-10-16"),
+    tr("Albralelie", "", "Team Liquid", "", "Stand-in", "2020-10-28"),
+  ];
+
+  test("身份分类：空的 / 队长是正式队员；替补、不活跃、教练、不活跃的教练；主播经理老板是 other", () => {
+    const k = (r) => lp.roleKind(r);
+    assert.deepEqual(["", "Captain", "Stand-in", "Substitute", "Inactive", "Suspended", "Coach", "Head Coach", "Inactive Coach", "Streamer", "Manager", "Co-Owner"].map(k),
+      ["player", "player", "sub", "sub", "inactive", "inactive", "coach", "coach", "coachInactive", "other", "other", "other"]);
+  });
+
+  test("转会记录：从这支队看加入 / 离队 / 队内换身份；只是主播的变动不要；消歧义去掉", () => {
+    const out = TL.map((r) => lp.normTransfer(r, "Team Liquid"));
+    const brief = (t) => t && [t.id, t.move, t.from, t.to, t.k1, t.k2];
+    assert.deepEqual(brief(out[0]), ["Tiltedwinnie", "leave", "", "ROC Esports", "coachInactive", "coach"]);
+    assert.deepEqual(brief(out[3]), ["Panic", "join", "", "", "player", "player"]);
+    assert.equal(out[3].page, "Panic_(American_player)", "页面名保留消歧义，点进选手页用");
+    assert.deepEqual(brief(out[4]), ["Fuhhnq", "role", "", "", "player", "inactive"]);
+    assert.deepEqual(brief(out[5]), ["Pistillo", "role", "", "", "coach", "other"], "教练转经理：卸任教练，要记");
+    assert.deepEqual(brief(out[6]), ["Zer0", "join", "Team Falcons", "", "inactive", "player"], "加入看 role2（在 Falcons 不活跃不影响）");
+    assert.equal(out[7], null, "主播离队不算");
+    assert.deepEqual(brief(out[8]), ["FunFPS", "join", "Complexity Gaming", "", "other", "player"], "在原来那队是主播，来这队当选手：算");
+    assert.equal(out[9].k2, "sub");
+    assert.equal(lp.normTransfer(TL[0], "NRG"), null, "和这支队无关");
+  });
+
+  test("一批里的两支队之间的转会两边都记；新的在前；条件是 fromteam OR toteam", async () => {
+    const f = fakeLpdb({ transfer: () => [TL[6], TL[0], TL[3]] });
+    const r = await lp.fetchTransfers(["Team_Liquid", "Team_Falcons"], { apiKey: "k", fetchImpl: f.impl });
+    assert.equal(f.calls[0].params.conditions, "[[fromteam::Team Liquid]] OR [[fromteam::Team Falcons]] OR [[toteam::Team Liquid]] OR [[toteam::Team Falcons]]");
+    assert.deepEqual(r.rows.Team_Liquid.map((x) => x.date), ["2026-04-21", "2026-02-19", "2025-11-05"]);
+    assert.deepEqual(r.rows.Team_Falcons.map((x) => [x.id, x.move, x.to]), [["Zer0", "leave", "Team Liquid"]]);
+    assert.equal(r.full, false);
+  });
+
+  test("队员表：选手全要、工作人员只要教练；跨维基的链接点不进去；旧数据没有 type 的当选手", () => {
+    const row = (o) => Object.assign({ pagename: "T", link: "A", id: "A", role: "", type: "player", status: "active", joindate: "2025-01-01", leavedate: "0000-01-01", nationality: "Canada" }, o);
+    assert.equal(lp.normMember(row({ type: "staff", role: "Streamer" })), null);
+    assert.equal(lp.normMember(row({ type: "staff", role: "Co-Owner" })), null);
+    const c = lp.normMember(row({ type: "staff", role: "Assistant Coach" }));
+    assert.deepEqual([c.type, c.role, c.nat], ["staff", "Assistant Coach", "Canada"]);
+    const x = lp.normMember(row({ link: "leagueoflegends:LiQuiD112", id: "" }));
+    assert.deepEqual([x.page, x.id], ["", "LiQuiD112"]);
+    const old = lp.normMember({ link: "B", joindate: "2025-01-01" });
+    assert.equal(old.type, "player");
+  });
+
+  test("队友不算教练（也不算自己当教练的那几段）", () => {
+    const m = (page, type, join, leave) => ({ page, id: page, type, join, leave, status: leave ? "former" : "active", role: type === "staff" ? "Coach" : "" });
+    const out = lp.mates("Me", { T: [m("Me", "player", "2024-01-01", ""), m("Coachy", "staff", "2024-01-01", ""), m("Mate", "player", "2024-01-01", "")],
+      U: [m("Me", "staff", "2020-01-01", ""), m("Kid", "player", "2020-01-01", "")] }, "2026-11-02");
+    assert.deepEqual(out.map((x) => x.page), ["Mate"]);
+  });
+
+  test("战队成绩：按队名（空格写法）查，对回页面名；还没打的不算", async () => {
+    const f = fakeLpdb({ placement: () => [placement({ opponentname: "Team Falcons" }), placement({ opponentname: "Team Liquid", placement: "" }), placement({ opponentname: "Team Liquid", parent: "Y", placement: "3" })] });
+    const r = await lp.fetchTeamResults(["Team_Falcons", "Team_Liquid"], { apiKey: "k", fetchImpl: f.impl });
+    assert.equal(f.calls[0].params.conditions, "[[opponentname::Team Falcons]] OR [[opponentname::Team Liquid]]");
+    assert.equal(r.rows.Team_Falcons.length, 1);
+    assert.deepEqual(r.rows.Team_Liquid.map((x) => x.place), ["3"]);
+  });
+
+  test("战队成绩、转会一次返回到上限：拆成两半重查，不存不完整的", async () => {
+    const store = memStore();
+    await store.writeState({ queue: [{ kind: "teamResults", pages: ["A", "B", "C"] }], events: [], rosters: {}, cycleAt: 1, lastRequestAt: 0 });
+    const many = Array.from({ length: lp.RESULT_LIMIT }, (_, i) => placement({ parent: "E" + i, opponentname: "A" }));
+    const f = fakeLpdb({ placement: () => many });
+    await sync.tick({ apiKey: "k", store, fetchImpl: f.impl, now: () => 10 * sync.MIN_GAP_MS });
+    assert.deepEqual(store.state.queue.map((q) => [q.kind, q.pages]), [["teamResults", ["A", "B"]], ["teamResults", ["C"]]]);
+    assert.equal(store.teams.A, undefined);
+  });
+
+  test("战队的几步：正在比赛的队排在前面，其余按名字", () => {
+    const steps = sync._expandTeams({ events: ["E"], rosters: { E: { teams: [{ team: "Team Liquid" }] } }, teamPages: ["Zeta", "Alpha", "Team_Liquid"] });
+    assert.deepEqual(steps.filter((s) => s.kind === "teams")[0].pages, ["Team_Liquid", "Alpha", "Zeta"]);
+    assert.deepEqual([...new Set(steps.map((s) => s.kind))], ["teams", "teamInfo", "teamResults", "transfers"]);
+  });
+
+  test("proTeam：资料、名单、成绩、转会都给；收录了的人 hasPage，国籍缺的从选手资料补；没有 data:null", async () => {
+    const store = memStore();
+    await store.savePlayer("Zer0", { profile: { id: "Zer0", nats: ["Brazil"], input: "Controller" } });
+    await store.saveTeam("Team_Liquid", { members: [
+      { page: "Zer0", id: "Zer0", type: "player", nat: "", join: "2025-11-05", leave: "", status: "active", role: "" },
+      { page: "", id: "LiQuiD112", type: "staff", nat: "", join: "2019-01-01", leave: "", status: "active", role: "Coach" },
+    ], membersAt: 5 });
+    await store.saveTeam("Team_Liquid", { transfers: [lp.normTransfer(TL[6], "Team Liquid")], transfersAt: 9 });
+    const r = await sync.proTeam({ page: "Team_Liquid" }, { store });
+    assert.equal(r.data.info, null, "资料还没抓到");
+    assert.equal(r.data.results, null);
+    assert.deepEqual(r.data.members.map((m) => [m.id, m.hasPage, m.nat]), [["Zer0", true, "Brazil"], ["LiQuiD112", false, ""]]);
+    assert.equal(r.data.transfers[0].hasPage, true);
+    assert.equal(r.data.at, 9);
+    assert.equal((await sync.proTeam({ page: "Nobody" }, { store })).data, null);
+    assert.equal((await sync.proTeam({ page: "" }, { store })).kind, "badinput");
+  });
+});
+
+/* ---------------- 选手照片（2026-11-07） ---------------- */
+
+describe("选手照片（proPhotos、pro_photos.json）", () => {
+  const MAP = require(path.join(CF, "pro_photos.json"));
+  // proPhotos 在加载时读对照表、每次调用读环境变量：换环境变量要重新加载它和用到它的 proSync
+  const fresh = (envBase) => {
+    if (envBase === undefined) delete process.env.PRO_PHOTO_BASE; else process.env.PRO_PHOTO_BASE = envBase;
+    for (const f of ["proPhotos.js", "proSync.js"]) delete require.cache[require.resolve(path.join(CF, f))];
+    return { photos: require(path.join(CF, "proPhotos.js")), sync: require(path.join(CF, "proSync.js")) };
+  };
+
+  test("对照表：文件名就是文档 _id 的编码（Panic_(American_player) 这种也不会撞）；base 只能是空的或 cloud:// 地址", () => {
+    assert.ok(Object.keys(MAP.files).length >= 100, "参赛的 121 人都该有");
+    for (const [page, slug] of Object.entries(MAP.files)) assert.equal(slug, docId(page), page);
+    assert.ok(MAP.base === "" || /^cloud:\/\//.test(MAP.base), "照片只放云存储，不许是外部网站");
+    assert.match(MAP.version, /^v\d+$/);
+  });
+
+  test("没传照片（base 空着）：一律不给地址，页面照旧剪影", () => {
+    const { photos } = fresh(undefined);
+    if (MAP.base) return;   // 已经填了 base 就不测这条
+    assert.equal(photos.photoOf("Zer0", "hero"), "");
+  });
+
+  test("填了 base：大卡 _hero、选手卡 _card；对照表里没有的人不给", () => {
+    const { photos } = fresh("cloud://env.bucket/pro/photos/v1");
+    assert.equal(photos.photoOf("Zer0", "hero"), "cloud://env.bucket/pro/photos/v1/p_Zer0_hero.webp");
+    assert.equal(photos.photoOf("Panic_(American_player)", "card"), "cloud://env.bucket/pro/photos/v1/" + docId("Panic_(American_player)") + "_card.webp");
+    assert.equal(photos.photoOf("Nobody", "hero"), "");
+    assert.equal(photos.photoOf("constructor", "hero"), "", "原型链上的名字不算");
+    fresh(undefined);
+  });
+
+  test("proPlayer 带大卡照片；proTeam 的选手带卡片照片，教练不带", async () => {
+    const { sync: s } = fresh("cloud://env.bucket/pro/photos/v1/");
+    const store = memStore();
+    await store.savePlayer("Zer0", { profile: { id: "Zer0", nats: [] }, history: [] });
+    assert.equal((await s.proPlayer({ page: "Zer0" }, { store })).data.photo, "cloud://env.bucket/pro/photos/v1/p_Zer0_hero.webp");
+    await store.saveTeam("Team_Liquid", { members: [
+      { page: "Zer0", id: "Zer0", type: "player", join: "2025-11-05", leave: "", status: "active", role: "" },
+      { page: "Kapreme", id: "Kapreme", type: "staff", join: "2026-03-24", leave: "", status: "active", role: "Coach" },
+    ] });
+    const t = (await s.proTeam({ page: "Team_Liquid" }, { store })).data;
+    assert.deepEqual(t.members.map((m) => m.photo), ["cloud://env.bucket/pro/photos/v1/p_Zer0_card.webp", ""]);
+    fresh(undefined);
   });
 });
 
@@ -348,9 +554,15 @@ describe("选手页 view.player（照 August 的设计稿）", () => {
     assert.equal(v.id, "ImperialHal");
     assert.equal(v.realName, "Phillip Dosen");
     assert.deepEqual(v.facts, [{ k: "国籍", v: "美国" }, { k: "年龄", v: "27 岁" }, { k: "累计奖金", v: "$1,204,549" }]);
-    assert.deepEqual(v.team, { name: "Team Falcons", initials: "TF", since: "2024 年 5 月加入" });
+    assert.deepEqual(v.team, { name: "Team Falcons", page: "", initials: "TF", since: "2024 年 5 月加入" }, "还没有战队页：点不进去");
     assert.equal(v.retired, null);
     assert.equal(view.player(raw(), "en", NOW).team.since, "Joined May 2024");
+  });
+
+  test("有战队页的队（teamPages）：大卡上现在的战队、战队经历那几行能点进去，别的不能", () => {
+    const v = view.player(raw({ teamPages: { Team_Falcons: true } }), "zh", NOW);
+    assert.equal(v.team.page, "Team_Falcons");
+    assert.deepEqual(v.career.items.map((x) => x.page), ["Team_Falcons", ""]);
   });
 
   test("资料卡：出生日期、输入设备、赛区", () => {

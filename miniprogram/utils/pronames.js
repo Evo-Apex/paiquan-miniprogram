@@ -42,7 +42,14 @@ var REGION = {
   "asia-pacific": ["亚太", "Asia-Pacific"],
   "asia": ["亚洲", "Asia"],
   "oceania": ["大洋洲", "Oceania"],
-  "china": ["中国", "China"]
+  "china": ["中国", "China"],
+  // 战队的赛区（2026-11-07 实测 Apex 维基 889 支队用到的：上面没有的这几个）
+  "japan": ["日本", "Japan"],
+  "korea": ["韩国", "Korea"],
+  "southeast asia": ["东南亚", "Southeast Asia"],
+  "south asia": ["南亚", "South Asia"],
+  "africa": ["非洲", "Africa"],
+  "cis": ["独联体", "CIS"]
 };
 
 var INPUT = {

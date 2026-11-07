@@ -18,7 +18,9 @@
          照片拿到授权之前用剪影（设计稿注释）。 -->
     <view class="pp-hero">
       <view class="pp-portrait">
-        <image class="pp-sil" src="/pro/assets/silhouette.svg" mode="aspectFit"></image>
+        <!-- 照片在云存储（WebP，网络图片要加 webp 属性 iPhone 才认）；没有或加载失败 → 剪影 -->
+        <image wx:if="{{v.photo}}" class="pp-photo" src="{{v.photo}}" mode="heightFix" webp="{{true}}" binderror="onPhotoError"></image>
+        <image wx:else class="pp-sil" src="/pro/assets/silhouette.svg" mode="aspectFit"></image>
         <view class="pp-fade"></view>
         <view class="pp-plate">
           <text class="pp-id">{{v.id}}</text>
@@ -31,12 +33,14 @@
           <text class="pp-fact-k">{{item.k}}</text>
         </view>
       </view>
-      <view wx:if="{{v.team}}" class="pp-hteam">
+      <!-- 有战队页就能点进去（右边一个 ›） -->
+      <view wx:if="{{v.team}}" class="pp-hteam" data-page="{{v.team.page}}" bindtap="onOpenTeam" hover-class="{{v.team.page ? 'pp-pressed' : 'none'}}">
         <view class="pp-logo">{{v.team.initials}}</view>
         <view class="pp-hteam-txt">
           <text class="pp-hteam-n">{{v.team.name}}</text>
           <text wx:if="{{v.team.since}}" class="pp-hteam-s">{{v.team.since}}</text>
         </view>
+        <text wx:if="{{v.team.page}}" class="pp-hchev">›</text>
       </view>
       <view wx:elif="{{v.retired}}" class="pp-hteam">
         <view class="pp-hteam-txt pp-center">
@@ -116,13 +120,15 @@
         </view>
       </block>
       <view class="pp-tl">
-        <view class="pp-tli {{item.now ? 'pp-tli-now' : ''}}" wx:for="{{v.career.items}}" wx:key="key">
+        <view class="pp-tli {{item.now ? 'pp-tli-now' : ''}}" wx:for="{{v.career.items}}" wx:key="key"
+              data-page="{{item.page}}" bindtap="onOpenTeam" hover-class="{{item.page ? 'pp-pressed' : 'none'}}">
           <view class="pp-dot"></view>
           <view class="pp-grow">
             <text class="pp-name">{{item.team}}</text>
             <text wx:if="{{item.sub}}" class="pp-small">{{item.sub}}</text>
           </view>
           <text class="pp-tl-d">{{item.range}}</text>
+          <text class="pp-chev">{{item.page ? '›' : ''}}</text>
         </view>
       </view>
     </view>

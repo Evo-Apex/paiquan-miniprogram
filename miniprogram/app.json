@@ -22,6 +22,7 @@
       "name": "pro",
       "pages": [
         "player/player",
+        "team/team",
         "sources/sources"
       ]
     },

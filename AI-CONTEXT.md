@@ -115,8 +115,9 @@ pages/maps.wxml  {{...}}  ← 只渲染，不含业务判断
 | `pickrates` | 英雄选取率（分段位） | 解析 `apexlegendsstatus.com` 网页 | 1 小时 | — |
 | `rankdist` | 段位分布（实时） | `/lib/php/rankdistrib.php?unranked=yes`（JSON） | 6 小时 | — |
 | `teams` | 战队专区（名单 + 当前分） | `curated_roster_resolved.json` + `/bridge` | 30 分钟 | — |
-| `proRoster` | 比赛页：一场赛事的参赛队伍和队员（Liquipedia，带国籍、键鼠/手柄），用来把名次行、选手名连到选手页 | 只读数据库 | — | `pro_meta`、`pro_players` |
-| `proPlayer` | 选手页：一位选手的资料、队伍经历、历届成绩、合作过的队友（Liquipedia） | 只读数据库 | — | `pro_players`、`pro_teams` |
+| `proRoster` | 比赛页：一场赛事的参赛队伍和队员（Liquipedia，带国籍、键鼠/手柄、有没有战队页），用来把名次行、选手名连到选手页、战队页 | 只读数据库 | — | `pro_meta`、`pro_players`、`pro_teams` |
+| `proPlayer` | 选手页：一位选手的资料、队伍经历、历届成绩、合作过的队友，和他待过的队里哪些有战队页（Liquipedia） | 只读数据库 | — | `pro_players`、`pro_teams` |
+| `proTeam` | 战队页（2026-11-07）：一支战队的资料、历史名单（选手 + 教练）、历届成绩、转会记录（Liquipedia） | 只读数据库 | — | `pro_teams`、`pro_players` |
 | `prostats` | 主播排位数据（英雄/阵容/武器/配枪）的热更新读取 | 云数据库 `prostats/current` | — | `prostats`（可缺，缺了用包内快照） |
 | `prostatsSet` | 同上，**写入**。只认云函数环境变量 `PROSTATS_TOKEN`，小程序端不持有 | 云数据库 | — | `prostats` |
 | `Timer` | 定时轮询追踪名单 + 顺手记一条轮换 + 抓一点职业选手数据（每次最多 1 个 Liquipedia 请求，见 §18） | Liquipedia 数据库 API（`LIQUIPEDIA_API_KEY`） | 一轮抓完歇 24 小时 | 同上 + `pro_meta`、`pro_players`、`pro_teams` |
@@ -131,7 +132,7 @@ pages/maps.wxml  {{...}}  ← 只渲染，不含业务判断
 | `rotation_log` | 轮换记录（`_id = 模式_开始时间`，天然幂等） | 不建 → 地图列显示「待记录」 |
 | `site_config` | 赛季结束时间 / 活动 / 赛程（可在控制台直接改 doc）；`_id = "pro_events"` 的 `list` 是选手页收录哪些赛事（§18） | 不建 → 用内置兜底值 |
 
-另有三个集合**不用手动建**（第一次写入时代码自己建，2026-11）：`pro_players`（一位选手一条）、`pro_teams`（一支战队的历史队员，算队友用）、`pro_meta`（选手数据的同步进度 + 参赛名单）。
+另有三个集合**不用手动建**（第一次写入时代码自己建，2026-11）：`pro_players`（一位选手一条）、`pro_teams`（一支战队一条：历史名单、资料、成绩、转会，算队友、战队页用）、`pro_meta`（选手数据的同步进度 + 参赛名单）。
 
 **容错铁律**：数据库/上游的任何错误都必须被**吞掉并降级**，绝不让用户看不到主数据。
 `index.js` 里 `require("wx-server-sdk")` 整个包在 try/catch 里；`store.js` / `playerStore.js` 每个操作都 catch；
@@ -150,9 +151,10 @@ pages/maps.wxml  {{...}}  ← 只渲染，不含业务判断
 | 首页（tab，2026-10-27） | `pages/home/` | 云端 `rotation`；Evo 那两块走 `evo_mp`（`home` / `crowd`）；赛事卡用离线 `next_match_data.js` | `home.js`、`viewmodel.js`、分包 `evo/components/home`、`evo/components/crowd` | 旗舰页（见 §1 信息架构）；没有 ⚙（语言、主题在「我的」里切） |
 | 全部地图（首页点进去） | `pages/maps/` | 云端 `rotation` + `schedule` | `viewmodel.js`、`prefs.js` | 原来的地图页：四行卡片 + 倒计时 + 设置面板；左上角返回（分享卡片直接打开时回首页） |
 | 战绩（tab，原排位专区） | `pages/predator/` | 云端 `predator`/`config`/`rankdist`/`teams`/`player` + 离线 `prostats_data.js`；「我的战绩」走 `evo_mp` | `rankdist.js`、`prostats.js`、`viewmodel.js`、`evo/utils/view.js` | 顶部切换：我的战绩（Evo，§17）｜排位资讯（猎杀线 / 职业选手数据 / 段位分布 / 战队 / 战绩查询） |
-| 比赛（tab） | `pages/matches/` | 内容**离线**：`match_result_data.js` + `next_match_data.js` + `algs_data.js`；另调一次云端 `proRoster`（只读数据库）把战队、选手名连到选手页 | `matchresult.js`、`nextmatch.js`、`algs.js`、`prolink.js` | 内容不等网络、当场渲染；名单要不到时什么都不能点，别的照旧 |
+| 比赛（tab） | `pages/matches/` | 内容**离线**：`match_result_data.js` + `next_match_data.js` + `algs_data.js`；另调一次云端 `proRoster`（只读数据库）把战队、选手名连到选手页、战队页 | `matchresult.js`、`nextmatch.js`、`algs.js`、`prolink.js` | 内容不等网络、当场渲染；名单要不到时什么都不能点，别的照旧 |
 | 选手页（比赛页点进去） | 分包 `pro/player/` | 云端 `proPlayer`（只读数据库；数据由定时器从 Liquipedia 抓，§18） | `pro/utils/view.js`、`utils/pronames.js` | 照 August 的设计稿：深色大卡 → 资料 → 合作过的队友 → 常用传奇 → 战队经历 → 重要比赛成绩 → 数据来源入口 |
-| 数据来源说明（选手页最底下点进去） | 分包 `pro/sources/` | 本地文案 + 上次同步时间（打开参数 `at`） | `pro/utils/view.js` 的 `syncedText` | Liquipedia 署名（CC BY-SA 3.0）、照片为什么是剪影、粉丝工具声明都放这里，选手页上不放 |
+| 战队页（选手页、比赛页的战队名点进去） | 分包 `pro/team/` | 云端 `proTeam`（只读数据库；同上由定时器抓） | `pro/utils/teamview.js`（复用 `view.js` 的成绩、时长、缩写）、`utils/pronames.js` | 照 August 的战队页设计稿：深色大卡 → 现役阵容 → 重要比赛成绩 → 阵容变动 → 历任队员 → 数据来源入口（§18） |
+| 数据来源说明（选手页、战队页最底下点进去） | 分包 `pro/sources/` | 本地文案 + 上次同步时间（打开参数 `at`） | `pro/utils/view.js` 的 `syncedText` | Liquipedia 署名（CC BY-SA 3.0）、照片为什么是剪影、粉丝工具声明都放这里，选手页上不放 |
 | 小游戏（tab） | `pages/games/` | 本地 | `wheel_data.js`、`games_meta.js`（两个题量，测试核对） | 分类入口页（3 个入口卡片）；三个玩法在分包 `games/`，进这个 tab 时预下载（`app.json` 的 `preloadRule`） |
 | 猜圈练习 | 分包 `games/ringguessr/` | 本地 `games/data/match_rings_data.js` | `games/utils/rings.js` | canvas 游戏：拖动 + 双指缩放，8 题 / 20 秒 |
 | 圈型速判 | 分包 `games/ringpick/` | 本地 `games/data/rings_data.js` + `map_ends_data.js` | `games/utils/ringpick.js` | 四选一，10 秒一题 |
@@ -188,6 +190,7 @@ pages/maps.wxml  {{...}}  ← 只渲染，不含业务判断
 | `utils/prolink.js` | 比赛页的战队名、选手名（ALS 写法）→ Liquipedia 选手页面名（§18） | ❌ 纯函数 |
 | `utils/pronames.js` | Liquipedia 英文取值的中文叫法：国籍、赛区、键鼠/手柄、队里的身份、比赛类型（查不到保留英文） | ❌ 纯数据 |
 | `pro/utils/view.js`（分包） | 选手页：云端数据 → 界面字段 | ❌ 纯函数 |
+| `pro/utils/teamview.js`（分包） | 战队页：云端数据 → 界面字段（阵容、转会说法、历任队员合并） | ❌ 纯函数 |
 | `data/*_data.js` | 离线数据快照（见下表），**只读、别手改**（2026-11-07 从 `utils/` 分出来，`utils/` 只放代码；小游戏的三个在 `games/data/`） | ❌ |
 
 **离线数据文件（8 个 `*_data.js`，改数据等于改产品口径）**
@@ -226,7 +229,7 @@ pages/maps.wxml  {{...}}  ← 只渲染，不含业务判断
 
 | 文件 | 职责 |
 |---|---|
-| `index.js` | 入口：读 `ALS_API_KEY` / `LIQUIPEDIA_API_KEY`、初始化数据库、分发 Timer/schedule/config/comps/pickrates/rankdist/teams/proPlayer/proRoster、兜底不抛异常 |
+| `index.js` | 入口：读 `ALS_API_KEY` / `LIQUIPEDIA_API_KEY`、初始化数据库、分发 Timer/schedule/config/comps/pickrates/rankdist/teams/proPlayer/proRoster/proTeam、兜底不抛异常 |
 | `handler.js` | 主逻辑：拼 URL、调用、错误分类、缓存、猎杀涨幅、追踪增删查 |
 | `core.js` | **与 `miniprogram/utils/core.js` 字节一致的副本** |
 | `fetcher.js` | 极简 HTTP 客户端（只用 Node 内置模块，兼容 Node 8~22） |
@@ -239,7 +242,8 @@ pages/maps.wxml  {{...}}  ← 只渲染，不含业务判断
 | `trackerPoll.js` | 定时轮询追踪名单（超 200 人/400 人自动分片降频） |
 | `curated_roster.json` / `curated_roster_resolved.json` | 战队名单（换赛季直接改 JSON 重新部署，不动逻辑） |
 | `liquipedia.js` | Liquipedia 数据库 API：拼请求、取数、把原始字段整理成我们的格式（§18） |
-| `proSync.js` | 选手数据：定时器每次做一步（最多 1 个请求）；`proPlayer`（带队友）/ `proRoster` 两个读取接口 |
+| `proSync.js` | 选手、战队数据：定时器每次做一步（最多 1 个请求）；`proPlayer`（带队友）/ `proRoster` / `proTeam` 三个读取接口 |
+| `proPhotos.js` + `pro_photos.json` | 选手照片：Liquipedia 页面名 → 云存储的 cloud:// 地址（对照表由 `tools/build_pro_photos.py` 生成，§18） |
 | `proStore.js` | 选手数据的数据库读写（`pro_players`、`pro_teams`、`pro_meta`），错误一律吞掉降级 |
 
 ---
@@ -362,7 +366,8 @@ pages/maps.wxml  {{...}}  ← 只渲染，不含业务判断
 | `prostats.test.mjs` | 14 | 职业选手数据：英雄名与头像 | 改 prostats |
 | `algs.test.mjs` | 21 | ALGS 快照：赛事/选取率/组合 | 改 algs |
 | `nextmatch.test.mjs` | 30 | 下一场比赛：赛程/分组/队员/双语 | 改 nextmatch |
-| `pro.test.mjs` | 34 | 选手页：Liquipedia 归一化、定时同步（每次 ≤1 个请求、4 分钟间隔、失败重试、24 小时一轮）、两个读取接口、队友重叠计算、视图模型（每一块、不编数据、S/A 级筛选和展开）、名字连接 | 改 liquipedia / proSync / proStore / pro/ / prolink / pronames |
+| `pro.test.mjs` | 50 | 选手页：Liquipedia 归一化、定时同步（每次 ≤1 个请求、4 分钟间隔、失败重试、24 小时一轮）、三个读取接口、队友重叠计算、战队的名单 / 转会 / 成绩、选手照片的地址和对照表、视图模型（每一块、不编数据、S/A 级筛选和展开）、名字连接 | 改 liquipedia / proSync / proStore / pro/ / prolink / pronames |
+| `proteam.test.mjs` | 14 | 战队页视图模型：大卡（赛区标签、进入 Apex、解散）、现役阵容、阵容变动的说法、历任队员合并 | 改 pro/utils/teamview.js / pro/team/ |
 | `comps.test.mjs` | 14 | 职业三人组合解析 | 改 comps |
 | `pickrates.test.mjs` | 14 | 英雄选取率解析 | 改 pickrates |
 | `rankdist.test.mjs` | 15 | 段位分布 | 改 rankdist |
@@ -654,18 +659,25 @@ git update-index --no-skip-worktree project.config.json miniprogram/app.js
   看完了再给「也看小比赛」（August 11-02 要的可以切到全部）。名次放大放左边，冠军用强调色，奖金写明是全队奖金。
 - **最底下「数据来源 ›」** → `pro/sources/`：Liquipedia 署名、上次同步时间、照片说明、粉丝工具声明（页面上不放这些）。
 
-**占位**（设计稿注释里定的）：选手照片拿到 EA 授权之前用剪影（`pro/assets/silhouette.svg`）；队标用队名缩写（Team Liquid → TL）；
-队友头像用名字首字母。小程序本来也加载不了外部网站的图片，真要放照片得打进包里或放云存储。
+**占位**（设计稿注释里定的）：没有照片的选手用剪影（`pro/assets/silhouette.svg`）；队标用队名缩写（Team Liquid → TL）；
+队友头像用名字首字母。
 
-**照片现状（2026-11-02）**：August 拿到了 EA 的授权，可以用 ALGS 官网的选手定妆照（透明底的半身照；图片站 `content.algstools.com`
-加 `?format=webp&width=480` 只有 22 KB）。但"哪个选手是哪张图"只在 `algs.ea.com` 页面背后的接口里，它的 robots.txt 是 `Disallow: /`
-（连搜索引擎都不许访问 `/api`），所以**不写程序去抓名单**，August 决定先不放照片。以后放：名单向 EA 要或手动收集 → 照片存云存储（国内快、
-不碰外部域名）→ 大卡里有照片放照片、没有照旧剪影；webp 要先在 iPhone 真机试（包里的 webp iPhone 显示不了，网络图片没试过）。
+**选手照片（2026-11-07 起）**：ALGS 的选手定妆照（透明底半身抠图），August 拿到 EA 授权、自己收集好的（2 GB，只在 August 本机，
+不进任何仓库）。`tools/build_pro_photos.py` 把照片对到 Liquipedia 页面名（名字一样 → 用对上的队友推出两边队名的对应 → 同队里名字包含 / 相似
+→ 人工确认的 `OVERRIDES`；对不上就不放、不猜），定妆照优先、没有用赛场照，裁掉透明边、保留透明，压成 WebP（质量 82，
+大卡 480px 约 46 KB、选手卡 320px 约 26 KB，和 PNG 肉眼看不出差别；256 色 PNG 会把皮肤压出色块，不用）。
+季后赛 121 人全有照片，共 8.6 MB，超过分包 2 MB，所以**放云存储**：整个输出文件夹传到云存储 `pro/photos/v1/`，
+对照表 `cloudfunctions/apex/pro_photos.json`（页面名 → 文件名前缀）里的 `base` 填 fileID 前缀（`cloud://环境.存储桶/pro/photos/v1/`）。
+`proPhotos.js` 据此给 `proPlayer` 的 `photo`（大卡）、`proTeam` 名单里选手的 `photo`（选手卡，教练不给）；`base` 空着就都不给，页面照旧剪影。
+页面上 `<image webp>`（网络 WebP 要加这个属性 iPhone 才认；**包里的** WebP iPhone 显示不了，见 §7 附近的说明），加载失败 → 换回剪影，不出破图。
+存储的权限要「所有用户可读」（默认就是），否则别人看不到。换了照片用 `v2` 文件夹（手机上有缓存），换比赛重跑脚本、补传新人的照片。
+数据来源说明页写了「选手照片来自 ALGS 官方定妆照，经 EA 授权使用」。
 
 **为什么用定时器、不现查**：Liquipedia 每小时只给 60 次请求。所以 `apex` 的定时器（每 5 分钟）每次最多发 1 个请求
 （每小时最多 12 次，两次至少隔 4 分钟），一轮 = 每场赛事的参赛名单 1 次 + 资料 / 队伍经历各 40 人 1 次
-+ 他们待过的战队的历史名单 30 队 1 次 + 成绩 5 人 1 次；季后赛 40 队 121 人、待过 339 支队，约 45 次、四个小时抓完，抓完歇 24 小时。
-前端两个接口只读数据库。失败的一步下次再试，连续 3 次就跳过（旧数据保留）；一次返回到 API 上限（1000 条）就拆半重查。
++ 他们待过的战队：历史名单 30 队、资料 40 队、成绩 10 队、转会 15 队各 1 次 + 选手成绩 5 人 1 次；
+季后赛 40 队 121 人、待过 339 支队，约 120 次、十个小时抓完，抓完歇 24 小时。正在比赛的队排在前面，先有战队页。
+前端三个接口只读数据库。失败的一步下次再试，连续 3 次就跳过（旧数据保留）；一次返回到 API 上限（1000 条）就拆半重查。
 
 **收录谁**：`site_config` 集合 `_id = "pro_events"` 的 `list`（Liquipedia 赛事页面名，最多 5 场），没有就用代码里的
 `Apex_Legends_Global_Series/2026/Split_2/Playoffs`。名单是 Liquipedia 上这场比赛记录的每支队伍的队员（页面名，不用对名字）。
@@ -689,6 +701,34 @@ git update-index --no-skip-worktree project.config.json miniprogram/app.js
 预览里底部弹层会比屏幕宽：工具把页面固定成 390px，弹层却按整个窗口铺，是预览的问题，真机正常。
 
 **测试**：`node tests/pro.test.mjs`；比赛页的连接在 `page.test.mjs`「比赛页 · 连到选手页」。
+
+### 战队页（2026-11-07 起）
+
+**是什么**：分包 `pro/team/`。入口：选手页大卡上现在的战队、战队经历那几行；比赛页冠军卡的队名、队伍弹层第一行「战队主页」。
+只有我们存了这支队（`pro_teams` 里有）才能点，点不了的不显示 ›。版式照 August 的战队页设计稿（`战队页设计稿-浅色.svg`）：
+
+- **深色大卡**：队名缩写的切角方块（队标拿到授权前的占位）、队名（`--fs-hero`）、赛区标签（红底缩写 NA / CN / JP… + 「北美赛区」）；
+  下面进入 Apex /（解散的队多一格解散年份）/ 累计奖金。
+- **现役阵容**：正式队员一张深色卡（剪影 + ID + 国籍，队长写上），教练、替补、暂停比赛的一行一个（写身份和加入时间）。
+- **重要比赛成绩**：同选手页（S、A 级先 5 场）。
+- **阵容变动**：+（进了阵容，强调色）/ −（离开，灰色），先 4 次（最近 4 次）+「查看全部 N 次」。说法照转会记录算：
+  加入看新身份（来自哪队 / 自由选手 / 替补 / 出任教练），离队看原身份（离队 / 卸任教练，有下家写转会到哪），
+  队内换身份写暂停比赛、恢复比赛、转为替补、转正、转任教练、转为主播这类；身份没变（队长换成普通队员）不算。
+- **历任队员**：现在不在队的选手一人一行（教练不算），几段在队时间相加；最近离开的在前，先 5 个。
+- 只看选手和教练（August 定的）：主播、经理、老板这些工作人员的名单和变动都不要。
+
+**和设计稿不一样的地方**（数据没有，不编）：没有「所在地」（Apex 维基的战队只写了赛区，没写国家；赛区放在标签里）；
+选手卡上没有指挥 / 突击这类分工（Liquipedia 没记）；阵容变动没有"退役"（转会记录只写去了哪队）。
+「进入 Apex」取最早的队员加入、比赛、转会日期：维基上的成立日期各队写法不一（Alliance 写的是俱乐部 2013 年成立），都没有才用它。
+赛区 2026-11-07 实测 Apex 维基 889 支队用到 12 种（Europe、North America、Japan、Southeast Asia、China、Korea…），`pronames.js` 都有中文。
+
+**数据**（`pro_teams` 一支队一条，四样分开更新、互不覆盖）：`members`（squadplayer：选手全要、工作人员只留教练，带国籍）、
+`info`（team 表：队名、赛区、状态、成立 / 解散日期、奖金）、`results`（placement 表按 `opponentname` = 队名查）、
+`transfers`（transfer 表 `fromteam` / `toteam` = 队名；云端先按 role1 / role2 分成 player / sub / inactive / coach / coachInactive / other）。
+
+**本机怎么看效果**：用开发者工具的测试副本（Evo 那边 `miniprogram/paiquan-preview` 的 `shots_team.js`，样本是 2026-11-07 抓的 9 支队）。
+
+**测试**：`node tests/proteam.test.mjs`（视图模型）；云端部分在 `pro.test.mjs`「战队：队员表、转会、成绩、proTeam」；页面在 `page.test.mjs`「战队页」。
 
 ---
 
@@ -714,3 +754,4 @@ git update-index --no-skip-worktree project.config.json miniprogram/app.js
 | 换战队名单 | `cloudfunctions/apex/curated_roster*.json` | teams |
 | 选手页换一场赛事（收录谁） | **云开发控制台** `site_config` 集合加/改 `_id: "pro_events"`，`list: ["赛事页面名"]`（不用发版） | — |
 | 改选手页 | `pro/player/`、`pro/utils/view.js`、`utils/pronames.js` | pro, static, i18n |
+| 改战队页 | `pro/team/`、`pro/utils/teamview.js`（成绩那块在 `view.js`） | proteam, pro, page, static, i18n |
