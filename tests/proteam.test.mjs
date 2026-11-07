@@ -94,7 +94,10 @@ describe("战队页 teamview.team", () => {
       ["Zer0", "美国", "Zer0"], ["Sikezz", "英国 · 队长", ""], ["Panic", "美国", "Panic_(American_player)"]]);
     assert.deepEqual(r.rows.map((x) => [x.name, x.text]), [["Kapreme", "主教练，2025 年 1 月加入"], ["Fuhhnq", "暂停比赛，2025 年 11 月加入"]]);
     assert.equal(r.countText, "4 名选手和 1 名教练");
-    assert.ok(r.cards.every((c) => c.photo === ""), "照片拿到授权以前都是空的（页面用剪影）");
+    assert.ok(r.cards.every((c) => c.photo === ""), "没有照片地址：都是空的（页面用剪影）");
+    assert.deepEqual(r.cards.map((c) => c.long), [false, false, false]);
+    const longName = tv.team({ page: "T", members: [mem({ id: "ImperialHal", join: "2024-05-28" })] }, "zh").roster.cards[0];
+    assert.equal(longName.long, true, "10 个字符以上换小一号字");
     assert.equal(tv.team(TL, "en").roster.rows[0].text, "Head Coach · Joined January 2025");
   });
 

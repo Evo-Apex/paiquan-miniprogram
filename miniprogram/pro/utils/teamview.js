@@ -107,7 +107,11 @@ function rosterOf(members, lang, T) {
     players += 1;
     if (m.status === "active" && kind === "player") {
       var meta = [names.nat(m.nat, lang), /^captain$/i.test(m.role || "") ? names.role("Captain", lang) : ""].filter(Boolean).join(" · ");
-      cards.push(Object.assign(base, { meta: meta, photo: String(m.photo || "") }));   // 照片没有 → ""，卡上用剪影
+      cards.push(Object.assign(base, {
+        meta: meta,
+        photo: String(m.photo || ""),        // 照片没有 → ""，卡上用剪影
+        long: String(m.id || "").length >= 10   // 名字长（ImperialHal）换小一号字，卡片窄、大字放不下
+      }));
     } else {
       // 替补、暂停比赛的队员：一行一个，写身份和加入时间
       var what = m.status === "inactive" || kind === "inactive" ? names.status("inactive", lang) : names.role(m.role, lang);
