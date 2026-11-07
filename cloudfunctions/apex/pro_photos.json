@@ -1,7 +1,7 @@
 {
  "note": "选手照片对照表（tools/build_pro_photos.py 生成，别手改）：Liquipedia 页面名 → 云存储里的文件名前缀。base = 云存储里 pro/photos/<version>/ 的 fileID 前缀，传完照片以后填；空着就不放照片（页面照旧剪影）",
  "version": "v1",
- "base": "",
+ "base": "cloud://cloud1-d8ggx095757c58e20.636c-cloud1-d8ggx095757c58e20-1497557706/pro/photos/v1/",
  "files": {
   "4rufa": "p_4rufa",
   "5CG": "p_5CG",
