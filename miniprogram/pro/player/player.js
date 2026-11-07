@@ -96,6 +96,13 @@ Page({
     wx.navigateTo({ url: "/pro/player/player?page=" + encodeURIComponent(page) });
   },
 
+  /** 点战队（大卡上现在的战队、战队经历那几行）→ 战队页（还没有战队页的 data-page 是空的，点了没反应） */
+  onOpenTeam: function (e) {
+    var page = e.currentTarget.dataset.page;
+    if (!page) return;
+    wx.navigateTo({ url: "/pro/team/team?page=" + encodeURIComponent(page) });
+  },
+
   /** 最底下的「数据来源」→ 说明页（来源、上次同步时间、声明都在那里，页面上不放） */
   onSources: function () {
     var at = this.data.v && this.data.v.at ? this.data.v.at : "";

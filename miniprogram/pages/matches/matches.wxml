@@ -52,7 +52,12 @@
       <text class="rs-champ-label">{{result.champLabel}}</text>
       <text class="rs-champ-points">{{result.champPoints}}</text>
     </view>
-    <text class="rs-champ-team">{{result.champTeam}}</text>
+    <!-- 有战队页就能点进去（右边一个 ›） -->
+    <view class="rs-champ-teamrow {{result.champTeamPage ? 'rs-champ-tap' : ''}}" data-page="{{result.champTeamPage}}"
+          bindtap="onOpenTeam" hover-class="{{result.champTeamPage ? 'rs-chip-hover' : 'none'}}">
+      <text class="rs-champ-team">{{result.champTeam}}</text>
+      <text wx:if="{{result.champTeamPage}}" class="rs-champ-x">›</text>
+    </view>
     <!-- 拿到 Liquipedia 名单后，冠军队员一人一块，点进选手页；没拿到就照旧一行字 -->
     <view wx:if="{{result.champChips.length}}" class="rs-chips">
       <view wx:for="{{result.champChips}}" wx:key="name" class="rs-chip"
@@ -404,6 +409,12 @@
           </view>
         </view>
         <view class="nx-sheet-x" bindtap="onCloseTeam">{{T.nextClose}}</view>
+      </view>
+      <!-- 这支队有战队页：第一行是入口 -->
+      <view wx:if="{{openTeam.teamPage}}" class="nx-player nx-player-tap" data-page="{{openTeam.teamPage}}"
+            bindtap="onOpenTeam" hover-class="nx-team-hover">
+        <text class="nx-player-n nx-teamlink">{{T.proTeamHome}}</text>
+        <text class="nx-team-x">›</text>
       </view>
       <block wx:if="{{openTeam.hasPlayers}}">
         <!-- 有 page 的（来自 Liquipedia 名单）能点进选手页 -->

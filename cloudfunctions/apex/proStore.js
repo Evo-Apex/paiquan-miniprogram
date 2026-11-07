@@ -4,7 +4,8 @@
  *   pro_players：一位选手一条（_id 由页面名编码而来），
  *                { page, profile, profileAt, history, historyAt, results, resultsAt }
  *   pro_meta：   只有一条 _id = "state"：同步进度（队列、上次请求时间）+ 各赛事的参赛名单
- *   pro_teams：  一支战队一条，{ page, members: [历史上的正式队员], at }（算"合作过的队友"用）
+ *   pro_teams：  一支战队一条，{ page, members, membersAt, info, infoAt, results, resultsAt, transfers, transfersAt }
+ *                （members 是历史名单：选手 + 教练，算"合作过的队友"、战队页的阵容用；2026-11 以前存的只有 members + at）
  *
  * 收录哪些赛事读 site_config 集合的 _id = "pro_events"（{ list: [赛事页面名] }），读不到返回 null。
  *
@@ -100,27 +101,66 @@ function createProStore(cloud) {
       }
     },
 
-    /** 一支战队的历史名单（整条覆盖） */
-    saveTeam: async function (page, data) {
+    /** 一支战队：只改给出的那几个字段（名单、资料、成绩、转会各自更新）；记录还没有就新建 */
+    saveTeam: async function (page, patch) {
+      var ref = db.collection(TEAMS).doc(docId(page));
       try {
         await ensure(TEAMS);
-        await db.collection(TEAMS).doc(docId(page)).set({ data: Object.assign({ page: page }, data) });
+        // 对象字段用 set 整个换掉（update 默认会把对象逐个键合并）
+        var upd = {};
+        Object.keys(patch).forEach(function (k) {
+          var v = patch[k];
+          upd[k] = v && typeof v === "object" && !Array.isArray(v) ? _.set(v) : v;
+        });
+        var res = await ref.update({ data: upd });
+        if (res && res.stats && res.stats.updated > 0) return true;
+        await ref.set({ data: Object.assign({ page: page }, patch) });
         return true;
       } catch (e) {
-        console.warn("写战队名单失败（" + page + "）：" + msgOf(e));
-        return false;
+        try {
+          await ref.set({ data: Object.assign({ page: page }, patch) });
+          return true;
+        } catch (e2) {
+          console.warn("写战队数据失败（" + page + "）：" + msgOf(e2));
+          return false;
+        }
       }
     },
 
-    /** 一批战队的历史名单：{ 战队页面名: [队员, ...] } */
+    /** 一支战队存下来的全部内容；没有 → null */
+    readTeam: async function (page) {
+      try {
+        var res = await db.collection(TEAMS).doc(docId(page)).get();
+        return res && res.data ? res.data : null;
+      } catch (e) {
+        return null;
+      }
+    },
+
+    /** 一批战队的历史名单：{ 战队页面名: [队员, ...] }（只取名单，不带成绩、转会） */
     readTeams: async function (pages) {
       var out = {};
       if (!pages || !pages.length) return out;
       try {
-        var res = await db.collection(TEAMS).where({ page: _.in(pages.slice(0, 200)) }).limit(1000).get();
+        var res = await db.collection(TEAMS).where({ page: _.in(pages.slice(0, 200)) })
+          .field({ page: true, members: true }).limit(1000).get();
         (res.data || []).forEach(function (d) { if (Array.isArray(d.members)) out[d.page] = d.members; });
       } catch (e) {
         console.warn("读战队名单失败：" + msgOf(e));
+      }
+      return out;
+    },
+
+    /** 这批战队里哪些有战队页（存过名单）：{ 战队页面名: true } */
+    teamIndex: async function (pages) {
+      var out = {};
+      if (!pages || !pages.length) return out;
+      try {
+        var res = await db.collection(TEAMS).where({ page: _.in(pages.slice(0, 200)) })
+          .field({ page: true }).limit(1000).get();
+        (res.data || []).forEach(function (d) { if (d.page) out[d.page] = true; });
+      } catch (e) {
+        console.warn("读战队列表失败：" + msgOf(e));
       }
       return out;
     },

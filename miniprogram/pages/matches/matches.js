@@ -157,11 +157,19 @@ Page({
         icon: "",
         hasIcon: false,
         groupName: t.place ? i18n.t(this.data.lang, "resTeamPlace").replace("{n}", t.place) : "",
+        teamPage: t.teamPage || "",
         players: t.players || [],
         hasPlayers: !!(t.players && t.players.length),
         countText: i18n.t(this.data.lang, "nextPlayerCount").replace("{n}", (t.players || []).length)
       }
     });
+  },
+
+  /** 点冠军队名、弹层里的「战队主页」→ 战队页（还没有战队页的 data-page 是空的，点了没反应） */
+  onOpenTeam: function (e) {
+    var page = e.currentTarget.dataset.page;
+    if (!page) return;
+    wx.navigateTo({ url: "/pro/team/team?page=" + encodeURIComponent(page) });
   },
 
   /** 点选手名 → 选手页（没连上 Liquipedia 的名字 data-page 是空的，点了没反应） */
@@ -194,12 +202,15 @@ Page({
     var n = this.data.next;
     if (!n || !n.teams || !n.teams[i]) return;
     var t = n.teams[i];
+    // 下一场的队伍名单是另一份数据：按队名去 Liquipedia 名单里对，对上了才有战队页入口
+    var rt = this._roster ? prolink.findTeam(this._roster, t.name) : null;
     this.setData({
       openTeam: {
         name: t.name,
         icon: t.icon || "",
         hasIcon: !!t.hasIcon,
         groupName: n.activeGroupName,
+        teamPage: (rt && rt.teamPage) || "",
         players: t.players || [],
         hasPlayers: !!t.hasPlayers,
         countText: i18n.t(this.data.lang, "nextPlayerCount").replace("{n}", (t.players || []).length)

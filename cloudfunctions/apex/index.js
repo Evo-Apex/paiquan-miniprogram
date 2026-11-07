@@ -108,8 +108,8 @@ exports.main = async (event) => {
     }
   }
 
-  // 职业选手（比赛页的选手页）：只读数据库，不现查 Liquipedia（它每小时只给 60 次）
-  if (event && (event.action === "proPlayer" || event.action === "proRoster")) {
+  // 职业选手、战队（比赛页的选手页、战队页）：只读数据库，不现查 Liquipedia（它每小时只给 60 次）
+  if (event && (event.action === "proPlayer" || event.action === "proRoster" || event.action === "proTeam")) {
     try {
       const pro = require("./proSync");
       return await pro[event.action](event, { store: proStore });

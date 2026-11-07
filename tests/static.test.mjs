@@ -327,8 +327,8 @@ const AD_PAGES = ["home", "maps", "predator"];
    新加的页面要加进来 —— 这几条正是抓"字段写错/标签没闭合/类名拼错"的网。
    （原来的 pages/mapview「交互地图」已删，所以这里也没有它了。） */
 // 2026-10-27：加了「我的」（me）和分包 evo 里 Evo 战绩的三个子页面（写成 "evo/matches" 这样带分包目录的名字）
-// 2026-11：比赛页去掉广告位时从 AD_PAGES 拿掉了，这些检查也跟着漏了它，这里补回来；加了分包 pro 的选手页
-const PAGE_NAMES = AD_PAGES.concat(["matches", "games", "games/wheel", "games/ringguessr", "games/ringpick", "me", "evo/matches", "evo/match", "evo/bind", "pro/player", "pro/sources"]);
+// 2026-11：比赛页去掉广告位时从 AD_PAGES 拿掉了，这些检查也跟着漏了它，这里补回来；加了分包 pro 的选手页、战队页
+const PAGE_NAMES = AD_PAGES.concat(["matches", "games", "games/wheel", "games/ringguessr", "games/ringpick", "me", "evo/matches", "evo/match", "evo/bind", "pro/player", "pro/team", "pro/sources"]);
 const pageDir = (n) => (n.indexOf("/") >= 0 ? path.join(MP, n) : path.join(MP, "pages", n));
 const pageBase = (n) => path.basename(n);
 const pageJsPath = (n) => path.join(pageDir(n), pageBase(n) + ".js");
@@ -620,6 +620,30 @@ function vmFieldNames() {
   const pvRes = playerView.visibleResults(pv.results, "major", false, pvT);
   collect(pvRes);
   pvRes.rows.forEach(collect);
+  // 战队页（pro/team）的视图模型：每块都给一条，字段才收得全
+  const teamView = require(path.join(MP, "pro", "utils", "teamview.js"));
+  const tv = teamView.team({ page: "T", at: 1,
+    info: { page: "T", name: "T", region: "North America", status: "active", created: "", disbanded: "", earnings: 1 },
+    members: [
+      { page: "A", id: "A", type: "player", nat: "Canada", join: "2025-01-01", leave: "", status: "active", role: "", hasPage: true },
+      { page: "B", id: "B", type: "player", nat: "", join: "2025-01-01", leave: "", status: "active", role: "Substitute", hasPage: false },
+      { page: "C", id: "C", type: "staff", nat: "", join: "2025-01-01", leave: "", status: "active", role: "Coach", hasPage: false },
+      { page: "D", id: "D", type: "player", nat: "", join: "2020-01-01", leave: "2021-01-01", status: "former", role: "", hasPage: true }],
+    results: [{ date: "2026-01-01", event: "E", tournament: "E", tier: "1", tierType: "", place: "1", prize: 1, team: "T" }],
+    transfers: [{ date: "2025-01-01", page: "A", id: "A", nat: "", move: "join", from: "", to: "", k1: "player", k2: "player", r1: "", r2: "", hasPage: true }] },
+  "zh");
+  collect(tv);
+  collect(tv.badge);
+  tv.facts.forEach(collect);
+  collect(tv.roster);
+  tv.roster.cards.forEach(collect);
+  tv.roster.rows.forEach(collect);
+  collect(tv.moves);
+  tv.moves.all.forEach(collect);
+  collect(teamView.visibleMoves(tv.moves, false, pvT));
+  collect(tv.former);
+  tv.former.all.forEach(collect);
+  collect(teamView.visibleFormer(tv.former, false, pvT));
 
   return keys;
 }

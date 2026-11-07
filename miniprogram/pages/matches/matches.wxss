@@ -314,6 +314,7 @@
 .nx-player-tap { align-items: center; min-height: 88rpx; box-sizing: border-box; }
 .nx-player-tap .nx-player-m { margin-left: auto; padding-left: var(--sp-3); }
 .nx-player-tap .nx-team-x { margin-left: var(--sp-3); }
+.nx-teamlink { font-weight: var(--fw-bold); }
 
 /* ============================================================
    比赛专区 · 最终成绩（2026-11-02）
@@ -356,6 +357,11 @@
   font-weight: var(--fw-num);
   color: #ffffff;
 }
+/* 冠军队名：有战队页时整行能点（热区 ≥ 80rpx），右边一个 › */
+.rs-champ-teamrow { display: flex; align-items: center; margin-top: var(--sp-2); border-radius: var(--r-lg); }
+.rs-champ-teamrow .rs-champ-team { margin-top: 0; }
+.rs-champ-tap { min-height: 80rpx; }
+.rs-champ-x { flex: none; margin-left: var(--sp-3); font-size: var(--fs-title); line-height: 1; color: #ffffff; }
 .rs-champ-team {
   display: block;
   margin-top: var(--sp-2);

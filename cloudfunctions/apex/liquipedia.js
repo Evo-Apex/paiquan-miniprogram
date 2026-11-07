@@ -269,31 +269,58 @@ function fetchResults(pages, deps) {
     });
 }
 
-/* ---------------- 队友（2026-11，照 August 的选手页设计稿） ---------------- */
+/* ---------------- 战队的历史名单（2026-11：先给选手页算队友，战队页也用） ---------------- */
 
-var TEAM_COLS = "pagename,link,id,role,type,status,joindate,leavedate";
+var TEAM_COLS = "pagename,link,id,role,type,status,joindate,leavedate,nationality";
 var TEAM_LIMIT = 1000;
 
-/** 一支队历史名单里的一名队员（squadplayer，只要 type = player） */
+/**
+ * 队里的身份 → 几类（队员表、转会表的 role 都是这种写法）：
+ *   player（正式队员：role 是空的；Captain、Loan、Tryout 也算）、sub（替补 / 临时替补）、
+ *   inactive（不活跃 / 停赛）、coach（教练、主教练、助理教练）、coachInactive（不活跃的教练）、
+ *   other（主播、经理、老板这些工作人员）。战队页只看选手和教练（August 2026-11-07 定的）。
+ */
+function roleKind(role) {
+  var r = String(role || "").trim().toLowerCase();
+  if (!r || /^(captain|loan|tryout)$/.test(r)) return "player";
+  if (/coach/.test(r)) return /inactive/.test(r) ? "coachInactive" : "coach";
+  if (/stand-?in|substitute/.test(r)) return "sub";
+  if (/inactive|suspended/.test(r)) return "inactive";
+  return "other";
+}
+
+/** 跨维基的链接（"leagueoflegends:LiQuiD112"）不是 Apex 维基的页面：页面名留空（点不进去），名字去掉前缀 */
+function crossWiki(link) { return /^[a-z0-9]+:/i.test(String(link || "")); }
+function plainId(link) { return String(link || "").replace(/^[a-z0-9]+:/i, "").replace(/_/g, " ").replace(/\s*\([^)]*\)$/, ""); }
+
+/**
+ * 一支队历史名单里的一个人（squadplayer）：选手全要；工作人员只要教练（主播、经理、老板这些不要）。
+ * type 缺的（这一版之前存的数据只有选手）当选手。
+ */
 function normMember(row) {
   if (!row || !row.link) return null;
+  var type = String(row.type || "player");
+  var role = String(row.role || "");
+  if (type === "staff" && !/coach/i.test(role)) return null;
   return {
-    page: linkToPage(row.link),
-    id: String(row.id || row.link),
+    page: crossWiki(row.link) ? "" : linkToPage(row.link),
+    id: String(row.id || plainId(row.link)),
+    type: type,
+    nat: String(row.nationality || ""),
     join: date10(row.joindate),
     leave: date10(row.leavedate),
     status: String(row.status || ""),
-    role: String(row.role || "")
+    role: role
   };
 }
 
 /**
- * 一批战队的历史队员 → { rows: { 战队页面名: [队员, ...] }, full: bool }。
+ * 一批战队的历史名单（选手 + 教练）→ { rows: { 战队页面名: [人, ...] }, full: bool }。
  * full = 返回到了上限，可能截掉了一部分 —— 调用方拆小重查（同 fetchResults）。
+ * 主播、经理这些工作人员也会返回、在 normMember 里扔掉：LPDB 的条件写不出"role 里有 coach"。
  */
 function fetchTeams(teamPages, deps) {
-  var cond = "(" + anyOf("pagename", teamPages) + ") AND [[type::player]]";
-  return query("squadplayer", { conditions: cond, query: TEAM_COLS, limit: TEAM_LIMIT }, deps)
+  return query("squadplayer", { conditions: anyOf("pagename", teamPages), query: TEAM_COLS, limit: TEAM_LIMIT }, deps)
     .then(function (rows) {
       if (rows === null) return null;
       var out = {};
@@ -303,12 +330,136 @@ function fetchTeams(teamPages, deps) {
         if (!out[r.pagename]) return;
         var m = normMember(r);
         if (!m) return;
-        var k = r.pagename + "|" + m.page + "|" + m.join + "|" + m.role;
+        var k = r.pagename + "|" + m.id + "|" + m.join + "|" + m.role;
         if (seen[k]) return;
         seen[k] = true;
         out[r.pagename].push(m);
       });
       return { rows: out, full: rows.length >= TEAM_LIMIT };
+    });
+}
+
+/* ---------------- 战队页（2026-11，照 August 的战队页设计稿） ---------------- */
+
+var TEAMINFO_COLS = "pagename,name,region,status,createdate,disbanddate,earnings";
+var TEAMRES_COLS = "pagename,parent,tournament,date,placement,prizemoney,liquipediatier,liquipediatiertype,opponentname,opponenttype,mode";
+var TRANSFER_COLS = "player,nationality,fromteam,toteam,role1,role2,date";
+var TRANSFER_LIMIT = 1000;
+
+/**
+ * 战队资料。Apex 维基的 locations 只填了赛区（"North America"），没有国家，所以不要它。
+ * createdate 各队写法不一（Alliance 写的是俱乐部 2013 年成立，Team Liquid 写的是 Apex 分部 2019 年），
+ * 页面上的「进入 Apex」由 view 结合最早的队员、比赛日期再算。
+ */
+function normTeam(row) {
+  if (!row || !row.pagename) return null;
+  return {
+    page: String(row.pagename),
+    name: String(row.name || teamName(row.pagename)),
+    region: String(row.region || ""),
+    status: String(row.status || ""),          // active / disbanded
+    created: date10(row.createdate),
+    disbanded: date10(row.disbanddate),
+    earnings: num(row.earnings)
+  };
+}
+
+/** 一批战队的资料 → { 页面名: normTeam }；取不到 null */
+function fetchTeamInfo(teamPages, deps) {
+  return query("team", { conditions: anyOf("pagename", teamPages), query: TEAMINFO_COLS, limit: 500 }, deps)
+    .then(function (rows) {
+      if (rows === null) return null;
+      var out = {};
+      rows.forEach(function (r) { var t = normTeam(r); if (t && teamPages.indexOf(t.page) >= 0) out[t.page] = t; });
+      return out;
+    });
+}
+
+/**
+ * 一批战队的历届成绩（placement 表里 opponentname = 队名，就是页面名把下划线换成空格）
+ * → { rows: { 战队页面名: [成绩, ...] }, full: bool }；full 的意思同 fetchResults。
+ */
+function fetchTeamResults(teamPages, deps) {
+  var byName = {};
+  teamPages.forEach(function (p) { byName[teamName(p)] = p; });
+  return query("placement", {
+    conditions: anyOf("opponentname", Object.keys(byName)), query: TEAMRES_COLS, limit: RESULT_LIMIT, order: "date DESC"
+  }, deps).then(function (rows) {
+    if (rows === null) return null;
+    var out = {};
+    teamPages.forEach(function (p) { out[p] = []; });
+    var seen = {};
+    rows.forEach(function (r) {
+      var page = byName[String(r.opponentname || "")];
+      if (!page || (r.opponenttype && r.opponenttype !== "team")) return;
+      var res = normPlacement(r);
+      if (!res) return;
+      var k = page + "|" + res.event + "|" + res.place;
+      if (seen[k]) return;
+      seen[k] = true;
+      out[page].push(res);
+    });
+    return { rows: out, full: rows.length >= RESULT_LIMIT };
+  });
+}
+
+/**
+ * 一条转会记录（从队名 name 这支队看）。role1 是在原来那队的身份，role2 是去新队以后的身份：
+ *   加入（toteam 是这队）看 role2，离队（fromteam 是这队）看 role1，队内变动（两边都是这队）看两边。
+ * 只是主播、经理、老板这些工作人员的变动 → null。
+ */
+function normTransfer(row, name) {
+  if (!row || !row.player) return null;
+  var from = String(row.fromteam || "");
+  var to = String(row.toteam || "");
+  var k1 = roleKind(row.role1);
+  var k2 = roleKind(row.role2);
+  var move, mine;
+  if (from === name && to === name) { move = "role"; mine = [k1, k2]; }
+  else if (to === name) { move = "join"; mine = [k2]; }
+  else if (from === name) { move = "leave"; mine = [k1]; }
+  else return null;
+  if (mine.every(function (k) { return k === "other"; })) return null;
+  var link = String(row.player);
+  return {
+    date: date10(row.date),
+    page: crossWiki(link) ? "" : linkToPage(link),
+    id: plainId(link),
+    nat: String(row.nationality || ""),
+    move: move,                               // join / leave / role（队内换身份）
+    from: move === "join" ? from : "",        // 从哪队来（空 = 自由选手）
+    to: move === "leave" ? to : "",           // 去了哪队（空 = 没有下家）
+    k1: k1,
+    k2: k2,
+    r1: String(row.role1 || ""),              // 原样的身份（"Head Coach"、"Streamer"），页面写"转为主播"这类用
+    r2: String(row.role2 || "")
+  };
+}
+
+/** 一批战队的转会记录 → { rows: { 战队页面名: [记录, ...]（新的在前） }, full: bool } */
+function fetchTransfers(teamPages, deps) {
+  var names = teamPages.map(teamName);
+  var cond = anyOf("fromteam", names) + " OR " + anyOf("toteam", names);
+  return query("transfer", { conditions: cond, query: TRANSFER_COLS, limit: TRANSFER_LIMIT, order: "date DESC" }, deps)
+    .then(function (rows) {
+      if (rows === null) return null;
+      var out = {};
+      teamPages.forEach(function (p) { out[p] = []; });
+      var seen = {};
+      rows.forEach(function (r) {
+        teamPages.forEach(function (p, i) {
+          var t = normTransfer(r, names[i]);
+          if (!t) return;
+          var k = p + "|" + t.id + "|" + t.date + "|" + t.move + "|" + t.k1 + "|" + t.k2;
+          if (seen[k]) return;
+          seen[k] = true;
+          out[p].push(t);
+        });
+      });
+      Object.keys(out).forEach(function (p) {
+        out[p].sort(function (a, b) { return (b.date || "").localeCompare(a.date || ""); });
+      });
+      return { rows: out, full: rows.length >= TRANSFER_LIMIT };
     });
 }
 
@@ -339,10 +490,10 @@ function mates(page, teams, todayIso) {
   var acc = {};
   Object.keys(teams || {}).forEach(function (tp) {
     var ms = teams[tp] || [];
-    var mine = ms.filter(function (m) { return m.page === page; });
+    var mine = ms.filter(function (m) { return m.page === page && (!m.type || m.type === "player"); });
     if (!mine.length) return;
     ms.forEach(function (o) {
-      if (o.page === page) return;
+      if (o.page === page || !o.page || (o.type && o.type !== "player")) return;   // 教练不算队友
       mine.forEach(function (me) {
         var a1 = dayNum(me.join);
         var b1 = stintEnd(me, today);
@@ -382,6 +533,14 @@ module.exports = {
   fetchTeams: fetchTeams,
   normMember: normMember,
   mates: mates,
+  roleKind: roleKind,
+  normTeam: normTeam,
+  fetchTeamInfo: fetchTeamInfo,
+  fetchTeamResults: fetchTeamResults,
+  normTransfer: normTransfer,
+  fetchTransfers: fetchTransfers,
+  teamName: teamName,
   RESULT_LIMIT: RESULT_LIMIT,
-  TEAM_LIMIT: TEAM_LIMIT
+  TEAM_LIMIT: TEAM_LIMIT,
+  TRANSFER_LIMIT: TRANSFER_LIMIT
 };

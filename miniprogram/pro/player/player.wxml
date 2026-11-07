@@ -31,12 +31,14 @@
           <text class="pp-fact-k">{{item.k}}</text>
         </view>
       </view>
-      <view wx:if="{{v.team}}" class="pp-hteam">
+      <!-- 有战队页就能点进去（右边一个 ›） -->
+      <view wx:if="{{v.team}}" class="pp-hteam" data-page="{{v.team.page}}" bindtap="onOpenTeam" hover-class="{{v.team.page ? 'pp-pressed' : 'none'}}">
         <view class="pp-logo">{{v.team.initials}}</view>
         <view class="pp-hteam-txt">
           <text class="pp-hteam-n">{{v.team.name}}</text>
           <text wx:if="{{v.team.since}}" class="pp-hteam-s">{{v.team.since}}</text>
         </view>
+        <text wx:if="{{v.team.page}}" class="pp-hchev">›</text>
       </view>
       <view wx:elif="{{v.retired}}" class="pp-hteam">
         <view class="pp-hteam-txt pp-center">
@@ -116,13 +118,15 @@
         </view>
       </block>
       <view class="pp-tl">
-        <view class="pp-tli {{item.now ? 'pp-tli-now' : ''}}" wx:for="{{v.career.items}}" wx:key="key">
+        <view class="pp-tli {{item.now ? 'pp-tli-now' : ''}}" wx:for="{{v.career.items}}" wx:key="key"
+              data-page="{{item.page}}" bindtap="onOpenTeam" hover-class="{{item.page ? 'pp-pressed' : 'none'}}">
           <view class="pp-dot"></view>
           <view class="pp-grow">
             <text class="pp-name">{{item.team}}</text>
             <text wx:if="{{item.sub}}" class="pp-small">{{item.sub}}</text>
           </view>
           <text class="pp-tl-d">{{item.range}}</text>
+          <text class="pp-chev">{{item.page ? '›' : ''}}</text>
         </view>
       </view>
     </view>

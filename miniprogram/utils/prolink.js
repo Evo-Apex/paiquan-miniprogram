@@ -73,20 +73,22 @@ function sheetPlayer(p, lang) {
 
 /**
  * 给 matchresult.build() 的结果补上连接（原地不改，返回新对象）：
+ *   champTeamPage：冠军队的战队页（还没有战队页 / 没对上为空）
  *   champChips[]：冠军队员 { name, page }（对不上的 page 为空）
  *   rows[i].ti：名次表这一行对上了名单里第几支队（-1 = 没对上，不能点）
  *   playerRows[i].page：选手榜这一行的选手页
- *   rosterTeams[]：名单里每支队 { name, players: [sheetPlayer] }，点名次行时弹层用
+ *   rosterTeams[]：名单里每支队 { name, place, teamPage, players: [sheetPlayer] }，点名次行时弹层用
  */
 function decorate(result, roster, lang) {
   if (!result) return result;
   var out = Object.assign({}, result);
   var teams = roster && Array.isArray(roster.teams) ? roster.teams : [];
   out.rosterTeams = teams.map(function (t) {
-    return { name: t.team, place: t.place, players: (t.players || []).map(function (p) { return sheetPlayer(p, lang); }) };
+    return { name: t.team, place: t.place, teamPage: t.teamPage || "", players: (t.players || []).map(function (p) { return sheetPlayer(p, lang); }) };
   });
 
   var champ = findTeam(roster, result.champTeam, "1");
+  out.champTeamPage = champ && champ.teamPage ? champ.teamPage : "";
   out.champChips = (result.champList || []).map(function (n) {
     var p = findPlayer(champ, n);
     return { name: n, page: p ? p.page : "" };
