@@ -560,7 +560,8 @@ node 直播识别/build_next_match.mjs --out 直播识别/out/next_match_data.js
 
 **第 4 个 tab 从「猜圈」改成了「小游戏」** —— 用户要求把新做的轮盘和猜圈放在同一个分类下，
 底下的标签就叫「小游戏」。所以现在那一格是**分类页**（`pages/games/`），
-猜圈（`pages/ringguessr/`）、圈型速判（`pages/ringpick/`）、轮盘（`pages/wheel/`）都从它进去。
+猜圈（`games/ringguessr/`）、圈型速判（`games/ringpick/`）、轮盘（`games/wheel/`）都从它进去
+（2026-11-07 起这三个在分包 `games/` 里，见 AI-CONTEXT §6「文件搬家」）。
 
 为什么做成分类页而不是把两个玩法塞进一页：
 - 猜圈页是**单屏手势游戏**（`disableScroll: true`、地图要接管 touchmove），
@@ -857,16 +858,19 @@ apex-miniapp/
 │   │   ├── maps/                地图：四行轮换卡 + 倒计时
 │   │   ├── predator/            排位专区：猎杀分数线 + 段位分布 + 职业选手数据
 │   │   ├── matches/             比赛：ALGS 赛场 + 下一场比赛
-│   │   ├── games/               小游戏分类页（猜圈练习 / 英雄武器轮盘两个入口）
+│   │   └── games/               小游戏分类页（猜圈练习 / 圈型速判 / 英雄武器轮盘三个入口）
+│   ├── games/                   分包：小游戏（2026-11-07 从 pages/、utils/ 搬来）
 │   │   ├── ringguessr/          猜圈练习（单屏手势游戏）
 │   │   ├── ringpick/            圈型速判（四选一，10 秒一题）
-│   │   └── wheel/               英雄 / 武器轮盘
+│   │   ├── wheel/               英雄 / 武器轮盘
+│   │   ├── utils/               rings.js（猜圈）、ringpick.js（速判：出题 + 四个候选方向 + 视口）
+│   │   ├── data/                题库（离线快照）
+│   │   └── assets/flat/         平面战术图
 │   └── utils/
 │       ├── core.js              纯逻辑：归一化、格式化、错误分类
 │       ├── viewmodel.js         纯逻辑：数据 → 界面字段（含差额、分享链接）
 │       ├── cloud.js             云函数调用 + 失败分类
 │       ├── wheel_data.js        轮盘候选池（读 codex）+ 扇形几何
-│       ├── ringpick.js          圈型速判：出题 + 四个候选方向 + 视口
 │       └── ad.js                广告位配置
 ├── cloudfunctions/apex/         云函数（无第三方依赖）
 │   ├── index.js                 入口：从环境变量读 Key

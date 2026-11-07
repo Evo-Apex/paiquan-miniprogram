@@ -14,11 +14,11 @@
  * 所以渲染**一律用百分比**（x / 16384 * 100%），不引入缩放常量，换图也不用改代码。
  */
 
-var DATA = require("./rings_data.js");
+var DATA = require("../data/rings_data.js");
 // 真实比赛 + 社区环库的完整圈序列（题库主体，见 match_rings_data.js）。
 var MATCH = null;
-try { MATCH = require("./match_rings_data.js"); } catch (e) { MATCH = null; }
-var core = require("./core.js");
+try { MATCH = require("../data/match_rings_data.js"); } catch (e) { MATCH = null; }
+var core = require("../../utils/core.js");
 
 var COORD = (DATA && DATA.coord) || 16384;
 
@@ -67,7 +67,7 @@ function stageAt(ms, hintCount) {
   };
 }
 
-/* 平面战术图（assets/maps/flat/*.jpg，由 直播识别/build_flatmaps.py 生成）。
+/* 平面战术图（games/assets/flat/*.jpg，2026-11 随小游戏搬进分包 games；由 直播识别/build_flatmaps.py 生成）。
    猜圈必须用平面图：判断的是"圈心落在哪块地形上"，斜视宣传图根本没法定位。
    ⚠️ 这里**只列猜圈真正用到的那 3 张**（上游 ALGS 模式的地图池就是这三张）。
       另外 3 张（诸王峡谷/奥林匹斯/残月）的平面图原本是给"交互地图"页面用的，
@@ -89,7 +89,7 @@ function i18n_lang(lang) {
 }
 function mapImage(id) {
   if (!id) return "";
-  return FLAT[id] ? ("/assets/maps/flat/" + id + ".jpg") : ("/assets/maps/" + id + ".jpg");
+  return FLAT[id] ? ("/games/assets/flat/" + id + ".jpg") : ("/assets/maps/" + id + ".jpg");
 }
 
 /**
@@ -179,7 +179,7 @@ var ENDS = null;
 function endZones(mapId) {
   if (ENDS === null) {
     try {
-      ENDS = require("./map_ends_data.js").maps || {};
+      ENDS = require("../data/map_ends_data.js").maps || {};
     } catch (e) {
       ENDS = {};
     }

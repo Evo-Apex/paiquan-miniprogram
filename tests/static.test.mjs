@@ -180,12 +180,12 @@ describe("猜圈页：手势不许带得页面一起滚", () => {
   test("页面 json 里 disableScroll 必须是 true", () => {
     // 用户实测报过：在地图上拖，整个小程序跟着上下滑。
     // 这一页是单屏游戏，滚动永远是误操作，所以整页禁滚 + 地图上 catchtouchmove。
-    const cfg = JSON.parse(read(path.join(MP, "pages", "ringguessr", "ringguessr.json")));
+    const cfg = JSON.parse(read(path.join(MP, "games", "ringguessr", "ringguessr.json")));
     assert.equal(cfg.disableScroll, true, "猜圈页必须 disableScroll，否则拖地图会把页面带着滚");
   });
 
   test("地图容器用 catch 接管 touchmove（bind 会漏给页面滚动）", () => {
-    const wxml = read(path.join(MP, "pages", "ringguessr", "ringguessr.wxml"));
+    const wxml = read(path.join(MP, "games", "ringguessr", "ringguessr.wxml"));
     assert.ok(/catchtouchmove="onTouchMove"/.test(wxml), "地图容器应当用 catchtouchmove");
     assert.ok(!/bindtouchmove="onTouchMove"/.test(wxml), "不要再用 bindtouchmove：它拦不住页面滚动");
   });
@@ -210,14 +210,21 @@ describe("底部标签", () => {
   test("「小游戏」是分类页：猜圈练习 / 圈型速判 / 轮盘都从它进去（而不是各占一个 tab）", () => {
     const games = bar.list[3];
     assert.equal(games.pagePath, "pages/games/games");
-    assert.ok(appJson.pages.includes("pages/ringguessr/ringguessr"), "猜圈练习应当还在（作为子页）");
-    assert.ok(appJson.pages.includes("pages/ringpick/ringpick"), "圈型速判没注册进 pages");
-    assert.ok(appJson.pages.includes("pages/wheel/wheel"), "轮盘页没注册进 pages");
+    // 2026-11-07：三个玩法页搬进了分包 games/（主包少约 470 KB），所以注册在 subpackages 里
+    const sub = (appJson.subpackages || []).find((s) => s.root === "games");
+    assert.ok(sub, "app.json 里没有分包 games");
+    assert.ok(sub.pages.includes("ringguessr/ringguessr"), "猜圈练习应当还在（作为子页）");
+    assert.ok(sub.pages.includes("ringpick/ringpick"), "圈型速判没注册进分包 games");
+    assert.ok(sub.pages.includes("wheel/wheel"), "轮盘页没注册进分包 games");
+    // 主包 pages 里不能再留旧路径（留着会找不到文件，编译报错）
+    for (const old of ["pages/ringguessr/ringguessr", "pages/ringpick/ringpick", "pages/wheel/wheel"]) {
+      assert.equal(appJson.pages.includes(old), false, "app.json 的 pages 里还有旧路径 " + old);
+    }
+    // 一进小游戏 tab 就先把分包下好，点进玩法页不用等
+    assert.deepEqual((appJson.preloadRule || {})["pages/games/games"], { network: "all", packages: ["games"] });
     // 子页不在 tabBar 里 —— 否则底部会多出几个标签（上限 5 个，也没必要）
     const tabPages = bar.list.map((t) => t.pagePath);
-    assert.equal(tabPages.includes("pages/ringguessr/ringguessr"), false);
-    assert.equal(tabPages.includes("pages/ringpick/ringpick"), false);
-    assert.equal(tabPages.includes("pages/wheel/wheel"), false);
+    assert.equal(tabPages.some((p) => p.indexOf("games/") === 0), false);
   });
 
   test("第一个标签就是默认首页（打开小程序先看到首页，地图轮换在首页上）", () => {
@@ -321,7 +328,7 @@ const AD_PAGES = ["home", "maps", "predator"];
    （原来的 pages/mapview「交互地图」已删，所以这里也没有它了。） */
 // 2026-10-27：加了「我的」（me）和分包 evo 里 Evo 战绩的三个子页面（写成 "evo/matches" 这样带分包目录的名字）
 // 2026-11：比赛页去掉广告位时从 AD_PAGES 拿掉了，这些检查也跟着漏了它，这里补回来；加了分包 pro 的选手页
-const PAGE_NAMES = AD_PAGES.concat(["matches", "games", "wheel", "ringguessr", "ringpick", "me", "evo/matches", "evo/match", "evo/bind", "pro/player", "pro/sources"]);
+const PAGE_NAMES = AD_PAGES.concat(["matches", "games", "games/wheel", "games/ringguessr", "games/ringpick", "me", "evo/matches", "evo/match", "evo/bind", "pro/player", "pro/sources"]);
 const pageDir = (n) => (n.indexOf("/") >= 0 ? path.join(MP, n) : path.join(MP, "pages", n));
 const pageBase = (n) => path.basename(n);
 const pageJsPath = (n) => path.join(pageDir(n), pageBase(n) + ".js");
@@ -464,9 +471,9 @@ function vmFieldNames() {
   collect(rankView.mine);
   rankView.rows.forEach(collect);
 
-  // 猜圈练习（本地圈数据，见 utils/rings.js）。视图模型给的那些框也是 WXML 绑定的来源。
+  // 猜圈练习（本地圈数据，见 games/utils/rings.js）。视图模型给的那些框也是 WXML 绑定的来源。
   // ⚠️ 2026-10-16 改成"题"模型：roundView/judge 收的是 {map,hints,answer} 而不是旧的样本。
-  const rings = require(path.resolve(HERE, "..", "miniprogram", "utils", "rings.js"));
+  const rings = require(path.resolve(HERE, "..", "miniprogram", "games", "utils", "rings.js"));
   const allQ = rings.allQuestions();
   const ringQ = allQ[0] || {
     map: "storm-point",
@@ -750,5 +757,34 @@ describe("WXML 绑定与数据字段一致", () => {
     }
     assert.ok(sawAny, "没解析到任何 class，解析逻辑可能坏了");
     assert.deepEqual(missing, [], "WXSS 里找不到这些类：" + JSON.stringify(missing));
+  });
+});
+
+/* ============================================================
+   分包的引用方向（2026-11-07 小游戏搬进分包 games/ 时加的）
+   微信规定：主包不能 require 分包里的文件，分包之间也不能互相 require
+   （分包可以 require 主包）。写错了只有开发者工具编译时才报错，这里提前拦住。
+   ============================================================ */
+describe("分包：引用方向", () => {
+  const appJson = JSON.parse(read(path.join(MP, "app.json")));
+  const roots = (appJson.subpackages || appJson.subPackages || []).map((s) => s.root.replace(/\/$/, ""));
+  const subOf = (rel) => roots.find((r) => rel === r || rel.indexOf(r + "/") === 0) || null;
+
+  test("主包不 require 分包，分包之间也不互相 require", () => {
+    assert.ok(roots.includes("games"), "app.json 里没找到分包 games，这条检查可能没在查东西");
+    const bad = [];
+    for (const f of walk(MP, (p) => p.endsWith(".js"))) {
+      const rel = path.relative(MP, f).split(path.sep).join("/");
+      const from = subOf(rel);
+      for (const m of read(f).matchAll(/require\(\s*["']([^"']+)["']\s*\)/g)) {
+        const spec = m[1];
+        const target = spec.charAt(0) === "/"
+          ? spec.slice(1)
+          : path.posix.normalize(path.posix.join(path.posix.dirname(rel), spec));
+        const to = subOf(target);
+        if (to && to !== from) bad.push(rel + " → " + spec + "（" + (from ? "分包 " + from : "主包") + " 引用了分包 " + to + "）");
+      }
+    }
+    assert.deepEqual(bad, [], "这些引用微信编译时会报错");
   });
 });

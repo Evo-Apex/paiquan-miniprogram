@@ -8,16 +8,17 @@
  *   好处是以后再加小游戏不用动 tabBar（最多 5 个，且图标只能本地文件）。
  *
  * 这一页**全部是本地数据和跳转**，不联网、不耗云函数配额：
- *   · 猜圈的题库在 utils/rings_data.js；
+ *   · 三个玩法页和猜圈、速判的题库在分包 games/ 里（2026-11-07 搬过去，主包少约 470 KB）。
+ *     这一页是 tab，只能留在主包，而主包不能 require 分包里的文件，
+ *     所以两个题量抄在 utils/games_meta.js（测试拿真题库核对）；
  *   · 轮盘的候选池在 utils/codex_data.js（人数/枪数从这里现算，不写死）。
  */
 var i18n = require("../../utils/i18n.js");
 var theme = require("../../utils/theme.js");
-var rings = require("../../utils/rings.js");
 var wd = require("../../utils/wheel_data.js");
-var rp = require("../../utils/ringpick.js");
+var meta = require("../../utils/games_meta.js");
 
-/** 玩法入口。p = 页面名（pages/<p>/<p>） */
+/** 玩法入口。p = 页面名（分包 games/<p>/<p>） */
 var GAMES = [
   { p: "ringguessr" },
   { p: "ringpick" },
@@ -64,7 +65,7 @@ Page({
     pickMap: PICK_MAP,
     heroPicks: [],          // [{src, style}] —— 五个英雄头像 + 各自的角度
 
-    // 三个入口各自的"有多少东西可玩"：现算，不写死数字
+    // 三个入口各自的"有多少东西可玩"：英雄/枪数现算，两个题量抄在 utils/games_meta.js（测试核对）
     ringMeta: "",
     pickMeta: "",
     wheelMeta: ""
@@ -110,9 +111,9 @@ Page({
     var T = this.data.T;
     var s = wd.stats();
     this.setData({
-      ringMeta: T.gameRingMeta.replace("{n}", String(rings.allQuestions().length)),
+      ringMeta: T.gameRingMeta.replace("{n}", String(meta.ringQuestions)),
       // 圈型速判的题库是「第一圈 + 真实第二圈」的序列数，和猜圈练习的题量不是同一个数
-      pickMeta: T.gamePickMeta.replace("{n}", String(rp.bank().length)),
+      pickMeta: T.gamePickMeta.replace("{n}", String(meta.pickQuestions)),
       wheelMeta: T.gameWheelMeta.replace("{h}", String(s.heroes)).replace("{w}", String(s.weapons))
     });
     i18n.applyChrome(this.data.lang, "navGames");
@@ -126,7 +127,7 @@ Page({
     for (var i = 0; i < GAMES.length; i++) if (GAMES[i].p === p) ok = true;
     if (!ok) return;
     try {
-      wx.navigateTo({ url: "/pages/" + p + "/" + p });
+      wx.navigateTo({ url: "/games/" + p + "/" + p });
     } catch (err) { /* 页面栈满了之类，微信自己会提示 */ }
   }
 });

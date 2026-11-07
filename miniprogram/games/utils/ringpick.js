@@ -1,7 +1,7 @@
 /**
  * 圈型速判：看第一个安全区圈，猜**下一个圈的圈心**在哪个方向（四选一）。
  *
- * 为什么和「猜圈练习」（pages/ringguessr）分开：
+ * 为什么和「猜圈练习」（games/ringguessr）分开：
  *   猜圈练习是**精修模式** —— 拖动地图 + 双指缩放 + 20 秒 + 8 题，重、慢、要两只手；
  *   这个是**快判模式** —— 一屏、四个字母、10 秒一题、5 题一局，滑开就能玩一把。
  *   两个模式共用一个题库来源，但玩法不同，所以是两个页面、不是同一页的两个 tab。
@@ -41,7 +41,7 @@ var TAU = Math.PI * 2;
    所以按"把这个圆撑到半径 88rpx"来定放大倍数（1.0~1.9 倍）：
      中位数那一档只要 1.3 倍 —— 底图 640×640 在这个倍数下几乎不糊；
      只有圆心几乎没移动的题（d 很小）会顶到 1.9 倍上限，再小就干脆不进题库。
-   ⚠️ BOX 必须和 pages/ringpick/ringpick.wxss 里 .qmap 的宽高（686rpx）一致。 */
+   ⚠️ BOX 必须和 games/ringpick/ringpick.wxss 里 .qmap 的宽高（686rpx）一致。 */
 var BOX = 686;
 var K = BOX / COORD;                   // 1 个地图单位 = 多少 rpx（未放大时）
 var ZOOM_DOT = 88;                     // 候选点圆圈的期望屏幕半径（rpx）
@@ -69,7 +69,7 @@ function sequences() {
     out.push({ key: "api-" + i, map: s.map, rings: s.rings });
   });
   var match = null;
-  try { match = require("./match_rings_data.js"); } catch (e) { match = null; }
+  try { match = require("../data/match_rings_data.js"); } catch (e) { match = null; }
   ((match && match.games) || []).forEach(function (g, i) {
     var rs = (g.rings || []).map(function (a) {
       return Array.isArray(a) ? { x: a[0], y: a[1], r: a[2] } : a;

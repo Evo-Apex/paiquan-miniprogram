@@ -1,4 +1,4 @@
-// 圈型速判（miniprogram/utils/ringpick.js）的单元测试。
+// 圈型速判（miniprogram/games/utils/ringpick.js）的单元测试。
 //
 // 这个模块只做三件事：从真实序列里出题、算四个候选方向、算视口（放大/平移）。
 // 三件事都有"错了也不报错、只是看着不对"的失败方式，所以逐条钉住：
@@ -15,8 +15,8 @@ import path from "node:path";
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const MP = path.resolve(HERE, "..", "miniprogram");
 const require = createRequire(import.meta.url);
-const rp = require(path.join(MP, "utils", "ringpick.js"));
-const rings = require(path.join(MP, "utils", "rings.js"));
+const rp = require(path.join(MP, "games", "utils", "ringpick.js"));
+const rings = require(path.join(MP, "games", "utils", "rings.js"));
 
 const K = 686 / 16384;      // 1 个地图单位 = 多少 rpx（未放大时）；和 ringpick.js 的 BOX 一致
 

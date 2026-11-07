@@ -1,5 +1,5 @@
 /**
- * 圈型速判（四选一）。玩法与几何依据见 utils/ringpick.js 顶部。
+ * 圈型速判（四选一）。玩法与几何依据见 games/utils/ringpick.js 顶部。
  *
  * 这一页刻意做得比「猜圈练习」轻：
  *   · 不用拖、不用捏、不用放大 —— 只点一个字母；
@@ -13,7 +13,7 @@
 
 var i18n = require("../../utils/i18n.js");
 var theme = require("../../utils/theme.js");
-var rp = require("../../utils/ringpick.js");
+var rp = require("../utils/ringpick.js");
 
 var TICK_MS = 100;
 

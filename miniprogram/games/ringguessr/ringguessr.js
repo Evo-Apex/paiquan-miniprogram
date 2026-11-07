@@ -1,7 +1,7 @@
 /**
  * 猜圈练习页。
  *
- * 玩法（用户定的时间线，见 utils/rings.js）：第 0 秒出第 1 个圈、第 5 秒第 2 个、
+ * 玩法（用户定的时间线，见 games/utils/rings.js）：第 0 秒出第 1 个圈、第 5 秒第 2 个、
  * 第 10 秒第 3 个，20 秒内猜**下一个圈**的圈心；答案圈从头到尾不显示。
  *
  * ★ 选点交互（2026-10-16 第二轮重做，用户反馈"不符合手机操作习惯"）：
@@ -25,7 +25,7 @@
 var i18n = require("../../utils/i18n.js");
 var theme = require("../../utils/theme.js");
 var ad = require("../../utils/ad.js");
-var rings = require("../../utils/rings.js");
+var rings = require("../utils/rings.js");
 
 var TICK_MS = 250;   // 每秒 4 次就够（原来是 100ms/10 次，桌面端容易卡）
 var TAP_MAX_MOVE = 12;    // 位移小于这个（px）且时间短 = 点击，不是拖动

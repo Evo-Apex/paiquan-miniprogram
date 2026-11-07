@@ -71,7 +71,10 @@ function setByPath(obj, key, value) {
 
 /** 加载某个页面并造一个可调用的实例 */
 function loadPage(name, opts = {}) {
-  const pagePath = path.join(MP, "pages", name, name + ".js");
+  // 分包里的页面写成带目录的名字（"games/wheel"），主包页面只写页面名（"maps"）
+  const pagePath = name.indexOf("/") >= 0
+    ? path.join(MP, name, path.basename(name) + ".js")
+    : path.join(MP, "pages", name, name + ".js");
   if (!existsSync(pagePath)) throw new Error("缺少页面 " + pagePath);
 
   const calls = [];
@@ -674,7 +677,7 @@ describe("分享", () => {
     theme.setTheme("dark");
 
     const pages = {};
-    for (const name of ["maps", "predator", "ringguessr"]) {
+    for (const name of ["maps", "predator", "games/ringguessr"]) {
       pages[name] = loadPage(name, { responses: { predator: predatorResult() } }).inst;
       pages[name].onLoad();
       await flush();
@@ -688,14 +691,14 @@ describe("分享", () => {
     assert.equal(pages.maps.data.theme, theme.getTheme());
 
     // 另两页切回来时必须跟上，不能各自留着旧值
-    for (const name of ["predator", "ringguessr"]) {
+    for (const name of ["predator", "games/ringguessr"]) {
       pages[name].onShow();
       assert.equal(pages[name].data.theme, "light", name + " 页切回来没跟上主题");
     }
 
     // 双向：再切回深色也要同步
     theme.setTheme("dark");
-    for (const name of ["maps", "predator", "ringguessr"]) {
+    for (const name of ["maps", "predator", "games/ringguessr"]) {
       pages[name].onShow();
       assert.equal(pages[name].data.theme, "dark", name + " 页没跟上切回深色");
     }
@@ -932,10 +935,25 @@ describe("小游戏分类页", () => {
   test("onLoad 立刻就有两个入口的规模（本地数据，不等网络）", () => {
     const { inst, calls } = loadPage("games", {});
     inst.onLoad();
-    // 题库条数 / 英雄与枪的数量都是现算的，界面不写死
+    // 英雄与枪的数量是现算的；两个题量抄在 utils/games_meta.js（下一条拿真题库核对）
     assert.match(inst.data.ringMeta, /\d/, "题库条数没算出来：" + inst.data.ringMeta);
     assert.match(inst.data.wheelMeta, /\d+\D+\d+/, "英雄/枪数量没算出来：" + inst.data.wheelMeta);
     assert.deepEqual(actionsOf(calls), [], "这一页全是本地数据，不该请求云函数");
+  });
+
+  test("分类页抄的两个题量和分包里的真题库一致（utils/games_meta.js）", () => {
+    // 2026-11-07 题库随小游戏搬进分包 games/，主包里的分类页读不到，只能抄数。题库一更新这条就会红。
+    const meta = require(path.join(MP, "utils", "games_meta.js"));
+    const rings = require(path.join(MP, "games", "utils", "rings.js"));
+    const ringpick = require(path.join(MP, "games", "utils", "ringpick.js"));
+    const ringN = rings.allQuestions().length;
+    const pickN = ringpick.bank().length;
+    assert.equal(meta.ringQuestions, ringN, "猜圈题库现在是 " + ringN + " 道：把 utils/games_meta.js 的 ringQuestions 改成 " + ringN);
+    assert.equal(meta.pickQuestions, pickN, "速判题库现在是 " + pickN + " 组：把 utils/games_meta.js 的 pickQuestions 改成 " + pickN);
+    const { inst } = loadPage("games", {});
+    inst.onLoad();
+    assert.ok(inst.data.ringMeta.indexOf(String(ringN)) >= 0, "猜圈入口没显示题量：" + inst.data.ringMeta);
+    assert.ok(inst.data.pickMeta.indexOf(String(pickN)) >= 0, "速判入口没显示题量：" + inst.data.pickMeta);
   });
 
   test("点入口只进白名单里的页面（不拿 dataset 直接拼 URL）", () => {
@@ -949,9 +967,9 @@ describe("小游戏分类页", () => {
     // 认不出的页面名（比如被改过的 dataset）一律不跳
     inst.onOpen({ currentTarget: { dataset: { p: "../maps/maps" } } });
     assert.deepEqual(urls, [
-      "/pages/wheel/wheel",
-      "/pages/ringguessr/ringguessr",
-      "/pages/ringpick/ringpick"
+      "/games/wheel/wheel",
+      "/games/ringguessr/ringguessr",
+      "/games/ringpick/ringpick"
     ]);
   });
 
@@ -983,7 +1001,7 @@ describe("轮盘页", () => {
   }
 
   test("英雄轮盘：片数 = 候选英雄数，两个轮盘 / 两种玩法都在", () => {
-    const { inst } = loadPage("wheel", {});
+    const { inst } = loadPage("games/wheel", {});
     inst.onLoad();
     const n = wd.heroes().length;
     assert.equal(inst.data.spots.length, n);
@@ -996,7 +1014,7 @@ describe("轮盘页", () => {
   });
 
   test("切到武器轮盘：池子换成枪，玩法换成「一长一短 / 两把随机」", () => {
-    const { inst } = loadPage("wheel", {});
+    const { inst } = loadPage("games/wheel", {});
     inst.onLoad();
     const heroCount = inst.data.spots.length;
     inst.onTab({ currentTarget: { dataset: { i: 1 } } });
@@ -1007,7 +1025,7 @@ describe("轮盘页", () => {
   });
 
   test("抽一位英雄：正好一片高亮，且指针正对那一片的中线", () => {
-    const { inst } = loadPage("wheel", {});
+    const { inst } = loadPage("games/wheel", {});
     inst.onLoad();
     const rot = spin(inst);
     const n = inst.data.spots.length;
@@ -1021,7 +1039,7 @@ describe("轮盘页", () => {
   });
 
   test("三人英雄组合：抽 3 位不重复的英雄", () => {
-    const { inst } = loadPage("wheel", {});
+    const { inst } = loadPage("games/wheel", {});
     inst.onLoad();
     inst.onMode({ currentTarget: { dataset: { i: 1 } } });   // 英雄轮盘的第二个玩法
     spin(inst);
@@ -1034,7 +1052,7 @@ describe("轮盘页", () => {
   test("一长一短：一把长枪 + 一把短枪（顺序就是长、短）", () => {
     const i18n = require(path.join(MP, "utils", "i18n.js"));
     i18n.setLang("zh");
-    const { inst } = loadPage("wheel", {});
+    const { inst } = loadPage("games/wheel", {});
     inst.onLoad();
     inst.onTab({ currentTarget: { dataset: { i: 1 } } });    // 武器轮盘
     inst.onMode({ currentTarget: { dataset: { i: 0 } } });   // 一长一短
@@ -1047,7 +1065,7 @@ describe("轮盘页", () => {
   });
 
   test("两把随机：两把不重复（可以同枪种）", () => {
-    const { inst } = loadPage("wheel", {});
+    const { inst } = loadPage("games/wheel", {});
     inst.onLoad();
     inst.onTab({ currentTarget: { dataset: { i: 1 } } });
     inst.onMode({ currentTarget: { dataset: { i: 1 } } });   // 两把随机
@@ -1058,7 +1076,7 @@ describe("轮盘页", () => {
   });
 
   test("转动中再点抽取不会重复抽；也不许换轮盘", () => {
-    const { inst } = loadPage("wheel", {});
+    const { inst } = loadPage("games/wheel", {});
     inst.onLoad();
     inst.onSpin();
     const rot = inst.data.rot;
@@ -1072,7 +1090,7 @@ describe("轮盘页", () => {
   });
 
   test("空抽合不崩：没有结果时 finishSpin 什么也不做", () => {
-    const { inst } = loadPage("wheel", {});
+    const { inst } = loadPage("games/wheel", {});
     inst.onLoad();
     inst.finishSpin();
     assert.equal(inst.data.result, null);
@@ -1082,14 +1100,14 @@ describe("轮盘页", () => {
 /* ============================================================
    圈型速判（2026-10 新增）：一题 10 秒、四选一、5 题一局
    ============================================================ */
-const rp = require(path.join(MP, "utils", "ringpick.js"));
+const rp = require(path.join(MP, "games", "utils", "ringpick.js"));
 
 describe("圈型速判页", () => {
   /** 加载一页并保证语言是中文（语言是模块级状态，会被别的用例改） */
   function pickPage() {
     const i18n = require(path.join(MP, "utils", "i18n.js"));
     i18n.setLang("zh");
-    const { inst } = loadPage("ringpick", {});
+    const { inst } = loadPage("games/ringpick", {});
     inst.onLoad();
     return inst;
   }

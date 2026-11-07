@@ -201,7 +201,7 @@ if (lookupName && inst.onPlayerInput && inst.onLookup) {
 }
 // 可选：跑一段表达式，用来预览"要点一下才出现"的状态。
 //   例（猜圈页点一次地图，看判定结果）：
-//     node tools/preview.mjs ringguessr zh dark out.html - - "inst.onTapMap({detail:{x:200,y:200}})"
+//     node tools/preview.mjs games/ringguessr zh dark out.html - - "inst.onTapMap({detail:{x:200,y:200}})"
 if (callExpr) {
   try {
     new Function("inst", "i18n", "wx", callExpr)(inst, i18n, global.wx);

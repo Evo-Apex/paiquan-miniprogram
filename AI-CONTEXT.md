@@ -153,10 +153,10 @@ pages/maps.wxml  {{...}}  ← 只渲染，不含业务判断
 | 比赛（tab） | `pages/matches/` | 内容**离线**：`match_result_data.js` + `next_match_data.js` + `algs_data.js`；另调一次云端 `proRoster`（只读数据库）把战队、选手名连到选手页 | `matchresult.js`、`nextmatch.js`、`algs.js`、`prolink.js` | 内容不等网络、当场渲染；名单要不到时什么都不能点，别的照旧 |
 | 选手页（比赛页点进去） | 分包 `pro/player/` | 云端 `proPlayer`（只读数据库；数据由定时器从 Liquipedia 抓，§18） | `pro/utils/view.js`、`utils/pronames.js` | 照 August 的设计稿：深色大卡 → 资料 → 合作过的队友 → 常用传奇 → 战队经历 → 重要比赛成绩 → 数据来源入口 |
 | 数据来源说明（选手页最底下点进去） | 分包 `pro/sources/` | 本地文案 + 上次同步时间（打开参数 `at`） | `pro/utils/view.js` 的 `syncedText` | Liquipedia 署名（CC BY-SA 3.0）、照片为什么是剪影、粉丝工具声明都放这里，选手页上不放 |
-| 小游戏（tab） | `pages/games/` | 本地 | `rings.js`、`ringpick.js`、`wheel_data.js` | 分类入口页（3 个入口卡片） |
-| 猜圈练习 | `pages/ringguessr/` | 本地 `match_rings_data.js` | `rings.js` | canvas 游戏：拖动 + 双指缩放，8 题 / 20 秒 |
-| 圈型速判 | `pages/ringpick/` | 本地 `rings_data.js` + `map_ends_data.js` | `ringpick.js` | 四选一，10 秒一题 |
-| 英雄/武器轮盘 | `pages/wheel/` | 本地 `codex_data.js` | `wheel_data.js` | 纯随机，不按选取率加权 |
+| 小游戏（tab） | `pages/games/` | 本地 | `wheel_data.js`、`games_meta.js`（两个题量，测试核对） | 分类入口页（3 个入口卡片）；三个玩法在分包 `games/`，进这个 tab 时预下载（`app.json` 的 `preloadRule`） |
+| 猜圈练习 | 分包 `games/ringguessr/` | 本地 `games/data/match_rings_data.js` | `games/utils/rings.js` | canvas 游戏：拖动 + 双指缩放，8 题 / 20 秒 |
+| 圈型速判 | 分包 `games/ringpick/` | 本地 `games/data/rings_data.js` + `map_ends_data.js` | `games/utils/ringpick.js` | 四选一，10 秒一题 |
+| 英雄/武器轮盘 | 分包 `games/wheel/` | 本地 `codex_data.js` | `wheel_data.js`（在主包 `utils/`，分类页也要用） | 纯随机，不按选取率加权 |
 | 我的（tab） | `pages/me/` | 云端 `evo_mp` | 分包 `evo/components/devices` | Evo 的绑定（§17） |
 | 全部对局 / 对局详情 / 绑定电脑 | 分包 `evo/matches`、`evo/match`、`evo/bind` | 云端 `evo_mp` | `evo/utils/view.js` | Evo 战绩的子页面（§17） |
 
@@ -182,7 +182,9 @@ pages/maps.wxml  {{...}}  ← 只渲染，不含业务判断
 | `utils/theme.js` | 主题开关 + 原生外壳同步（导航栏/tabBar/窗口底色） | ✅ |
 | `utils/prefs.js` | **唯一**允许碰本地存储的文件（只存界面偏好） | ✅ |
 | `utils/ad.js` | 广告位 ID + 开关 | ✅ |
-| `utils/algs.js` / `nextmatch.js` / `matchresult.js` / `prostats.js` / `rankdist.js` / `rings.js` / `ringpick.js` / `wheel_data.js` | 各自区块的"数据 → 视图模型" | ❌ 纯函数 |
+| `utils/algs.js` / `nextmatch.js` / `matchresult.js` / `prostats.js` / `rankdist.js` / `wheel_data.js` | 各自区块的"数据 → 视图模型" | ❌ 纯函数 |
+| `games/utils/rings.js` / `ringpick.js`（分包） | 猜圈、速判：题库、判定、几何（2026-11-07 从 `utils/` 搬来） | ❌ 纯函数 |
+| `utils/games_meta.js` | 小游戏分类页显示的两个题量（主包读不到分包里的题库，只能抄数；`page.test.mjs` 拿真题库核对） | ❌ 纯数据 |
 | `utils/prolink.js` | 比赛页的战队名、选手名（ALS 写法）→ Liquipedia 选手页面名（§18） | ❌ 纯函数 |
 | `utils/pronames.js` | Liquipedia 英文取值的中文叫法：国籍、赛区、键鼠/手柄、队里的身份、比赛类型（查不到保留英文） | ❌ 纯数据 |
 | `pro/utils/view.js`（分包） | 选手页：云端数据 → 界面字段 | ❌ 纯函数 |
@@ -198,10 +200,24 @@ pages/maps.wxml  {{...}}  ← 只渲染，不含业务判断
 | `next_match_data.js` | 下一场比赛（赛程树 + 分组 + 队员） | 2026-10-26 | 同上（赛程树 + 分组名单） |
 | `prostats_data.js` | 职业选手排位数据（英雄/组合/枪械） | 2026-10-26 | B 站直播录像识别（离线） |
 | `codex_data.js` | 英雄/武器图鉴（28 英雄 + 枪） | 2026-10-16 | 项目自建 |
-| `match_rings_data.js` | 完整圈序列（猜圈题库） | 2026-10-25 | DGS + 社区数据，半径已按当前版本缩放 |
-| `rings_data.js` | 3 圈序列（速判题库） | 2026-10-25 | 上游 ring-guessr API |
-| `map_ends_data.js` | 每张图最终圈可能落点 | 2026-10-17 | 交互地图页内联数据 |
+| `games/data/match_rings_data.js` | 完整圈序列（猜圈题库） | 2026-10-25 | DGS + 社区数据，半径已按当前版本缩放 |
+| `games/data/rings_data.js` | 3 圈序列（速判题库） | 2026-10-25 | 上游 ring-guessr API |
+| `games/data/map_ends_data.js` | 每张图最终圈可能落点 | 2026-10-17 | 交互地图页内联数据 |
 | `wheel_data.js` | 轮盘候选池 + 扇形几何 | — | 读 codex |
+
+**文件搬家（2026-11-07，August 和合作者说好的）**：三个小游戏连同逻辑、题库、平面图整体搬进分包 `games/`，
+主包按文件大小算从 1.66 MB 降到约 1.2 MB（上限 2 MB）。路径都相对 `miniprogram/`。
+**仓库外的生成脚本（`直播识别/` 那几个）要照这张表改输出路径**：
+
+| 原来 | 现在 |
+|---|---|
+| `pages/ringguessr/`、`pages/ringpick/`、`pages/wheel/` | `games/ringguessr/`、`games/ringpick/`、`games/wheel/`（页面路径 `/games/<名>/<名>`） |
+| `utils/rings.js`、`utils/ringpick.js` | `games/utils/` |
+| `utils/rings_data.js`、`utils/match_rings_data.js`、`utils/map_ends_data.js` | `games/data/` |
+| `assets/maps/flat/*.jpg`（`build_flatmaps.py` 生成） | `games/assets/flat/` |
+
+分包的规矩：分包可以 require 主包（`utils/`、`assets/`），**主包不能 require 分包，分包之间也不行**
+（写错了只有开发者工具编译时才报错，`static.test.mjs`「分包：引用方向」提前拦）。
 
 ### 云端 `cloudfunctions/apex/`
 
@@ -687,8 +703,8 @@ git update-index --no-skip-worktree project.config.json miniprogram/app.js
 | 加新的云端 action | `index.js` 分支 或 `handler.js` 的 `ACTIONS` | handler |
 | 改猎杀涨幅窗口 | `cloudfunctions/apex/snapshot.js` | snapshot, predgap |
 | 改轮盘候选/几何 | `utils/wheel_data.js` | wheel, page |
-| 改猜圈题库 | `utils/match_rings_data.js` | rings, page |
-| 改速判题库 | `utils/rings_data.js` / `map_ends_data.js` | ringpick, page |
+| 改猜圈题库 | `games/data/match_rings_data.js`（题量变了要改 `utils/games_meta.js`，`page` 会提示） | rings, page |
+| 改速判题库 | `games/data/rings_data.js` / `map_ends_data.js`（同上） | ringpick, page |
 | 开/关/换广告位 | `utils/ad.js` | ad |
 | 改主题令牌 | `app.wxss` 顶部（两套都要改） | theme, static |
 | 换赛季（赛季结束时间） | **云开发控制台** `site_config` 集合（不用发版） | config 相关（无测试，手测） |

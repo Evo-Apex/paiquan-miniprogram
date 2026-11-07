@@ -127,10 +127,12 @@ test("小程序端不得引用任何外部域名（图片/请求都不行，境�
 });
 
 test("三个页面都真的存在（拆页之后最容易漏一个）", () => {
-  for (const n of ["maps", "predator", "ringguessr"]) {
+  // 猜圈 2026-11-07 搬进了分包 games/
+  for (const dir of ["pages/maps", "pages/predator", "games/ringguessr"]) {
+    const n = path.basename(dir);
     for (const ext of [".js", ".wxml", ".json"]) {
-      const p = path.join(ROOT, "miniprogram", "pages", n, n + ext);
-      assert.ok(existsSync(p), "缺少页面文件 " + n + ext);
+      const p = path.join(ROOT, "miniprogram", dir, n + ext);
+      assert.ok(existsSync(p), "缺少页面文件 " + dir + "/" + n + ext);
     }
   }
 });

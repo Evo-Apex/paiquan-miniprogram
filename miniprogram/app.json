@@ -5,9 +5,6 @@
     "pages/predator/predator",
     "pages/matches/matches",
     "pages/games/games",
-    "pages/ringguessr/ringguessr",
-    "pages/ringpick/ringpick",
-    "pages/wheel/wheel",
     "pages/me/me"
   ],
   "subpackages": [
@@ -27,8 +24,23 @@
         "player/player",
         "sources/sources"
       ]
+    },
+    {
+      "root": "games",
+      "name": "games",
+      "pages": [
+        "ringguessr/ringguessr",
+        "ringpick/ringpick",
+        "wheel/wheel"
+      ]
     }
   ],
+  "preloadRule": {
+    "pages/games/games": {
+      "network": "all",
+      "packages": ["games"]
+    }
+  },
   "window": {
     "navigationBarTitleText": "英雄地图轮换助手",
     "navigationBarBackgroundColor": "#f5f6f8",

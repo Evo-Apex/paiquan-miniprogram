@@ -1,4 +1,4 @@
-// 猜圈练习（utils/rings.js + rings_data.js）。
+// 猜圈练习（games/utils/rings.js + games/data/rings_data.js）。
 //
 // 这份数据是从上游猜圈接口一条条取回来的，所以最该验的是**它是不是真的圈**：
 //   Apex 的圈是【内切】的 —— 下一个圈的圆心到上一个圈心的距离 + 新半径
@@ -17,7 +17,7 @@ import { fileURLToPath } from "node:url";
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const MP = path.resolve(HERE, "..", "miniprogram");
 const require = createRequire(import.meta.url);
-const rings = require(path.join(MP, "utils", "rings.js"));
+const rings = require(path.join(MP, "games", "utils", "rings.js"));
 const i18n = require(path.join(MP, "utils", "i18n.js"));
 
 const CJK = /[\u4e00-\u9fff]/;
@@ -105,11 +105,11 @@ describe("猜圈 · 数据", () => {
     assert.ok(CJK.test(rings.mapName("storm-point", "zh")), "中文模式要给中文名");
     assert.ok(!CJK.test(rings.mapName("worlds-edge", "en")));
     // ★ 猜圈必须用【平面战术图】，不能用首页那种斜视宣传图
-    assert.equal(rings.mapImage("storm-point"), "/assets/maps/flat/storm-point.jpg");
-    assert.equal(rings.mapImage("e-district"), "/assets/maps/flat/e-district.jpg");
+    assert.equal(rings.mapImage("storm-point"), "/games/assets/flat/storm-point.jpg");
+    assert.equal(rings.mapImage("e-district"), "/games/assets/flat/e-district.jpg");
     // 2026-10-17：奥林匹斯 / 残月进了题库，所以也必须是平面图（不是宣传图）
-    assert.equal(rings.mapImage("olympus"), "/assets/maps/flat/olympus.jpg");
-    assert.equal(rings.mapImage("broken-moon"), "/assets/maps/flat/broken-moon.jpg");
+    assert.equal(rings.mapImage("olympus"), "/games/assets/flat/olympus.jpg");
+    assert.equal(rings.mapImage("broken-moon"), "/games/assets/flat/broken-moon.jpg");
     // 题库之外的图（诸王峡谷）回落到首页宣传图，只保证路径不空
     assert.equal(rings.mapImage("kings-canyon"), "/assets/maps/kings-canyon.jpg");
     assert.equal(rings.mapName("no-such-map", "zh"), "no-such-map", "认不出就原样返回");
@@ -234,7 +234,8 @@ describe("猜圈 · 一局与视图", () => {
         assert.ok(!/NaN|undefined/.test(b[k]), "算出了 NaN：" + b[k]);
       });
     }
-    assert.ok(v.image.startsWith("/assets/maps/"));
+    // 题库里的图是平面图（2026-11-07 随小游戏搬进分包 games/），题库外的图回落到主包的宣传图
+    assert.ok(/^\/(games\/assets\/flat|assets\/maps)\//.test(v.image), "配图路径不对：" + v.image);
     assert.ok(v.mapName);
   });
 

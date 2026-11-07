@@ -1,12 +1,12 @@
 <!--
-  圈型速判（四选一）。玩法与几何依据见 utils/ringpick.js 顶部。
+  圈型速判（四选一）。玩法与几何依据见 games/utils/ringpick.js 顶部。
 
   版面（一屏）：
       计分条 → 时间条 → 地图（白圈 + 四个候选字母）→ 结果条 → 下一题 / 再来一局
 
   三条不能动的约定：
     · 白圈是第一个安全区圈；红圈（真实的下一个圈）**答完才出现**，否则就是送答案；
-    · 四个字母点都在白圈内、互不相挨（间距是 utils/ringpick.js 按 70° 算的）；
+    · 四个字母点都在白圈内、互不相挨（间距是 games/utils/ringpick.js 按 70° 算的）；
     · wx:if / wx:for 不写在同一个标签上；不用 wx:else（预览器会两个分支都渲染）。
 -->
 <view class="wrap theme-{{theme}}" data-lang="{{lang}}">

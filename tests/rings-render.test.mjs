@@ -17,7 +17,7 @@ import { fileURLToPath } from "node:url";
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const MP = path.resolve(HERE, "..", "miniprogram");
 const require = createRequire(import.meta.url);
-const rings = require(path.join(MP, "utils", "rings.js"));
+const rings = require(path.join(MP, "games", "utils", "rings.js"));
 
 describe("猜圈 · 每一道题都画得出来", () => {
   const ALL = rings.allQuestions();

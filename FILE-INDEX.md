@@ -44,14 +44,14 @@
 | `pages/predator/` | 云端（`predator`/`config`/`rankdist`/`teams`/`player`）+ 离线 `prostats_data.js`；「我的战绩」走云函数 `evo_mp` | **「战绩」tab**（2026-10-27 前叫排位专区）。顶部切换：「我的战绩」= 分包 evo 的 overview 组件（Evo 同步的个人战绩）；「排位资讯」= 原来的猎杀分数线、职业选手数据、段位分布、战队专区、战绩查询 |
 | `pages/matches/` | **纯离线**（`algs_data.js` + `next_match_data.js`） | 下一场比赛 + ALGS 赛场（赛事/选取率/组合/战队排名）。不联网 |
 | `pages/games/` | 本地 | 小游戏分类入口页（3 张入口卡） |
-| `pages/ringguessr/` | 本地 `match_rings_data.js` | 猜圈练习：canvas、拖动 + 双指缩放、8 题 20 秒 |
-| `pages/ringpick/` | 本地 `rings_data.js` + `map_ends_data.js` | 圈型速判：四选一、10 秒一题 |
-| `pages/wheel/` | 本地 `codex_data.js` | 英雄 / 武器轮盘（canvas 扇形） |
+| `games/ringguessr/`（分包） | 本地 `games/data/match_rings_data.js` | 猜圈练习：canvas、拖动 + 双指缩放、8 题 20 秒 |
+| `games/ringpick/`（分包） | 本地 `games/data/rings_data.js` + `map_ends_data.js` | 圈型速判：四选一、10 秒一题 |
+| `games/wheel/`（分包） | 本地 `codex_data.js` | 英雄 / 武器轮盘（canvas 扇形） |
 | `pages/me/` | 云函数 `evo_mp` | **「我的」tab**（2026-10-27）：外壳页（导航栏 + ⚙），内容是分包 evo 的 devices 组件（绑定的电脑、扫码绑定、解绑、游戏账号）。没有 wxss |
 
 ### `miniprogram/evo/` —— 分包：Evo 战绩（2026-10-27，见 AI-CONTEXT §17）
 
-主包只剩约 120 KB 余量，Evo 的页面、组件、段位徽章都放这个分包；主包的两个 tab 页**异步引用**这里的组件（页面 json 的 `componentPlaceholder`）。
+主包当时只剩约 120 KB 余量（2026-11-07 小游戏也搬进分包 `games/` 后，主包按文件大小算约 1.2 MB），Evo 的页面、组件、段位徽章都放这个分包；主包的两个 tab 页**异步引用**这里的组件（页面 json 的 `componentPlaceholder`）。
 
 | 文件 | 说明 |
 |---|---|
@@ -90,9 +90,9 @@
 | `../pro/`（分包） | — | 选手页 `pro/player/`、数据来源说明 `pro/sources/`、视图模型 `pro/utils/view.js`、剪影占位图 `pro/assets/silhouette.svg`（数据来自 Liquipedia） |
 | `prostats.js` | 11 KB | 职业选手排位数据 → 视图模型（英雄选取率/组合/枪械） |
 | `rankdist.js` | 4 KB | 段位分布 → 视图模型（含"你在哪"的位置换算） |
-| `rings.js` | 26 KB | 猜圈：题库、判定、缩放/平移、评分 |
-| `ringpick.js` | 13 KB | 圈型速判：出题、四个候选方向几何、视口换算 |
-| `wheel_data.js` | 11 KB | 轮盘：候选池（读 codex）+ 扇形几何 |
+| `wheel_data.js` | 11 KB | 轮盘：候选池（读 codex）+ 扇形几何（留在主包：小游戏分类页也要用） |
+| `games_meta.js` | 1 KB | 小游戏分类页显示的两个题量（题库在分包里，主包读不到，只能抄数；`tests/page.test.mjs` 核对） |
+| `../games/`（分包，2026-11-07） | — | 三个玩法页 `games/ringguessr/`、`ringpick/`、`wheel/`；`games/utils/rings.js`（26 KB，猜圈：题库、判定、缩放/平移、评分）、`games/utils/ringpick.js`（13 KB，速判：出题、四个候选方向几何、视口）；题库 `games/data/`；平面图 `games/assets/flat/` |
 
 ### `miniprogram/utils/*_data.js` —— ⚠️ 离线数据快照（只读，别手改）
 
@@ -102,9 +102,9 @@
 | `next_match_data.js` | 32 KB | 下一场赛程/分组/队员 | 2026-10-26 |
 | `prostats_data.js` | 116 KB | 职业选手排位数据 | 2026-10-26 |
 | `codex_data.js` | 10 KB | 英雄/武器图鉴（28 英雄） | 2026-10-16 |
-| `match_rings_data.js` | 72 KB | 完整圈序列（猜圈题库） | 2026-10-25 |
-| `rings_data.js` | 6 KB | 3 圈序列（速判题库） | 2026-10-25 |
-| `map_ends_data.js` | 15 KB | 每图最终圈可能落点 | 2026-10-17 |
+| `games/data/match_rings_data.js`（分包） | 72 KB | 完整圈序列（猜圈题库） | 2026-10-25 |
+| `games/data/rings_data.js`（分包） | 6 KB | 3 圈序列（速判题库） | 2026-10-25 |
+| `games/data/map_ends_data.js`（分包） | 15 KB | 每图最终圈可能落点 | 2026-10-17 |
 | `wheel_data.js` 的候选池来源 | — | 见上表 `wheel_data.js` | — |
 
 ### `miniprogram/assets/` —— 图片资源（共 1.9 MB，随包发布、不联网）
@@ -114,7 +114,7 @@
 | `assets/`（根） | 12 个 `tab-*.png` | tabBar 图标：当前 4 页各一对（选中/未选中），另有 `tab-ring`、`tab-stats` 两对是旧图标残留（4 个文件） |
 | `assets/heroes/` | 29 个 96×96 PNG | 28 个英雄头像（`alter/madmaggie` 有重名重复份） |
 | `assets/maps/` | 16 个 JPG | 六张大图实景图 + 10 个轮换据点图（`mixtape-*`），EA 官方 CDN 来源 |
-| `assets/maps/flat/` | 5 个 JPG | 同一批图的平面版（备用） |
+| `games/assets/flat/`（分包） | 5 个 JPG | 平面战术图，猜圈、速判用（2026-11-07 从 `assets/maps/flat/` 搬来） |
 | `assets/teams/` | 40 个 PNG | ALGS 战队队标（`tools/build_team_icons.mjs` 抓取） |
 
 ---
