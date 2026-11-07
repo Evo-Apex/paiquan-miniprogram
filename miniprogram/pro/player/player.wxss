@@ -1,0 +1,249 @@
+/* 选手页，照 August 的设计稿（设计稿的 px × 2 = 这里的 rpx）。
+   颜色只用 app.wxss 的令牌（var(--x)）；大卡用 --hero-*（两套主题下都是深色底，同首页的大卡）。
+   大卡里的分隔线用 --hero-track：--hero-line 在浅色主题下和卡片底色一样（首页大卡故意不要外框），画线会看不见。
+   字号只用令牌档位：ID 用 --fs-hero（首页大卡那一档，AI-CONTEXT §7 已写明选手页大卡也用），其余是 7 档正文字号。
+   字重：800 只给 ID（拉丁字母）和名次数字；中文一律 700，免得合成加粗发虚。
+   .msg 用 app.wxss 的 */
+
+.pp-wrap { padding: 24rpx 24rpx 48rpx; }
+.pp-pressed { opacity: 0.7; }
+.pp-skel { height: 800rpx; }
+.pp-grow { flex: 1; min-width: 0; }
+.pp-name { display: block; font-size: var(--fs-body); font-weight: var(--fw-bold); color: var(--ink); line-height: 1.4; }
+.pp-small { display: block; font-size: var(--fs-min); color: var(--ink3); line-height: 1.5; }
+.pp-chev { flex: none; width: 24rpx; margin-left: 12rpx; text-align: right; color: var(--ink3); }
+
+.pp-retry {
+  display: inline-block;
+  margin-top: var(--sp-4);
+  padding: var(--sp-3) var(--sp-8);
+  min-height: 80rpx;
+  box-sizing: border-box;
+  line-height: 56rpx;
+  border: 1rpx solid currentColor;
+  border-radius: var(--r-full);
+  font-size: var(--fs-sub);
+  font-weight: var(--fw-bold);
+}
+
+/* ---------- 大卡 ---------- */
+.pp-hero {
+  background: var(--hero-bg);
+  color: var(--hero-ink);
+  border-radius: var(--r-xl);
+  overflow: hidden;
+  margin-bottom: var(--sp-6);
+}
+.pp-portrait {
+  position: relative;
+  height: 600rpx;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  background: radial-gradient(60% 70% at 50% 30%, var(--hero-track), transparent 70%);
+}
+.pp-sil { width: 440rpx; height: 528rpx; margin-top: 32rpx; }
+/* 下半截渐变进卡片底色，ID 压在渐变上 */
+.pp-fade {
+  position: absolute;
+  left: 0; right: 0; top: 0; bottom: 0;
+  background: linear-gradient(180deg, transparent 40%, var(--hero-bg) 86%);
+}
+.pp-plate {
+  position: absolute;
+  left: 0; right: 0; bottom: 28rpx;
+  padding: 0 32rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.pp-id {
+  font-size: var(--fs-hero);
+  font-weight: var(--fw-num);
+  line-height: 1.1;
+  color: var(--hero-ink);
+  word-break: break-all;
+  text-shadow: 0 4rpx 32rpx rgba(0, 0, 0, 0.5);
+}
+.pp-real { margin-top: var(--sp-3); font-size: var(--fs-body); color: var(--hero-ink2); }
+
+/* 国籍 / 年龄 / 累计奖金：一排，竖线隔开；哪项没有就少一格 */
+.pp-facts { display: flex; padding: 8rpx 16rpx 28rpx; text-align: center; }
+.pp-fact {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  border-left: 1rpx solid var(--hero-track);
+}
+.pp-fact:first-child { border-left: none; }
+.pp-fact-v { font-size: var(--fs-head); font-weight: var(--fw-bold); color: var(--hero-ink); font-variant-numeric: tabular-nums; }
+.pp-fact-k { margin-top: 4rpx; font-size: var(--fs-min); color: var(--hero-ink2); }
+
+/* 现在的战队（退役了换成「已退役 · 最后效力于」） */
+.pp-hteam {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24rpx 32rpx;
+  border-top: 1rpx solid var(--hero-track);
+}
+.pp-logo {
+  width: 60rpx;
+  height: 60rpx;
+  flex: none;
+  margin-right: 20rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--fs-min);
+  font-weight: var(--fw-bold);
+  background: var(--hero-track);
+  color: var(--hero-ink);
+  clip-path: polygon(0 0, 100% 0, 100% 72%, 72% 100%, 0 100%);
+}
+.pp-hteam-txt { min-width: 0; }
+.pp-center { text-align: center; }
+.pp-hteam-n { display: block; font-size: var(--fs-body); font-weight: var(--fw-bold); color: var(--hero-ink); }
+.pp-hteam-s { display: block; font-size: var(--fs-min); color: var(--hero-ink2); }
+
+/* ---------- 卡片 ---------- */
+.pp-card {
+  background: var(--card);
+  border-radius: var(--r-xl);
+  padding: 28rpx 32rpx 24rpx;
+  margin-bottom: var(--sp-6);
+}
+.pp-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: var(--sp-6); }
+.pp-h { font-size: var(--fs-section); font-weight: var(--fw-bold); color: var(--ink); }
+.pp-hs { margin-left: var(--sp-4); font-size: var(--fs-min); color: var(--ink3); }
+.pp-more {
+  margin-top: var(--sp-5);
+  min-height: 80rpx;
+  line-height: 80rpx;
+  text-align: center;
+  font-size: var(--fs-sub);
+  color: var(--ink2);
+  background: var(--raised);
+  border-radius: var(--r-lg);
+}
+.pp-quiet { min-height: 80rpx; line-height: 80rpx; text-align: center; font-size: var(--fs-sub); color: var(--ink3); }
+
+/* 资料：两列 */
+.pp-kv { display: flex; flex-wrap: wrap; margin-bottom: -16rpx; }
+.pp-kv-i { width: 50%; margin-bottom: var(--sp-6); }
+.pp-kv-k { display: block; font-size: var(--fs-min); color: var(--ink3); }
+.pp-kv-v { display: block; font-size: var(--fs-body); font-weight: var(--fw-bold); color: var(--ink); }
+
+/* 队友：头像是名字首字母的切角方块（照片同样要授权，先占位） */
+.pp-subh { display: block; margin: 4rpx 0 var(--sp-3); font-size: var(--fs-sub); color: var(--ink2); }
+.pp-ava {
+  width: 72rpx;
+  height: 72rpx;
+  flex: none;
+  margin-right: 20rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--fs-body);
+  font-weight: var(--fw-bold);
+  background: var(--track);
+  color: var(--ink2);
+  clip-path: polygon(0 0, 100% 0, 100% 72%, 72% 100%, 0 100%);
+}
+.pp-mates-now { display: flex; flex-wrap: wrap; justify-content: space-between; margin-bottom: var(--sp-2); }
+/* 小块底色是 --raised，头像再用 --track 就和它几乎一样（设计稿里看不出头像框），换成卡片色 */
+.pp-mate .pp-ava { background: var(--card); }
+.pp-mate {
+  width: calc(50% - 10rpx);
+  box-sizing: border-box;
+  min-height: 88rpx;
+  margin-bottom: 20rpx;
+  padding: 20rpx;
+  display: flex;
+  align-items: center;
+  background: var(--raised);
+  border-radius: var(--r-lg);
+}
+.pp-prow {
+  display: flex;
+  align-items: center;
+  min-height: 88rpx;
+  box-sizing: border-box;
+  padding: 18rpx 0;
+  border-top: 1rpx solid var(--line);
+}
+.pp-prow:first-child { border-top: none; }
+.pp-dur { flex: none; margin-left: var(--sp-4); font-size: var(--fs-sub); color: var(--ink2); font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+/* 常用传奇：一排三个，切角方块里是图鉴头像 */
+.pp-legends { display: flex; flex-wrap: wrap; }
+.pp-legend { width: calc((100% - 40rpx) / 3); margin: 0 20rpx 8rpx 0; }
+.pp-legend:nth-child(3n) { margin-right: 0; }
+.pp-legend-ic {
+  width: 128rpx;
+  height: 128rpx;
+  margin-bottom: var(--sp-3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--raised);
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 24rpx), calc(100% - 24rpx) 100%, 0 100%);
+}
+.pp-legend-img { width: 100%; height: 100%; }
+.pp-legend-ph { font-size: var(--fs-title); font-weight: var(--fw-bold); color: var(--ink3); }
+
+/* 战队经历：时长色条 + 时间线（菱形点 + 竖线） */
+.pp-strip { display: flex; height: 20rpx; border-radius: 4rpx; overflow: hidden; }
+.pp-seg { background: var(--track); margin-right: 4rpx; }
+.pp-seg:last-child { margin-right: 0; }
+.pp-seg-now { background: var(--accent); }
+.pp-axis { display: flex; justify-content: space-between; margin: var(--sp-2) 0 var(--sp-6); }
+.pp-axis-i { font-size: var(--fs-min); color: var(--ink3); font-variant-numeric: tabular-nums; }
+.pp-tli { position: relative; display: flex; align-items: flex-start; padding-bottom: 28rpx; }
+.pp-tli:last-child { padding-bottom: 0; }
+.pp-tli::after {
+  content: "";
+  position: absolute;
+  left: 12rpx; top: 40rpx; bottom: 4rpx;
+  width: 4rpx;
+  background: var(--track);
+}
+.pp-tli:last-child::after { display: none; }
+.pp-dot {
+  flex: none;
+  width: 20rpx;
+  height: 20rpx;
+  margin: 12rpx 24rpx 0 4rpx;
+  border-radius: 4rpx;
+  transform: rotate(45deg);
+  background: var(--track);
+  box-shadow: 0 0 0 4rpx var(--card), 0 0 0 6rpx var(--line);
+}
+.pp-tli-now .pp-dot { background: var(--accent); box-shadow: 0 0 0 4rpx var(--card), 0 0 0 6rpx var(--accent); }
+.pp-tl-d { flex: none; margin-left: var(--sp-4); padding-top: 4rpx; font-size: var(--fs-min); color: var(--ink2); font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+/* 比赛成绩：名次放大放左边，冠军用强调色（名次数字本身就写了，颜色只是加强） */
+.pp-row { display: flex; align-items: center; padding: 20rpx 0; border-top: 1rpx solid var(--line); }
+.pp-row:first-child { border-top: none; padding-top: 0; }
+.pp-place { flex: none; min-width: 88rpx; margin-right: 20rpx; display: flex; align-items: flex-start; }
+.pp-place-n { font-size: var(--fs-title); font-weight: var(--fw-num); line-height: 1; color: var(--ink); font-variant-numeric: tabular-nums; }
+.pp-sup { margin-left: 2rpx; font-size: var(--fs-min); font-weight: var(--fw-bold); line-height: 1; color: var(--ink3); }
+.pp-row-win .pp-place-n { color: var(--accent-ink); }
+.pp-prize { flex: none; margin-left: var(--sp-4); text-align: right; }
+.pp-prize-v { display: block; font-size: var(--fs-body); font-weight: var(--fw-bold); color: var(--ink); font-variant-numeric: tabular-nums; }
+/* 成绩行、以前的队友、时间线各包一层，:first-child 才能认出第一行（去掉它上面的分隔线） */
+.pp-res, .pp-past, .pp-tl { display: block; }
+
+/* 最底下的「数据来源」入口：小字，整行热区 ≥ 80rpx */
+.pp-srclink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 80rpx;
+  padding: 0 32rpx;
+  font-size: var(--fs-min);
+  color: var(--ink3);
+}

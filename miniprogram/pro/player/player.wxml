@@ -1,0 +1,154 @@
+<view class="wrap theme-{{theme}} pp-wrap" data-lang="{{lang}}">
+  <!-- 读取中：和读好后的大卡差不多高的空卡片，免得页面跳 -->
+  <view wx:if="{{state === 'loading'}}" class="pp-hero pp-skel"></view>
+
+  <view wx:elif="{{state === 'error'}}" class="msg msg-err">
+    <text class="msg-title">{{T.proLoadFail}}</text>
+    <view class="pp-retry" hover-class="pp-pressed" bindtap="onRetry">{{T.proRetry}}</view>
+  </view>
+
+  <view wx:elif="{{state === 'empty'}}" class="msg msg-info">
+    <text class="msg-title">{{T.proEmpty}}</text>
+    <text class="msg-body">{{T.proEmptyBody}}</text>
+  </view>
+
+  <block wx:else>
+    <!-- 大卡（设计稿：整页唯一显眼的东西，两套主题都是深色底）：
+         剪影居中、下半截渐变进卡片底色，ID 和真名压在渐变上；下面国籍 / 年龄 / 累计奖金；再下面现在的战队。
+         照片拿到授权之前用剪影（设计稿注释）。 -->
+    <view class="pp-hero">
+      <view class="pp-portrait">
+        <image class="pp-sil" src="/pro/assets/silhouette.svg" mode="aspectFit"></image>
+        <view class="pp-fade"></view>
+        <view class="pp-plate">
+          <text class="pp-id">{{v.id}}</text>
+          <text wx:if="{{v.realName}}" class="pp-real">{{v.realName}}</text>
+        </view>
+      </view>
+      <view wx:if="{{v.facts.length}}" class="pp-facts">
+        <view class="pp-fact" wx:for="{{v.facts}}" wx:key="k">
+          <text class="pp-fact-v">{{item.v}}</text>
+          <text class="pp-fact-k">{{item.k}}</text>
+        </view>
+      </view>
+      <view wx:if="{{v.team}}" class="pp-hteam">
+        <view class="pp-logo">{{v.team.initials}}</view>
+        <view class="pp-hteam-txt">
+          <text class="pp-hteam-n">{{v.team.name}}</text>
+          <text wx:if="{{v.team.since}}" class="pp-hteam-s">{{v.team.since}}</text>
+        </view>
+      </view>
+      <view wx:elif="{{v.retired}}" class="pp-hteam">
+        <view class="pp-hteam-txt pp-center">
+          <text class="pp-hteam-n">{{v.retired.text}}</text>
+          <text wx:if="{{v.retired.last}}" class="pp-hteam-s">{{v.retired.last}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 资料：出生日期、输入设备、赛区（哪项没有就不出） -->
+    <view wx:if="{{v.profile.length}}" class="pp-card">
+      <view class="pp-head"><text class="pp-h">{{T.proProfile}}</text></view>
+      <view class="pp-kv">
+        <view class="pp-kv-i" wx:for="{{v.profile}}" wx:key="k">
+          <text class="pp-kv-k">{{item.k}}</text>
+          <text class="pp-kv-v">{{item.v}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 合作过的队友：现在的两个并排，以前的按一起的时间排；我们收录了的人才能点进去 -->
+    <view wx:if="{{v.mates.has}}" class="pp-card">
+      <view class="pp-head"><text class="pp-h">{{T.proMates}}</text><text class="pp-hs">{{v.mates.countText}}</text></view>
+      <block wx:if="{{v.mates.now.length}}">
+        <text class="pp-subh">{{T.proMatesNow}}</text>
+        <view class="pp-mates-now">
+          <view class="pp-mate" wx:for="{{v.mates.now}}" wx:key="key"
+                data-page="{{item.page}}" bindtap="onOpenPlayer" hover-class="{{item.page ? 'pp-pressed' : 'none'}}">
+            <view class="pp-ava">{{item.initial}}</view>
+            <view class="pp-grow">
+              <text class="pp-name">{{item.name}}</text>
+              <text class="pp-small">{{item.text}}</text>
+            </view>
+          </view>
+        </view>
+        <text wx:if="{{mates.past.length}}" class="pp-subh">{{T.proMatesPast}}</text>
+      </block>
+      <view class="pp-past">
+        <view class="pp-prow" wx:for="{{mates.past}}" wx:key="key"
+              data-page="{{item.page}}" bindtap="onOpenPlayer" hover-class="{{item.page ? 'pp-pressed' : 'none'}}">
+          <view class="pp-ava">{{item.initial}}</view>
+          <view class="pp-grow">
+            <text class="pp-name">{{item.name}}</text>
+            <text class="pp-small">{{item.teams}}</text>
+          </view>
+          <text class="pp-dur">{{item.dur}}</text>
+          <text class="pp-chev">{{item.page ? '›' : ''}}</text>
+        </view>
+      </view>
+      <view wx:if="{{mates.moreText}}" class="pp-more" bindtap="onMatesMore" hover-class="pp-pressed">{{mates.moreText}}</view>
+    </view>
+
+    <!-- 常用传奇：Liquipedia 上写的，头像用图鉴里的 -->
+    <view wx:if="{{v.legends.length}}" class="pp-card">
+      <view class="pp-head"><text class="pp-h">{{T.proLegends}}</text></view>
+      <view class="pp-legends">
+        <view class="pp-legend" wx:for="{{v.legends}}" wx:key="key">
+          <view class="pp-legend-ic">
+            <image wx:if="{{item.hasIcon}}" class="pp-legend-img" src="{{item.icon}}" mode="aspectFill"></image>
+            <text wx:else class="pp-legend-ph">{{item.initial}}</text>
+          </view>
+          <text class="pp-name">{{item.name}}</text>
+          <text wx:if="{{item.en}}" class="pp-small">{{item.en}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 战队经历：上面一条按在队时间切开的色条（红 = 现在的队），下面时间线（新的在前） -->
+    <view wx:if="{{v.career.has}}" class="pp-card">
+      <view class="pp-head"><text class="pp-h">{{T.proCareer}}</text><text class="pp-hs">{{v.career.countText}}</text></view>
+      <block wx:if="{{v.career.strip.length}}">
+        <view class="pp-strip">
+          <view wx:for="{{v.career.strip}}" wx:key="key" class="pp-seg {{item.now ? 'pp-seg-now' : ''}}" style="flex: {{item.flex}};"></view>
+        </view>
+        <view class="pp-axis">
+          <text wx:for="{{v.career.axis}}" wx:key="k" class="pp-axis-i">{{item.t}}</text>
+        </view>
+      </block>
+      <view class="pp-tl">
+        <view class="pp-tli {{item.now ? 'pp-tli-now' : ''}}" wx:for="{{v.career.items}}" wx:key="key">
+          <view class="pp-dot"></view>
+          <view class="pp-grow">
+            <text class="pp-name">{{item.team}}</text>
+            <text wx:if="{{item.sub}}" class="pp-small">{{item.sub}}</text>
+          </view>
+          <text class="pp-tl-d">{{item.range}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 重要比赛成绩：S、A 级，名次放大放左边，冠军用强调色；奖金是全队的（Liquipedia 记的就是队伍奖金） -->
+    <view wx:if="{{v.results.has}}" class="pp-card">
+      <view class="pp-head"><text class="pp-h">{{T.proResults}}</text><text class="pp-hs">{{res.sub}}</text></view>
+      <view class="pp-res">
+        <view class="pp-row {{item.win ? 'pp-row-win' : ''}}" wx:for="{{res.rows}}" wx:key="key">
+          <view class="pp-place"><text class="pp-place-n">{{item.place}}</text><text wx:if="{{item.sup}}" class="pp-sup">{{item.sup}}</text></view>
+          <view class="pp-grow">
+            <text class="pp-name">{{item.event}}</text>
+            <text class="pp-small">{{item.sub}}</text>
+          </view>
+          <view wx:if="{{item.prize}}" class="pp-prize">
+            <text class="pp-prize-v">{{item.prize}}</text>
+            <text class="pp-small">{{T.proTeamPrize}}</text>
+          </view>
+        </view>
+      </view>
+      <view wx:if="{{res.moreText}}" class="pp-more" bindtap="onResMore" hover-class="pp-pressed">{{res.moreText}}</view>
+      <view wx:if="{{res.minorText}}" class="pp-quiet" bindtap="onResMinor" hover-class="pp-pressed">{{res.minorText}}</view>
+      <view wx:if="{{res.majorText}}" class="pp-quiet" bindtap="onResMajor" hover-class="pp-pressed">{{res.majorText}}</view>
+    </view>
+
+    <!-- 页面上不放来源和声明，只在最底下留一个「数据来源」入口（设计稿） -->
+    <view class="pp-srclink" bindtap="onSources" hover-class="pp-pressed">{{T.proSources}}<text class="pp-chev">›</text></view>
+  </block>
+</view>

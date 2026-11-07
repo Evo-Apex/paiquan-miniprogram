@@ -19,6 +19,14 @@
         "match/match",
         "bind/bind"
       ]
+    },
+    {
+      "root": "pro",
+      "name": "pro",
+      "pages": [
+        "player/player",
+        "sources/sources"
+      ]
     }
   ],
   "window": {

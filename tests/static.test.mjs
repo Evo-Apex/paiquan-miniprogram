@@ -320,7 +320,8 @@ const AD_PAGES = ["home", "maps", "predator"];
    新加的页面要加进来 —— 这几条正是抓"字段写错/标签没闭合/类名拼错"的网。
    （原来的 pages/mapview「交互地图」已删，所以这里也没有它了。） */
 // 2026-10-27：加了「我的」（me）和分包 evo 里 Evo 战绩的三个子页面（写成 "evo/matches" 这样带分包目录的名字）
-const PAGE_NAMES = AD_PAGES.concat(["games", "wheel", "ringguessr", "ringpick", "me", "evo/matches", "evo/match", "evo/bind"]);
+// 2026-11：比赛页去掉广告位时从 AD_PAGES 拿掉了，这些检查也跟着漏了它，这里补回来；加了分包 pro 的选手页
+const PAGE_NAMES = AD_PAGES.concat(["matches", "games", "wheel", "ringguessr", "ringpick", "me", "evo/matches", "evo/match", "evo/bind", "pro/player", "pro/sources"]);
 const pageDir = (n) => (n.indexOf("/") >= 0 ? path.join(MP, n) : path.join(MP, "pages", n));
 const pageBase = (n) => path.basename(n);
 const pageJsPath = (n) => path.join(pageDir(n), pageBase(n) + ".js");
@@ -575,6 +576,43 @@ function vmFieldNames() {
   // 选手雷达页的数字行（k 名称 / v 个人值 / a 全场平均）
   ["k", "v", "a"].forEach((k) => keys.add(k));
   rv.legendRows.forEach(collect);
+  // 比赛页 → 选手页（2026-11）：prolink 给最终成绩补的字段，和分包 pro 选手页的视图模型
+  const prolink = require(path.join(MP, "utils", "prolink.js"));
+  const linked = prolink.decorate(rv, { teams: [{ place: "1", team: rv.champTeam,
+    players: [{ page: "P", id: "P", nat: "China", input: "Controller" }] }] }, "zh");
+  collect(linked);
+  linked.rows.forEach(collect);
+  linked.playerRows.forEach(collect);
+  linked.champChips.forEach(collect);
+  linked.rosterTeams.forEach((t) => { collect(t); t.players.forEach(collect); });
+  const playerView = require(path.join(MP, "pro", "utils", "view.js"));
+  const pv = playerView.player({ page: "P", at: 1,
+    profile: { page: "P", id: "P", name: "N", localName: "", nats: ["China"], region: "Asia", birth: "2000-01-01",
+      status: "Active", teamPage: "T", team: "T", earnings: 1, input: "Controller", roles: [], legends: ["Wraith"] },
+    history: [{ teamPage: "T", team: "T", join: "2020-01-01", leave: "", status: "active", type: "player", role: "Captain" }],
+    results: [{ date: "2026-01-01", event: "E", tournament: "E", tier: "1", tierType: "", place: "1", prize: 1, team: "T" }],
+    mates: [{ page: "Q", id: "Q", teams: ["T"], days: 100, current: true, hasPage: true },
+      { page: "R", id: "R", teams: ["T"], days: 50, current: false, hasPage: false }] },
+  "zh", Date.UTC(2026, 10, 2));
+  const pvT = i18n.T("zh");
+  collect(pv);
+  pv.facts.forEach(collect);
+  collect(pv.team);
+  collect({ text: "", last: "" });            // 退役时的 v.retired
+  pv.profile.forEach(collect);
+  collect(pv.mates);
+  pv.mates.now.forEach(collect);
+  pv.mates.past.forEach(collect);
+  collect(playerView.visibleMates(pv.mates, false, pvT));
+  pv.legends.forEach(collect);
+  collect(pv.career);
+  pv.career.strip.forEach(collect);
+  pv.career.axis.forEach(collect);
+  pv.career.items.forEach(collect);
+  collect(pv.results);
+  const pvRes = playerView.visibleResults(pv.results, "major", false, pvT);
+  collect(pvRes);
+  pvRes.rows.forEach(collect);
 
   return keys;
 }

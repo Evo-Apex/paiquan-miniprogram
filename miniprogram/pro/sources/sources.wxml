@@ -1,0 +1,12 @@
+<view class="wrap theme-{{theme}} pp-wrap" data-lang="{{lang}}">
+  <view class="pp-card">
+    <view class="pp-head"><text class="pp-h">{{T.proSrcDataH}}</text></view>
+    <text class="ps-p">{{T.proSrcData}}</text>
+    <text wx:if="{{synced}}" class="ps-p">{{synced}}</text>
+    <text class="ps-p">{{T.proSrcPhoto}}</text>
+  </view>
+  <view class="pp-card">
+    <view class="pp-head"><text class="pp-h">{{T.proSrcFanH}}</text></view>
+    <text class="ps-p">{{T.proSrcFan}}</text>
+  </view>
+</view>
