@@ -43,6 +43,8 @@
   background: radial-gradient(60% 70% at 50% 30%, var(--hero-track), transparent 70%);
 }
 .pp-sil { width: 440rpx; height: 528rpx; margin-top: 32rpx; }
+/* 照片（透明底抠图，腰部截断）：定高、宽度随图，底边压进渐变里 */
+.pp-photo { height: 560rpx; margin-top: 40rpx; }
 /* 下半截渐变进卡片底色，ID 压在渐变上 */
 .pp-fade {
   position: absolute;

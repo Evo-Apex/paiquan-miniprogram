@@ -983,6 +983,18 @@ describe("战队页", () => {
     assert.deepEqual(urls, ["/pro/player/player?page=A", "/pro/player/player?page=C"]);
   });
 
+  test("选手卡照片加载失败：这张卡换回剪影，展开别的块重算时也不再试", async () => {
+    const withPhoto = Object.assign({}, data, { members: data.members.map((m) => (m.id === "A" ? Object.assign({}, m, { photo: "cloud://e.b/a_card.webp" }) : m)) });
+    const { inst } = loadPage("pro/team", { responses: { proTeam: { ok: true, kind: "ok", message: "", data: withPhoto } } });
+    inst.onLoad({ page: "Team_Liquid" });
+    await flush();
+    assert.equal(inst.data.v.roster.cards[0].photo, "cloud://e.b/a_card.webp");
+    inst.onCardPhotoError({ currentTarget: { dataset: { i: 0 } } });
+    assert.equal(inst.data.v.roster.cards[0].photo, "");
+    inst.onMovesMore();
+    assert.equal(inst.data.v.roster.cards[0].photo, "", "重算以后还是剪影");
+  });
+
   test("数据库里没有这支队：写「还没有这支战队的资料」；云函数挂了：出错 + 重试", async () => {
     const empty = loadPage("pro/team", { responses: { proTeam: { ok: true, kind: "ok", message: "", data: null } } }).inst;
     empty.onLoad({ page: "Nobody" });
@@ -992,6 +1004,20 @@ describe("战队页", () => {
     bad.onLoad({ page: "Team_Liquid" });
     await flush();
     assert.equal(bad.data.state, "error");
+  });
+});
+
+describe("选手页 · 照片", () => {
+  test("大卡照片加载失败：换回剪影，重算也不再试", async () => {
+    const raw = { page: "Zer0", photo: "cloud://e.b/p_Zer0_hero.webp", profile: { id: "Zer0", nats: [], legends: [] }, history: [], results: null, mates: null, teamPages: {}, at: 1 };
+    const { inst } = loadPage("pro/player", { responses: { proPlayer: { ok: true, kind: "ok", message: "", data: raw } } });
+    inst.onLoad({ page: "Zer0" });
+    await flush();
+    assert.equal(inst.data.v.photo, "cloud://e.b/p_Zer0_hero.webp");
+    inst.onPhotoError();
+    assert.equal(inst.data.v.photo, "");
+    inst.onResMore();
+    assert.equal(inst.data.v.photo, "");
   });
 });
 

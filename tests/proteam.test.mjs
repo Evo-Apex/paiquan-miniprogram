@@ -157,6 +157,14 @@ describe("阵容变动", () => {
   });
 });
 
+describe("选手照片", () => {
+  test("选手卡带上云函数给的照片地址；没有就是空的（卡上用剪影）", () => {
+    const raw = Object.assign({}, TL, { members: TL.members.map((m) => (m.id === "Zer0" ? Object.assign({}, m, { photo: "cloud://e.b/pro/photos/v1/p_Zer0_card.webp" }) : m)) });
+    const cards = tv.team(raw, "zh").roster.cards;
+    assert.deepEqual(cards.map((c) => c.photo), ["cloud://e.b/pro/photos/v1/p_Zer0_card.webp", "", ""]);
+  });
+});
+
 describe("历任队员", () => {
   test("现在不在队的选手一人一行（教练不算）；几段在队时间相加；最近离开的在前", () => {
     const f = tv.team(TL, "zh").former;

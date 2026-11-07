@@ -303,6 +303,8 @@ function player(raw, lang, nowMs) {
   return {
     id: p ? p.id : String(page).replace(/_\(.*\)$/, "").replace(/_/g, " "),
     hasProfile: !!p,
+    // 选手照片（云存储的 cloud:// 地址，ALGS 定妆照）；没有 → ""，大卡用剪影
+    photo: String((raw && raw.photo) || ""),
     realName: real,
     facts: hero.facts,
     team: hero.team,

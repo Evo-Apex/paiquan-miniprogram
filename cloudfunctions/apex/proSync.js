@@ -18,6 +18,7 @@
  * 任何异常都不往外抛（index.js 也会包 try/catch）：选手页是附加功能，不能拖累轮询和轮换记录。
  */
 var lp = require("./liquipedia");
+var photos = require("./proPhotos");
 
 var DEFAULT_EVENTS = ["Apex_Legends_Global_Series/2026/Split_2/Playoffs"];
 var BATCH = { players: 40, squads: 40, teams: 30, teamInfo: 40, teamResults: 10, transfers: 15, results: 5 };
@@ -322,6 +323,7 @@ function proPlayer(event, deps) {
           results: Array.isArray(doc.results) ? doc.results : null,
           mates: m.mates,
           teamPages: m.teamPages,
+          photo: photos.photoOf(page, "hero"),   // 选手照片（cloud:// 地址）；没有 → ""，页面用剪影
           at: latest(doc.profileAt, doc.historyAt, doc.resultsAt)
         }
       };
@@ -351,12 +353,18 @@ function proTeam(event, deps) {
         var b = x.page ? briefs[x.page] : null;
         return Object.assign({}, x, { hasPage: !!b, nat: x.nat || (b && b.nat) || "" });
       };
+      // 名单里的选手带上照片（战队页的选手卡用，教练不放）
+      var markMember = function (x) {
+        var o = mark(x);
+        o.photo = x.page && (!x.type || x.type === "player") ? photos.photoOf(x.page, "card") : "";
+        return o;
+      };
       return {
         ok: true, kind: "ok", message: "",
         data: {
           page: page,
           info: doc.info || null,
-          members: members ? members.map(mark) : null,
+          members: members ? members.map(markMember) : null,
           results: Array.isArray(doc.results) ? doc.results : null,
           transfers: transfers ? transfers.map(mark) : null,
           at: latest(doc.at, doc.membersAt, doc.infoAt, doc.resultsAt, doc.transfersAt)

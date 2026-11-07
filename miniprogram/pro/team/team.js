@@ -58,6 +58,8 @@ Page({
     if (!this._raw) return;
     var T = this.data.T;
     var v = teamview.team(this._raw, this.data.lang);
+    var bad = this._badPhotos || {};
+    v.roster.cards.forEach(function (c) { if (bad[c.photo]) c.photo = ""; });   // 加载失败过的不再试
     if (!this._resMode) this._resMode = v.results.defaultMode;
     this.setData({
       v: v,
@@ -84,6 +86,16 @@ Page({
     this._resMode = "major";
     this._resOpen = false;
     this.rebuild();
+  },
+
+  /** 选手卡的照片加载失败（没传、网络不通、手机不认 WebP）→ 这张卡换回剪影 */
+  onCardPhotoError: function (e) {
+    var i = Number(e.currentTarget.dataset.i);
+    var cards = this.data.v && this.data.v.roster.cards;
+    if (!cards || !cards[i]) return;
+    this._badPhotos = this._badPhotos || {};
+    this._badPhotos[cards[i].photo] = true;
+    this.rebuild();   // rebuild 会把记下的坏照片换成空的
   },
 
   onMovesMore: function () {

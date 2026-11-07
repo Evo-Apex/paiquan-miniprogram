@@ -38,7 +38,9 @@
       <view wx:if="{{v.roster.cards.length}}" class="tp-cards">
         <view class="tp-pcard" wx:for="{{v.roster.cards}}" wx:key="key"
               data-page="{{item.page}}" bindtap="onOpenPlayer" hover-class="{{item.page ? 'pp-pressed' : 'none'}}">
-          <image wx:if="{{item.photo}}" class="tp-photo" src="{{item.photo}}" mode="aspectFill"></image>
+          <!-- 照片在云存储（WebP 要加 webp 属性）；没有或加载失败 → 剪影 -->
+          <image wx:if="{{item.photo}}" class="tp-photo" src="{{item.photo}}" mode="widthFix" webp="{{true}}"
+                 data-i="{{index}}" binderror="onCardPhotoError"></image>
           <image wx:else class="tp-sil" src="/pro/assets/silhouette.svg" mode="aspectFit"></image>
           <view class="tp-pfade"></view>
           <view class="tp-pplate">

@@ -243,6 +243,7 @@ pages/maps.wxml  {{...}}  ← 只渲染，不含业务判断
 | `curated_roster.json` / `curated_roster_resolved.json` | 战队名单（换赛季直接改 JSON 重新部署，不动逻辑） |
 | `liquipedia.js` | Liquipedia 数据库 API：拼请求、取数、把原始字段整理成我们的格式（§18） |
 | `proSync.js` | 选手、战队数据：定时器每次做一步（最多 1 个请求）；`proPlayer`（带队友）/ `proRoster` / `proTeam` 三个读取接口 |
+| `proPhotos.js` + `pro_photos.json` | 选手照片：Liquipedia 页面名 → 云存储的 cloud:// 地址（对照表由 `tools/build_pro_photos.py` 生成，§18） |
 | `proStore.js` | 选手数据的数据库读写（`pro_players`、`pro_teams`、`pro_meta`），错误一律吞掉降级 |
 
 ---
@@ -365,8 +366,8 @@ pages/maps.wxml  {{...}}  ← 只渲染，不含业务判断
 | `prostats.test.mjs` | 14 | 职业选手数据：英雄名与头像 | 改 prostats |
 | `algs.test.mjs` | 21 | ALGS 快照：赛事/选取率/组合 | 改 algs |
 | `nextmatch.test.mjs` | 30 | 下一场比赛：赛程/分组/队员/双语 | 改 nextmatch |
-| `pro.test.mjs` | 46 | 选手页：Liquipedia 归一化、定时同步（每次 ≤1 个请求、4 分钟间隔、失败重试、24 小时一轮）、三个读取接口、队友重叠计算、战队的名单 / 转会 / 成绩、视图模型（每一块、不编数据、S/A 级筛选和展开）、名字连接 | 改 liquipedia / proSync / proStore / pro/ / prolink / pronames |
-| `proteam.test.mjs` | 13 | 战队页视图模型：大卡（赛区标签、进入 Apex、解散）、现役阵容、阵容变动的说法、历任队员合并 | 改 pro/utils/teamview.js / pro/team/ |
+| `pro.test.mjs` | 50 | 选手页：Liquipedia 归一化、定时同步（每次 ≤1 个请求、4 分钟间隔、失败重试、24 小时一轮）、三个读取接口、队友重叠计算、战队的名单 / 转会 / 成绩、选手照片的地址和对照表、视图模型（每一块、不编数据、S/A 级筛选和展开）、名字连接 | 改 liquipedia / proSync / proStore / pro/ / prolink / pronames |
+| `proteam.test.mjs` | 14 | 战队页视图模型：大卡（赛区标签、进入 Apex、解散）、现役阵容、阵容变动的说法、历任队员合并 | 改 pro/utils/teamview.js / pro/team/ |
 | `comps.test.mjs` | 14 | 职业三人组合解析 | 改 comps |
 | `pickrates.test.mjs` | 14 | 英雄选取率解析 | 改 pickrates |
 | `rankdist.test.mjs` | 15 | 段位分布 | 改 rankdist |
@@ -658,13 +659,19 @@ git update-index --no-skip-worktree project.config.json miniprogram/app.js
   看完了再给「也看小比赛」（August 11-02 要的可以切到全部）。名次放大放左边，冠军用强调色，奖金写明是全队奖金。
 - **最底下「数据来源 ›」** → `pro/sources/`：Liquipedia 署名、上次同步时间、照片说明、粉丝工具声明（页面上不放这些）。
 
-**占位**（设计稿注释里定的）：选手照片拿到 EA 授权之前用剪影（`pro/assets/silhouette.svg`）；队标用队名缩写（Team Liquid → TL）；
-队友头像用名字首字母。小程序本来也加载不了外部网站的图片，真要放照片得打进包里或放云存储。
+**占位**（设计稿注释里定的）：没有照片的选手用剪影（`pro/assets/silhouette.svg`）；队标用队名缩写（Team Liquid → TL）；
+队友头像用名字首字母。
 
-**照片现状（2026-11-02）**：August 拿到了 EA 的授权，可以用 ALGS 官网的选手定妆照（透明底的半身照；图片站 `content.algstools.com`
-加 `?format=webp&width=480` 只有 22 KB）。但"哪个选手是哪张图"只在 `algs.ea.com` 页面背后的接口里，它的 robots.txt 是 `Disallow: /`
-（连搜索引擎都不许访问 `/api`），所以**不写程序去抓名单**，August 决定先不放照片。以后放：名单向 EA 要或手动收集 → 照片存云存储（国内快、
-不碰外部域名）→ 大卡里有照片放照片、没有照旧剪影；webp 要先在 iPhone 真机试（包里的 webp iPhone 显示不了，网络图片没试过）。
+**选手照片（2026-11-07 起）**：ALGS 的选手定妆照（透明底半身抠图），August 拿到 EA 授权、自己收集好的（2 GB，只在 August 本机，
+不进任何仓库）。`tools/build_pro_photos.py` 把照片对到 Liquipedia 页面名（名字一样 → 用对上的队友推出两边队名的对应 → 同队里名字包含 / 相似
+→ 人工确认的 `OVERRIDES`；对不上就不放、不猜），定妆照优先、没有用赛场照，裁掉透明边、保留透明，压成 WebP（质量 82，
+大卡 480px 约 46 KB、选手卡 320px 约 26 KB，和 PNG 肉眼看不出差别；256 色 PNG 会把皮肤压出色块，不用）。
+季后赛 121 人全有照片，共 8.6 MB，超过分包 2 MB，所以**放云存储**：整个输出文件夹传到云存储 `pro/photos/v1/`，
+对照表 `cloudfunctions/apex/pro_photos.json`（页面名 → 文件名前缀）里的 `base` 填 fileID 前缀（`cloud://环境.存储桶/pro/photos/v1/`）。
+`proPhotos.js` 据此给 `proPlayer` 的 `photo`（大卡）、`proTeam` 名单里选手的 `photo`（选手卡，教练不给）；`base` 空着就都不给，页面照旧剪影。
+页面上 `<image webp>`（网络 WebP 要加这个属性 iPhone 才认；**包里的** WebP iPhone 显示不了，见 §7 附近的说明），加载失败 → 换回剪影，不出破图。
+存储的权限要「所有用户可读」（默认就是），否则别人看不到。换了照片用 `v2` 文件夹（手机上有缓存），换比赛重跑脚本、补传新人的照片。
+数据来源说明页写了「选手照片来自 ALGS 官方定妆照，经 EA 授权使用」。
 
 **为什么用定时器、不现查**：Liquipedia 每小时只给 60 次请求。所以 `apex` 的定时器（每 5 分钟）每次最多发 1 个请求
 （每小时最多 12 次，两次至少隔 4 分钟），一轮 = 每场赛事的参赛名单 1 次 + 资料 / 队伍经历各 40 人 1 次

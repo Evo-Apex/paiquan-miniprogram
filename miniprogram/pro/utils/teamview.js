@@ -8,6 +8,7 @@
  * 和设计稿不一样的地方（数据没有，不编）：
  *   - 没有「所在地」：Apex 维基的战队只写了赛区，没写国家；赛区放在大卡的标签里；
  *   - 选手卡上没有指挥 / 突击这类分工：Liquipedia 没记；卡上写国籍（队长写上"队长"）；
+ *     照片是 ALGS 定妆照（云函数给 cloud:// 地址，2026-11-07 起），没有照片的照旧剪影；
  *   - 阵容变动里没有"退役"：转会记录只写去了哪队，没有下家就只写"离队"。
  * 「进入 Apex」取最早的队员加入、比赛、转会日期：维基上的成立日期各队写法不一（有的写的是俱乐部成立那年）。
  */
@@ -106,7 +107,7 @@ function rosterOf(members, lang, T) {
     players += 1;
     if (m.status === "active" && kind === "player") {
       var meta = [names.nat(m.nat, lang), /^captain$/i.test(m.role || "") ? names.role("Captain", lang) : ""].filter(Boolean).join(" · ");
-      cards.push(Object.assign(base, { meta: meta, photo: "" }));
+      cards.push(Object.assign(base, { meta: meta, photo: String(m.photo || "") }));   // 照片没有 → ""，卡上用剪影
     } else {
       // 替补、暂停比赛的队员：一行一个，写身份和加入时间
       var what = m.status === "inactive" || kind === "inactive" ? names.status("inactive", lang) : names.role(m.role, lang);

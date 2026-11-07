@@ -18,7 +18,9 @@
          照片拿到授权之前用剪影（设计稿注释）。 -->
     <view class="pp-hero">
       <view class="pp-portrait">
-        <image class="pp-sil" src="/pro/assets/silhouette.svg" mode="aspectFit"></image>
+        <!-- 照片在云存储（WebP，网络图片要加 webp 属性 iPhone 才认）；没有或加载失败 → 剪影 -->
+        <image wx:if="{{v.photo}}" class="pp-photo" src="{{v.photo}}" mode="heightFix" webp="{{true}}" binderror="onPhotoError"></image>
+        <image wx:else class="pp-sil" src="/pro/assets/silhouette.svg" mode="aspectFit"></image>
         <view class="pp-fade"></view>
         <view class="pp-plate">
           <text class="pp-id">{{v.id}}</text>

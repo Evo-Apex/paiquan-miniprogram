@@ -455,6 +455,54 @@ describe("战队：队员表、转会、成绩、proTeam", () => {
   });
 });
 
+/* ---------------- 选手照片（2026-11-07） ---------------- */
+
+describe("选手照片（proPhotos、pro_photos.json）", () => {
+  const MAP = require(path.join(CF, "pro_photos.json"));
+  // proPhotos 在加载时读对照表、每次调用读环境变量：换环境变量要重新加载它和用到它的 proSync
+  const fresh = (envBase) => {
+    if (envBase === undefined) delete process.env.PRO_PHOTO_BASE; else process.env.PRO_PHOTO_BASE = envBase;
+    for (const f of ["proPhotos.js", "proSync.js"]) delete require.cache[require.resolve(path.join(CF, f))];
+    return { photos: require(path.join(CF, "proPhotos.js")), sync: require(path.join(CF, "proSync.js")) };
+  };
+
+  test("对照表：文件名就是文档 _id 的编码（Panic_(American_player) 这种也不会撞）；base 只能是空的或 cloud:// 地址", () => {
+    assert.ok(Object.keys(MAP.files).length >= 100, "参赛的 121 人都该有");
+    for (const [page, slug] of Object.entries(MAP.files)) assert.equal(slug, docId(page), page);
+    assert.ok(MAP.base === "" || /^cloud:\/\//.test(MAP.base), "照片只放云存储，不许是外部网站");
+    assert.match(MAP.version, /^v\d+$/);
+  });
+
+  test("没传照片（base 空着）：一律不给地址，页面照旧剪影", () => {
+    const { photos } = fresh(undefined);
+    if (MAP.base) return;   // 已经填了 base 就不测这条
+    assert.equal(photos.photoOf("Zer0", "hero"), "");
+  });
+
+  test("填了 base：大卡 _hero、选手卡 _card；对照表里没有的人不给", () => {
+    const { photos } = fresh("cloud://env.bucket/pro/photos/v1");
+    assert.equal(photos.photoOf("Zer0", "hero"), "cloud://env.bucket/pro/photos/v1/p_Zer0_hero.webp");
+    assert.equal(photos.photoOf("Panic_(American_player)", "card"), "cloud://env.bucket/pro/photos/v1/" + docId("Panic_(American_player)") + "_card.webp");
+    assert.equal(photos.photoOf("Nobody", "hero"), "");
+    assert.equal(photos.photoOf("constructor", "hero"), "", "原型链上的名字不算");
+    fresh(undefined);
+  });
+
+  test("proPlayer 带大卡照片；proTeam 的选手带卡片照片，教练不带", async () => {
+    const { sync: s } = fresh("cloud://env.bucket/pro/photos/v1/");
+    const store = memStore();
+    await store.savePlayer("Zer0", { profile: { id: "Zer0", nats: [] }, history: [] });
+    assert.equal((await s.proPlayer({ page: "Zer0" }, { store })).data.photo, "cloud://env.bucket/pro/photos/v1/p_Zer0_hero.webp");
+    await store.saveTeam("Team_Liquid", { members: [
+      { page: "Zer0", id: "Zer0", type: "player", join: "2025-11-05", leave: "", status: "active", role: "" },
+      { page: "Kapreme", id: "Kapreme", type: "staff", join: "2026-03-24", leave: "", status: "active", role: "Coach" },
+    ] });
+    const t = (await s.proTeam({ page: "Team_Liquid" }, { store })).data;
+    assert.deepEqual(t.members.map((m) => m.photo), ["cloud://env.bucket/pro/photos/v1/p_Zer0_card.webp", ""]);
+    fresh(undefined);
+  });
+});
+
 /* ---------------- 队友（liquipedia.mates） ---------------- */
 
 describe("合作过的队友", () => {

@@ -74,7 +74,8 @@
   border-radius: var(--r-lg);
 }
 .tp-sil { width: 160rpx; height: 192rpx; margin-top: 28rpx; }
-.tp-photo { position: absolute; left: 0; top: 0; width: 100%; height: 100%; }
+/* 照片：宽度铺满、从头顶往下放，腰部以下被卡片切掉（再被渐变盖住） */
+.tp-photo { position: absolute; left: 0; top: 16rpx; width: 100%; }
 .tp-pfade {
   position: absolute;
   left: 0; right: 0; top: 0; bottom: 0;
