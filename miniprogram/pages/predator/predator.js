@@ -52,10 +52,10 @@ Page({
     // 先显示 ranked（和改版前一样）；「我的战绩」读完发现绑定了 Evo，再切过去（onEvoStatus）
     seg: "ranked",
     proQuery: "",        // 选手搜索词
-    proExpand: false,       // 是否展开全部选手
-    proChipsView: [],      // 实际渲染的选手（前 12 或过滤后）
-    proMoreCount: 0,       // 还藏着几个
-    proCanExpand: false,   // 是否值得给「展开」入口
+    proExpand: false,       // 竖排选手列表是否展开（默认收起，只显示当前这个人）
+    proChipsView: [],      // 展开后渲染的选手（搜索过滤后）
+    proCurrentName: "",    // 当前选中的是谁（收起时那一行就显示它）
+    proCanSearch: false,   // 选手多到一屏放不下时才给搜索框
     panelOpen: false,
     // 四个榜单的"展开其余"开关。用户 2026-10 的要求：一律只显示前五，
     // 其余点一下才展开。状态放在 data 里而不是视图模型里 ——
@@ -319,20 +319,28 @@ Page({
    * 纯本地（prostats_data.js），不联网、不耗云函数配额 ——
    * 所以 onLoad 里可以直接先渲染，不用等分数线那几个请求回来。
    */
-  /** 由 pro.chips 派生出「搜索 + 前 12」的显示列表 */
+  /**
+   * 由 pro.chips 派生出「竖排选手列表」。
+   *
+   * 用户 2026-11-07：「抓了太多主播，默认只显示综合情况，其他主播缩略成一个
+   * 竖的列表，展开后点击再显示具体主播的个人数据」。
+   * 所以默认收起 —— 页面上只留一行"当前是谁 + 切换"，点开才铺出竖列表。
+   */
   buildProChipsView: function () {
     var all = (this.data.pro && this.data.pro.chips) || [];
     var q = String(this.data.proQuery || "").trim().toLowerCase();
     var list = q
       ? all.filter(function (c) { return String(c.name || "").toLowerCase().indexOf(q) >= 0; })
       : all;
-    var LIMIT = 12;
-    var expand = this.data.proExpand || !!q;      // 搜索时不受 12 个限制
-    var shown = expand ? list : list.slice(0, LIMIT);
+    var active = null;
+    for (var i = 0; i < all.length; i++) {
+      if (all[i].active) { active = all[i]; break; }
+    }
     this.setData({
-      proChipsView: shown,
-      proMoreCount: Math.max(0, list.length - shown.length),
-      proCanExpand: all.length > LIMIT
+      proChipsView: list,
+      proCurrentName: (active && active.name) || "",
+      // 选手多到一屏放不下才给搜索框；否则搜索是多余的噪音
+      proCanSearch: all.length > 12
     });
   },
 
@@ -348,7 +356,7 @@ Page({
     this.buildProChipsView();
   },
 
-  /** 展开 / 收起 */
+  /** 展开 / 收起竖排选手列表 */
   onProToggle: function () {
     this.setData({ proExpand: !this.data.proExpand });
     this.buildProChipsView();
@@ -376,12 +384,16 @@ Page({
     else if (k === "pairs") this.setData({ expPairs: !this.data.expPairs });
   },
 
-  /** 切选手 */
+  /** 切选手：**选完立刻把手风琴合上**，不然列表一直占着屏幕 */
   onProChip: function (e) {
     var id = e.currentTarget.dataset.id;
-    if (!id || id === this._proId) return;
-    this._proId = id;
-    this.rebuildPro();
+    if (!id) return;
+    if (id !== this._proId) {
+      this._proId = id;
+      this.rebuildPro();
+    }
+    this.setData({ proExpand: false, proQuery: "" });
+    this.buildProChipsView();
   },
 
   /**

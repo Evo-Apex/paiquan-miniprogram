@@ -59,16 +59,57 @@
 .rrow-mine .rrow-fill { background: var(--accent); }
 .rrow-tag { font-size: var(--fs-min); color: var(--accent-ink); display: block; line-height: 1.5; }
 
-/* 电脑端：选手栏不横滚，改成换行铺开（否则滚轮被 scroll-view 吃掉，页面滑不动） */
-.prochips-pc {
-  white-space: normal;
-  flex-wrap: wrap;
-  height: auto;
-  max-height: none;
-  overflow: visible;
+/* 选手切换：收起态只占一行（当前是谁 + 箭头），展开才铺竖列表。
+   用户 2026-11-07 的要求：主播太多，平铺的标签墙把版面吃光了。 */
+.proswitch {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  margin: 0 0 var(--sp-2);
+  padding: var(--sp-3);
+  border-radius: var(--r-md);
+  background: var(--sunken);
+  border: 1rpx solid var(--line);
 }
+.proswitch-on { background: var(--track); }
+.proswitch-l { display: flex; align-items: baseline; gap: var(--sp-2); min-width: 0; }
+.proswitch-k { font-size: var(--fs-min); color: var(--ink3); flex: 0 0 auto; }
+.proswitch-v {
+  font-size: var(--fs-body);
+  font-weight: 600;
+  color: var(--ink);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.proswitch-caret { font-size: var(--fs-min); color: var(--ink3); flex: 0 0 auto; }
 
-/* 选手选择：搜索框 + 换行网格 + 展开 */
+/* 展开后的竖列表：限高滚动，避免 40 个主播把页面顶到天边 */
+.prolist { margin: 0 0 var(--sp-3); }
+.prolist-scroll {
+  max-height: 520rpx;
+  border-radius: var(--r-md);
+  border: 1rpx solid var(--line);
+  background: var(--card);
+  overflow: hidden;
+}
+.proitem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  padding: var(--sp-3);
+  border-bottom: 1rpx solid var(--line);
+  font-size: var(--fs-body);
+  color: var(--ink2);
+}
+.proitem:last-child { border-bottom: none; }
+.proitem-on { color: var(--ink); font-weight: 600; background: var(--sunken); }
+.proitem-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.proitem-dot { color: var(--accent-ink); flex: 0 0 auto; }
+
+/* 选手选择：搜索框（只在选手多的时候出现在展开的竖列表里） */
 .prosearch {
   display: flex;
   align-items: center;
@@ -93,15 +134,6 @@
   background: var(--track);
   font-size: var(--fs-min);
   color: var(--ink2);
-}
-/* 选手网格：换行铺开，不再横滑（手机上横滑找人也累） */
-.prox-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--sp-2);
-  overflow: visible;
-  white-space: normal;
-  height: auto;
 }
 .promore {
   margin: var(--sp-2) 0 var(--sp-3);

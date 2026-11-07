@@ -84,6 +84,7 @@ var DICT = {
     predUnit: "猎杀",
     // —— 排位专区（职业选手排位数据，来自直播回放离线识别）——
     proSearch: "搜索选手",
+    proSwitch: "切换选手",
   proClear: "清空",
   proMore: "展开全部，还有",
   proCollapse: "收起",
@@ -731,6 +732,7 @@ var DICT = {
     rgStart: "Start a game",
     rgRound: "Round {n} / {m}",
     proSearch: "Search player",
+    proSwitch: "Switch player",
   proClear: "Clear",
   proMore: "Show all",
   proCollapse: "Collapse",
