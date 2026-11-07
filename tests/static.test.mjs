@@ -788,3 +788,18 @@ describe("分包：引用方向", () => {
     assert.deepEqual(bad, [], "这些引用微信编译时会报错");
   });
 });
+
+/* 文件搬家（2026-11-07，见 AI-CONTEXT §6）：仓库外的生成脚本（直播识别/）要是还往旧路径写，
+   新文件会躺在没人读的地方，界面照旧显示老数据、也不报错。所以旧位置一冒出文件就拦下。 */
+describe("文件搬家：旧位置不许再冒出数据文件", () => {
+  test("utils/ 里只剩 wheel_data.js 一个 *_data.js（它是代码）", () => {
+    const strays = readdirSync(path.join(MP, "utils")).filter((n) => /_data\.js$/.test(n) && n !== "wheel_data.js");
+    assert.deepEqual(strays, [], "数据快照应该在 data/ 或 games/data/，生成脚本可能还在写旧路径（见 AI-CONTEXT §6「文件搬家」）");
+  });
+
+  test("平面战术图在 games/assets/flat/，assets/maps/flat/ 不该再有", () => {
+    assert.ok(existsSync(path.join(MP, "games", "assets", "flat")), "games/assets/flat/ 不见了");
+    assert.equal(existsSync(path.join(MP, "assets", "maps", "flat")), false,
+      "assets/maps/flat/ 又出现了：build_flatmaps.py 可能还在写旧路径，平面图应该在 games/assets/flat/");
+  });
+});
