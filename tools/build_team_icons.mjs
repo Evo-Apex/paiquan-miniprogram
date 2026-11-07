@@ -10,7 +10,7 @@
  *   node tools/build_team_icons.mjs
  *   node tools/build_team_icons.mjs --url https://apexlegendsstatus.com/algs/.../Overview
  *
- * 默认会读 miniprogram/utils/next_match_data.js 里的 event.path，去抓**当前快照那一场**的队标，
+ * 默认会读 miniprogram/data/next_match_data.js 里的 event.path，去抓**当前快照那一场**的队标，
  * 所以换赛事时的正确顺序是：先跑 直播识别/build_next_match.mjs（写出新的 event.path）→
  * 再跑本脚本 → 再跑一次 build_next_match.mjs（这次才会把 icon 写进数据）。
  *
@@ -40,7 +40,7 @@ const args = process.argv.slice(2);
 /** 默认跟着快照里的赛事走；读不到才退回写死的 URL */
 function defaultUrl() {
   try {
-    const mod = require(path.join(MP, "utils", "next_match_data.js"));
+    const mod = require(path.join(MP, "data", "next_match_data.js"));
     if (mod && mod.event && mod.event.path) {
       return "https://apexlegendsstatus.com/algs/" + mod.event.path + "/Overview";
     }

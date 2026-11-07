@@ -18,7 +18,7 @@ const HERE = path.dirname(fileURLToPath(import.meta.url));
 const MP = path.resolve(HERE, "..", "miniprogram");
 const require = createRequire(import.meta.url);
 const algs = require(path.join(MP, "utils", "algs.js"));
-const codex = require(path.join(MP, "utils", "codex_data.js"));
+const codex = require(path.join(MP, "data", "codex_data.js"));
 
 const EVENTS = algs.DATA.events || [];
 const KNOWN = new Map(codex.heroes.map((h) => [h.en.toLowerCase(), h]));

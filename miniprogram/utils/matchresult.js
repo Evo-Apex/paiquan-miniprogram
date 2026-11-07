@@ -5,7 +5,7 @@
  * 口径和 nextmatch 一致：英文缺译文时回落原文，不机翻、不留空。
  */
 var i18n = require("./i18n.js");
-var RAW = require("./match_result_data.js");
+var RAW = require("../data/match_result_data.js");
 
 function build(lang, raw) {
   var T = i18n.T(lang);

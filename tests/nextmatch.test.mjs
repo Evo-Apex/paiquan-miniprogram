@@ -340,7 +340,7 @@ describe("下一场比赛 · 真实快照的形状", () => {
   });
 
   test("数据文件里不出现外部域名（小程序不许直连境外域名）", () => {
-    const src = readFileSync(path.join(MP, "utils", "next_match_data.js"), "utf8");
+    const src = readFileSync(path.join(MP, "data", "next_match_data.js"), "utf8");
     assert.equal(/https?:\/\//.test(src), false, "快照里不该有完整 URL，只留赛事路径");
   });
 });

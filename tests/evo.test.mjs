@@ -18,7 +18,7 @@ const require = createRequire(import.meta.url);
 const S = require(path.join(ROOT, "cloudfunctions", "evo_mp", "stats.js"));
 const view = require(path.join(MP, "evo", "utils", "view.js"));
 const i18n = require(path.join(MP, "utils", "i18n.js"));
-const codex = require(path.join(MP, "utils", "codex_data.js"));
+const codex = require(path.join(MP, "data", "codex_data.js"));
 
 const ZH = i18n.T("zh");
 const EN = i18n.T("en");

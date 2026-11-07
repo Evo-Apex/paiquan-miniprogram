@@ -11,7 +11,7 @@
  *   · 三个玩法页和猜圈、速判的题库在分包 games/ 里（2026-11-07 搬过去，主包少约 470 KB）。
  *     这一页是 tab，只能留在主包，而主包不能 require 分包里的文件，
  *     所以两个题量抄在 utils/games_meta.js（测试拿真题库核对）；
- *   · 轮盘的候选池在 utils/codex_data.js（人数/枪数从这里现算，不写死）。
+ *   · 轮盘的候选池在 data/codex_data.js（人数/枪数从这里现算，不写死）。
  */
 var i18n = require("../../utils/i18n.js");
 var theme = require("../../utils/theme.js");

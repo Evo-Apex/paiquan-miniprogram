@@ -8,7 +8,7 @@
  * 英文模式下传奇名和头像从图鉴 codex_data 取，地图名从 core.MAP_CN 反查；查不到就保留原文。
  */
 var core = require("../../utils/core.js");
-var codex = require("../../utils/codex_data.js");
+var codex = require("../../data/codex_data.js");
 
 // Evo 记下的传奇名（游戏里的中文）→ 图鉴里的 id。
 // 图鉴有 4 个中文名和游戏里不一样（变换/变幻、兰帕特/兰伯特、疯马吉/疯玛吉、导管/导线管），所以按 id 对，不按名字

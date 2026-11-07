@@ -15,7 +15,7 @@
 
 var i18n = require("./i18n.js");
 var core = require("./core.js");
-var codex = require("./codex_data.js");
+var codex = require("../data/codex_data.js");
 
 /**
  * 数据来源：**包内快照 + 云端热更新**。
@@ -27,7 +27,7 @@ var codex = require("./codex_data.js");
  *
  * DATA 是**可变的**：setHot 会把云端那份换进来。页面读 buildAll 拿的永远是最新。
  */
-var SNAPSHOT = require("./prostats_data.js");
+var SNAPSHOT = require("../data/prostats_data.js");
 // 注意：这里**不能**让 DATA 直接指向 SNAPSHOT —— 热更新是把内容换进来，
 // 而 module.exports.DATA 是同一个对象的引用。换成新对象会让外面拿的那份变旧
 // （测试里读 prostats.DATA 就会读到大盘数据，页面也会不同步）。

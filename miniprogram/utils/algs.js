@@ -19,8 +19,8 @@
 
 var i18n = require("./i18n.js");
 var core = require("./core.js");
-var DATA = require("./algs_data.js");
-var codex = require("./codex_data.js");
+var DATA = require("../data/algs_data.js");
+var codex = require("../data/codex_data.js");
 
 /* 英文名 -> 图鉴里的那一条（含中文名和头像） */
 var HERO = {};

@@ -34,7 +34,7 @@
   <!-- ================= 比赛专区 · 最终成绩 =================
      2026-11-02 拉斯维加斯季后赛打完后加的：原来这里放「下一场比赛」，
      赛程全打完就没有下一场了，改成放最终成绩（冠军 / 决赛前 10 / 中国大陆三队）。
-     数据是离线快照（utils/match_result_data.js），来源逐条可查，页面上标注。 -->
+     数据是离线快照（data/match_result_data.js），来源逐条可查，页面上标注。 -->
 <block wx:if="{{result}}">
   <view class="sec-head">
     <text class="sec-title">{{result.title}}</text>
@@ -198,7 +198,7 @@
 <!-- ================= 比赛专区 · 下一场比赛 =================
        2026-10-18 用户要求：一打开先看到「未来最近一场比赛」的分组与时间安排；
        官方还没排期时只显示分组；点队伍看队员。
-       数据是离线快照（utils/next_match_data.js，由 直播识别/build_next_match.mjs 生成），
+       数据是离线快照（data/next_match_data.js，由 直播识别/build_next_match.mjs 生成），
        所以"还有几天"由视图模型按**打开页面的时刻**算，界面不写死。 -->
   <block wx:if="{{next}}">
     <view class="sec-title">

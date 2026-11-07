@@ -94,7 +94,7 @@
 | `games_meta.js` | 1 KB | 小游戏分类页显示的两个题量（题库在分包里，主包读不到，只能抄数；`tests/page.test.mjs` 核对） |
 | `../games/`（分包，2026-11-07） | — | 三个玩法页 `games/ringguessr/`、`ringpick/`、`wheel/`；`games/utils/rings.js`（26 KB，猜圈：题库、判定、缩放/平移、评分）、`games/utils/ringpick.js`（13 KB，速判：出题、四个候选方向几何、视口）；题库 `games/data/`；平面图 `games/assets/flat/` |
 
-### `miniprogram/utils/*_data.js` —— ⚠️ 离线数据快照（只读，别手改）
+### `miniprogram/data/` —— ⚠️ 离线数据快照（只读，别手改；2026-11-07 从 `utils/` 分出来）
 
 | 文件 | 大小 | 内容 | 日期 |
 |---|---|---|---|
@@ -102,6 +102,7 @@
 | `next_match_data.js` | 32 KB | 下一场赛程/分组/队员 | 2026-10-26 |
 | `prostats_data.js` | 116 KB | 职业选手排位数据 | 2026-10-26 |
 | `codex_data.js` | 10 KB | 英雄/武器图鉴（28 英雄） | 2026-10-16 |
+| `match_result_data.js` | 9 KB | 比赛页的赛果（`utils/matchresult.js` 读） | — |
 | `games/data/match_rings_data.js`（分包） | 72 KB | 完整圈序列（猜圈题库） | 2026-10-25 |
 | `games/data/rings_data.js`（分包） | 6 KB | 3 圈序列（速判题库） | 2026-10-25 |
 | `games/data/map_ends_data.js`（分包） | 15 KB | 每图最终圈可能落点 | 2026-10-17 |

@@ -188,25 +188,27 @@ pages/maps.wxml  {{...}}  ← 只渲染，不含业务判断
 | `utils/prolink.js` | 比赛页的战队名、选手名（ALS 写法）→ Liquipedia 选手页面名（§18） | ❌ 纯函数 |
 | `utils/pronames.js` | Liquipedia 英文取值的中文叫法：国籍、赛区、键鼠/手柄、队里的身份、比赛类型（查不到保留英文） | ❌ 纯数据 |
 | `pro/utils/view.js`（分包） | 选手页：云端数据 → 界面字段 | ❌ 纯函数 |
-| `utils/*_data.js` | 离线数据快照（见下表），**只读、别手改** | ❌ |
+| `data/*_data.js` | 离线数据快照（见下表），**只读、别手改**（2026-11-07 从 `utils/` 分出来，`utils/` 只放代码；小游戏的三个在 `games/data/`） | ❌ |
 
 **离线数据文件（8 个 `*_data.js`，改数据等于改产品口径）**
 
-> 其中 7 个是纯数据快照；`wheel_data.js` 除了候选池还含扇形几何（是代码），改它要看 `wheel.test.mjs`。
+> 其中 7 个是纯数据快照；`wheel_data.js` 除了候选池还含扇形几何（是代码，所以留在 `utils/`），改它要看 `wheel.test.mjs`。
+> 表里没列的 `data/match_result_data.js` 是比赛页的赛果快照（`utils/matchresult.js` 读）。
 
 | 文件 | 内容 | 快照日期 | 来源 |
 |---|---|---|---|
-| `algs_data.js` | ALGS 赛事统计（战队/局数/选取率/组合） | 2026-10-20 | `apexlegendsstatus.com/algs` 赛事总览页 |
-| `next_match_data.js` | 下一场比赛（赛程树 + 分组 + 队员） | 2026-10-26 | 同上（赛程树 + 分组名单） |
-| `prostats_data.js` | 职业选手排位数据（英雄/组合/枪械） | 2026-10-26 | B 站直播录像识别（离线） |
-| `codex_data.js` | 英雄/武器图鉴（28 英雄 + 枪） | 2026-10-16 | 项目自建 |
+| `data/algs_data.js` | ALGS 赛事统计（战队/局数/选取率/组合） | 2026-10-20 | `apexlegendsstatus.com/algs` 赛事总览页 |
+| `data/next_match_data.js` | 下一场比赛（赛程树 + 分组 + 队员） | 2026-10-26 | 同上（赛程树 + 分组名单） |
+| `data/prostats_data.js` | 职业选手排位数据（英雄/组合/枪械） | 2026-10-26 | B 站直播录像识别（离线） |
+| `data/codex_data.js` | 英雄/武器图鉴（28 英雄 + 枪） | 2026-10-16 | 项目自建 |
 | `games/data/match_rings_data.js` | 完整圈序列（猜圈题库） | 2026-10-25 | DGS + 社区数据，半径已按当前版本缩放 |
 | `games/data/rings_data.js` | 3 圈序列（速判题库） | 2026-10-25 | 上游 ring-guessr API |
 | `games/data/map_ends_data.js` | 每张图最终圈可能落点 | 2026-10-17 | 交互地图页内联数据 |
 | `wheel_data.js` | 轮盘候选池 + 扇形几何 | — | 读 codex |
 
-**文件搬家（2026-11-07，August 和合作者说好的）**：三个小游戏连同逻辑、题库、平面图整体搬进分包 `games/`，
-主包按文件大小算从 1.66 MB 降到约 1.2 MB（上限 2 MB）。路径都相对 `miniprogram/`。
+**文件搬家（2026-11-07，August 和合作者说好的）**：① 三个小游戏连同逻辑、题库、平面图整体搬进分包 `games/`，
+主包按文件大小算从 1.66 MB 降到约 1.2 MB（上限 2 MB）；② 主包里的离线数据快照从 `utils/` 分到 `data/`，`utils/` 只放代码。
+路径都相对 `miniprogram/`。
 **仓库外的生成脚本（`直播识别/` 那几个）要照这张表改输出路径**：
 
 | 原来 | 现在 |
@@ -215,6 +217,7 @@ pages/maps.wxml  {{...}}  ← 只渲染，不含业务判断
 | `utils/rings.js`、`utils/ringpick.js` | `games/utils/` |
 | `utils/rings_data.js`、`utils/match_rings_data.js`、`utils/map_ends_data.js` | `games/data/` |
 | `assets/maps/flat/*.jpg`（`build_flatmaps.py` 生成） | `games/assets/flat/` |
+| `utils/algs_data.js`（`build_algs.py`）、`utils/codex_data.js`（`build_codex.py`）、`utils/next_match_data.js`（`build_next_match.mjs`）、`utils/prostats_data.js`（`s29_to_miniapp.py`）、`utils/match_result_data.js` | `data/` |
 
 分包的规矩：分包可以 require 主包（`utils/`、`assets/`），**主包不能 require 分包，分包之间也不行**
 （写错了只有开发者工具编译时才报错，`static.test.mjs`「分包：引用方向」提前拦）。

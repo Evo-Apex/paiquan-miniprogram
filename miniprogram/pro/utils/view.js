@@ -10,7 +10,7 @@
  */
 var i18n = require("../../utils/i18n.js");
 var names = require("../../utils/pronames.js");
-var codex = require("../../utils/codex_data.js");
+var codex = require("../../data/codex_data.js");
 
 var RES_FIRST = 5;     // 比赛成绩先显示几条
 var MATES_FIRST = 6;   // 以前的队友先显示几个

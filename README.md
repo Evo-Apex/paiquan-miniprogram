@@ -225,7 +225,7 @@ api.apexlegendsstatus.com
 1. 只统计**主播本人 HUD 上看到的**英雄与武器，**不是全大厅**；
 2. 「帧」和「局」单位不同，不能横向比。
 
-**数据文件**：`miniprogram/utils/prostats_data.js`，由 `直播识别/build_prostats.py` 生成，
+**数据文件**：`miniprogram/data/prostats_data.js`，由 `直播识别/build_prostats.py` 生成，
 **不要手改**（改了会被下一次生成覆盖）。视图模型在同目录的 `prostats.js`。
 
 ### 布局：三层层次，而不是一长串等权重的列表
@@ -263,10 +263,10 @@ rpx 按 `750rpx = 屏宽` 换算。两个已知坑写在该文件注释里（`pa
 > ⚠️ **2026-10-18：排位专区的「版本图鉴」（英雄 + 枪械样本）已经按用户要求删掉。**
 > 它和上面的「职业选手数据」回答的是同一件事（谁被用得多），一页里出现两遍；
 > 视图层 `utils/codex.js` 和 `tests/codex.test.mjs` 一起删了。
-> **但 `utils/codex_data.js` 不能删** —— `prostats.js` 与 `algs.js` 的英雄头像/中英名
+> **但 `data/codex_data.js` 不能删** —— `prostats.js` 与 `algs.js` 的英雄头像/中英名
 > 都还在查它，它是这两块的单一数据源。
 
-数据在 `utils/codex_data.js`（由 `直播识别/build_codex.py` 生成）。两条不能改的约定：
+数据在 `data/codex_data.js`（由 `直播识别/build_codex.py` 生成）。两条不能改的约定：
 
 1. **英雄图标是 ASCII 文件名**（`assets/heroes/wraith.png`，不是 `恶灵.png`）。
    中文路径在 cv2.imwrite、部分构建链上都栽过，统一用英文 id。
@@ -512,7 +512,7 @@ ALGS 官方赛事页（apexlegendsstatus.com/algs）的**赛事总览页**，服
 生成：
 
 ```
-node 直播识别/build_next_match.mjs          # -> miniprogram/utils/next_match_data.js（自动生成，别手改）
+node 直播识别/build_next_match.mjs          # -> miniprogram/data/next_match_data.js（自动生成，别手改）
 node 直播识别/build_next_match.mjs --out 直播识别/out/next_match_data.js
 ```
 
@@ -618,7 +618,7 @@ node 直播识别/build_next_match.mjs --out 直播识别/out/next_match_data.js
 
 ### 候选池从哪来（不手抄名字）
 
-`utils/wheel_data.js` **只读 `utils/codex_data.js`**，不自己维护名字表：
+`utils/wheel_data.js` **只读 `data/codex_data.js`**，不自己维护名字表：
 
 - 英雄池 = codex 里的 28 位英雄，中文名 / 英文名 / 头像路径**全都来自那一份**；
   在别处再抄一份，下次识别数据更新（出新英雄、改译名）两边就会打架。
@@ -866,6 +866,7 @@ apex-miniapp/
 │   │   ├── utils/               rings.js（猜圈）、ringpick.js（速判：出题 + 四个候选方向 + 视口）
 │   │   ├── data/                题库（离线快照）
 │   │   └── assets/flat/         平面战术图
+│   ├── data/                    离线数据快照（2026-11-07 从 utils/ 分出来）
 │   └── utils/
 │       ├── core.js              纯逻辑：归一化、格式化、错误分类
 │       ├── viewmodel.js         纯逻辑：数据 → 界面字段（含差额、分享链接）

@@ -15,7 +15,7 @@
  */
 var i18n = require("./i18n.js");
 var algs = require("./algs.js");
-var DATA = require("./next_match_data.js");
+var DATA = require("../data/next_match_data.js");
 
 var WD_ZH = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"];
 var WD_EN = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
