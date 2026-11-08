@@ -18,6 +18,7 @@
  * 任何异常都不往外抛（index.js 也会包 try/catch）：选手页是附加功能，不能拖累轮询和轮换记录。
  */
 var lp = require("./liquipedia");
+var season = require("./proSeason");
 var photos = require("./proPhotos");
 
 var DEFAULT_EVENTS = ["Apex_Legends_Global_Series/2026/Split_2/Playoffs"];
@@ -41,13 +42,25 @@ function cleanEvents(list) {
   return out.length ? out : null;
 }
 
-/** 一轮开头：每场赛事一步，最后一个 plan 标记（等名单到了再展开成选手的几步） */
+/**
+ * 一轮开头：每场赛事一步；比赛页的赛季两步（season 取比赛列表，planSeason 标记展开成取名次的几步，2026-11-08）；
+ * 最后一个 plan 标记（等名单到了再展开成选手的几步）
+ */
 function planCycle(events) {
-  return events.map(function (e) { return { kind: "event", event: e }; }).concat([{ kind: "plan" }]);
+  return events.map(function (e) { return { kind: "event", event: e }; })
+    .concat([{ kind: "season" }, { kind: "planSeason" }, { kind: "plan" }]);
 }
 
-/** 不花请求的标记步：plan（名单到了，展开成选手的几步）、planTeams（队伍经历到了，展开成战队名单的几步） */
-function isMarker(item) { return !!item && (item.kind === "plan" || item.kind === "planTeams"); }
+/** 不花请求的标记步：plan（名单到了，展开成选手的几步）、planTeams（队伍经历到了，展开成战队名单的几步）、planSeason（比赛列表到了，展开成取名次） */
+function isMarker(item) { return !!item && (item.kind === "plan" || item.kind === "planTeams" || item.kind === "planSeason"); }
+
+var SEASON_BATCH = 10;   // 名次一次取几场比赛（季后赛、冠军赛各 40 队，十场也到不了 1000 行的上限）
+
+/** 比赛列表到了：五站 + 中国的小比赛，每 10 场取一次名次 */
+function expandSeason(state) {
+  var pages = season.stagePages().concat(state.seasonMinor || []);
+  return chunk(pages, SEASON_BATCH).map(function (c) { return { kind: "seasonResults", pages: c }; });
+}
 
 /** 所有赛事名单里的选手页面名（去重，按赛事、名次的顺序） */
 function rosterPages(state) {
@@ -91,6 +104,8 @@ function rosterTeams(state) {
  */
 function expandTeams(state) {
   var now = rosterTeams(state);
+  // 比赛页「所有 CN 战队」那个联赛的队（2026-11-08）：也要有战队页，排在正在比赛的队后面
+  (state.seasonTeams || []).forEach(function (p) { if (now.indexOf(p) < 0) now.push(p); });
   var rest = (state.teamPages || []).filter(function (p) { return now.indexOf(p) < 0; }).sort();
   var teams = now.concat(rest);
   var steps = function (kind) { return chunk(teams, BATCH[kind]).map(function (c) { return { kind: kind, pages: c }; }); };
@@ -98,7 +113,9 @@ function expandTeams(state) {
 }
 
 function expandMarker(item, state) {
-  return item.kind === "plan" ? expandPlan(state) : expandTeams(state);
+  if (item.kind === "plan") return expandPlan(state);
+  if (item.kind === "planSeason") return expandSeason(state);
+  return expandTeams(state);
 }
 
 function emptyState() {
@@ -158,6 +175,33 @@ function runStep(item, state, deps, now) {
       return Promise.all(item.pages.map(function (page) {
         return store.savePlayer(page, { results: r.rows[page] || [], resultsAt: now });
       })).then(function () { return true; });
+    });
+  }
+  if (item.kind === "season") {
+    // 比赛页：这个赛季的比赛列表（五站 + 办在中国的小比赛）；只存要的那些
+    return lp.fetchTournaments(season.SEASON.from, season.SEASON.to, deps).then(function (list) {
+      if (!list) return false;
+      var picked = season.pickTournaments(list);
+      var keep = Object.keys(picked.stages).map(function (p) { return picked.stages[p]; }).concat(picked.minor);
+      state.seasonMinor = picked.minor.map(function (t) { return t.page; });
+      return Promise.resolve(store.saveSeason ? store.saveSeason({ tournaments: keep, at: now }) : true).then(function () { return true; });
+    });
+  }
+  if (item.kind === "seasonResults") {
+    return lp.fetchEventResults(item.pages, deps).then(function (r) {
+      if (!r) return false;
+      if (r.full && item.pages.length > 1) {
+        splitAfter(state, item);
+        return true;
+      }
+      var league = r.rows[season.SEASON.cnLeague];
+      if (league) state.seasonTeams = league.map(function (x) { return x.team.replace(/ /g, "_"); });
+      // 名次按比赛分开存：已经有的比赛换成新的，别的照旧
+      return Promise.resolve(store.readSeason ? store.readSeason() : null).then(function (doc) {
+        var results = (doc && Array.isArray(doc.results)) ? doc.results.filter(function (x) { return item.pages.indexOf(x.page) < 0; }) : [];
+        item.pages.forEach(function (p) { results.push({ page: p, rows: r.rows[p] || [] }); });
+        return store.saveSeason ? store.saveSeason({ results: results, at: now }) : true;
+      }).then(function () { return true; });
     });
   }
   if (item.kind === "teams") {
@@ -433,6 +477,7 @@ module.exports = {
   _planCycle: planCycle,
   _expandPlan: expandPlan,
   _expandTeams: expandTeams,
+  _expandSeason: expandSeason,
   _todayIso: todayIso,
   _cleanEvents: cleanEvents,
   DEFAULT_EVENTS: DEFAULT_EVENTS,

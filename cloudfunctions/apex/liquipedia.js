@@ -470,6 +470,64 @@ function dayNum(d) {
   return Math.floor(Date.UTC(Number(m[1]), Number(m[2]) - 1, Number(m[3])) / 86400000);
 }
 
+/* ---------------- 比赛页的赛季（2026-11-08，照 August 的赛季进度条设计稿） ---------------- */
+
+var TOURNAMENT_COLS = "pagename,name,startdate,enddate,liquipediatier,liquipediatiertype,locations,participantsnumber,prizepool,type";
+var EVENTRES_COLS = "parent,placement,prizemoney,opponentname,opponenttype,opponentplayers,mode";
+
+/** 比赛办在中国（locations 里有 China / cn）：比赛页的「小比赛」只收这些（August 2026-11-08 定的） */
+function inChina(locations) {
+  var l = locations && typeof locations === "object" ? locations : {};
+  return Object.keys(l).some(function (k) { return l[k] === "China" || l[k] === "cn"; });
+}
+
+/** 一场比赛的资料（tournament 表；这张表没有 region 一列，赛区在 locations 里） */
+function normTournament(row) {
+  if (!row || !row.pagename) return null;
+  var n = Number(row.participantsnumber);
+  return {
+    page: String(row.pagename),
+    name: String(row.name || teamName(row.pagename)),
+    start: date10(row.startdate),
+    end: date10(row.enddate),
+    tier: String(row.liquipediatier || ""),
+    tierType: String(row.liquipediatiertype || ""),
+    cn: inChina(row.locations),
+    teams: n > 0 ? n : 0,                    // Liquipedia 没填时是 -1
+    prize: num(row.prizepool)
+  };
+}
+
+/** 开赛日期在 from 和 to 之间的比赛 → [normTournament]（按开赛日期排）；取不到 null */
+function fetchTournaments(from, to, deps) {
+  var cond = "[[startdate::>" + from + "]] AND [[startdate::<" + to + "]]";
+  return query("tournament", { conditions: cond, query: TOURNAMENT_COLS, limit: 500, order: "startdate ASC" }, deps)
+    .then(function (rows) {
+      if (rows === null) return null;
+      return rows.map(normTournament).filter(Boolean);
+    });
+}
+
+/**
+ * 一批比赛的名次（placement 表，一队一行）→ { rows: { 比赛页面名: [{ team, place, prize, players }] }, full }。
+ * 名次空的（已经晋级、还没打）也留着：主队的"下一站"要用。个人奖项不要。full 的意思同 fetchResults。
+ */
+function fetchEventResults(pages, deps) {
+  return query("placement", { conditions: anyOf("parent", pages), query: EVENTRES_COLS, limit: RESULT_LIMIT }, deps)
+    .then(function (rows) {
+      if (rows === null) return null;
+      var out = {};
+      pages.forEach(function (p) { out[p] = []; });
+      rows.forEach(function (r) {
+        if (!out[r.parent] || r.opponenttype !== "team" || /award/i.test(String(r.mode || ""))) return;
+        var team = String(r.opponentname || "").trim();
+        if (!team || out[r.parent].some(function (x) { return x.team === team; })) return;
+        out[r.parent].push({ team: team, place: String(r.placement || ""), prize: num(r.prizemoney), players: playersOf(r) });
+      });
+      return { rows: out, full: rows.length >= RESULT_LIMIT };
+    });
+}
+
 /** 一段在队时间的结束日：有离队日就用；还在队（active、没离队日）用今天；别的（离队日没记）算不出 → null */
 function stintEnd(m, today) {
   if (m.leave) return dayNum(m.leave);
@@ -540,6 +598,10 @@ module.exports = {
   normTransfer: normTransfer,
   fetchTransfers: fetchTransfers,
   teamName: teamName,
+  inChina: inChina,
+  normTournament: normTournament,
+  fetchTournaments: fetchTournaments,
+  fetchEventResults: fetchEventResults,
   RESULT_LIMIT: RESULT_LIMIT,
   TEAM_LIMIT: TEAM_LIMIT,
   TRANSFER_LIMIT: TRANSFER_LIMIT

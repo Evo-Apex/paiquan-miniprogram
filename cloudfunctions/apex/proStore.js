@@ -16,6 +16,8 @@ var PLAYERS = "pro_players";
 var TEAMS = "pro_teams";
 var META = "pro_meta";
 var STATE_ID = "state";
+var SEASON_ID = "season";             // 比赛页的赛季：比赛列表 + 名次（2026-11-08）
+var MANUAL = "pro_manual_events";     // 自己录入的比赛（在云开发控制台里加，见 proSeason.normManual）
 
 /** 页面名 → 文档 _id：只留字母数字和 - _，其它字符写成 ~十六进制~（可逆、不会撞） */
 function docId(page) {
@@ -163,6 +165,62 @@ function createProStore(cloud) {
         console.warn("读战队列表失败：" + msgOf(e));
       }
       return out;
+    },
+
+    /** 比赛页的赛季：{ tournaments: [比赛], results: [{ page, rows }], at }；没有 → null */
+    readSeason: async function () {
+      try {
+        var res = await db.collection(META).doc(SEASON_ID).get();
+        return res && res.data ? res.data : null;
+      } catch (e) {
+        return null;
+      }
+    },
+
+    /** 只改给出的字段（比赛列表、名次各自更新）；记录还没有就新建 */
+    saveSeason: async function (patch) {
+      var ref = db.collection(META).doc(SEASON_ID);
+      try {
+        await ensure(META);
+        var upd = {};
+        Object.keys(patch).forEach(function (k) { upd[k] = Array.isArray(patch[k]) ? _.set(patch[k]) : patch[k]; });
+        var res = await ref.update({ data: upd });
+        if (res && res.stats && res.stats.updated > 0) return true;
+        await ref.set({ data: patch });
+        return true;
+      } catch (e) {
+        try {
+          await ref.set({ data: patch });
+          return true;
+        } catch (e2) {
+          console.warn("写赛季数据失败：" + msgOf(e2));
+          return false;
+        }
+      }
+    },
+
+    /** 一批战队的资料（赛区等）：{ 页面名: info } */
+    readTeamInfos: async function (pages) {
+      var out = {};
+      if (!pages || !pages.length) return out;
+      try {
+        var res = await db.collection(TEAMS).where({ page: _.in(pages.slice(0, 200)) })
+          .field({ page: true, info: true }).limit(1000).get();
+        (res.data || []).forEach(function (d) { if (d.info) out[d.page] = d.info; });
+      } catch (e) {
+        console.warn("读战队资料失败：" + msgOf(e));
+      }
+      return out;
+    },
+
+    /** 自己录入的比赛（集合 pro_manual_events，控制台手动加的记录，_id 是自动生成的，所以整个集合读）；没有集合 → [] */
+    readManualEvents: async function () {
+      try {
+        var res = await db.collection(MANUAL).limit(100).get();
+        return res.data || [];
+      } catch (e) {
+        return [];
+      }
     },
 
     /** 一批选手的简要信息（队员弹层用）：{ 页面名: { id, nat, input } } */
