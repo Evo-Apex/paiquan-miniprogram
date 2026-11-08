@@ -757,30 +757,31 @@ describe("分享", () => {
    比赛页 · 下一场比赛（2026-10-18 用户要求）
    赛程 / 分组 / 队员全部来自本地快照，不联网；交互是切组 + 点队伍看队员。
    ============================================================ */
-describe("比赛页 · 下一场比赛", () => {
+describe("赛季的一站（pro/event）· 原来比赛页的三块", () => {
+  // 2026-11-08 比赛页改版：最终成绩、下一场比赛、ALGS 职业赛场挪进了每一站的详情页（这里是 S2 季后赛 s2po）
   // 2026-11 起比赛页多了一个云函数调用 proRoster（只读数据库里的 Liquipedia 参赛名单，用来连到选手页）。
   // 内容本身还是本地快照：onLoad 当场就渲染出来，不等这个调用。
   test("onLoad 立刻就有内容（本地快照）；唯一的云函数调用是参赛名单 proRoster", () => {
-    const { inst, calls } = loadPage("matches", {});
-    inst.onLoad();
+    const { inst, calls } = loadPage("pro/event", {});
+    inst.onLoad({ key: "s2po" });
     // 2026-11-02 拉斯维加斯那场打完之后，快照里没有未来的比赛了。
     // 这时这一页显示「最终成绩」而不是「下一场比赛」——两种状态都要成立。
     if (!inst.data.next) {
       assert.ok(inst.data.result, "没有下一场时必须显示最终成绩");
       assert.ok(inst.data.result.rows.length >= 10, "最终成绩至少要有前 10");
-      assert.deepEqual(actionsOf(calls), ["proRoster"], "只该要参赛名单，内容是本地数据");
+      assert.deepEqual(actionsOf(calls), ["proSeason", "proRoster"], "只读数据库：赛季（头和名次）+ 参赛名单；内容是本地快照");
       return;
     }
     assert.ok(inst.data.next, "onLoad 之后 next 必须有值");
     assert.equal(inst.data.next.groups.length, 4);
     assert.equal(inst.data.next.activeGroup, "A");
     assert.equal(inst.data.next.teams.length, 10);
-    assert.deepEqual(actionsOf(calls), ["proRoster"], "只该要参赛名单，内容是本地数据");
+    assert.deepEqual(actionsOf(calls), ["proSeason", "proRoster"], "只读数据库：赛季（头和名次）+ 参赛名单；内容是本地快照");
   });
 
   test("切分组：A → B，队伍列表跟着换", () => {
-    const { inst } = loadPage("matches", {});
-    inst.onLoad();
+    const { inst } = loadPage("pro/event", {});
+    inst.onLoad({ key: "s2po" });
     if (!inst.data.next) return;  // 赛程已全部结束，没有分组可切
     const firstA = inst.data.next.teams[0].name;
     inst.onNextGroup({ currentTarget: { dataset: { k: "B" } } });
@@ -794,8 +795,8 @@ describe("比赛页 · 下一场比赛", () => {
   });
 
   test("点队伍 → 打开队员弹层；关掉后清空", () => {
-    const { inst } = loadPage("matches", {});
-    inst.onLoad();
+    const { inst } = loadPage("pro/event", {});
+    inst.onLoad({ key: "s2po" });
     if (!inst.data.next) return;  // 赛程已全部结束，没有队伍可点
     inst.onTeam({ currentTarget: { dataset: { i: 0 } } });
     const t = inst.data.openTeam;
@@ -812,8 +813,8 @@ describe("比赛页 · 下一场比赛", () => {
   test("切语言后下一场也跟着换（不残留旧语言）", () => {
     const i18n = require(path.join(MP, "utils", "i18n.js"));
     i18n.setLang("zh");
-    const { inst } = loadPage("matches", {});
-    inst.onLoad();
+    const { inst } = loadPage("pro/event", {});
+    inst.onLoad({ key: "s2po" });
     i18n.setLang("en");
     inst.onShow();
     if (inst.data.next) {
@@ -828,7 +829,7 @@ describe("比赛页 · 下一场比赛", () => {
   });
 
   test("没有 next 时点队伍 / 切组不崩", () => {
-    const { inst } = loadPage("matches", {});
+    const { inst } = loadPage("pro/event", {});
     inst.setData({ next: null });
     inst.onTeam({ currentTarget: { dataset: { i: 0 } } });
     inst.onCloseTeam();
@@ -836,16 +837,15 @@ describe("比赛页 · 下一场比赛", () => {
     assert.equal(inst.data.openTeam, null);
   });
 
-  test("分享标题跟着主内容走（页首是下一场比赛，不只是 ALGS 赛场）", () => {
-    const { inst } = loadPage("matches", {});
-    inst.onLoad();
-    assert.match(inst.onShareAppMessage().title, /下一场/);
-    assert.equal(inst.onShareAppMessage().path, "/pages/matches/matches");
+  test("分享：转发的是这一站（带 key）", () => {
+    const { inst } = loadPage("pro/event", {});
+    inst.onLoad({ key: "s2po" });
+    assert.equal(inst.onShareAppMessage().path, "/pro/event/event?key=s2po");
   });
 
   test("赛制：默认收起，点一下展开再收起", () => {
-    const { inst } = loadPage("matches", {});
-    inst.onLoad();
+    const { inst } = loadPage("pro/event", {});
+    inst.onLoad({ key: "s2po" });
     assert.equal(inst.data.fmtOpen, false, "默认必须收起，不占第一屏");
     // 赛程全部结束、这一页改成最终成绩时没有 next，赛制折叠就无从谈起
     if (!inst.data.next) return;
@@ -861,7 +861,7 @@ describe("比赛页 · 下一场比赛", () => {
    比赛页 → 选手页（2026-11，数据来自 Liquipedia）
    参赛名单由云函数 proRoster 给（只读数据库）；名单到了，冠军队员、名次行、选手榜才能点。
    ============================================================ */
-describe("比赛页 · 连到选手页", () => {
+describe("赛季的一站（pro/event）· 连到选手页", () => {
   // 一份最小的名单：冠军 Team Liquid（三人）+ 名次 11 的 Rex Regum Qeon（ALS 叫 Team RRQ，只能靠名次对上）
   const roster = {
     event: "Apex_Legends_Global_Series/2026/Split_2/Playoffs",
@@ -879,8 +879,8 @@ describe("比赛页 · 连到选手页", () => {
   const rosterOk = { ok: true, kind: "ok", message: "", data: roster };
 
   test("名单到了：冠军队员、名次行、选手榜行连上；对不上的不能点", async () => {
-    const { inst } = loadPage("matches", { responses: { proRoster: rosterOk } });
-    inst.onLoad();
+    const { inst } = loadPage("pro/event", { responses: { proRoster: rosterOk } });
+    inst.onLoad({ key: "s2po" });
     await flush();
     const r = inst.data.result;
     if (!r) return;   // 快照换成了别的比赛，这条测试的名单就不对了
@@ -894,10 +894,10 @@ describe("比赛页 · 连到选手页", () => {
   });
 
   test("点名次行 → 弹层里是三名队员（带国籍 · 键鼠/手柄）；点队员 → 选手页", async () => {
-    const { inst } = loadPage("matches", { responses: { proRoster: rosterOk } });
+    const { inst } = loadPage("pro/event", { responses: { proRoster: rosterOk } });
     const urls = [];
     global.wx.navigateTo = (o) => urls.push(o.url);
-    inst.onLoad();
+    inst.onLoad({ key: "s2po" });
     await flush();
     if (!inst.data.result) return;
     inst.onRankTeam({ currentTarget: { dataset: { ti: 0 } } });
@@ -914,10 +914,10 @@ describe("比赛页 · 连到选手页", () => {
   });
 
   test("有战队页的队：冠军队名能点、弹层第一行是「战队主页」；没有战队页的队没有这一行", async () => {
-    const { inst } = loadPage("matches", { responses: { proRoster: rosterOk } });
+    const { inst } = loadPage("pro/event", { responses: { proRoster: rosterOk } });
     const urls = [];
     global.wx.navigateTo = (o) => urls.push(o.url);
-    inst.onLoad();
+    inst.onLoad({ key: "s2po" });
     await flush();
     if (!inst.data.result) return;
     assert.equal(inst.data.result.champTeamPage, "Team_Liquid");
@@ -932,8 +932,8 @@ describe("比赛页 · 连到选手页", () => {
   });
 
   test("名单要不到（云函数挂了）：内容照常，什么都不能点", async () => {
-    const { inst } = loadPage("matches", { failAll: true });
-    inst.onLoad();
+    const { inst } = loadPage("pro/event", { failAll: true });
+    inst.onLoad({ key: "s2po" });
     await flush();
     if (!inst.data.result) return;
     assert.ok(inst.data.result.rows.length >= 10, "最终成绩照常显示");

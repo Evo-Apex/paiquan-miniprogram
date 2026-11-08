@@ -15,6 +15,7 @@ const MP = path.resolve(HERE, "..", "miniprogram");
 const lp = require(path.join(CF, "liquipedia.js"));
 const sync = require(path.join(CF, "proSync.js"));
 const { docId } = require(path.join(CF, "proStore.js"));
+const season = require(path.join(CF, "proSeason.js"));
 const view = require(path.join(MP, "pro", "utils", "view.js"));
 const names = require(path.join(MP, "utils", "pronames.js"));
 const prolink = require(path.join(MP, "utils", "prolink.js"));
@@ -88,6 +89,18 @@ function memStore() {
       pages.forEach((p) => { if (teams[p]) o[p] = true; });
       return o;
     },
+    seasonDoc: null,
+    manual: [],
+    readSeason: async function () { return this.seasonDoc ? JSON.parse(JSON.stringify(this.seasonDoc)) : null; },
+    saveSeason: async function (patch) { this.seasonDoc = Object.assign({}, this.seasonDoc || {}, JSON.parse(JSON.stringify(patch))); return true; },
+    readTeamInfos: async (pages) => {
+      const o = {};
+      pages.forEach((p) => { if (teams[p] && teams[p].info) o[p] = teams[p].info; });
+      return o;
+    },
+    readManualEvents: async function () { return this.manual; },
+    cnDocs: [],
+    readCnTeams: async function () { return this.cnDocs; },
     readBriefs: async (pages) => {
       const o = {};
       pages.forEach((p) => { const d = players[p]; if (d && d.profile) o[p] = { id: d.profile.id, nat: d.profile.nats[0] || "", input: d.profile.input }; });
@@ -184,6 +197,7 @@ describe("proSync 定时同步", () => {
          { pagename: "Team_Falcons", link: "Someone", id: "Someone", role: "Streamer", type: "staff", status: "active", joindate: "2024-05-28", leavedate: "0000-01-01" }]
       : [{ pagename: "Team_Falcons", link: "ImperialHal", role: "", type: "player", status: "active", joindate: "2024-05-28", leavedate: "0000-01-01" }]),
     team: () => [{ pagename: "Team_Falcons", name: "Team Falcons", region: "North America", status: "active", createdate: "2017-01-01", disbanddate: "0000-01-01", earnings: 3000000 }],
+    tournament: () => [],
     transfer: () => [
       { player: "Gild", nationality: "United States", fromteam: "Team Liquid", toteam: "Team Falcons", role1: "", role2: "", date: "2025-01-01 00:00:00" },
       { player: "Someone", nationality: "", fromteam: "", toteam: "Team Falcons", role1: "", role2: "Streamer", date: "2024-06-01 00:00:00" },
@@ -196,26 +210,26 @@ describe("proSync 定时同步", () => {
     let t = T0;
     const deps = { apiKey: "k", store, fetchImpl: f.impl, now: () => t };
     const dids = [];
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 12; i++) {
       const before = f.calls.length;
       dids.push((await sync.tick(deps)).did);
       assert.ok(f.calls.length - before <= 1, "一次 tick 不能超过 1 个请求");
       t += 5 * 60 * 1000;
     }
-    assert.deepEqual(dids.slice(0, 8), ["ok:event", "ok:players", "ok:squads", "ok:teams", "ok:teamInfo", "ok:teamResults", "ok:transfers", "ok:results"]);
-    assert.equal(dids[8], "fresh", "抓完了就歇着");
+    assert.deepEqual(dids.slice(0, 10), ["ok:event", "ok:season", "ok:seasonResults", "ok:players", "ok:squads", "ok:teams", "ok:teamInfo", "ok:teamResults", "ok:transfers", "ok:results"]);
+    assert.equal(dids[10], "fresh", "抓完了就歇着");
     assert.equal(store.players.ImperialHal.profile.id, "ImperialHal");
     assert.equal(store.players.Wxltzy.history.length, 0, "名单里有但经历没查到的，存空数组（查过了、确实没有）");
     assert.equal(store.players.ImperialHal.results.length, 5);
     const tf = store.teams.Team_Falcons;
     assert.deepEqual(tf.members.map((m) => m.page), ["ImperialHal", "Gild", "Raven"], "经历里出现过的战队都要查历史名单；教练留下，主播不要");
     assert.equal(tf.members[0].nat, "United States");
-    assert.equal(f.calls[3].params.conditions, "[[pagename::Team_Falcons]]");
+    assert.equal(f.calls[5].params.conditions, "[[pagename::Team_Falcons]]");
     assert.equal(tf.info.region, "North America");
     assert.equal(tf.info.disbanded, "", "0000-01-01 = 没解散");
-    assert.equal(f.calls[5].params.conditions, "[[opponentname::Team Falcons]]", "战队成绩按队名查（空格写法）");
+    assert.equal(f.calls[7].params.conditions, "[[opponentname::Team Falcons]]", "战队成绩按队名查（空格写法）");
     assert.equal(tf.results.length, 4, "还没打的、个人奖项不算；Red Bull 那条参赛方不是这支队");
-    assert.equal(f.calls[6].params.conditions, "[[fromteam::Team Falcons]] OR [[toteam::Team Falcons]]");
+    assert.equal(f.calls[8].params.conditions, "[[fromteam::Team Falcons]] OR [[toteam::Team Falcons]]");
     assert.deepEqual(tf.transfers.map((x) => [x.id, x.move, x.from]), [["Gild", "join", "Team Liquid"]], "主播的加入不算阵容变动");
     for (const k of ["membersAt", "infoAt", "resultsAt", "transfersAt"]) assert.ok(tf[k] > 0, k + " 要记下");
     // 24 小时后重新来一轮
@@ -243,6 +257,8 @@ describe("proSync 定时同步", () => {
     const deps = { apiKey: "k", store, fetchImpl: f.impl, now: () => t };
     const step = async () => { const d = (await sync.tick(deps)).did; t += 5 * 60 * 1000; return d; };
     assert.equal(await step(), "ok:event");
+    assert.equal(await step(), "ok:season");
+    assert.equal(await step(), "ok:seasonResults");
     assert.equal(await step(), "fail:players");
     assert.equal(await step(), "fail:players");
     assert.equal(await step(), "fail:players");
@@ -500,6 +516,115 @@ describe("选手照片（proPhotos、pro_photos.json）", () => {
     const t = (await s.proTeam({ page: "Team_Liquid" }, { store })).data;
     assert.deepEqual(t.members.map((m) => m.photo), ["cloud://env.bucket/pro/photos/v1/p_Zer0_card.webp", ""]);
     fresh(undefined);
+  });
+});
+
+/* ---------------- 比赛页的赛季（2026-11-08） ---------------- */
+
+describe("比赛页的赛季（云端）", () => {
+  const S = season.SEASON;
+  const tour = (o) => Object.assign({ pagename: "X", name: "X", startdate: "2026-05-01", enddate: "2026-05-02", liquipediatier: "3",
+    liquipediatiertype: "", locations: { region1: "China", country1: "cn" }, participantsnumber: 20, prizepool: 100, type: "Online" }, o);
+
+  test("比赛列表：赛区在 locations 里认中国；参赛队数 -1 = 没填；按开赛日期区间查", async () => {
+    assert.equal(lp.inChina({ region1: "China", country1: "cn" }), true);
+    assert.equal(lp.inChina({ region1: "Southeast Asia", region2: "South Asia" }), false);
+    const t = lp.normTournament(tour({ participantsnumber: -1, enddate: "0000-01-01" }));
+    assert.deepEqual([t.teams, t.end, t.cn], [0, "", true]);
+    const f = fakeLpdb({ tournament: () => [tour({})] });
+    const list = await lp.fetchTournaments("2026-02-01", "2027-02-28", { apiKey: "k", fetchImpl: f.impl });
+    assert.equal(list.length, 1);
+    assert.equal(f.calls[0].params.conditions, "[[startdate::>2026-02-01]] AND [[startdate::<2027-02-28]]");
+  });
+
+  test("名次：按比赛分开，还没打的（名次空）留着，个人奖项不要，同一队不重复", async () => {
+    const row = (parent, team, place, o) => Object.assign({ parent, opponentname: team, opponenttype: "team", placement: place, prizemoney: 0,
+      opponentplayers: { p1: "A", p1dn: "A" }, mode: "" }, o);
+    const f = fakeLpdb({ placement: () => [row("E1", "Team RRQ", "1"), row("E1", "Team RRQ", "1"), row("E1", "Wolves Esports", "2"),
+      row("E2", "Team Liquid", ""), row("E2", "TBD", ""), row("E1", "Sikezz", "1", { opponenttype: "solo", mode: "award_individual" })] });
+    const r = await lp.fetchEventResults(["E1", "E2"], { apiKey: "k", fetchImpl: f.impl });
+    assert.equal(f.calls[0].params.conditions, "[[parent::E1]] OR [[parent::E2]]");
+    assert.deepEqual(r.rows.E1.map((x) => [x.team, x.place]), [["Team RRQ", "1"], ["Wolves Esports", "2"]]);
+    assert.deepEqual(r.rows.E2.map((x) => [x.team, x.place]), [["Team Liquid", ""]], "冠军赛已晋级的队：名次空着也要；TBD（还没定的名额）不算");
+  });
+
+  test("挑比赛：五站另外放；小比赛只要这个赛季里办在中国的", () => {
+    const list = [lp.normTournament(tour({ pagename: S.stages[3].page, locations: { country1: "us" } })),
+      lp.normTournament(tour({ pagename: "BiliBili/Stellar_Cup/Season_8", startdate: "2026-09-25" })),
+      lp.normTournament(tour({ pagename: "BiliBili/Stellar_Cup/Season_6", startdate: "2025-09-25" })),
+      lp.normTournament(tour({ pagename: "Reignite_Cup/11", locations: { region1: "Asia-Pacific" } }))];
+    const p = season.pickTournaments(list);
+    assert.deepEqual(Object.keys(p.stages), [S.stages[3].page]);
+    assert.deepEqual(p.minor.map((t) => t.page), ["BiliBili/Stellar_Cup/Season_8"], "上个赛季的、不在中国的都不要");
+  });
+
+  test("自己录入的比赛：名字、开赛日期必填；类型认不出当国内；结束日期早于开赛就当一天", () => {
+    assert.equal(season.normManual({ name: "", start: "2026-11-22" }), null);
+    assert.equal(season.normManual({ name: "星火杯", start: "11-22" }), null);
+    const m = season.normManual({ name: " 周末职业表演赛 ", start: "2026-11-22", end: "2026-11-01", kind: "oops", teams: "8", teamsIn: ["Team RRQ", 3, ""] });
+    assert.deepEqual([m.name, m.end, m.kind, m.teams, m.teamsIn, m.manual], ["周末职业表演赛", "2026-11-22", "cn", 8, ["Team RRQ"], true]);
+    assert.equal(season.normManual({ name: "X", start: "2026-11-22", kind: "invitational" }).kind, "invitational");
+  });
+
+  test("同步：比赛列表到了展开成取名次（五站 + 中国比赛，每 10 场一次）；联赛的队加进战队同步", async () => {
+    const store = memStore();
+    const T0 = Date.UTC(2026, 10, 8);
+    await store.writeState({ queue: [{ kind: "season" }, { kind: "planSeason" }], events: [], rosters: {}, cycleAt: T0, lastRequestAt: 0 });
+    const f = fakeLpdb({
+      tournament: () => [tour({ pagename: S.stages[0].page, locations: {} }), tour({ pagename: "VK_Cash_Cup/2026", startdate: "2026-09-03" })],
+      placement: (q) => q.conditions.indexOf(S.cnLeague) >= 0
+        ? [{ parent: S.cnLeague, opponentname: "Wolves Esports", opponenttype: "team", placement: "2", opponentplayers: { p1: "CrazyCong" } }] : [],
+    });
+    let t = T0;
+    const deps = { apiKey: "k", store, fetchImpl: f.impl, now: () => t };
+    assert.equal((await sync.tick(deps)).did, "ok:season");
+    assert.deepEqual(store.seasonDoc.tournaments.map((x) => x.page), [S.stages[0].page, "VK_Cash_Cup/2026"]);
+    t += sync.MIN_GAP_MS;
+    assert.equal((await sync.tick(deps)).did, "ok:seasonResults");
+    assert.equal(f.calls[1].params.conditions.split(" OR ").length, 6, "五站 + 一场中国比赛");
+    assert.deepEqual(store.state.seasonTeams, ["Wolves_Esports"]);
+    const league = store.seasonDoc.results.find((x) => x.page === S.cnLeague);
+    assert.deepEqual(league.rows.map((x) => x.team), ["Wolves Esports"]);
+    const teams = sync._expandTeams(store.state).find((x) => x.kind === "teams");
+    assert.ok(teams.pages.includes("Wolves_Esports"), "联赛的队也有战队页");
+  });
+
+  test("proSeason：五站按名次排、写冠军；小比赛和自己录入的按日期合在一起；CN 战队照手动名单，在联赛里的按名次排", async () => {
+    const store = memStore();
+    store.seasonDoc = {
+      at: 9,
+      tournaments: [lp.normTournament(tour({ pagename: S.stages[3].page, name: "ALGS: 2026 Split 2 Playoffs", startdate: "2026-10-29", enddate: "2026-11-01", locations: {} })),
+        lp.normTournament(tour({ pagename: "BiliBili/Stellar_Cup/Season_8", name: "BiliBili Stellar Cup - Season #8", startdate: "2026-09-25", enddate: "2026-10-04" }))],
+      results: [
+        { page: S.stages[3].page, rows: [{ team: "Team Vision", place: "2", players: [] }, { team: "Team Liquid", place: "1", players: [] }] },
+        { page: "BiliBili/Stellar_Cup/Season_8", rows: [{ team: "Black Hole", place: "1", players: [] }] },
+        { page: S.cnLeague, rows: [{ team: "TEC", place: "3", players: [{ page: "Xiaolin", id: "Xiaolin" }] }, { team: "Team RRQ", place: "1", players: [] },
+          { team: "Wolves Esports", place: "2", players: [{ page: "CrazyCong", id: "CrazyCong" }] }] },
+      ],
+    };
+    store.manual = [{ name: "周末职业表演赛", start: "2026-11-22", kind: "invitational", teamsIn: ["Team RRQ"] }, { name: "坏的" }];
+    await store.saveTeam("Wolves_Esports", { info: { region: "China" } });
+    await store.saveTeam("TEC", { info: { region: "China" } });
+    await store.saveTeam("Team_RRQ", { info: { region: "Southeast Asia" } });
+    store.seasonDoc.results.find((x) => x.page === S.cnLeague).rows.push({ team: "Kirisame", place: "13", players: [] });
+    // 「所有 CN 战队」只看手动名单（August 定的）：一条一支队、一条一整个名单都认；不在联赛里的接在后面
+    store.cnDocs = [{ list: [{ team: "Black Hole", name: "黑洞 Black Hole" }, "kirisame", { team: "Wolves Esports", name: "狼队 Wolves Esports" }] }, { team: "TEC" }, { team: "" }];
+    const d = (await season.proSeason({}, { store })).data;
+    assert.equal(d.year, 6);
+    assert.equal(d.stages.length, 5);
+    const s2 = d.stages[3];
+    assert.deepEqual([s2.name, s2.winner, s2.results.map((r) => r.team)], ["ALGS: 2026 Split 2 Playoffs", "Team Liquid", ["Team Liquid", "Team Vision"]]);
+    assert.equal(d.stages[0].name, "", "没抓到的站：名字空着，页面用自己的叫法");
+    assert.deepEqual(d.minor.map((m) => [m.name, m.kind, m.winner]), [["BiliBili Stellar Cup - Season #8", "cn", "Black Hole"], ["周末职业表演赛", "invitational", ""]]);
+    assert.deepEqual(d.cnTeams.map((c) => [c.name, c.place, c.page]), [
+      ["狼队 Wolves Esports", "2", "Wolves_Esports"], ["TEC", "3", "TEC"], ["kirisame", "13", "Kirisame"], ["黑洞 Black Hole", "", "Black_Hole"]],
+      "在联赛里的按名次排（名单里写小写也对得上，页面名用 Liquipedia 的写法），不在的接在后面；空队名不要");
+    assert.deepEqual(d.cnTeams[0].players.map((p) => p.id), ["CrazyCong"]);
+    assert.deepEqual(season.cnListOf([{ team: "A" }, "a", { list: ["B", { team: "C", name: "丙" }] }]).map((c) => [c.team, c.name]), [["A", "A"], ["B", "B"], ["C", "丙"]], "重复的只留第一个");
+    assert.deepEqual(d.teams.map((t) => [t.team, t.region]), [["TEC", "China"], ["Team RRQ", "Southeast Asia"], ["Wolves Esports", "China"], ["Kirisame", ""], ["Team Vision", ""], ["Team Liquid", ""]],
+      "选主队的队伍：联赛的在前，再按各站；资料没抓到的赛区空着");
+    assert.equal(d.at, 9);
+    assert.equal((await season.proSeason({}, { store: memStore() })).data, null, "还没抓过：data:null");
   });
 });
 

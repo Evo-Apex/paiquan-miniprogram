@@ -352,3 +352,16 @@ describe("i18n · 语言状态", () => {
     assert.equal(i18n.getLang(), "zh");
   });
 });
+
+describe("词条不许重名（2026-11-08）", () => {
+  test("同一种语言里同一个键只写一次：后写的会悄悄盖掉前面的（比赛页的 seasonEnded 差点盖掉首页的「本赛季已结束」）", async () => {
+    const fs = await import("node:fs");
+    const src = fs.readFileSync(new URL("../miniprogram/utils/i18n.js", import.meta.url), "utf8");
+    const enAt = src.search(/^  en: \{/m);
+    for (const [name, block] of [["zh", src.slice(0, enAt)], ["en", src.slice(enAt)]]) {
+      const keys = [...block.matchAll(/^    ([A-Za-z_][A-Za-z0-9_]*):/gm)].map((x) => x[1]);
+      const dup = keys.filter((k, i) => keys.indexOf(k) !== i);
+      assert.deepEqual(dup, [], name + " 里重名的词条：" + dup.join(", "));
+    }
+  });
+});

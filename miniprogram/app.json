@@ -23,6 +23,7 @@
       "pages": [
         "player/player",
         "team/team",
+        "event/event",
         "sources/sources"
       ]
     },

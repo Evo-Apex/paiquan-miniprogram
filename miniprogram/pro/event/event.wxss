@@ -1,0 +1,31 @@
+/* 赛季里的一站（2026-11-08）。原来比赛页的三块（最终成绩、下一场比赛、ALGS 职业赛场）和队员弹层挪到了这里，
+   样式还在比赛页的 wxss 里，直接引进来（主包的文件，分包可以用）；这里只写这一页自己的（ev-*）。 */
+@import "../../pages/matches/matches.wxss";
+
+.ev-wrap { padding: var(--sp-6); }
+.ev-pressed { opacity: 0.7; }
+.ev-skel { height: 240rpx; }
+
+/* 头：两套主题都是深色底（同选手页、战队页的大卡） */
+.ev-head { margin-bottom: var(--sp-6); padding: var(--sp-8); border-radius: var(--r-xl); background: var(--hero-bg); color: var(--hero-ink); }
+.ev-name { display: block; font-size: var(--fs-title); font-weight: var(--fw-bold); }
+.ev-lp { display: block; margin-top: 4rpx; font-size: var(--fs-min); color: var(--hero-ink2); }
+.ev-facts { display: flex; margin-top: var(--sp-6); }
+.ev-fact { flex: 1; min-width: 0; display: flex; flex-direction: column; padding-left: var(--sp-4); border-left: 1rpx solid var(--hero-track); }
+.ev-fact:first-child { padding-left: 0; border-left: none; }
+.ev-fact-v { font-size: var(--fs-body); font-weight: var(--fw-bold); color: var(--hero-ink); word-break: break-word; }
+.ev-fact-k { margin-top: 4rpx; font-size: var(--fs-min); color: var(--hero-ink2); }
+
+/* Liquipedia 的名次（上面没有现成名次表时） */
+.ev-card { margin-bottom: var(--sp-6); padding: 28rpx 32rpx 16rpx; border-radius: var(--r-xl); background: var(--card); }
+.ev-card-h { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: var(--sp-3); }
+.ev-card-t { font-size: var(--fs-section); font-weight: var(--fw-bold); color: var(--ink); }
+.ev-card-s { margin-left: var(--sp-4); font-size: var(--fs-min); color: var(--ink3); }
+.ev-rows { display: block; }
+.ev-row { display: flex; align-items: center; min-height: 88rpx; border-top: 1rpx solid var(--line); }
+.ev-row:first-child { border-top: none; }
+.ev-place { flex: none; width: 112rpx; font-size: var(--fs-body); font-weight: var(--fw-num); color: var(--ink); font-variant-numeric: tabular-nums; }
+.ev-row-mine .ev-place { color: var(--accent-ink); }
+.ev-team { flex: 1; min-width: 0; font-size: var(--fs-body); color: var(--ink); }
+.ev-mine { flex: none; margin-left: var(--sp-3); padding: 4rpx 8rpx; border-radius: 4rpx; background: var(--accent); color: #ffffff; font-size: var(--fs-min); font-weight: var(--fw-bold); }
+.ev-chev { flex: none; width: 24rpx; margin-left: var(--sp-3); text-align: right; color: var(--ink3); }

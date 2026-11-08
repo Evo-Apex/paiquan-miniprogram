@@ -328,7 +328,7 @@ const AD_PAGES = ["home", "maps", "predator"];
    （原来的 pages/mapview「交互地图」已删，所以这里也没有它了。） */
 // 2026-10-27：加了「我的」（me）和分包 evo 里 Evo 战绩的三个子页面（写成 "evo/matches" 这样带分包目录的名字）
 // 2026-11：比赛页去掉广告位时从 AD_PAGES 拿掉了，这些检查也跟着漏了它，这里补回来；加了分包 pro 的选手页、战队页
-const PAGE_NAMES = AD_PAGES.concat(["matches", "games", "games/wheel", "games/ringguessr", "games/ringpick", "me", "evo/matches", "evo/match", "evo/bind", "pro/player", "pro/team", "pro/sources"]);
+const PAGE_NAMES = AD_PAGES.concat(["matches", "games", "games/wheel", "games/ringguessr", "games/ringpick", "me", "evo/matches", "evo/match", "evo/bind", "pro/player", "pro/team", "pro/event", "pro/sources"]);
 const pageDir = (n) => (n.indexOf("/") >= 0 ? path.join(MP, n) : path.join(MP, "pages", n));
 const pageBase = (n) => path.basename(n);
 const pageJsPath = (n) => path.join(pageDir(n), pageBase(n) + ".js");
@@ -336,7 +336,7 @@ const pageWxmlPath = (n) => path.join(pageDir(n), pageBase(n) + ".wxml");
 const pageWxssPath = (n) => path.join(pageDir(n), pageBase(n) + ".wxss");
 /* 自定义组件（目前都是 Evo 战绩的，在分包 evo 里）：和页面一样做绑定一致性 / 标签闭合 / 样式类检查 */
 // 2026-10-27：加了首页的两个（home：段位、今日、上一局；crowd：大家在玩什么）
-const COMPONENT_NAMES = ["evo/components/overview", "evo/components/devices", "evo/components/home", "evo/components/crowd"];
+const COMPONENT_NAMES = ["evo/components/overview", "evo/components/devices", "evo/components/home", "evo/components/crowd", "pro/components/season"];
 const compPath = (n, ext) => path.join(MP, n, "index" + ext);
 
 /** 读 wxss，把 @import 进来的文件也接上（Evo 的页面和组件共用 evo/evo.wxss） */
@@ -644,6 +644,36 @@ function vmFieldNames() {
   collect(tv.former);
   tv.former.all.forEach(collect);
   collect(teamView.visibleFormer(tv.former, false, pvT));
+
+  // 比赛页的赛季（2026-11-08）：每块都给一条，字段才收得全
+  const seasonView = require(path.join(MP, "pro", "utils", "seasonview.js"));
+  const sraw = { year: 6, at: 1,
+    stages: [{ key: "s2po", split: 2, kind: "playoffs", page: "P", name: "N", start: "2026-10-29", end: "2026-11-01", teams: 40, winner: "A",
+      results: [{ team: "A", place: "1" }, { team: "B", place: "" }] }],
+    minor: [{ page: "M", name: "M", start: "2026-11-10", end: "2026-11-12", kind: "cn", teams: 8, winner: "", teamsIn: ["A"], note: "x", manual: false }],
+    cnTeams: [{ team: "A", page: "A", place: "2", players: [{ page: "p", id: "p" }] }],
+    teams: [{ team: "A", page: "A", region: "China" }] };
+  const sv = seasonView.season(sraw, "zh", Date.UTC(2026, 10, 8), "A");
+  collect(sv);
+  sv.track.forEach(collect);
+  sv.dots.forEach((d) => { collect(d); d.dots.forEach(collect); });
+  collect(sv.next || {});
+  collect(sv.home);
+  collect(sv.home.next);
+  sv.home.results.forEach(collect);
+  sv.recent.forEach(collect);
+  sv.chips.forEach(collect);
+  sv.timeline.forEach(collect);
+  sv.cn.forEach(collect);
+  collect(seasonView.visibleRecent(sv, "all", false, i18nT));
+  collect(seasonView.visibleCn(sv, false, i18nT));
+  const pk = seasonView.picker(sraw, "zh", "", "", "A");
+  collect(pk);
+  pk.regions.forEach(collect);
+  pk.teams.forEach(collect);
+  const st = seasonView.stage(sraw, "s2po", "zh", Date.UTC(2026, 10, 8), "A");
+  collect(st);
+  st.rows.forEach(collect);
 
   return keys;
 }

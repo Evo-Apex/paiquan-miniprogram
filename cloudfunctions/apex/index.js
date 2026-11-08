@@ -109,6 +109,16 @@ exports.main = async (event) => {
   }
 
   // 职业选手、战队（比赛页的选手页、战队页）：只读数据库，不现查 Liquipedia（它每小时只给 60 次）
+  // 比赛页的赛季（五站 + 中国的小比赛 + 自己录入的比赛 + 所有 CN 战队，2026-11-08）：同样只读数据库
+  if (event && event.action === "proSeason") {
+    try {
+      return await require("./proSeason").proSeason(event, { store: proStore });
+    } catch (e) {
+      console.warn("赛季数据读取失败：" + (e && e.message ? e.message : String(e)));
+      return { ok: true, kind: "ok", message: "", data: null };
+    }
+  }
+
   if (event && (event.action === "proPlayer" || event.action === "proRoster" || event.action === "proTeam")) {
     try {
       const pro = require("./proSync");

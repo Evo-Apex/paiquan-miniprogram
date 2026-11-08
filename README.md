@@ -878,7 +878,7 @@ apex-miniapp/
 │   ├── handler.js               请求上游 + 分类 + 缓存
 │   ├── fetcher.js               只用 Node 内置模块的 HTTP 客户端
 │   └── core.js                  与 miniprogram/utils/core.js 完全相同的副本
-└── tests/                       743 条测试 + 1 个联机脚本
+└── tests/                       767 条测试 + 1 个联机脚本
 ```
 
 `core.js` 放了两份（小程序和云函数是两个独立上传根目录，没法互相 require）。
