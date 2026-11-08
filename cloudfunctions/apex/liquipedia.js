@@ -521,7 +521,8 @@ function fetchEventResults(pages, deps) {
       rows.forEach(function (r) {
         if (!out[r.parent] || r.opponenttype !== "team" || /award/i.test(String(r.mode || ""))) return;
         var team = String(r.opponentname || "").trim();
-        if (!team || out[r.parent].some(function (x) { return x.team === team; })) return;
+        // TBD = 还没定的名额（Liquipedia 先占位），不是一支队
+        if (!team || /^tbd$/i.test(team) || out[r.parent].some(function (x) { return x.team === team; })) return;
         out[r.parent].push({ team: team, place: String(r.placement || ""), prize: num(r.prizemoney), players: playersOf(r) });
       });
       return { rows: out, full: rows.length >= RESULT_LIMIT };

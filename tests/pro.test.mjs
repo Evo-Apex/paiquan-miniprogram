@@ -539,11 +539,11 @@ describe("比赛页的赛季（云端）", () => {
     const row = (parent, team, place, o) => Object.assign({ parent, opponentname: team, opponenttype: "team", placement: place, prizemoney: 0,
       opponentplayers: { p1: "A", p1dn: "A" }, mode: "" }, o);
     const f = fakeLpdb({ placement: () => [row("E1", "Team RRQ", "1"), row("E1", "Team RRQ", "1"), row("E1", "Wolves Esports", "2"),
-      row("E2", "Team Liquid", ""), row("E1", "Sikezz", "1", { opponenttype: "solo", mode: "award_individual" })] });
+      row("E2", "Team Liquid", ""), row("E2", "TBD", ""), row("E1", "Sikezz", "1", { opponenttype: "solo", mode: "award_individual" })] });
     const r = await lp.fetchEventResults(["E1", "E2"], { apiKey: "k", fetchImpl: f.impl });
     assert.equal(f.calls[0].params.conditions, "[[parent::E1]] OR [[parent::E2]]");
     assert.deepEqual(r.rows.E1.map((x) => [x.team, x.place]), [["Team RRQ", "1"], ["Wolves Esports", "2"]]);
-    assert.deepEqual(r.rows.E2.map((x) => [x.team, x.place]), [["Team Liquid", ""]], "冠军赛已晋级的队：名次空着也要");
+    assert.deepEqual(r.rows.E2.map((x) => [x.team, x.place]), [["Team Liquid", ""]], "冠军赛已晋级的队：名次空着也要；TBD（还没定的名额）不算");
   });
 
   test("挑比赛：五站另外放；小比赛只要这个赛季里办在中国的", () => {

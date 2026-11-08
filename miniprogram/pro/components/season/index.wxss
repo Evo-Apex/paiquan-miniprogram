@@ -250,7 +250,8 @@
 .ss-sheet-x { min-height: 72rpx; line-height: 72rpx; padding: 0 var(--sp-5); border: 1rpx solid var(--line); border-radius: var(--r-full); font-size: var(--fs-sub); color: var(--ink2); }
 .ss-search { height: 80rpx; margin: var(--sp-5) 0 var(--sp-4); padding: 0 var(--sp-6); border-radius: var(--r-full); background: var(--raised); color: var(--ink); font-size: var(--fs-body); }
 .ss-search-ph { color: var(--ink3); }
-.ss-grid-wrap { flex: 1; min-height: 240rpx; max-height: 50vh; }
+/* 队伍格子单独滚动：高度写死（弹层是一列 flex，滚动区不写死高度会撑出去、压住下面的按钮） */
+.ss-grid-wrap { height: 42vh; }
 .ss-grid { display: flex; flex-wrap: wrap; margin-right: -16rpx; }
 .ss-tpick {
   width: calc((100% - 48rpx) / 3);

@@ -32,7 +32,7 @@
   </view>
 
   <!-- 赛季（2026-11-08 照 August 的「赛季进度条」设计稿）：分包 pro 里的组件，异步加载；云端没数据时整块不出 -->
-  <pro-season lang="{{lang}}"></pro-season>
+  <pro-season id="season" lang="{{lang}}"></pro-season>
 
   <view class="foot">
     {{T.foot1}}
