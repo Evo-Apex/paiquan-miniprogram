@@ -58,8 +58,22 @@ async function syncPro() {
   }
 }
 
+// 临时排查用：只留这次调用的时间、类型和字段名，不记 userInfo 等字段的内容
+function callInfo(event) {
+  const e = event && typeof event === "object" ? event : {};
+  const text = function (v) { return v === undefined || v === null ? "" : String(v).slice(0, 80); };
+  return { at: Date.now(), type: text(e.Type), trigger: text(e.TriggerName), time: text(e.Time), keys: Object.keys(e).slice(0, 20) };
+}
+
 exports.main = async (event) => {
   const apiKey = (process.env.ALS_API_KEY || "").trim();
+
+  // 临时排查（2026-11-08）：线上定时器一直没有运行记录。没有 action 的调用（不是小程序页面发起的）记一笔，
+  // 看定时器到底有没有调用函数、传了什么。查清后删掉这一段、callInfo 和 proStore 的 noteCall / readCallNote
+  if (proStore && !(event && event.action)) await proStore.noteCall(callInfo(event));
+  if (event && event.action === "callNote") {
+    return { ok: true, kind: "ok", message: "", data: proStore ? await proStore.readCallNote() : null };
+  }
 
   // 定时触发器：只做轮询，不走 handle（那是给前端按需调用走的路）
   if (event && event.Type === "Timer") {
