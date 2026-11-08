@@ -20,6 +20,7 @@
 var lp = require("./liquipedia");
 var season = require("./proSeason");
 var photos = require("./proPhotos");
+var logos = require("./proLogos");
 
 var DEFAULT_EVENTS = ["Apex_Legends_Global_Series/2026/Split_2/Playoffs"];
 var BATCH = { players: 40, squads: 40, teams: 30, teamInfo: 40, teamResults: 10, transfers: 15, results: 5 };
@@ -349,6 +350,15 @@ function matesOf(page, history, deps) {
   });
 }
 
+/** 现在的队 + 待过的队（页面名，去重）：给它们配队标 */
+function teamsOf(profile, history) {
+  var out = [];
+  var add = function (p) { if (p && out.indexOf(p) < 0) out.push(p); };
+  add(profile && profile.teamPage);
+  (history || []).forEach(function (h) { add(h && h.teamPage); });
+  return out;
+}
+
 /** 选手页：一位选手存下来的全部内容 + 队友。数据库里没有 → data:null（页面写"还没有这位选手的资料"） */
 function proPlayer(event, deps) {
   var page = event && event.page;
@@ -368,6 +378,7 @@ function proPlayer(event, deps) {
           mates: m.mates,
           teamPages: m.teamPages,
           photo: photos.photoOf(page, "hero"),   // 选手照片（cloud:// 地址）；没有 → ""，页面用剪影
+          teamLogos: logos.logosOf(teamsOf(doc.profile, history)),   // { 战队页面名: 队标地址 }，没有的队不在里面（页面写缩写）
           at: latest(doc.profileAt, doc.historyAt, doc.resultsAt)
         }
       };
@@ -408,6 +419,7 @@ function proTeam(event, deps) {
         data: {
           page: page,
           info: doc.info || null,
+          logo: logos.logoOf(page),   // 队标（cloud:// 地址）；没有 → ""，大卡写队名缩写
           members: members ? members.map(markMember) : null,
           results: Array.isArray(doc.results) ? doc.results : null,
           transfers: transfers ? transfers.map(mark) : null,
@@ -450,6 +462,7 @@ function proRoster(event, deps) {
               place: t.place,
               team: t.team,
               teamPage: teamIdx[teamPageOf(t)] ? teamPageOf(t) : "",   // 空 = 还没有战队页
+              teamLogo: logos.logoOf(teamPageOf(t)),   // 队标（比赛页冠军卡用）；没有 → ""
               players: (t.players || []).map(function (p) {
                 var b = briefs[p.page] || null;
                 return {

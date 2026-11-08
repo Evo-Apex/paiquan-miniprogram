@@ -109,7 +109,7 @@ Page({
     var stage = this._season ? sv.stage(this._season, key, lang, Date.now(), prefs.get("homeTeam", "")) : null;
     var result = null;
     if (key === RESULT_STAGE) {
-      result = this._roster ? prolink.decorate(matchresult.build(lang), this._roster, lang) : matchresult.build(lang);
+      result = this._roster ? this.champLogoFix(prolink.decorate(matchresult.build(lang), this._roster, lang)) : matchresult.build(lang);
     }
     var next = null;
     if (nextStageKey(nextData.event, year) === key) {
@@ -164,6 +164,20 @@ Page({
         countText: i18n.t(this.data.lang, "nextPlayerCount").replace("{n}", (t.players || []).length)
       }
     });
+  },
+
+  /** 加载失败过的冠军队标不再试（只写队名） */
+  champLogoFix: function (r) {
+    if (r && this._badChampLogo && r.champTeamLogo === this._badChampLogo) r.champTeamLogo = "";
+    return r;
+  },
+
+  /** 冠军队标加载失败（没传、网络不通）→ 只写队名 */
+  onChampLogoError: function () {
+    var r = this.data.result;
+    if (!r || !r.champTeamLogo) return;
+    this._badChampLogo = r.champTeamLogo;
+    this.setData({ "result.champTeamLogo": "" });
   },
 
   /** 点冠军队名、弹层里的「战队主页」、Liquipedia 名次的一行 → 战队页 */

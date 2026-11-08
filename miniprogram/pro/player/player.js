@@ -56,6 +56,9 @@ Page({
     var T = this.data.T;
     var v = view.player(this._raw, this.data.lang, Date.now());
     if (this._badPhoto && v.photo === this._badPhoto) v.photo = "";   // 加载失败过的照片不再试，换回剪影
+    var bad = this._badLogos || {};   // 加载失败过的队标不再试，换回缩写
+    if (v.team && bad[v.team.logo]) v.team.logo = "";
+    if (v.career.items) v.career.items.forEach(function (it) { if (bad[it.logo]) it.logo = ""; });
     if (!this._resMode) this._resMode = v.results.defaultMode;
     this.setData({
       v: v,
@@ -89,6 +92,15 @@ Page({
   onPhotoError: function () {
     this._badPhoto = this.data.v && this.data.v.photo;
     this.setData({ "v.photo": "" });
+  },
+
+  /** 队标加载失败（没传、网络不通）→ 这支队换回缩写（大卡和战队经历里同一支队一起换） */
+  onLogoError: function (e) {
+    var src = e.currentTarget.dataset.src;
+    if (!src) return;
+    this._badLogos = this._badLogos || {};
+    this._badLogos[src] = true;
+    this.rebuild();
   },
 
   onMatesMore: function () {

@@ -92,8 +92,8 @@
   border-top: 1rpx solid var(--hero-track);
 }
 .pp-logo {
-  width: 60rpx;
-  height: 60rpx;
+  width: 72rpx;
+  height: 72rpx;
   flex: none;
   margin-right: 20rpx;
   display: flex;
@@ -105,6 +105,8 @@
   color: var(--hero-ink);
   clip-path: polygon(0 0, 100% 0, 100% 72%, 72% 100%, 0 100%);
 }
+/* 队标四周留 16%，右下切角切不到（84% + 84% < 100% + 72%）；大卡和战队经历共用 */
+.pp-logo-img { width: 68%; height: 68%; }
 .pp-hteam-txt { min-width: 0; }
 .pp-center { text-align: center; }
 .pp-hteam-n { display: block; font-size: var(--fs-body); font-weight: var(--fw-bold); color: var(--hero-ink); }
@@ -225,6 +227,21 @@
   transform: rotate(45deg);
   background: var(--track);
   box-shadow: 0 0 0 4rpx var(--card), 0 0 0 6rpx var(--line);
+}
+/* 战队经历每行的队标：普通卡片上（浅色主题是白底），所以用实心的深色底，深色版队标两套主题都看得清 */
+.pp-tlogo {
+  width: 64rpx;
+  height: 64rpx;
+  flex: none;
+  margin-right: 20rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--fs-min);
+  font-weight: var(--fw-bold);
+  background: var(--hero-bg);
+  color: var(--hero-ink);
+  clip-path: polygon(0 0, 100% 0, 100% 72%, 72% 100%, 0 100%);
 }
 .pp-tli-now .pp-dot { background: var(--accent); box-shadow: 0 0 0 4rpx var(--card), 0 0 0 6rpx var(--accent); }
 .pp-tl-d { flex: none; margin-left: var(--sp-4); padding-top: 4rpx; font-size: var(--fs-min); color: var(--ink2); font-variant-numeric: tabular-nums; white-space: nowrap; }

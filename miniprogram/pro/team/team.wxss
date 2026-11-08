@@ -27,6 +27,8 @@
   background: var(--hero-track);
   clip-path: polygon(0 0, 100% 0, 100% 72%, 72% 100%, 0 100%);
 }
+/* 队标四周留 16%，右下切角切不到（84% + 84% < 100% + 72%） */
+.tp-logo-img { width: 68%; height: 68%; }
 .tp-name {
   margin-top: 36rpx;
   font-size: var(--fs-hero);

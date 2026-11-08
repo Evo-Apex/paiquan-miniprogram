@@ -361,6 +361,19 @@
 .rs-champ-teamrow { display: flex; align-items: center; margin-top: var(--sp-2); border-radius: var(--r-lg); }
 .rs-champ-teamrow .rs-champ-team { margin-top: 0; }
 .rs-champ-tap { min-height: 80rpx; }
+/* 冠军队标：红底上放深色切角方块（队标是深色底用的那一版），四周留 16% 切角切不到 */
+.rs-champ-logo {
+  flex: none;
+  width: 80rpx;
+  height: 80rpx;
+  margin-right: var(--sp-3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--hero-bg);
+  clip-path: polygon(0 0, 100% 0, 100% 72%, 72% 100%, 0 100%);
+}
+.rs-champ-logo-img { width: 68%; height: 68%; }
 .rs-champ-x { flex: none; margin-left: var(--sp-3); font-size: var(--fs-title); line-height: 1; color: #ffffff; }
 .rs-champ-team {
   display: block;

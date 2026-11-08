@@ -35,7 +35,12 @@
       </view>
       <!-- 有战队页就能点进去（右边一个 ›） -->
       <view wx:if="{{v.team}}" class="pp-hteam" data-page="{{v.team.page}}" bindtap="onOpenTeam" hover-class="{{v.team.page ? 'pp-pressed' : 'none'}}">
-        <view class="pp-logo">{{v.team.initials}}</view>
+        <!-- 队标（云存储；没有或加载失败写队名缩写） -->
+        <view class="pp-logo">
+          <image wx:if="{{v.team.logo}}" class="pp-logo-img" src="{{v.team.logo}}" aria-hidden="{{true}}" mode="aspectFit"
+                 data-src="{{v.team.logo}}" binderror="onLogoError"></image>
+          <text wx:else>{{v.team.initials}}</text>
+        </view>
         <view class="pp-hteam-txt">
           <text class="pp-hteam-n">{{v.team.name}}</text>
           <text wx:if="{{v.team.since}}" class="pp-hteam-s">{{v.team.since}}</text>
@@ -108,7 +113,7 @@
       </view>
     </view>
 
-    <!-- 战队经历：上面一条按在队时间切开的色条（红 = 现在的队），下面时间线（新的在前） -->
+    <!-- 战队经历：上面一条按在队时间切开的色条（红 = 现在的队），下面时间线（新的在前，每行带队标或缩写） -->
     <view wx:if="{{v.career.has}}" class="pp-card">
       <view class="pp-head"><text class="pp-h">{{T.proCareer}}</text><text class="pp-hs">{{v.career.countText}}</text></view>
       <block wx:if="{{v.career.strip.length}}">
@@ -123,6 +128,11 @@
         <view class="pp-tli {{item.now ? 'pp-tli-now' : ''}}" wx:for="{{v.career.items}}" wx:key="key"
               data-page="{{item.page}}" bindtap="onOpenTeam" hover-class="{{item.page ? 'pp-pressed' : 'none'}}">
           <view class="pp-dot"></view>
+          <view class="pp-tlogo">
+            <image wx:if="{{item.logo}}" class="pp-logo-img" src="{{item.logo}}" aria-hidden="{{true}}" mode="aspectFit" lazy-load="{{true}}"
+                   data-src="{{item.logo}}" binderror="onLogoError"></image>
+            <text wx:else>{{item.initials}}</text>
+          </view>
           <view class="pp-grow">
             <text class="pp-name">{{item.team}}</text>
             <text wx:if="{{item.sub}}" class="pp-small">{{item.sub}}</text>

@@ -178,7 +178,8 @@ var DICT = {
     proSrcDataH: "选手和战队资料",
     proSrcData: "选手和战队的资料、战队经历、阵容变动、比赛成绩和队友关系来自 Liquipedia，按 CC BY-SA 3.0 使用。",
     proSrcSynced: "每天同步一次，上次同步于 {t}。",
-    proSrcPhoto: "选手照片来自 ALGS 官方定妆照，经 EA 授权使用；没有照片的选手用剪影代替，队标先用队名缩写。",
+    proSrcPhoto: "选手照片来自 ALGS 官方定妆照，经 EA 授权使用；没有照片的选手用剪影代替。",
+    proSrcLogo: "战队队标来自 Apex Legends Status 和 Liquipedia，归各战队所有。",
     proSrcFanH: "声明",
     proSrcFan: "派圈助手是粉丝做的工具，与 Electronic Arts、Respawn 无关，也没有得到他们的认可。",
     // —— 战队页（分包 pro/team/，2026-11-07；版式照 August 的战队页设计稿）——
@@ -875,7 +876,8 @@ var DICT = {
     proSrcDataH: "Player and team data",
     proSrcData: "Player and team profiles, team history, roster changes, results and teammates come from Liquipedia, used under CC BY-SA 3.0.",
     proSrcSynced: "Synced daily. Last synced {t}.",
-    proSrcPhoto: "Player photos are official ALGS portraits, used with permission from EA. Players without a photo show a silhouette; team logos are abbreviations for now.",
+    proSrcPhoto: "Player photos are official ALGS portraits, used with permission from EA. Players without a photo show a silhouette.",
+    proSrcLogo: "Team logos come from Apex Legends Status and Liquipedia and belong to their teams.",
     proSrcFanH: "Disclaimer",
     proSrcFan: "Paiquan is a fan-made tool. It is not affiliated with or endorsed by Electronic Arts or Respawn.",
     // —— Team page (subpackage pro/team/, 2026-11-07; layout from August's mockup) ——

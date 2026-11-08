@@ -74,6 +74,7 @@ function sheetPlayer(p, lang) {
 /**
  * 给 matchresult.build() 的结果补上连接（原地不改，返回新对象）：
  *   champTeamPage：冠军队的战队页（还没有战队页 / 没对上为空）
+ *   champTeamLogo：冠军队的队标（云存储地址；没有 / 没对上为空）
  *   champChips[]：冠军队员 { name, page }（对不上的 page 为空）
  *   rows[i].ti：名次表这一行对上了名单里第几支队（-1 = 没对上，不能点）
  *   playerRows[i].page：选手榜这一行的选手页
@@ -89,6 +90,7 @@ function decorate(result, roster, lang) {
 
   var champ = findTeam(roster, result.champTeam, "1");
   out.champTeamPage = champ && champ.teamPage ? champ.teamPage : "";
+  out.champTeamLogo = champ && typeof champ.teamLogo === "string" ? champ.teamLogo : "";
   out.champChips = (result.champList || []).map(function (n) {
     var p = findPlayer(champ, n);
     return { name: n, page: p ? p.page : "" };

@@ -60,6 +60,7 @@ Page({
     var v = teamview.team(this._raw, this.data.lang);
     var bad = this._badPhotos || {};
     v.roster.cards.forEach(function (c) { if (bad[c.photo]) c.photo = ""; });   // 加载失败过的不再试
+    if (this._badLogo && v.logo === this._badLogo) v.logo = "";   // 队标加载失败过 → 写缩写
     if (!this._resMode) this._resMode = v.results.defaultMode;
     this.setData({
       v: v,
@@ -86,6 +87,12 @@ Page({
     this._resMode = "major";
     this._resOpen = false;
     this.rebuild();
+  },
+
+  /** 大卡的队标加载失败（没传、网络不通）→ 换回队名缩写 */
+  onLogoError: function () {
+    this._badLogo = this.data.v && this.data.v.logo;
+    this.setData({ "v.logo": "" });
   },
 
   /** 选手卡的照片加载失败（没传、网络不通、手机不认 WebP）→ 这张卡换回剪影 */
