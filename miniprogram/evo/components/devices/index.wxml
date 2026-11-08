@@ -1,7 +1,10 @@
-<!-- 「我的」页里 Evo 那一块：绑定的电脑（可以解绑，每次问要不要同时删掉云端的数据）、扫码绑定、游戏账号、说明。
-     字段由 evo/utils/view.js 的 devicesView() 拼好 -->
+<!-- 「我的」页上半部分（2026-11-08 照 August 的设计稿）：游戏 ID + 绑定状态、三格统计、每台电脑一张「电脑上的 Evo」卡。
+     字段由 evo/utils/view.js 的 meView() 拼好；下面的设置列表在主包 pages/me 里 -->
 <view class="evo">
-  <view wx:if="{{state === 'loading'}}" class="panel evo-skel"></view>
+  <block wx:if="{{state === 'loading'}}">
+    <view class="me-head"><view class="me-ava"></view><view class="me-skel-line"></view></view>
+    <view class="me-card evo-skel"></view>
+  </block>
 
   <view wx:elif="{{state === 'error'}}" class="msg msg-err">
     <text class="msg-title">{{T.evoLoadFail}}</text>
@@ -10,43 +13,60 @@
   </view>
 
   <block wx:else>
-    <view class="sec-title">{{T.evoDevices}}</view>
-    <view class="panel">
-      <text wx:if="{{!v.hasDevices}}" class="evo-dim">{{T.evoNoDevice}}</text>
-      <view wx:for="{{v.devices}}" wx:key="id" class="evo-dev {{index === v.devices.length - 1 ? 'evo-dev-last' : ''}}">
-        <view class="evo-grow">
-          <text class="evo-dev-name">{{item.name}}</text>
-          <text wx:if="{{item.boundAt}}" class="evo-k">{{item.boundAt}}</text>
-          <text class="evo-k">{{item.sync}}</text>
-          <text class="evo-k">{{item.count}}</text>
-        </view>
-        <view class="evo-unbind" hover-class="evo-pressed" data-index="{{index}}" bindtap="onUnbind">{{T.evoUnbind}}</view>
+    <!-- 顶上：游戏 ID 首字母的切角方块当头像（不用微信头像昵称：不采集个人信息）；没绑定时方块里是图标 -->
+    <view class="me-head">
+      <view class="me-ava">
+        <text wx:if="{{v.initial}}">{{v.initial}}</text>
+        <image wx:else class="me-ava-ic" src="/evo/assets/link-pc.svg" mode="aspectFit"></image>
       </view>
-      <view class="evo-cta" hover-class="evo-pressed" bindtap="onScan">{{v.hasDevices ? T.evoScanAnother : T.evoScan}}</view>
+      <view class="evo-grow">
+        <text class="me-name">{{v.name}}</text>
+        <view class="me-sub">
+          <view wx:if="{{v.state === 'ready'}}" class="me-dot"></view>
+          <text>{{v.sub}}</text>
+        </view>
+      </view>
     </view>
 
-    <block wx:if="{{v.accounts.length}}">
-      <view class="sec-title">{{T.evoAccounts}}</view>
-      <view class="panel">
-        <view wx:for="{{v.accounts}}" wx:key="key" class="evo-acc">
-          <text class="evo-acc-name" user-select="{{true}}">{{item.name}}</text>
-          <text wx:if="{{item.names}}" class="evo-k">{{item.names}}</text>
-        </view>
-        <view class="note">{{T.evoAccountsNote}}</view>
+    <!-- 三格统计（记录局数 / 赛季最高 / 冠军次数）；没有的那格不出，不写 0 -->
+    <view wx:if="{{v.stats.length}}" class="me-stats">
+      <view class="me-stat" wx:for="{{v.stats}}" wx:key="key">
+        <text class="me-stat-v {{item.small ? 'me-stat-v-s' : ''}}">{{item.v}}</text>
+        <text class="me-stat-k">{{item.k}}</text>
       </view>
-    </block>
+    </view>
 
-    <view class="sec-title">{{T.evoAbout}}</view>
-    <view class="panel">
-      <view class="evo-about"><text class="evo-about-t">{{T.evoAbout1T}}</text><text class="evo-dim">{{T.evoAbout1}}</text></view>
-      <view class="evo-about"><text class="evo-about-t">{{T.evoAbout2T}}</text><text class="evo-dim">{{T.evoAbout2}}</text></view>
-      <view class="evo-about"><text class="evo-about-t">{{T.evoAbout3T}}</text><text class="evo-dim">{{T.evoAbout3}}</text></view>
-      <!-- 不做"点一下复制"：wx.setClipboardData 是隐私接口（static.test.mjs 的黑名单）；网址可以长按选中 -->
-      <view class="evo-site-row">
-        <text class="evo-k">{{T.evoSite}}</text>
-        <text class="evo-site" user-select="{{true}}">evotracker.cn</text>
-        <text class="evo-k">{{T.evoSiteHint}}</text>
+    <!-- 每台电脑一张卡：状态标签带字（不只靠颜色）、几分钟前同步、Evo 版本；解除绑定用强调色文字，点了还要选、要确认 -->
+    <view wx:for="{{v.devices}}" wx:key="id" class="me-card">
+      <view class="me-pc">
+        <image class="me-pc-ic" src="/evo/assets/link-pc.svg" mode="aspectFit"></image>
+        <view class="evo-grow">
+          <text class="me-pc-t">{{item.title}}</text>
+          <text class="me-pc-s">{{item.sub}}</text>
+        </view>
+        <text class="me-chip me-chip-{{item.chipCls}}">{{item.chip}}</text>
       </view>
+      <text class="me-desc">{{T.mePcDesc}}</text>
+      <view class="me-btns">
+        <view class="me-btn" hover-class="evo-pressed" bindtap="onAccounts">{{T.meManageAccounts}}</view>
+        <view class="me-btn me-btn-danger" hover-class="evo-pressed" data-index="{{index}}" bindtap="onUnbind">{{T.meUnbind}}</view>
+      </view>
+    </view>
+    <view wx:if="{{v.state === 'ready'}}" class="me-more" hover-class="evo-pressed" bindtap="onScan">{{T.evoScanAnother}}</view>
+
+    <!-- 没绑定：同一张卡，讲清楚是什么、怎么绑 -->
+    <view wx:if="{{v.state === 'unbound'}}" class="me-card">
+      <view class="me-pc">
+        <image class="me-pc-ic" src="/evo/assets/link-pc.svg" mode="aspectFit"></image>
+        <view class="evo-grow">
+          <text class="me-pc-t">{{T.mePcTitle}}</text>
+          <text class="me-pc-s">{{T.meUnboundCard}}</text>
+        </view>
+      </view>
+      <text class="me-desc">{{T.meUnboundDesc}}</text>
+      <view class="evo-cta" hover-class="evo-pressed" bindtap="onScan">{{T.evoScan}}</view>
+      <!-- 网址不做"点一下复制"：wx.setClipboardData 是隐私接口（static.test.mjs 的黑名单）；可以长按选中 -->
+      <view class="me-site"><text>{{T.meGetEvo}}</text><text class="me-site-url" user-select="{{true}}">evotracker.cn</text></view>
     </view>
   </block>
 </view>

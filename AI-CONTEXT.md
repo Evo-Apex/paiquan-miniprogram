@@ -159,7 +159,8 @@ pages/maps.wxml  {{...}}  ← 只渲染，不含业务判断
 | 猜圈练习 | 分包 `games/ringguessr/` | 本地 `games/data/match_rings_data.js` | `games/utils/rings.js` | canvas 游戏：拖动 + 双指缩放，8 题 / 20 秒 |
 | 圈型速判 | 分包 `games/ringpick/` | 本地 `games/data/rings_data.js` + `map_ends_data.js` | `games/utils/ringpick.js` | 四选一，10 秒一题 |
 | 英雄/武器轮盘 | 分包 `games/wheel/` | 本地 `codex_data.js` | `wheel_data.js`（在主包 `utils/`，分类页也要用） | 纯随机，不按选取率加权 |
-| 我的（tab） | `pages/me/` | 云端 `evo_mp` | 分包 `evo/components/devices` | Evo 的绑定（§17） |
+| 我的（tab） | `pages/me/` | 云端 `evo_mp`（`me`） | 分包 `evo/components/devices`、`utils/theme.js` | 2026-11-08 照 August 的设计稿改版：游戏 ID + 三格统计 + 电脑上的 Evo（组件）→ 设置列表（分享卡片、外观、语言、隐私说明、关于 Evo、版本）（§17） |
+| 游戏账号 / 关于 Evo | 分包 `evo/accounts`、`evo/about` | `evo_mp`（`me`）/ 本地文案 | `evo/utils/view.js` | 「我的」页的两个二级页（2026-11-08） |
 | 全部对局 / 对局详情 / 绑定电脑 | 分包 `evo/matches`、`evo/match`、`evo/bind` | 云端 `evo_mp` | `evo/utils/view.js` | Evo 战绩的子页面（§17） |
 
 **注意**：`pages/maps/` **没有自己的 `.wxss`**（只有 js/json/wxml），它的样式全部在根目录 `app.wxss` 里。
@@ -345,11 +346,11 @@ pages/maps.wxml  {{...}}  ← 只渲染，不含业务判断
 |---|---|---|---|
 | `core.test.mjs` | 68 | 归一化、uid、错误分类、涨幅计算、译名"不许猜" | 改 core.js |
 | `handler.test.mjs` | 49 | 云函数 handler：uid 重试、store 注入、追踪 action | 改 handler/index |
-| `page.test.mjs` | 65 | 七个页面行为：取数、查询、涨幅、猜圈、速判、轮盘 | 改页面 |
+| `page.test.mjs` | 85 | 页面行为：取数、查询、涨幅、猜圈、速判、轮盘、比赛页连接、选手页、战队页、「我的」设置列表 | 改页面 |
 | `static.test.mjs` | 32 | 隐私接口黑名单、本地存储白名单、WXML 一致性、颜色不表意 | 改任何 WXML/JS |
 | `sync.test.mjs` | 9 | 两份 core.js 字节一致、依赖白名单、不许用全局 fetch | 改 core.js / 云函数 |
 | `i18n.test.mjs` | 18 | 中英成对、不混排、地图译名清单、外壳跟随 | 加文案/改译名 |
-| `theme.test.mjs` | 8 | 浅色是否覆盖深色每一个变量 | 改 app.wxss 变量 |
+| `theme.test.mjs` | 9 | 浅色是否覆盖深色每一个变量；跟随系统 | 改 app.wxss 变量 / theme.js |
 | `viewmodel.test.mjs` | 31 | 数据 → 界面字段 | 改 viewmodel |
 | `snapshot.test.mjs` | 15 | 快照分桶、挑基准、清理 | 改 snapshot/store |
 | `snapshot-store.test.mjs` | 13 | 数据库读写与错误降级（假 cloud） | 改 store |
@@ -603,7 +604,7 @@ git update-index --no-skip-worktree project.config.json miniprogram/app.js
 |---|---|
 | 「战绩」tab（`pages/predator/`） | 顶部切换「我的战绩 ｜ 排位资讯」。排位资讯 = 原排位专区，**一点没改**，只是包进一个 `hidden` 的 view。绑定了 Evo 的人默认看「我的战绩」，其他人照旧先看排位资讯（`onEvoStatus`） |
 | 首页（`pages/home/`，2026-10-27） | 最上面一块（分包组件 `evo/components/home`，云函数 `evo_mp.home`）：没绑定时三步怎么绑 + 扫码绑定；绑定了显示我的段位（离下一段还差多少）、今日（局数、场均名次、击杀和伤害的总数）、上一局（可转发）。中间「大家在玩什么」（`evo/components/crowd`，`evo_mp.crowd`）：所有 Evo 玩家近 7 天的热门传奇、场均名次最好的三人组合；**少于 5 位玩家时整块不显示**，结果存在集合 `evo_stats` 里管 30 分钟 |
-| 「我的」tab（`pages/me/`） | Evo 的绑定：电脑、解绑、账号 |
+| 「我的」tab（`pages/me/`） | 2026-11-08 照 August 的设计稿改版，见下面「「我的」页」 |
 | 分包 `miniprogram/evo/` | 其余全部：两个组件（主包页面异步引用）、三个子页面、段位徽章、`utils/view.js` |
 
 **为什么用分包**：主包 1.88 MB / 上限 2 MB。Evo 的东西放分包，主包只多了「我的」外壳、一个 tab 图标和词条（约 15 KB）。
@@ -626,6 +627,21 @@ git update-index --no-skip-worktree project.config.json miniprogram/app.js
   同本项目"判断/换算在 utils/ 纯函数里"的约定，也免得英文模式露出中文。
 - **统计**在 `evo_mp/stats.js`，和 Evo 电脑窗口同一套算法；四舍五入照 Python（正好一半取偶数），两边数字才对得上。
 - 传奇、地图名是 Evo 从游戏画面读的中文。英文模式：传奇名 / 头像按 id 从 `codex_data.js` 取（图鉴有 4 个中文名和游戏里不一样，所以按 id 对），地图名反查 `core.MAP_CN`；查不到保留原文。
+
+**「我的」页**（2026-11-08 照 August 的设计稿改版）：没有标题栏（顶上固定一条同色底，内容不钻到胶囊底下）。
+- 上半部分是分包组件 `evo/components/devices`（字段由 `view.meView` 拼）：游戏 ID（首字母切角方块当头像，**不用微信头像昵称**：不采集个人信息）
+  + 「已绑定 Evo · N 个游戏账号」；三格统计（记录局数 / 赛季最高 / 冠军次数，和首页一样只看默认账号，没有的格不出）；
+  每台电脑一张「电脑上的 Evo」卡（状态标签「正常 / 还没同步」、几分钟前同步、Evo 版本；管理游戏账号 → `evo/accounts`，解除绑定照旧两步确认）。
+  卡片说明照实写：会传队友名字，不传截图（设计稿写的"不上传队友名字"不对）。
+- 「赛季最高」：`evo_mp/stats.js` 的 `SEASONS` 写着每个赛季的开赛时刻（同 Evo 的 `config/seasons.json`），按电脑时区换算；
+  **新赛季开始时要加一行、重新部署 `evo_mp`**，否则会把上个赛季的段位算进来。
+- 下面的设置列表在主包 `pages/me`：分享卡片（首页「上一局」转发标题带不带游戏名，界面偏好 `shareName`，默认不带）、
+  外观（跟随系统 / 深色 / 浅色）、语言、隐私说明（`wx.openPrivacyContract`，打不开就弹一段本地说明）、
+  加入玩家群（`me.js` 的 `GROUP_QR` 有群二维码才出）、关于 Evo（`evo/about`）、版本（正式版、体验版才有）、底部声明。
+- 「跟随系统」：`app.json` 开了 `"darkmode": true`（只为读到手机的深浅色；导航栏、tab 照旧由 `theme.applyChrome` 设），
+  `theme.js` 分「模式」（system / dark / light）和「主题」（dark / light），手机切换时 `app.js` 的 `wx.onThemeChange` 刷新当前页面。
+  别的页面 ⚙ 面板里直接点深色 / 浅色 = 不再跟随。
+- August 定的不做：每周战报 / 地图轮换推送（游戏工具只能一次性订阅）、意见反馈、导出战绩、删除全部战绩；底部 tab 不动。
 
 **隐私**：只存战绩数字、段位、队友的名字和 ID，不存截图。「大家在玩什么」只回汇总的数字和传奇名，不回任何人的名字。`evo_devices` 里存了绑定者的 openid（和追踪名单 `tracked_players` 一样，用来认"这是谁的数据"）。
 解绑时每次问要不要同时删云端数据。扫码用 `wx.scanCode`（不在隐私接口黑名单里）。

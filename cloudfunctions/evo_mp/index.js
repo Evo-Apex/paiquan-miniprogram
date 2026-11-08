@@ -5,7 +5,7 @@
 // event.action：
 // - status：绑定了没有（「战绩」页决定默认显示哪一栏）
 // - bind：{ code } 扫码绑定，把绑定码对应的电脑绑到这个微信
-// - me：绑定的电脑、游戏账号
+// - me：绑定的电脑、游戏账号，和「我的」页顶上那块（默认账号的局数、冠军次数、本赛季最高段位）
 // - unbind：{ device, delete_data } 解绑一台电脑，delete_data 为 true 时同时删掉它传上来的数据
 // - overview：{ account, range } 我的战绩（段位、RP 走势、统计数字、最近对局、传奇表现）
 // - matches：{ account, mode, review, page } 全部对局（每页 20 局）
@@ -74,7 +74,7 @@ async function loadAll(openid, account) {
   ])
   const view = S.accountView(acc.accounts, rows, account)
   return {
-    devices, view, bounds: acc.bounds, now: S.localNow(S.deviceTz(devices)),
+    devices, view, accounts: acc.accounts, bounds: acc.bounds, now: S.localNow(S.deviceTz(devices)),
     rows: S.onlyAccount(rows, view.filter), lobby: S.onlyAccount(lobby, view.filter),
   }
 }
@@ -105,19 +105,35 @@ async function bind(openid, event) {
 async function me(openid) {
   const devices = await myDevices(openid)
   const uids = devices.map((d) => d._id)
-  const counts = await Promise.all(uids.map((uid) => safe(() => db.collection('evo_matches').where({ uid }).count(), { total: 0 })))
-  const { accounts } = await myAccounts(uids)
+  const [counts, acc, rows, lobby] = await Promise.all([
+    Promise.all(uids.map((uid) => safe(() => db.collection('evo_matches').where({ uid }).count(), { total: 0 }))),
+    myAccounts(uids),
+    myRows('evo_matches', uids, 'ended_at'),
+    myRows('evo_lobby', uids, 'read_at'),
+  ])
   const tz = S.deviceTz(devices)
+  // 「我的」页顶上：和首页一样只看一个账号（几个账号时是最近玩过的那个）
+  const view = S.accountView(acc.accounts, rows, null)
+  const current = view.accounts.find((a) => a.key === view.current)
+  const mine = S.onlyAccount(rows, view.filter)
+  const myLobby = S.onlyAccount(lobby, view.filter)
   return {
     ok: true,
     devices: devices.sort((a, b) => (a.bound_at || 0) - (b.bound_at || 0)).map((d) => ({
       id: d._id,
       bound_at: S.stampText(d.bound_at, tz),
       last_upload_at: d.last_upload_at ? S.stampText(new Date(d.last_upload_at).getTime(), tz) : null,
+      last_upload_ms: d.last_upload_at ? new Date(d.last_upload_at).getTime() : null,   // 手机上算"几分钟前同步"
       app_version: d.app_version || null,
       matches: (counts[uids.indexOf(d._id)] || {}).total || 0,
     })),
-    accounts: accounts.map((a) => ({ name: a.name, names: a.keys.size })),
+    accounts: acc.accounts.map((a) => ({ name: a.name, names: a.keys.size })),
+    profile: devices.length ? {
+      account: current ? current.name : (acc.accounts[0] ? acc.accounts[0].name : null),
+      matches: mine.length,
+      wins: S.winCount(mine),
+      peak: S.seasonPeak(mine, myLobby, S.seasonStartText(tz)),
+    } : null,
   }
 }
 
@@ -201,8 +217,9 @@ async function match(openid, event) {
 
 async function home(openid, event) {
   // 首页只看一个账号："全部账号"时按默认（最近玩过的那个），段位才有意义
-  const { devices, view, bounds, now, rows, lobby } = await loadAll(openid, event.account === 'all' ? null : event.account)
+  const { devices, view, accounts, bounds, now, rows, lobby } = await loadAll(openid, event.account === 'all' ? null : event.account)
   if (!devices.length) return { ok: true, bound: false }
+  const current = view.accounts.find((a) => a.key === view.current)
   const since = S.dayStartText(now)
   const rank = S.rankCard(rows, lobby)
   const synced = devices.map((d) => (d.last_upload_at ? new Date(d.last_upload_at).getTime() : 0))
@@ -210,6 +227,7 @@ async function home(openid, event) {
     ok: true,
     bound: true,
     account: view.current,
+    name: current ? current.name : (accounts[0] ? accounts[0].name : null),   // 游戏名（分享标题选了"显示游戏名"时用）
     total: rows.length,
     synced_at: Math.max(0, ...synced) || null,
     rank,

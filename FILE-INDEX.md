@@ -47,7 +47,7 @@
 | `games/ringguessr/`（分包） | 本地 `games/data/match_rings_data.js` | 猜圈练习：canvas、拖动 + 双指缩放、8 题 20 秒 |
 | `games/ringpick/`（分包） | 本地 `games/data/rings_data.js` + `map_ends_data.js` | 圈型速判：四选一、10 秒一题 |
 | `games/wheel/`（分包） | 本地 `codex_data.js` | 英雄 / 武器轮盘（canvas 扇形） |
-| `pages/me/` | 云函数 `evo_mp` | **「我的」tab**（2026-10-27）：外壳页（导航栏 + ⚙），内容是分包 evo 的 devices 组件（绑定的电脑、扫码绑定、解绑、游戏账号）。没有 wxss |
+| `pages/me/` | 云函数 `evo_mp` | **「我的」tab**（2026-11-08 照 August 的设计稿改版）：上半部分是分包 evo 的 devices 组件，下面是设置列表（分享卡片、外观、语言、隐私说明、关于 Evo、版本）；`me.wxss` 是列表的样式 |
 
 ### `miniprogram/evo/` —— 分包：Evo 战绩（2026-10-27，见 AI-CONTEXT §17）
 
@@ -60,12 +60,14 @@
 | `utils/state.js` | 几个页面共用的内存状态（选中的账号、绑定后要重读），**不写本地存储** |
 | `evo.wxss` | 共用样式（列表行、名次、按钮、账号切换），各页面 / 组件 `@import` |
 | `components/overview/` | 「我的战绩」：段位、RP 走势（canvas）、统计数字、最近 5 局、传奇表现 |
-| `components/devices/` | 「我的」里的 Evo：电脑列表、解绑（每次问要不要删云端数据）、账号、说明 |
+| `components/devices/` | 「我的」页上半部分（2026-11-08 改版）：游戏 ID、三格统计、电脑上的 Evo 卡（解绑每次问要不要删云端数据）、没绑定时怎么绑 |
 | `components/home/` | 首页最上面一块（2026-10-27）：没绑定时三步怎么绑；绑定了显示我的段位、今日、上一局（可转发） |
 | `components/crowd/` | 首页「大家在玩什么」：所有 Evo 玩家近 7 天的热门传奇、最好的三人组合（人数不够时整块不显示） |
 | `matches/` | 全部对局（筛选模式 / 只看待确认 / 切账号，每页 20 局） |
 | `match/` | 单局详情（这一局的数字 + 两名队友） |
 | `bind/` | 绑定确认（扫码后打开；小程序码的 scene 或 Evo 二维码的 c 是绑定码） |
+| `accounts/` | 游戏账号（「我的」页「管理游戏账号」，2026-11-08）：账号列表 + 怎么合并的说明 |
+| `about/` | 关于 Evo（「我的」页，2026-11-08）：原来写在「我的」页底下的说明和官网 |
 | `assets/ranks/*.png` | 段位徽章（7 张 256 色 png，80 KB；EA 的游戏素材，同 `assets/heroes/`。不用 webp：iPhone 上的微信显示不了包里的 webp） |
 
 > 页面 js 里**只该有**：`onLoad/onShow`、`cloud.callCloud`、`setData`。
@@ -166,11 +168,11 @@
 |---|---|---|
 | `core.test.mjs` | 68 | 归一化/uid/错误分类/涨幅/译名"不许猜" |
 | `handler.test.mjs` | 49 | 云函数 handler |
-| `page.test.mjs` | 65 | 七个页面行为 |
+| `page.test.mjs` | 85 | 页面行为 |
 | `static.test.mjs` | 32 | 隐私接口黑名单、存储白名单、WXML 一致性 |
 | `sync.test.mjs` | 9 | 两份 `core.js` 一致、依赖白名单、不用全局 fetch |
 | `i18n.test.mjs` | 18 | 中英成对/不混排/译名清单 |
-| `theme.test.mjs` | 8 | 浅色覆盖深色全部变量 |
+| `theme.test.mjs` | 9 | 浅色覆盖深色全部变量；跟随系统 |
 | `viewmodel.test.mjs` | 31 | 数据 → 界面字段 |
 | `snapshot.test.mjs` | 15 | 快照分桶/基准/清理 |
 | `snapshot-store.test.mjs` | 13 | 数据库读写与降级（假 cloud） |

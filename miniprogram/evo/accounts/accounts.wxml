@@ -1,0 +1,21 @@
+<view class="wrap theme-{{theme}} evo ac-wrap" data-lang="{{lang}}">
+  <view wx:if="{{state === 'loading'}}" class="panel evo-skel"></view>
+
+  <view wx:elif="{{state === 'error'}}" class="msg msg-err">
+    <text class="msg-title">{{T.evoLoadFail}}</text>
+    <text class="msg-body">{{error}}</text>
+    <view class="evo-retry" hover-class="evo-pressed" bindtap="load">{{T.evoRetry}}</view>
+  </view>
+
+  <block wx:else>
+    <!-- 一个账号一行；玩家名可以长按选中 -->
+    <view class="panel">
+      <text wx:if="{{!accounts.length}}" class="evo-dim">{{T.meNoAccounts}}</text>
+      <view wx:for="{{accounts}}" wx:key="key" class="ac-row">
+        <text class="ac-name" user-select="{{true}}">{{item.name}}</text>
+        <text wx:if="{{item.names}}" class="evo-k">{{item.names}}</text>
+      </view>
+    </view>
+    <text class="ac-note">{{T.evoAccountsNote}}</text>
+  </block>
+</view>

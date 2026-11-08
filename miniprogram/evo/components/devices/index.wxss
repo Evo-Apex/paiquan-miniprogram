@@ -1,27 +1,97 @@
-/* 「我的」里 Evo 那一块。共用的在 evo/evo.wxss */
+/* 「我的」页上半部分（2026-11-08 照 August 的设计稿：设计稿的 px ≈ 这里的 rpx）。共用的在 evo/evo.wxss。
+   颜色只用令牌；字号只用令牌档位；热区 ≥ 88rpx（44pt）。 */
 @import "../../evo.wxss";
 
-.evo-dev { display: flex; align-items: center; padding: var(--sp-4) 0; border-bottom: 1rpx solid var(--track); }
-.evo-dev-last { border-bottom: none; }
-.evo-dev-name { display: block; font-size: var(--fs-body); font-weight: var(--fw-bold); }
-/* 解绑：热区 ≥ 80rpx；用强调色文字 + 边框，不是实心红块（不是这一页的主操作） */
-.evo-unbind {
+/* ---------- 顶上：头像 + 游戏 ID + 绑定状态 ---------- */
+.me-head { display: flex; align-items: center; padding: var(--sp-4) var(--sp-2) var(--sp-8); }
+.me-ava {
+  width: 120rpx;
+  height: 120rpx;
   flex: none;
-  min-width: 128rpx;
-  height: 80rpx;
-  line-height: 80rpx;
+  margin-right: var(--sp-6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--fs-big);
+  font-weight: var(--fw-num);
+  color: var(--ink2);
+  background: var(--track);
+  clip-path: polygon(0 0, 100% 0, 100% 72%, 72% 100%, 0 100%);   /* 切角方块，同队友头像 */
+}
+.me-ava-ic { width: 64rpx; height: 64rpx; }
+.me-name { display: block; font-size: var(--fs-title); font-weight: var(--fw-num); line-height: 1.25; color: var(--ink); word-break: break-all; }
+.me-sub { display: flex; align-items: center; margin-top: var(--sp-2); font-size: var(--fs-sub); color: var(--ink2); }
+.me-dot { width: 14rpx; height: 14rpx; flex: none; margin-right: var(--sp-3); border-radius: var(--r-full); background: var(--ok-ink); }
+.me-skel-line { flex: 1; height: 48rpx; border-radius: var(--r-sm); background: var(--track); }
+
+/* ---------- 三格统计 ---------- */
+.me-stats { display: flex; margin-bottom: var(--sp-6); }
+.me-stat {
+  flex: 1;
+  min-width: 0;
   margin-left: var(--sp-4);
-  text-align: center;
-  border: 1rpx solid var(--line);
-  border-radius: var(--r-lg);
-  color: var(--accent-ink);
+  padding: var(--sp-6) var(--sp-5);
+  background: var(--card);
+  border-radius: var(--r-xl);
+}
+.me-stat:first-child { margin-left: 0; }
+.me-stat-v {
+  display: block;
+  font-size: var(--fs-title);
+  font-weight: var(--fw-num);
+  line-height: 1.2;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* 段位是字（"钻石 II"、"Apex 猎杀者"），比数字小一号、中文用 700 */
+.me-stat-v-s { font-size: var(--fs-head); font-weight: var(--fw-bold); line-height: 1.4; }
+.me-stat-k { display: block; margin-top: var(--sp-2); font-size: var(--fs-sub); color: var(--ink2); }
+
+/* ---------- 「电脑上的 Evo」卡 ---------- */
+.me-card { background: var(--card); border-radius: var(--r-xl); padding: var(--sp-6); margin-bottom: var(--sp-6); }
+.me-pc { display: flex; align-items: center; }
+.me-pc-ic { width: 72rpx; height: 72rpx; flex: none; margin-right: var(--sp-5); }
+.me-pc-t { display: block; font-size: var(--fs-head); font-weight: var(--fw-bold); color: var(--ink); }
+.me-pc-s { display: block; margin-top: 4rpx; font-size: var(--fs-sub); color: var(--ink2); }
+/* 状态标签：字本身说明状态（正常 / 还没同步），颜色只是加强 */
+.me-chip {
+  flex: none;
+  margin-left: var(--sp-4);
+  padding: 4rpx var(--sp-4);
+  border-radius: var(--r-sm);
+  background: var(--raised);
   font-size: var(--fs-sub);
   font-weight: var(--fw-bold);
 }
-.evo-acc { display: flex; align-items: baseline; justify-content: space-between; padding: var(--sp-2) 0; }
-.evo-acc-name { font-size: var(--fs-body); font-weight: var(--fw-bold); }
-
-.evo-about { margin-bottom: var(--sp-4); }
-.evo-about-t { display: block; font-size: var(--fs-body); font-weight: var(--fw-bold); }
-.evo-site-row { padding-top: var(--sp-4); border-top: 1rpx solid var(--track); }
-.evo-site { display: block; font-size: var(--fs-body); font-weight: var(--fw-bold); color: var(--ink2); }
+.me-chip-ok { color: var(--ok-ink); }
+.me-chip-warn { color: var(--warn-ink); }
+.me-desc { display: block; margin-top: var(--sp-5); font-size: var(--fs-sub); line-height: 1.7; color: var(--ink2); }
+.me-btns { display: flex; margin-top: var(--sp-6); }
+.me-btn {
+  flex: 1;
+  min-height: 88rpx;
+  line-height: 88rpx;
+  text-align: center;
+  border-radius: var(--r-lg);
+  background: var(--raised);
+  color: var(--ink);
+  font-size: var(--fs-body);
+  font-weight: var(--fw-bold);
+}
+.me-btn + .me-btn { margin-left: var(--sp-4); }
+/* 解除绑定：强调色文字、不是实心红块（不是这一页的主操作；点了还有两步确认） */
+.me-btn-danger { color: var(--accent-ink); }
+/* 再绑定一台电脑：不常用，放卡片下面一行小字，热区照样 ≥ 88rpx */
+.me-more {
+  min-height: 88rpx;
+  line-height: 88rpx;
+  margin: calc(-1 * var(--sp-4)) 0 var(--sp-2);
+  text-align: center;
+  font-size: var(--fs-sub);
+  color: var(--ink3);
+}
+.me-site { margin-top: var(--sp-5); font-size: var(--fs-sub); color: var(--ink3); text-align: center; }
+.me-site-url { margin-left: var(--sp-2); font-weight: var(--fw-bold); color: var(--ink2); }

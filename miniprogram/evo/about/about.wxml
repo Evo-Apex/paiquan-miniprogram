@@ -1,0 +1,13 @@
+<view class="wrap theme-{{theme}} evo ab-wrap" data-lang="{{lang}}">
+  <view class="panel">
+    <view class="ab-item"><text class="ab-t">{{T.evoAbout1T}}</text><text class="evo-dim">{{T.evoAbout1}}</text></view>
+    <view class="ab-item"><text class="ab-t">{{T.evoAbout2T}}</text><text class="evo-dim">{{T.evoAbout2}}</text></view>
+    <view class="ab-item"><text class="ab-t">{{T.evoAbout3T}}</text><text class="evo-dim">{{T.evoAbout3}}</text></view>
+    <!-- 不做"点一下复制"：wx.setClipboardData 是隐私接口（static.test.mjs 的黑名单）；网址可以长按选中 -->
+    <view class="ab-site">
+      <text class="evo-k">{{T.evoSite}}</text>
+      <text class="ab-url" user-select="{{true}}">evotracker.cn</text>
+      <text class="evo-k">{{T.evoSiteHint}}</text>
+    </view>
+  </view>
+</view>

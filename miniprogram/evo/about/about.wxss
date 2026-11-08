@@ -1,0 +1,8 @@
+/* 关于 Evo。共用的在 evo/evo.wxss */
+@import "../evo.wxss";
+
+.ab-wrap { padding: var(--sp-6); }
+.ab-item { margin-bottom: var(--sp-6); }
+.ab-t { display: block; margin-bottom: var(--sp-2); font-size: var(--fs-body); font-weight: var(--fw-bold); color: var(--ink); }
+.ab-site { padding-top: var(--sp-5); border-top: 1rpx solid var(--line); }
+.ab-url { display: block; margin: var(--sp-1) 0; font-size: var(--fs-body); font-weight: var(--fw-bold); color: var(--ink2); }

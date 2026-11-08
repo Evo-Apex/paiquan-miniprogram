@@ -1,29 +1,59 @@
-<view class="wrap theme-{{theme}}" data-lang="{{lang}}">
-
-  <!-- 自定义导航栏：⚙ 常驻左上角，和地图页、「战绩」页一模一样 -->
-  <view class="navbar" style="padding-top: {{navTop}}px; height: {{navH}}px;">
-    <view class="navbtn {{panelOpen ? 'navbtn-on' : ''}}" bindtap="onTogglePanel">⚙</view>
-    <text class="navtitle">{{T.navMe}}</text>
-    <view class="navspace" style="width: {{navRight}}px;"></view>
-  </view>
-
-  <view wx:if="{{panelOpen}}" class="panel">
-    <view class="panel-t">{{T.panelLang}}</view>
-    <view class="panel-row">
-      <view class="langsw">
-        <view class="langsw-i langsw-l {{lang === 'zh' ? 'langsw-on' : ''}}" data-l="zh" bindtap="onLang">中文</view>
-        <view class="langsw-i langsw-r {{lang === 'en' ? 'langsw-on' : ''}}" data-l="en" bindtap="onLang">EN</view>
-      </view>
-    </view>
-    <view class="panel-t">{{T.panelTheme}}</view>
-    <view class="panel-row">
-      <view class="langsw">
-        <view class="langsw-i langsw-l {{theme === 'dark' ? 'langsw-on' : ''}}" data-t="dark" bindtap="onTheme">{{T.themeDark}}</view>
-        <view class="langsw-i langsw-r {{theme === 'light' ? 'langsw-on' : ''}}" data-t="light" bindtap="onTheme">{{T.themeLight}}</view>
-      </view>
-    </view>
-  </view>
-
-  <!-- Evo 的绑定（分包 evo 里的组件，异步加载；加载前先占一个空 view） -->
+<!-- 「我的」（2026-11-08 照 August 的设计稿改版）：没有标题栏，内容从胶囊按钮下面开始。
+     上半部分（游戏 ID、三格统计、电脑上的 Evo）是分包 evo 的组件；下面的设置列表在这里。 -->
+<view class="wrap theme-{{theme}} me-wrap" data-lang="{{lang}}" style="padding-top: {{navTop + navH}}px;">
+  <!-- 状态栏 + 胶囊按钮那一行：固定一条和页面同色的底，往下滚时内容不会钻到胶囊底下（这一页没有标题） -->
+  <view class="me-topbar" style="height: {{navTop + navH}}px;"></view>
+  <!-- Evo 的那一块（分包 evo 里的组件，异步加载；加载前先占一个空 view） -->
   <evo-devices lang="{{lang}}"></evo-devices>
+
+  <!-- 设置：一行 ≥ 88rpx，右边是现在的值 + ›；点了弹出选项 -->
+  <view class="me-group">
+    <view class="me-row" hover-class="me-pressed" bindtap="onShareSetting">
+      <text class="me-row-t">{{T.meShare}}</text>
+      <text class="me-row-v">{{shareText}}</text>
+      <text class="me-chev">›</text>
+    </view>
+  </view>
+
+  <view class="me-group">
+    <view class="me-row" hover-class="me-pressed" bindtap="onAppearance">
+      <text class="me-row-t">{{T.meTheme}}</text>
+      <text class="me-row-v">{{themeText}}</text>
+      <text class="me-chev">›</text>
+    </view>
+    <view class="me-row" hover-class="me-pressed" bindtap="onLanguage">
+      <text class="me-row-t">{{T.meLang}}</text>
+      <text class="me-row-v">{{langText}}</text>
+      <text class="me-chev">›</text>
+    </view>
+  </view>
+
+  <view class="me-group">
+    <view class="me-row" hover-class="me-pressed" bindtap="onPrivacy">
+      <text class="me-row-t">{{T.mePrivacy}}</text>
+      <text class="me-chev">›</text>
+    </view>
+  </view>
+
+  <view class="me-group">
+    <!-- 玩家群：有群二维码才出这一行（GROUP_QR，me.js） -->
+    <view wx:if="{{hasGroup}}" class="me-row" hover-class="me-pressed" bindtap="onGroup">
+      <text class="me-row-t">{{T.meGroup}}</text>
+      <text class="me-chev">›</text>
+    </view>
+    <view class="me-row" hover-class="me-pressed" bindtap="onAboutEvo">
+      <view class="me-row-main">
+        <text class="me-row-t">{{T.meAboutEvo}}</text>
+        <text class="me-row-s">{{T.meAboutEvoSub}}</text>
+      </view>
+      <text class="me-chev">›</text>
+    </view>
+    <!-- 版本号只在正式版、体验版里有（开发版是空的，就不出这一行） -->
+    <view wx:if="{{version}}" class="me-row">
+      <text class="me-row-t">{{T.meVersion}}</text>
+      <text class="me-row-v me-row-v-end">{{version}}</text>
+    </view>
+  </view>
+
+  <text class="me-foot">{{T.meDisclaimer}}</text>
 </view>

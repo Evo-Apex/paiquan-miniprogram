@@ -1022,6 +1022,50 @@ describe("选手页 · 照片", () => {
 });
 
 /* ============================================================
+   「我的」（2026-11-08 照 August 的设计稿改版）：上半部分是 evo 组件，这里测下面的设置列表
+   ============================================================ */
+describe("我的 · 设置列表", () => {
+  const withSheet = (pick) => { global.wx.showActionSheet = (o) => { o.itemList.length; o.success({ tapIndex: pick(o.itemList) }); }; };
+
+  test("右边写现在的值；分享卡片默认不显示游戏名，选了以后记住", () => {
+    const { inst } = loadPage("me");
+    inst.onLoad();
+    inst.onShow();
+    assert.equal(inst.data.shareText, "不显示游戏名");
+    assert.equal(inst.data.langText, "简体中文");
+    withSheet((items) => items.indexOf("显示游戏名"));
+    inst.onShareSetting();
+    assert.equal(inst.data.shareText, "显示游戏名");
+    assert.equal(require(path.join(MP, "utils", "prefs.js")).get("shareName"), true);
+  });
+
+  test("外观三选一：跟随系统 / 深色 / 浅色；选深色页面跟着换", () => {
+    const { inst } = loadPage("me");
+    inst.onLoad();
+    inst.onShow();
+    let items = null;
+    global.wx.showActionSheet = (o) => { items = o.itemList; o.success({ tapIndex: 1 }); };
+    inst.onAppearance();
+    assert.deepEqual(items, ["跟随系统", "深色", "浅色"]);
+    assert.equal(inst.data.theme, "dark");
+    assert.equal(inst.data.themeText, "深色");
+  });
+
+  test("语言换成 English：整页文案跟着换；没有群二维码时不出「加入玩家群」", () => {
+    const { inst } = loadPage("me");
+    inst.onLoad();
+    inst.onShow();
+    assert.equal(inst.data.hasGroup, false);
+    withSheet((items) => items.indexOf("English"));
+    inst.onLanguage();
+    assert.equal(inst.data.lang, "en");
+    assert.equal(inst.data.langText, "English");
+    assert.equal(inst.data.T.meTheme, "Appearance");
+    require(path.join(MP, "utils", "i18n.js")).setLang("zh");   // 别影响后面的测试
+  });
+});
+
+/* ============================================================
    小游戏（2026-10 用户要求）
    第 4 个 tab 从「猜圈」扩成「小游戏」分类：分类页 → 猜圈练习 / 轮盘。
    这两个页面都是**本地数据 + 纯前端随机**，不联网，所以一进来就该是可用状态。

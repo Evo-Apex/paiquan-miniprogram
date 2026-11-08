@@ -1,5 +1,6 @@
 /**
- * 「我的」页里 Evo 那一块（在分包 evo 里，由主包的 pages/me 异步引用，同 overview 组件）。
+ * 「我的」页上半部分（在分包 evo 里，由主包的 pages/me 异步引用，同 overview 组件）：
+ * 游戏 ID + 绑定状态、三格统计、每台电脑一张「电脑上的 Evo」卡（2026-11-08 照 August 的设计稿）。
  * 解绑时先选云端的数据怎么办，选了删除再确认一次（删了不能恢复）：每次都问（Evo 的用户决定）。
  */
 var i18n = require("../../../utils/i18n.js");
@@ -58,7 +59,12 @@ Component({
 
     rebuild: function () {
       if (!this._raw) return;
-      this.setData({ v: view.devicesView(this._raw, this.data.T), state: "ready", error: "" });
+      this.setData({ v: view.meView(this._raw, this.data.T, Date.now()), state: "ready", error: "" });
+    },
+
+    /** 管理游戏账号 → 账号页（同一个分包） */
+    onAccounts: function () {
+      wx.navigateTo({ url: "/evo/accounts/accounts" });
     },
 
     onScan: function () {

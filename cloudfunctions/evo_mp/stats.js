@@ -43,6 +43,48 @@ function stampText(ms, tz) {
   return ms ? new Date(ms + tz * 60000).toISOString().slice(0, 16).replace('T', ' ') : null
 }
 
+// ---------- 赛季（「我的」页的「赛季最高」用，2026-11-08） ----------
+
+// 每个赛季从什么时候开始（官方开赛时刻，UTC），和 Evo 的 config/seasons.json 一样。
+// 新赛季开始时两边都要加一行，evo_mp 重新部署；忘了加的话「赛季最高」会把上个赛季的段位也算进来
+const SEASONS = [
+  { number: 30, start: '2026-08-04T17:00:00Z' },
+  { number: 31, start: '2026-11-03T18:00:00Z' },
+]
+
+// 这个赛季从电脑上的几点开始（电脑上的时间是没有时区的文字，按电脑的时区换算），如 "2026-11-04 02:00:00"
+function seasonStartText(tz, nowMs = Date.now()) {
+  const started = SEASONS.filter((s) => Date.parse(s.start) <= nowMs)
+  if (!started.length) return null
+  return stampText(Date.parse(started[started.length - 1].start), tz) + ':00'
+}
+
+const TIER_ORDER = ['rookie', 'bronze', 'silver', 'gold', 'platinum', 'diamond', 'master', 'predator']
+
+// 这个赛季到过的最高段位：每局结束时和每次回大厅读到的段位里最高的那个 → { tier, division }；没有 → null
+// 大师、猎杀者没有小段
+function seasonPeak(rows, lobby, since) {
+  if (!since) return null
+  let best = null
+  const look = (tier, division, when) => {
+    if (!when || when < since) return
+    const key = tierKey(tier)
+    if (!key) return
+    const top = key === 'master' || key === 'predator'
+    const div = !top && DIVISIONS.includes(division) ? division : null
+    const value = TIER_ORDER.indexOf(key) * 4 + (div ? DIVISIONS.indexOf(div) : 3)
+    if (!best || value > best.value) best = { value, tier: key, division: div }
+  }
+  for (const r of rows) look(r.rank_tier, r.rank_division, r.ended_at)
+  for (const l of lobby) look(l.rank_tier, l.rank_division, l.read_at)
+  return best ? { tier: best.tier, division: best.division } : null
+}
+
+// 拿了几次第 1 名（所有模式）
+function winCount(rows) {
+  return rows.filter((r) => r.placement === 1).length
+}
+
 // ---------- 数字 ----------
 
 // 四舍五入和 Python 一样（Evo 窗口用 Python 算，两边显示的数字要一样）：按这个数在计算机里的真实值算，
@@ -358,5 +400,5 @@ function byTime(key) {
 module.exports = {
   MODES, deviceTz, localNow, dayStartText, stampText, pyRound, rowData, detailData, groupNumbers, rpSum, rankCard,
   rankStep, dayNumbers, rpChart, legendBars, daysAgoText, crowdStats, mergeAccounts, accountView, publicAccounts,
-  onlyAccount, byTime,
+  onlyAccount, byTime, SEASONS, seasonStartText, seasonPeak, winCount,
 }
