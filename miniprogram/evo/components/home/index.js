@@ -6,6 +6,7 @@
  */
 var i18n = require("../../../utils/i18n.js");
 var view = require("../../utils/view.js");
+var prefs = require("../../../utils/prefs.js");
 var evoCloud = require("../../utils/cloud.js");
 var state = require("../../utils/state.js");
 
@@ -62,7 +63,8 @@ Component({
     /** 换语言时用手上的数据重拼，不再打网络 */
     rebuild: function () {
       if (!this._raw) return;
-      var v = view.homeView(this._raw, this.data.T, EMBLEM_RPX, Date.now());
+      // 分享标题带不带游戏名：「我的」页「分享卡片」选的（界面偏好，默认不带）
+      var v = view.homeView(this._raw, this.data.T, EMBLEM_RPX, Date.now(), { shareName: prefs.get("shareName", false) === true });
       this.setData({ v: v, state: v.state });
     },
 

@@ -1,0 +1,15 @@
+<view class="wrap theme-{{theme}} evo gp-wrap" data-lang="{{lang}}">
+  <view class="panel">
+    <text class="gp-t">{{T.groupTitle}}</text>
+    <!-- 群号可以长按选中（不做"点一下复制"：wx.setClipboardData 是隐私接口，static.test.mjs 的黑名单） -->
+    <view class="gp-num">
+      <text class="evo-k">{{T.groupNumber}}</text>
+      <text class="gp-num-v" user-select="{{true}}">{{number}}</text>
+    </view>
+    <!-- 二维码放在白底上（两套主题都是：二维码要浅色底才扫得出）；长按出保存图片的菜单 -->
+    <view class="gp-qr-box">
+      <image class="gp-qr" src="/evo/assets/qq-group.jpg" mode="aspectFit" show-menu-by-longpress="{{true}}"></image>
+    </view>
+    <text class="gp-how">{{T.groupHow}}</text>
+  </view>
+</view>

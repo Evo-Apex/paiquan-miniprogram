@@ -1,0 +1,27 @@
+/* 「我的」的设置列表（2026-11-08 照 August 的设计稿）。上半部分的样式在 evo/components/devices/index.wxss。
+   颜色只用令牌；字号只用令牌档位；一行 ≥ 88rpx（44pt 触控热区）。 */
+
+.me-wrap { padding-left: var(--sp-6); padding-right: var(--sp-6); padding-bottom: var(--sp-16); box-sizing: border-box; min-height: 100vh; }
+.me-pressed { background: var(--raised); }
+.me-topbar { position: fixed; top: 0; left: 0; right: 0; z-index: 10; background: var(--bg); }
+
+/* 一组一张白卡，行之间一条细线（第一行上面不画） */
+.me-group { background: var(--card); border-radius: var(--r-xl); margin-bottom: var(--sp-6); overflow: hidden; }
+.me-row {
+  display: flex;
+  align-items: center;
+  min-height: 108rpx;
+  padding: var(--sp-4) var(--sp-6);
+  box-sizing: border-box;
+  border-top: 1rpx solid var(--line);
+}
+.me-row:first-child { border-top: none; }
+.me-row-main { flex: 1; min-width: 0; }
+.me-row-t { flex: 1; min-width: 0; font-size: var(--fs-body); color: var(--ink); }
+.me-row-main .me-row-t { display: block; }
+.me-row-s { display: block; margin-top: 4rpx; font-size: var(--fs-min); color: var(--ink3); }
+.me-row-v { flex: none; margin-left: var(--sp-4); font-size: var(--fs-sub); color: var(--ink2); }
+.me-row-v-end { font-variant-numeric: tabular-nums; }
+.me-chev { flex: none; width: 24rpx; margin-left: var(--sp-3); text-align: right; font-size: var(--fs-head); line-height: 1; color: var(--ink3); }
+
+.me-foot { display: block; padding: var(--sp-2) var(--sp-2) 0; font-size: var(--fs-min); line-height: 1.6; color: var(--ink3); text-align: center; }

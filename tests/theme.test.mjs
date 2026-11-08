@@ -52,6 +52,33 @@ describe("主题 · 切换逻辑", () => {
     assert.equal(theme.getTheme(), "dark");
   });
 
+  test("跟随系统（2026-11-08）：主题跟着手机走；手机切换时跟着换；直接选深色 / 浅色就不再跟随", () => {
+    const calls = [];
+    let sys = "dark";
+    global.wx = {
+      getAppBaseInfo: () => ({ theme: sys }),
+      setNavigationBarColor: (o) => calls.push(o), setBackgroundColor: () => {}, setTabBarStyle: () => {},
+    };
+    try {
+      assert.equal(theme.setMode("system"), "dark", "手机是深色");
+      assert.equal(theme.getMode(), "system");
+      sys = "light";
+      assert.equal(theme.onSystemChange("light"), true, "手机切成浅色：跟着换");
+      assert.equal(theme.getTheme(), "light");
+      assert.equal(calls[calls.length - 1].frontColor, "#000000", "原生外壳也跟着换");
+      assert.equal(theme.onSystemChange("light"), false, "没变就不动");
+      assert.equal(theme.setTheme("dark"), "dark");
+      assert.equal(theme.getMode(), "dark", "⚙ 面板里直接选深色 = 不再跟随");
+      assert.equal(theme.onSystemChange("light"), false, "不跟随时手机切换不影响");
+      assert.equal(theme.getTheme(), "dark");
+      global.wx.getAppBaseInfo = () => ({});
+      assert.equal(theme.setMode("system"), "light", "读不到手机的深浅色：按浅色");
+      assert.equal(theme.setMode("rainbow"), "light", "认不出的模式当浅色（默认）");
+    } finally {
+      delete global.wx;
+    }
+  });
+
   test("原生外壳配色：frontColor 只能是 #ffffff / #000000（微信的硬要求）", () => {
     const calls = [];
     global.wx = {

@@ -1,0 +1,10 @@
+/* 加入玩家群。共用的在 evo/evo.wxss */
+@import "../evo.wxss";
+
+.gp-wrap { padding: var(--sp-6); }
+.gp-t { display: block; font-size: var(--fs-head); font-weight: var(--fw-bold); color: var(--ink); }
+.gp-num { display: flex; align-items: baseline; margin-top: var(--sp-3); }
+.gp-num-v { margin-left: var(--sp-3); font-size: var(--fs-title); font-weight: var(--fw-num); color: var(--ink); font-variant-numeric: tabular-nums; letter-spacing: 2rpx; }
+.gp-qr-box { margin: var(--sp-6) auto 0; width: 480rpx; padding: var(--sp-4); border-radius: var(--r-lg); background: #ffffff; }
+.gp-qr { display: block; width: 480rpx; height: 480rpx; }
+.gp-how { display: block; margin-top: var(--sp-6); font-size: var(--fs-sub); line-height: 1.7; color: var(--ink2); }

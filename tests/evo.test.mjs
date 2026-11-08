@@ -31,6 +31,26 @@ const match = (over = {}) => Object.assign({
 }, over);
 
 describe("evo · 统计（云函数 stats.js）", () => {
+  test("「我的」页：本赛季最高段位只看赛季开始以后的局和大厅读数；大师没有小段；冠军次数数第 1 名", () => {
+    const since = S.seasonStartText(480, Date.parse("2026-11-08T00:00:00Z"));
+    assert.equal(since, "2026-11-04 02:00:00", "第 31 赛季 11-03 18:00 UTC = 北京时间 11-04 02:00");
+    assert.equal(S.seasonStartText(60, Date.parse("2026-11-08T00:00:00Z")), "2026-11-03 19:00:00", "瑞士（UTC+1）是 19:00");
+    assert.equal(S.seasonStartText(480, Date.parse("2026-01-01T00:00:00Z")), null, "比收录的赛季都早：算不出");
+    const rows = [
+      { ended_at: "2026-11-03 23:00:00", rank_tier: "大师", rank_division: null, placement: 1 },   // 上个赛季的
+      { ended_at: "2026-11-05 20:00:00", rank_tier: "钻石", rank_division: "III", placement: 3 },
+      { ended_at: "2026-11-06 20:00:00", rank_tier: "钻石", rank_division: "II", placement: 1 },
+      { ended_at: "2026-11-07 20:00:00", rank_tier: "钻石", rank_division: "IV", placement: 1 },
+    ];
+    const lobby = [{ read_at: "2026-11-06 21:00:00", rank_tier: "白金", rank_division: "I" }];
+    assert.deepEqual(S.seasonPeak(rows, lobby, since), { tier: "diamond", division: "II" }, "上个赛季的大师不算");
+    assert.deepEqual(S.seasonPeak([{ ended_at: "2026-11-05 20:00:00", rank_tier: "大师", rank_division: "I" }], [], since),
+      { tier: "master", division: null });
+    assert.equal(S.seasonPeak([], [{ read_at: "2026-11-05 20:00:00", rank_tier: "认不出", rank_division: "I" }], since), null);
+    assert.equal(S.seasonPeak(rows, lobby, null), null);
+    assert.equal(S.winCount(rows), 3);
+  });
+
   test("四舍五入和 Python 一样：正好一半取偶数，按真实值算", () => {
     assert.equal(S.pyRound(12.5), 12);
     assert.equal(S.pyRound(13.5), 14);
@@ -278,14 +298,59 @@ describe("evo · 界面字段（evo/utils/view.js）", () => {
     assert.equal(view.bindCodeFrom("%E0%A4%A"), "", "坏的转义不抛错");
   });
 
-  test("我的：电脑编号、同步时间、改过名的账号", () => {
-    const v = view.devicesView({ devices: [{ id: "u1", bound_at: "2026-10-26 20:00", last_upload_at: null, app_version: "0.4.1", matches: 12 }],
-      accounts: [{ name: "A", names: 2 }, { name: "B", names: 1 }] }, ZH);
-    assert.equal(v.devices[0].name, "电脑 1");
-    assert.equal(v.devices[0].sync, "还没有同步过");
-    assert.equal(v.devices[0].count, "云端 12 局 · Evo 0.4.1");
+  test("我的（2026-11-08 改版）：游戏 ID 当名字、三格统计、电脑卡的同步时间和状态标签、改过名的账号", () => {
+    const NOW_MS = Date.parse("2026-11-08T12:00:00Z");
+    const d = {
+      devices: [{ id: "u1", bound_at: "2026-10-26 20:00", last_upload_at: "2026-11-08 19:55", last_upload_ms: NOW_MS - 5 * 60000, app_version: "0.5.4", matches: 120 }],
+      accounts: [{ name: "ImperialHzd", names: 2 }, { name: "Alt", names: 1 }],
+      profile: { account: "ImperialHzd", matches: 95, wins: 7, peak: { tier: "diamond", division: "II" } },
+    };
+    const v = view.meView(d, ZH, NOW_MS);
+    assert.equal(v.state, "ready");
+    assert.equal(v.name, "ImperialHzd");
+    assert.equal(v.initial, "I");
+    assert.equal(v.sub, "已绑定 Evo · 2 个游戏账号");
+    assert.deepEqual(v.stats.map((s) => [s.k, s.v]), [["记录局数", "95"], ["赛季最高", "钻石 II"], ["冠军次数", "7"]]);
+    assert.equal(v.devices[0].title, "电脑上的 Evo");
+    assert.equal(v.devices[0].sub, "5 分钟前同步 · Evo 0.5.4");
+    assert.deepEqual([v.devices[0].chip, v.devices[0].chipCls], ["正常", "ok"]);
+    assert.equal(v.devices[0].name, "电脑 1", "解绑弹窗里的叫法");
     assert.equal(v.accounts[0].names, "用过 2 个名字");
     assert.equal(v.accounts[1].names, "");
+    const en = view.meView(d, i18n.T("en"), NOW_MS);
+    assert.equal(en.devices[0].sub, "Synced 5m ago · Evo 0.5.4");
+    assert.equal(en.sub, "Evo linked · 2 game accounts");
+  });
+
+  test("我的：赛季没数据、云函数还没更新时不编数；两台电脑分开叫；没绑定时讲怎么绑", () => {
+    const NOW_MS = Date.parse("2026-11-08T12:00:00Z");
+    const two = [
+      { id: "u1", bound_at: "x", last_upload_at: null, app_version: null, matches: 0 },
+      { id: "u2", bound_at: "x", last_upload_at: "2026-11-01 10:00", app_version: "0.5.0", matches: 30 },
+    ];
+    const noPeak = view.meView({ devices: two, accounts: [], profile: { account: null, matches: 30, wins: 0, peak: null } }, ZH, NOW_MS);
+    assert.deepEqual(noPeak.stats.map((s) => s.k), ["记录局数", "冠军次数"], "这个赛季还没有段位：那格不出，不写 0");
+    assert.equal(noPeak.name, "还没有对局");
+    assert.equal(noPeak.initial, "");
+    assert.equal(noPeak.sub, "已绑定 Evo");
+    assert.deepEqual(noPeak.devices.map((x) => x.title), ["电脑 1 上的 Evo", "电脑 2 上的 Evo"]);
+    assert.deepEqual(noPeak.devices.map((x) => x.chip), ["还没同步", "正常"]);
+    assert.equal(noPeak.devices[0].sub, "还没有同步过");
+    assert.equal(noPeak.devices[1].sub, "上次同步 2026-11-01 10:00 · Evo 0.5.0", "云函数旧版没有 last_upload_ms：照旧写时间");
+    const old = view.meView({ devices: two, accounts: [{ name: "A", names: 1 }] }, ZH, NOW_MS);
+    assert.deepEqual(old.stats.map((s) => [s.k, s.v]), [["记录局数", "30"]], "云函数还没更新（没有 profile）：局数用各台电脑的合计，另外两格不出");
+    assert.equal(old.name, "A");
+    const unbound = view.meView({ devices: [], accounts: [] }, ZH, NOW_MS);
+    assert.deepEqual([unbound.state, unbound.name, unbound.stats.length], ["unbound", "未绑定 Evo", 0]);
+  });
+
+  test("首页分享标题：「我的」页选了显示游戏名才带名字；没有名字照旧写「我」", () => {
+    const NOW_MS = Date.parse("2026-11-08T12:00:00Z");
+    const d = { bound: true, total: 1, name: "ImperialHzd", synced_at: NOW_MS, day: {},
+      last: { id: "m1", placement: 1, legend: "恶灵", map: null, kills: 3, damage: 900 } };
+    assert.equal(view.homeView(d, ZH, 112, NOW_MS).last.shareTitle, "我刚拿了第 1 名");
+    assert.equal(view.homeView(d, ZH, 112, NOW_MS, { shareName: true }).last.shareTitle, "ImperialHzd 刚拿了第 1 名");
+    assert.equal(view.homeView(Object.assign({}, d, { name: null }), ZH, 112, NOW_MS, { shareName: true }).last.shareTitle, "我刚拿了第 1 名");
   });
 });
 

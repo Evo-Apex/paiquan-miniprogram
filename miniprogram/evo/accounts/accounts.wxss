@@ -1,0 +1,14 @@
+/* 游戏账号。共用的（.evo-* 和 app.wxss 的 .panel / .msg）在 evo/evo.wxss */
+@import "../evo.wxss";
+
+.ac-wrap { padding: var(--sp-6); }
+.ac-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 88rpx;
+  border-bottom: 1rpx solid var(--line);
+}
+.ac-row:last-child { border-bottom: none; }
+.ac-name { font-size: var(--fs-body); font-weight: var(--fw-bold); color: var(--ink); word-break: break-all; }
+.ac-note { display: block; padding: 0 var(--sp-2); font-size: var(--fs-sub); line-height: 1.7; color: var(--ink3); }

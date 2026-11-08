@@ -14,7 +14,10 @@
       "pages": [
         "matches/matches",
         "match/match",
-        "bind/bind"
+        "bind/bind",
+        "accounts/accounts",
+        "about/about",
+        "group/group"
       ]
     },
     {
@@ -91,5 +94,6 @@
   "cloud": true,
   "sitemapLocation": "sitemap.json",
   "style": "v2",
+  "darkmode": true,
   "lazyCodeLoading": "requiredComponents"
 }

@@ -1,5 +1,5 @@
 // 小程序全局逻辑。
-// 这里只做一件事：初始化云开发，否则 wx.cloud.callFunction 用不了。
+// 这里做两件事：初始化云开发（否则 wx.cloud.callFunction 用不了）；「外观」跟随系统时，手机切换深浅色跟着换。
 /**
  * 云开发环境 ID。
  *
@@ -12,6 +12,7 @@
  * 形如 cloud1-xxxxxxxxxxxxxxxx。
  */
 var CLOUD_ENV = "cloud1-d8ggx095757c58e20";
+var theme = require("./utils/theme.js");
 
 App({
   onLaunch: function () {
@@ -32,6 +33,17 @@ App({
     wx.cloud.init({
       env: CLOUD_ENV
     });
+
+    // 「外观」选了跟随系统时，手机切换深浅色要跟着换（2026-11-08）。
+    // 当前页面直接刷新；后面压着的页面回到前台时 onShow 自己会对一遍
+    if (wx.onThemeChange) {
+      wx.onThemeChange(function (res) {
+        if (!theme.onSystemChange(res && res.theme)) return;
+        var pages = getCurrentPages();
+        var page = pages[pages.length - 1];
+        if (page && page.data && page.data.theme !== undefined) page.setData({ theme: theme.getTheme() });
+      });
+    }
   },
 
   globalData: {}

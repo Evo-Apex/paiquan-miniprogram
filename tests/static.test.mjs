@@ -328,7 +328,7 @@ const AD_PAGES = ["home", "maps", "predator"];
    （原来的 pages/mapview「交互地图」已删，所以这里也没有它了。） */
 // 2026-10-27：加了「我的」（me）和分包 evo 里 Evo 战绩的三个子页面（写成 "evo/matches" 这样带分包目录的名字）
 // 2026-11：比赛页去掉广告位时从 AD_PAGES 拿掉了，这些检查也跟着漏了它，这里补回来；加了分包 pro 的选手页、战队页
-const PAGE_NAMES = AD_PAGES.concat(["matches", "games", "games/wheel", "games/ringguessr", "games/ringpick", "me", "evo/matches", "evo/match", "evo/bind", "pro/player", "pro/team", "pro/event", "pro/sources"]);
+const PAGE_NAMES = AD_PAGES.concat(["matches", "games", "games/wheel", "games/ringguessr", "games/ringpick", "me", "evo/matches", "evo/match", "evo/bind", "evo/accounts", "evo/about", "evo/group", "pro/player", "pro/team", "pro/event", "pro/sources"]);
 const pageDir = (n) => (n.indexOf("/") >= 0 ? path.join(MP, n) : path.join(MP, "pages", n));
 const pageBase = (n) => path.basename(n);
 const pageJsPath = (n) => path.join(pageDir(n), pageBase(n) + ".js");
@@ -533,11 +533,14 @@ function vmFieldNames() {
   collect(evoDetail);
   evoDetail.facts.forEach(collect);
   evoDetail.mates.forEach(collect);
-  const evoDev = evoView.devicesView({ devices: [{ id: "u", bound_at: "x", last_upload_at: "x", app_version: "1", matches: 2 }],
-    accounts: [{ name: "a", names: 2 }] }, i18nT);
-  collect(evoDev);
-  evoDev.devices.forEach(collect);
-  evoDev.accounts.forEach(collect);
+  // 「我的」页上半部分（2026-11-08）：绑定了 / 没绑定两种都收字段
+  const evoMe = evoView.meView({ devices: [{ id: "u", bound_at: "x", last_upload_at: "x", last_upload_ms: 1, app_version: "1", matches: 2 }],
+    accounts: [{ name: "a", names: 2 }], profile: { account: "a", matches: 2, wins: 1, peak: { tier: "diamond", division: "II" } } }, i18nT, 2);
+  collect(evoMe);
+  evoMe.stats.forEach(collect);
+  evoMe.devices.forEach(collect);
+  evoMe.accounts.forEach(collect);
+  collect(evoView.meView({ devices: [], accounts: [] }, i18nT, 2));
 
   // 首页（2026-10-27）：大卡 / 小卡 / 每秒的字段（utils/home.js），Evo 那两块（view.js 的 homeView / crowdView）
   const homeUtil = require(path.resolve(HERE, "..", "miniprogram", "utils", "home.js"));

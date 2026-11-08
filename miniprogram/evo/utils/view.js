@@ -327,24 +327,49 @@ function detail(d, T) {
 }
 
 /** 「我的」里的电脑和账号 */
-function devicesView(d, T) {
+/**
+ * 「我的」页上半部分（云函数 me 的结果，2026-11-08 照 August 的设计稿）：
+ *   顶上：游戏 ID（首字母切角方块当头像）+ 绑定状态；三格统计（记录局数 / 赛季最高 / 冠军次数，没有的格不出）；
+ *   每台电脑一张「电脑上的 Evo」卡（状态标签 + 几分钟前同步 + Evo 版本）。
+ * 云函数还没更新（没有 profile）时：局数用各台电脑的合计，赛季最高、冠军次数不出。
+ * @param {number} nowMs 手机上的现在（算"几分钟前同步"）
+ */
+function meView(d, T, nowMs) {
   var list = d.devices || [];
+  var accounts = (d.accounts || []).map(function (a, i) {
+    return { key: String(i), name: a.name, names: a.names > 1 ? count(T.evoNamesN, a.names) : "" };
+  });
+  if (!list.length) {
+    return { state: "unbound", name: T.meUnbound, initial: "", sub: T.meUnboundSub, stats: [], devices: [], accounts: accounts };
+  }
+  var p = d.profile || null;
+  var name = (p && p.account) || (accounts[0] && accounts[0].name) || "";
+  var total = list.reduce(function (s, x) { return s + (x.matches || 0); }, 0);
+  var stats = [{ key: "m", k: T.meStatMatches, v: core.num(p ? p.matches : total), small: false }];
+  var peak = p && p.peak ? tierName(p.peak.tier, p.peak.division, T) : "";
+  if (peak) stats.push({ key: "p", k: T.meStatPeak, v: peak, small: true });   // 段位是字，比数字小一号
+  if (p && has(p.wins)) stats.push({ key: "w", k: T.meStatWins, v: core.num(p.wins), small: false });
   return {
-    hasDevices: list.length > 0,
+    state: "ready",
+    name: name || T.meNoMatches,
+    initial: name ? name.slice(0, 1).toUpperCase() : "",
+    sub: accounts.length ? T.meBound + " · " + count(T.meAccountsN, accounts.length) : T.meBound,
+    stats: stats,
     devices: list.map(function (x, i) {
-      var name = fill(T.evoPcN, { n: i + 1 });
+      var sync = has(x.last_upload_ms) ? fill(T.meSyncedAgo, { ago: agoText(x.last_upload_ms, nowMs, T).trim() })
+        : (x.last_upload_at ? fill(T.evoLastSync, { t: x.last_upload_at }) : T.evoNeverSync);
       return {
         id: x.id,
-        name: name,
-        boundAt: x.bound_at ? fill(T.evoBoundAt, { t: x.bound_at }) : "",
-        sync: x.last_upload_at ? fill(T.evoLastSync, { t: x.last_upload_at }) : T.evoNeverSync,
-        count: count(T.evoCloudN, x.matches) + (x.app_version ? " · Evo " + x.app_version : ""),
+        title: list.length > 1 ? fill(T.mePcTitleN, { n: i + 1 }) : T.mePcTitle,
+        name: fill(T.evoPcN, { n: i + 1 }),   // 解绑时弹窗里说"电脑 1"
+        sub: [sync, x.app_version ? "Evo " + x.app_version : ""].filter(Boolean).join(" · "),
+        // 状态标签：同步过 = 正常；绑了还没传过 = 还没同步（标签上有字，不只靠颜色）
+        chip: x.last_upload_at || has(x.last_upload_ms) ? T.meStatusOk : T.meStatusNever,
+        chipCls: x.last_upload_at || has(x.last_upload_ms) ? "ok" : "warn",
         matches: x.matches
       };
     }),
-    accounts: (d.accounts || []).map(function (a, i) {
-      return { key: String(i), name: a.name, names: a.names > 1 ? count(T.evoNamesN, a.names) : "" };
-    })
+    accounts: accounts
   };
 }
 
@@ -368,7 +393,8 @@ function splitAtNumber(tpl, vars, n) {
  * @param {number} emblemRpx 段位徽章多大（rpx），和 home 组件的 .evo-hm-emblem 一样
  * @param {number} nowMs 手机上的现在（算"同步于几分钟前"）
  */
-function homeView(d, T, emblemRpx, nowMs) {
+function homeView(d, T, emblemRpx, nowMs, opts) {
+  var shareName = !!(opts && opts.shareName) && !!d.name;   // 「我的」页「分享卡片」选了显示游戏名
   if (!d.bound) return { state: "unbound" };
   if (!d.total) return { state: "empty" };
   var ctx = { T: T, today: "", yesterday: "" };
@@ -395,7 +421,8 @@ function homeView(d, T, emblemRpx, nowMs) {
       line: line.join(" · "),
       // 转发卡片的标题；名次没读到就不提供分享（不编一个名次出来）
       shareTitle: has(last.placement)
-        ? fill(map ? T.evoShareTitle : T.evoShareTitleNoMap, { place: last.placement, map: map })
+        ? fill(shareName ? (map ? T.evoShareTitleName : T.evoShareTitleNameNoMap) : (map ? T.evoShareTitle : T.evoShareTitleNoMap),
+          { place: last.placement, map: map, name: d.name })
         : ""
     };
   }
@@ -479,7 +506,7 @@ module.exports = {
   matchesView: matchesView,
   emptyText: emptyText,
   detail: detail,
-  devicesView: devicesView,
+  meView: meView,
   homeView: homeView,
   crowdView: crowdView,
   errText: errText,
