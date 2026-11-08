@@ -55,6 +55,10 @@
     <!-- 有战队页就能点进去（右边一个 ›） -->
     <view class="rs-champ-teamrow {{result.champTeamPage ? 'rs-champ-tap' : ''}}" data-page="{{result.champTeamPage}}"
           bindtap="onOpenTeam" hover-class="{{result.champTeamPage ? 'rs-chip-hover' : 'none'}}">
+      <!-- 队标（参赛名单从云端到了才有；没有就只写队名） -->
+      <view wx:if="{{result.champTeamLogo}}" class="rs-champ-logo">
+        <image class="rs-champ-logo-img" aria-hidden="{{true}}" src="{{result.champTeamLogo}}" mode="aspectFit" binderror="onChampLogoError"></image>
+      </view>
       <text class="rs-champ-team">{{result.champTeam}}</text>
       <text wx:if="{{result.champTeamPage}}" class="rs-champ-x">›</text>
     </view>

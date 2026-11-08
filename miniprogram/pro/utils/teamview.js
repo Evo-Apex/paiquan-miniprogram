@@ -236,6 +236,8 @@ function team(raw, lang) {
   return {
     name: name,
     initials: view.initials(name),
+    // 队标（云存储的 cloud:// 地址）；没有 → ""，大卡写队名缩写
+    logo: typeof (raw && raw.logo) === "string" ? raw.logo : "",
     badge: info ? badgeOf(info.region, lang, T) : null,
     facts: factsOf(info, members, results, transfers, lang, T),
     roster: rosterOf(members, lang, T),

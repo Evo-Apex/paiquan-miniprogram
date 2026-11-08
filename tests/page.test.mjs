@@ -931,6 +931,25 @@ describe("比赛页 · 连到选手页", () => {
     assert.equal(urls.length, 1, "没有战队页的点了没反应");
   });
 
+  test("冠军卡队标：名单里冠军队带 teamLogo 才有；加载失败只写队名，重算也不再试", async () => {
+    const L = "cloud://e.b/pro/logos/v1/t_Team_Liquid.png";
+    const withLogo = { ok: true, kind: "ok", message: "", data: Object.assign({}, roster, {
+      teams: roster.teams.map((t, i) => (i === 0 ? Object.assign({}, t, { teamLogo: L }) : t)) }) };
+    const { inst } = loadPage("matches", { responses: { proRoster: withLogo } });
+    inst.onLoad();
+    await flush();
+    if (!inst.data.result) return;
+    assert.equal(inst.data.result.champTeamLogo, L);
+    inst.onChampLogoError();
+    assert.equal(inst.data.result.champTeamLogo, "");
+    inst.rebuild();
+    assert.equal(inst.data.result.champTeamLogo, "", "重算以后还是只写队名");
+    const plain = loadPage("matches", { responses: { proRoster: rosterOk } }).inst;
+    plain.onLoad();
+    await flush();
+    assert.equal(plain.data.result.champTeamLogo, "", "云函数没给队标：没有");
+  });
+
   test("名单要不到（云函数挂了）：内容照常，什么都不能点", async () => {
     const { inst } = loadPage("matches", { failAll: true });
     inst.onLoad();
@@ -939,6 +958,7 @@ describe("比赛页 · 连到选手页", () => {
     assert.ok(inst.data.result.rows.length >= 10, "最终成绩照常显示");
     assert.equal(inst.data.result.champChips, undefined, "没有名单就不出队员块，照旧一行字");
     assert.ok(!inst.data.result.champTeamPage, "冠军队名也不能点");
+    assert.ok(!inst.data.result.champTeamLogo, "也没有队标");
     assert.ok(inst.data.result.rows.every((x) => !(x.ti >= 0)));
   });
 });
@@ -995,6 +1015,19 @@ describe("战队页", () => {
     assert.equal(inst.data.v.roster.cards[0].photo, "", "重算以后还是剪影");
   });
 
+  test("大卡队标：有就放，加载失败换回队名缩写，重算也不再试", async () => {
+    const L = "cloud://e.b/pro/logos/v1/t_Team_Liquid.png";
+    const { inst } = loadPage("pro/team", { responses: { proTeam: { ok: true, kind: "ok", message: "", data: Object.assign({}, data, { logo: L }) } } });
+    inst.onLoad({ page: "Team_Liquid" });
+    await flush();
+    assert.equal(inst.data.v.logo, L);
+    assert.equal(inst.data.v.initials, "TL", "缩写照样算好，换回去时用");
+    inst.onLogoError();
+    assert.equal(inst.data.v.logo, "");
+    inst.onMovesMore();
+    assert.equal(inst.data.v.logo, "", "重算以后还是缩写");
+  });
+
   test("数据库里没有这支队：写「还没有这支战队的资料」；云函数挂了：出错 + 重试", async () => {
     const empty = loadPage("pro/team", { responses: { proTeam: { ok: true, kind: "ok", message: "", data: null } } }).inst;
     empty.onLoad({ page: "Nobody" });
@@ -1004,6 +1037,32 @@ describe("战队页", () => {
     bad.onLoad({ page: "Team_Liquid" });
     await flush();
     assert.equal(bad.data.state, "error");
+  });
+});
+
+describe("选手页 · 队标", () => {
+  test("大卡现在的战队、战队经历每行带队标；一张加载失败，这支队在两处都换回缩写，别的队不受影响", async () => {
+    const LT = "cloud://e.b/pro/logos/v1/t_Team_Liquid.png";
+    const LD = "cloud://e.b/pro/logos/v1/t_DarkZero_Esports.png";
+    const raw = { page: "Zer0", profile: { id: "Zer0", nats: [], legends: [], team: "Team Liquid", teamPage: "Team_Liquid" },
+      history: [
+        { teamPage: "Team_Liquid", team: "Team Liquid", join: "2025-11-05", leave: "", status: "active", type: "player", role: "" },
+        { teamPage: "DarkZero_Esports", team: "DarkZero Esports", join: "2022-01-01", leave: "2025-11-05", status: "former", type: "player", role: "" },
+      ],
+      results: null, mates: null, teamPages: {}, teamLogos: { Team_Liquid: LT, DarkZero_Esports: LD }, at: 1 };
+    const { inst } = loadPage("pro/player", { responses: { proPlayer: { ok: true, kind: "ok", message: "", data: raw } } });
+    inst.onLoad({ page: "Zer0" });
+    await flush();
+    assert.equal(inst.data.v.team.logo, LT);
+    assert.deepEqual(inst.data.v.career.items.map((x) => x.logo), [LT, LD]);
+    inst.onLogoError({ currentTarget: { dataset: { src: LT } } });
+    assert.equal(inst.data.v.team.logo, "");
+    assert.equal(inst.data.v.team.initials, "TL");
+    assert.deepEqual(inst.data.v.career.items.map((x) => x.logo), ["", LD]);
+    inst.onResMore();
+    assert.deepEqual(inst.data.v.career.items.map((x) => x.logo), ["", LD], "重算以后也不再试");
+    inst.onLogoError({ currentTarget: { dataset: {} } });   // 没有地址：不动
+    assert.deepEqual(inst.data.v.career.items.map((x) => x.logo), ["", LD]);
   });
 });
 

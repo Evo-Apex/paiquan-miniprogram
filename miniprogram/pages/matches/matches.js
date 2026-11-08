@@ -139,10 +139,24 @@ Page({
       // 赛程全部打完时 build() 返回 hasNext=false：那就不显示「下一场比赛」，只显示最终成绩
       next: (function (nx) { return nx && nx.hasNext ? nx : null; })(nextmatch.build(this.data.lang, Date.now(), this._nextGroup)),
       result: this._roster
-        ? prolink.decorate(matchresult.build(this.data.lang), this._roster, this.data.lang)
+        ? this.champLogoFix(prolink.decorate(matchresult.build(this.data.lang), this._roster, this.data.lang))
         : matchresult.build(this.data.lang),
       openTeam: null
     });
+  },
+
+  /** 加载失败过的冠军队标不再试（只写队名） */
+  champLogoFix: function (r) {
+    if (r && this._badChampLogo && r.champTeamLogo === this._badChampLogo) r.champTeamLogo = "";
+    return r;
+  },
+
+  /** 冠军队标加载失败（没传、网络不通）→ 只写队名 */
+  onChampLogoError: function () {
+    var r = this.data.result;
+    if (!r || !r.champTeamLogo) return;
+    this._badChampLogo = r.champTeamLogo;
+    this.setData({ "result.champTeamLogo": "" });
   },
 
   /** 点名次表的一行 → 底部弹层看这队的三名队员（和「下一场比赛」点队伍是同一个弹层） */

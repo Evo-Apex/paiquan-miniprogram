@@ -13,11 +13,14 @@
   </view>
 
   <block wx:else>
-    <!-- 大卡（两套主题都是深色底）：队名缩写的切角方块（队标拿到授权之前的占位）、队名、赛区标签；
+    <!-- 大卡（两套主题都是深色底）：切角方块里放队标（云存储；没有或加载失败写队名缩写）、队名、赛区标签；
          下面进入 Apex /（解散）/ 累计奖金，哪项没有就少一格 -->
     <view class="pp-hero">
       <view class="tp-top">
-        <view class="tp-logo">{{v.initials}}</view>
+        <view class="tp-logo">
+          <image wx:if="{{v.logo}}" class="tp-logo-img" aria-hidden="{{true}}" src="{{v.logo}}" mode="aspectFit" binderror="onLogoError"></image>
+          <text wx:else>{{v.initials}}</text>
+        </view>
         <text class="tp-name">{{v.name}}</text>
         <view wx:if="{{v.badge}}" class="tp-badge">
           <text wx:if="{{v.badge.code}}" class="tp-badge-code">{{v.badge.code}}</text>

@@ -503,6 +503,69 @@ describe("选手照片（proPhotos、pro_photos.json）", () => {
   });
 });
 
+/* ---------------- 战队队标（2026-11-08） ---------------- */
+
+describe("战队队标（proLogos、pro_logos.json）", () => {
+  const MAP = require(path.join(CF, "pro_logos.json"));
+  const slug = (page) => "t_" + docId(page).slice(2);   // 和选手文档 _id 同一种编码，前缀换成 t_
+  const fresh = (envBase) => {
+    if (envBase === undefined) delete process.env.PRO_LOGO_BASE; else process.env.PRO_LOGO_BASE = envBase;
+    for (const f of ["proLogos.js", "proSync.js"]) delete require.cache[require.resolve(path.join(CF, f))];
+    return { logos: require(path.join(CF, "proLogos.js")), sync: require(path.join(CF, "proSync.js")) };
+  };
+
+  test("对照表：文件名是页面名编码过的（Gen.G_Citadel 这种也不会撞）；base 只能是空的或 cloud:// 地址", () => {
+    assert.ok(Object.keys(MAP.files).length >= 300, "收录的 300 多支队大都该有");
+    for (const [page, name] of Object.entries(MAP.files)) assert.equal(name, slug(page), page);
+    assert.ok(MAP.base === "" || /^cloud:\/\//.test(MAP.base), "队标只放云存储，不许是外部网站");
+    assert.match(MAP.version, /^v\d+$/);
+    for (const page of ["Team_Liquid", "Team_Falcons", "Rex_Regum_Qeon", "Team_Eclipse"]) assert.ok(MAP.files[page], "这一届的队有队标：" + page);
+    assert.ok(!MAP.files.World_Wide, "World Wide 两边都只有 Apex 通用标志：不放，页面写缩写");
+  });
+
+  test("没传队标（base 空着）：一律不给地址，页面照旧写缩写", () => {
+    const { logos } = fresh(undefined);
+    if (MAP.base) return;   // 已经填了 base 就不测这条
+    assert.equal(logos.logoOf("Team_Liquid"), "");
+    assert.deepEqual(logos.logosOf(["Team_Liquid"]), {});
+  });
+
+  test("填了 base：<base>t_<页面名>.png；对照表里没有的队不给", () => {
+    const { logos } = fresh("cloud://env.bucket/pro/logos/v1");
+    assert.equal(logos.logoOf("Team_Liquid"), "cloud://env.bucket/pro/logos/v1/t_Team_Liquid.png");
+    assert.equal(logos.logoOf("Gen.G_Citadel"), "cloud://env.bucket/pro/logos/v1/" + slug("Gen.G_Citadel") + ".png");
+    assert.equal(logos.logoOf("World_Wide"), "");
+    assert.equal(logos.logoOf("constructor"), "", "原型链上的名字不算");
+    assert.equal(logos.logoOf(undefined), "");
+    assert.deepEqual(logos.logosOf(["Team_Liquid", "World_Wide", ""]), { Team_Liquid: "cloud://env.bucket/pro/logos/v1/t_Team_Liquid.png" });
+    fresh(undefined);
+  });
+
+  test("proTeam 带队标；proPlayer 给现在的队和待过的队的队标；proRoster 每支队带 teamLogo", async () => {
+    const B = "cloud://env.bucket/pro/logos/v1/";
+    const { sync: s } = fresh(B);
+    const store = memStore();
+    await store.saveTeam("Team_Liquid", { members: [] });
+    assert.equal((await s.proTeam({ page: "Team_Liquid" }, { store })).data.logo, B + "t_Team_Liquid.png");
+    await store.saveTeam("World_Wide", { members: [] });
+    assert.equal((await s.proTeam({ page: "World_Wide" }, { store })).data.logo, "", "没有队标：空字符串");
+
+    await store.savePlayer("Zer0", { profile: { id: "Zer0", nats: [], teamPage: "Team_Liquid", team: "Team Liquid" }, history: [
+      { teamPage: "Team_Liquid", team: "Team Liquid", join: "2025-11-05", leave: "", status: "active", type: "player", role: "" },
+      { teamPage: "World_Wide", team: "World Wide", join: "2022-01-01", leave: "2025-11-05", status: "former", type: "player", role: "" },
+    ] });
+    const p = (await s.proPlayer({ page: "Zer0" }, { store, now: () => Date.UTC(2026, 10, 2) })).data;
+    assert.deepEqual(p.teamLogos, { Team_Liquid: B + "t_Team_Liquid.png" });
+
+    await store.writeState({ events: ["E"], rosters: { E: { name: "T", teams: [
+      { place: "1", team: "Team Liquid", players: [] }, { place: "2", team: "World Wide", players: [] },
+    ] } }, queue: [] });
+    const r = (await s.proRoster({}, { store })).data;
+    assert.deepEqual(r.teams.map((t) => t.teamLogo), [B + "t_Team_Liquid.png", ""]);
+    fresh(undefined);
+  });
+});
+
 /* ---------------- 队友（liquipedia.mates） ---------------- */
 
 describe("合作过的队友", () => {
@@ -554,7 +617,7 @@ describe("选手页 view.player（照 August 的设计稿）", () => {
     assert.equal(v.id, "ImperialHal");
     assert.equal(v.realName, "Phillip Dosen");
     assert.deepEqual(v.facts, [{ k: "国籍", v: "美国" }, { k: "年龄", v: "27 岁" }, { k: "累计奖金", v: "$1,204,549" }]);
-    assert.deepEqual(v.team, { name: "Team Falcons", page: "", initials: "TF", since: "2024 年 5 月加入" }, "还没有战队页：点不进去");
+    assert.deepEqual(v.team, { name: "Team Falcons", page: "", initials: "TF", logo: "", since: "2024 年 5 月加入" }, "还没有战队页：点不进去；没给队标：写缩写");
     assert.equal(v.retired, null);
     assert.equal(view.player(raw(), "en", NOW).team.since, "Joined May 2024");
   });
@@ -563,6 +626,16 @@ describe("选手页 view.player（照 August 的设计稿）", () => {
     const v = view.player(raw({ teamPages: { Team_Falcons: true } }), "zh", NOW);
     assert.equal(v.team.page, "Team_Falcons");
     assert.deepEqual(v.career.items.map((x) => x.page), ["Team_Falcons", ""]);
+  });
+
+  test("队标（teamLogos）：大卡上现在的战队、战队经历每一行；没有队标的队写缩写", () => {
+    const L = "cloud://e.b/pro/logos/v1/t_Team_Falcons.png";
+    const v = view.player(raw({ teamLogos: { Team_Falcons: L } }), "zh", NOW);
+    assert.equal(v.team.logo, L);
+    assert.deepEqual(v.career.items.map((x) => [x.logo, x.initials]), [[L, "TF"], ["", "TS"]]);
+    const none = view.player(raw(), "zh", NOW);
+    assert.ok(none.career.items.every((x) => x.logo === ""), "云函数没给（老版本、没传队标）：都是空的");
+    assert.equal(view.logoOf({ constructor: "x" }, "toString"), "", "原型链上的名字不算");
   });
 
   test("资料卡：出生日期、输入设备、赛区", () => {

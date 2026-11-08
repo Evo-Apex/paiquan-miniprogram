@@ -659,7 +659,7 @@ git update-index --no-skip-worktree project.config.json miniprogram/app.js
   看完了再给「也看小比赛」（August 11-02 要的可以切到全部）。名次放大放左边，冠军用强调色，奖金写明是全队奖金。
 - **最底下「数据来源 ›」** → `pro/sources/`：Liquipedia 署名、上次同步时间、照片说明、粉丝工具声明（页面上不放这些）。
 
-**占位**（设计稿注释里定的）：没有照片的选手用剪影（`pro/assets/silhouette.svg`）；队标用队名缩写（Team Liquid → TL）；
+**占位**（设计稿注释里定的）：没有照片的选手用剪影（`pro/assets/silhouette.svg`）；没有队标的队写队名缩写（Team Liquid → TL）；
 队友头像用名字首字母。
 
 **选手照片（2026-11-07 起）**：ALGS 的选手定妆照（透明底半身抠图），August 拿到 EA 授权、自己收集好的（2 GB，只在 August 本机，
@@ -672,6 +672,19 @@ git update-index --no-skip-worktree project.config.json miniprogram/app.js
 页面上 `<image webp>`（网络 WebP 要加这个属性 iPhone 才认；**包里的** WebP iPhone 显示不了，见 §7 附近的说明），加载失败 → 换回剪影，不出破图。
 存储的权限要「所有用户可读」（默认就是），否则别人看不到。换了照片用 `v2` 文件夹（手机上有缓存），换比赛重跑脚本、补传新人的照片。
 数据来源说明页写了「选手照片来自 ALGS 官方定妆照，经 EA 授权使用」。
+
+**战队队标（2026-11-08 起）**：放在四个地方——战队页大卡、选手页大卡上现在的战队、选手页战队经历每一行、比赛页冠军卡队名前。
+一律放在**深色切角方块**里（大卡上用 `--hero-track`，普通卡片、红色冠军卡上用实心的 `--hero-bg`），四周留 16%，右下切角切不到；
+没有队标或加载失败：大卡、战队经历写队名缩写，冠军卡只写队名。来源（August 定的）：这一届比赛的队用 ALS 赛事页上的队标
+（比赛页分组卡片用的同一批），其他队用 Liquipedia 战队资料里的队标（API 的 team 表给的 `textlesslogodarkurl`：深色底用、不带字的一版）。
+用 Apex 通用标志顶替的（ALS 的 `fa.png` / `worldwide.png`，Liquipedia 文件名带 "Apex Legends" 的，如 World Wide）不算队标，照旧写缩写。
+`tools/build_pro_logos.py` 一次 API 请求拿 Apex 维基全部战队（约 890 支，850 支有真队标）+ 一次拿这场比赛的参赛队（对 ALS 队名），
+下载（liquipedia.net 两次隔 2 秒，第一次约半小时，之后有缓存）、裁透明边、压成最长边 192px 的 256 色 PNG（队标是平面图形看不出差别，
+一张 2～8 KB，共约 4 MB），**放云存储**（几百个打进分包会超过 2 MB，而且收录的队会越来越多）：整个输出文件夹传到 `pro/logos/v1/`，
+对照表 `cloudfunctions/apex/pro_logos.json`（页面名 → 文件名，编码同 `proStore.docId`、前缀 `t_`）的 `base` 填 fileID 前缀。
+`proLogos.js` 据此给 `proTeam` 的 `logo`、`proPlayer` 的 `teamLogos`（{ 战队页面名: 地址 }，现在的队和待过的队）、`proRoster` 每支队的 `teamLogo`；
+`base` 空着就都不给。ALS 和 Liquipedia 叫法对不上的写在脚本的 `OVERRIDES`（PXX = Pork Xiaolongbao Xpert、Team RRQ = Rex Regum Qeon…）。
+换比赛（next_match_data.js 换了）、Liquipedia 上有了新队：重跑脚本，补传新文件（换了图就用 `v2`）。队标是各战队的商标，图片不在 CC BY-SA 授权里。
 
 **为什么用定时器、不现查**：Liquipedia 每小时只给 60 次请求。所以 `apex` 的定时器（每 5 分钟）每次最多发 1 个请求
 （每小时最多 12 次，两次至少隔 4 分钟），一轮 = 每场赛事的参赛名单 1 次 + 资料 / 队伍经历各 40 人 1 次
@@ -694,6 +707,7 @@ git update-index --no-skip-worktree project.config.json miniprogram/app.js
 1. 部署 `apex`（「上传并部署：云端安装依赖」）
 2. `apex` 的环境变量加 `LIQUIPEDIA_API_KEY`（August 给；**条款：Key 不许给第三方**）。没配就不抓，选手页显示"还没有这位选手的资料"，别的功能不受影响
 3. 等两三个小时（第一轮抓完），比赛页的名次行、选手名才能点
+4. 选手照片、战队队标传到云存储（`pro/photos/v1/`、`pro/logos/v1/`，权限「所有用户可读」），对照表填 `base` 后再部署一次 `apex`
 
 **本机怎么看效果**：`tools/preview.mjs` 支持分包页面和打开参数：
 `PREVIEW_FIXTURE=样本.json PREVIEW_OPTIONS='{"page":"Zer0"}' node tools/preview.mjs pro/player zh dark out.html`
@@ -707,7 +721,7 @@ git update-index --no-skip-worktree project.config.json miniprogram/app.js
 **是什么**：分包 `pro/team/`。入口：选手页大卡上现在的战队、战队经历那几行；比赛页冠军卡的队名、队伍弹层第一行「战队主页」。
 只有我们存了这支队（`pro_teams` 里有）才能点，点不了的不显示 ›。版式照 August 的战队页设计稿（`战队页设计稿-浅色.svg`）：
 
-- **深色大卡**：队名缩写的切角方块（队标拿到授权前的占位）、队名（`--fs-hero`）、赛区标签（红底缩写 NA / CN / JP… + 「北美赛区」）；
+- **深色大卡**：切角方块里放队标（没有写队名缩写，见上「战队队标」）、队名（`--fs-hero`）、赛区标签（红底缩写 NA / CN / JP… + 「北美赛区」）；
   下面进入 Apex /（解散的队多一格解散年份）/ 累计奖金。
 - **现役阵容**：正式队员一张深色卡（剪影 + ID + 国籍，队长写上），教练、替补、暂停比赛的一行一个（写身份和加入时间）。
 - **重要比赛成绩**：同选手页（S、A 级先 5 场）。
@@ -755,3 +769,4 @@ git update-index --no-skip-worktree project.config.json miniprogram/app.js
 | 选手页换一场赛事（收录谁） | **云开发控制台** `site_config` 集合加/改 `_id: "pro_events"`，`list: ["赛事页面名"]`（不用发版） | — |
 | 改选手页 | `pro/player/`、`pro/utils/view.js`、`utils/pronames.js` | pro, static, i18n |
 | 改战队页 | `pro/team/`、`pro/utils/teamview.js`（成绩那块在 `view.js`） | proteam, pro, page, static, i18n |
+| 换比赛 / 补新战队的队标 | `python tools/build_pro_logos.py <工作文件夹>`，传新文件到云存储 `pro/logos/v1/`（对照表 `pro_logos.json`） | pro |

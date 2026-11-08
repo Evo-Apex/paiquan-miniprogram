@@ -136,6 +136,7 @@
 | `liquipedia.js` | 550 | Liquipedia 数据库 API：拼请求、取数、归一化（选手、战队、成绩、转会）、算队友重叠（每小时只给 60 次，所以只由定时器调） |
 | `proSync.js` | 430 | 选手、战队数据：定时器每次一步（≤1 个请求）+ `proPlayer`（带队友）/ `proRoster` / `proTeam` 读取接口 |
 | `proPhotos.js` | 40 | 选手照片：页面名 → 云存储的 cloud:// 地址；对照表 `pro_photos.json` 由 `tools/build_pro_photos.py` 生成 |
+| `proLogos.js` | 46 | 战队队标：战队页面名 → 云存储的 cloud:// 地址；对照表 `pro_logos.json` 由 `tools/build_pro_logos.py` 生成 |
 | `proStore.js` | 190 | `pro_players` / `pro_teams` / `pro_meta` 三个集合的读写（第一次写入时自动建） |
 | `snapshot.js` | 70 | 猎杀快照纯逻辑（按小时分桶、20~28h 窗口挑基准） |
 | `store.js` | 90 | 猎杀快照数据库读写（错误全部降级） |
@@ -212,6 +213,7 @@
 | `fix-type-floor.mjs` / `fix-accent-border.mjs` | 一次性修正脚本（历史遗留，只作参考） |
 | `build_team_icons.mjs` | 抓 ALGS 队标 → `assets/teams/` |
 | `build_pro_photos.py` | 选手照片：ALGS 定妆照对到 Liquipedia 页面名、压成 WebP（传云存储），生成 `cloudfunctions/apex/pro_photos.json`（AI-CONTEXT §18） |
+| `build_pro_logos.py` | 战队队标：这一届的队用 ALS 的、其他队用 Liquipedia 的，压成 192px PNG（传云存储），生成 `cloudfunctions/apex/pro_logos.json`（AI-CONTEXT §18） |
 | `make-*-tabicon.py` | 生成 tabBar 图标 |
 | `make-home-assets.py` | 生成「首页」tab 图标和首页导航栏的品牌标 `logo-mark.png`（Noto Sans SC） |
 | `icon.html` / `tabicons.html` | 图标预览页 |

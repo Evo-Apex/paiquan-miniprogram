@@ -168,6 +168,15 @@ describe("选手照片", () => {
   });
 });
 
+describe("队标", () => {
+  test("大卡带上云函数给的队标地址；没有（或不是字符串）就是空的，写队名缩写", () => {
+    const L = "cloud://e.b/pro/logos/v1/t_Team_Liquid.png";
+    assert.equal(tv.team(Object.assign({}, TL, { logo: L }), "zh").logo, L);
+    assert.equal(tv.team(TL, "zh").logo, "");
+    assert.equal(tv.team(Object.assign({}, TL, { logo: 1 }), "zh").logo, "");
+  });
+});
+
 describe("历任队员", () => {
   test("现在不在队的选手一人一行（教练不算）；几段在队时间相加；最近离开的在前", () => {
     const f = tv.team(TL, "zh").former;
