@@ -62,20 +62,6 @@ module.exports = {
           "heroes": [
             "亡灵",
             "命脉",
-            "探路者"
-          ],
-          "en": [
-            "Revenant",
-            "Lifeline",
-            "Pathfinder"
-          ],
-          "n": 2,
-          "pct": 40.0
-        },
-        {
-          "heroes": [
-            "亡灵",
-            "命脉",
             "疯马吉"
           ],
           "en": [
@@ -83,8 +69,22 @@ module.exports = {
             "Lifeline",
             "Mad Maggie"
           ],
-          "n": 2,
-          "pct": 40.0
+          "n": 5,
+          "pct": 55.6
+        },
+        {
+          "heroes": [
+            "亡灵",
+            "命脉",
+            "探路者"
+          ],
+          "en": [
+            "Revenant",
+            "Lifeline",
+            "Pathfinder"
+          ],
+          "n": 3,
+          "pct": 33.3
         },
         {
           "heroes": [
@@ -98,7 +98,7 @@ module.exports = {
             "Lifeline"
           ],
           "n": 1,
-          "pct": 20.0
+          "pct": 11.1
         }
       ],
       "weapons": [
@@ -532,8 +532,8 @@ module.exports = {
             "Lifeline",
             "Pathfinder"
           ],
-          "n": 3,
-          "pct": 33.3
+          "n": 6,
+          "pct": 42.9
         },
         {
           "heroes": [
@@ -547,7 +547,7 @@ module.exports = {
             "Loba"
           ],
           "n": 2,
-          "pct": 22.2
+          "pct": 14.3
         },
         {
           "heroes": [
@@ -561,7 +561,35 @@ module.exports = {
             "Loba"
           ],
           "n": 1,
-          "pct": 11.1
+          "pct": 7.1
+        },
+        {
+          "heroes": [
+            "命脉",
+            "探路者",
+            "探路者"
+          ],
+          "en": [
+            "Lifeline",
+            "Pathfinder",
+            "Pathfinder"
+          ],
+          "n": 1,
+          "pct": 7.1
+        },
+        {
+          "heroes": [
+            "探路者",
+            "疯马吉",
+            "罗芭"
+          ],
+          "en": [
+            "Pathfinder",
+            "Mad Maggie",
+            "Loba"
+          ],
+          "n": 1,
+          "pct": 7.1
         },
         {
           "heroes": [
@@ -575,7 +603,7 @@ module.exports = {
             "Mad Maggie"
           ],
           "n": 1,
-          "pct": 11.1
+          "pct": 7.1
         },
         {
           "heroes": [
@@ -589,7 +617,7 @@ module.exports = {
             "Mad Maggie"
           ],
           "n": 1,
-          "pct": 11.1
+          "pct": 7.1
         },
         {
           "heroes": [
@@ -603,7 +631,7 @@ module.exports = {
             "Bangalore"
           ],
           "n": 1,
-          "pct": 11.1
+          "pct": 7.1
         }
       ],
       "weapons": [
@@ -1048,8 +1076,8 @@ module.exports = {
             "Lifeline",
             "Crypto"
           ],
-          "n": 7,
-          "pct": 87.5
+          "n": 16,
+          "pct": 84.2
         },
         {
           "heroes": [
@@ -1062,8 +1090,8 @@ module.exports = {
             "Crypto",
             "Pathfinder"
           ],
-          "n": 1,
-          "pct": 12.5
+          "n": 3,
+          "pct": 15.8
         }
       ],
       "weapons": [
@@ -1471,8 +1499,8 @@ module.exports = {
             "Pathfinder",
             "Loba"
           ],
-          "n": 3,
-          "pct": 42.9
+          "n": 6,
+          "pct": 54.5
         },
         {
           "heroes": [
@@ -1485,8 +1513,8 @@ module.exports = {
             "Lifeline",
             "Seer"
           ],
-          "n": 2,
-          "pct": 28.6
+          "n": 3,
+          "pct": 27.3
         },
         {
           "heroes": [
@@ -1500,7 +1528,7 @@ module.exports = {
             "Loba"
           ],
           "n": 1,
-          "pct": 14.3
+          "pct": 9.1
         },
         {
           "heroes": [
@@ -1514,7 +1542,7 @@ module.exports = {
             "Bangalore"
           ],
           "n": 1,
-          "pct": 14.3
+          "pct": 9.1
         }
       ],
       "weapons": [
@@ -1945,6 +1973,20 @@ module.exports = {
       "combos": [
         {
           "heroes": [
+            "动力小子",
+            "探路者",
+            "疯马吉"
+          ],
+          "en": [
+            "Octane",
+            "Pathfinder",
+            "Mad Maggie"
+          ],
+          "n": 2,
+          "pct": 66.7
+        },
+        {
+          "heroes": [
             "亡灵",
             "命脉",
             "探路者"
@@ -1955,21 +1997,7 @@ module.exports = {
             "Pathfinder"
           ],
           "n": 1,
-          "pct": 50.0
-        },
-        {
-          "heroes": [
-            "动力小子",
-            "探路者",
-            "疯马吉"
-          ],
-          "en": [
-            "Octane",
-            "Pathfinder",
-            "Mad Maggie"
-          ],
-          "n": 1,
-          "pct": 50.0
+          "pct": 33.3
         }
       ],
       "weapons": [
@@ -2401,8 +2429,22 @@ module.exports = {
             "Pathfinder",
             "Mad Maggie"
           ],
+          "n": 6,
+          "pct": 75.0
+        },
+        {
+          "heroes": [
+            "探路者",
+            "探路者",
+            "疯马吉"
+          ],
+          "en": [
+            "Pathfinder",
+            "Pathfinder",
+            "Mad Maggie"
+          ],
           "n": 1,
-          "pct": 50.0
+          "pct": 12.5
         },
         {
           "heroes": [
@@ -2416,7 +2458,7 @@ module.exports = {
             "Mad Maggie"
           ],
           "n": 1,
-          "pct": 50.0
+          "pct": 12.5
         }
       ],
       "weapons": [
@@ -2782,6 +2824,20 @@ module.exports = {
         {
           "heroes": [
             "亡灵",
+            "动力小子",
+            "密客"
+          ],
+          "en": [
+            "Revenant",
+            "Octane",
+            "Crypto"
+          ],
+          "n": 4,
+          "pct": 66.7
+        },
+        {
+          "heroes": [
+            "亡灵",
             "密客",
             "探路者"
           ],
@@ -2791,21 +2847,7 @@ module.exports = {
             "Pathfinder"
           ],
           "n": 1,
-          "pct": 33.3
-        },
-        {
-          "heroes": [
-            "亡灵",
-            "动力小子",
-            "密客"
-          ],
-          "en": [
-            "Revenant",
-            "Octane",
-            "Crypto"
-          ],
-          "n": 1,
-          "pct": 33.3
+          "pct": 16.7
         },
         {
           "heroes": [
@@ -2819,7 +2861,7 @@ module.exports = {
             "Crypto"
           ],
           "n": 1,
-          "pct": 33.3
+          "pct": 16.7
         }
       ],
       "weapons": [
@@ -3022,8 +3064,8 @@ module.exports = {
             "Pathfinder",
             "Loba"
           ],
-          "n": 3,
-          "pct": 42.9
+          "n": 6,
+          "pct": 60.0
         },
         {
           "heroes": [
@@ -3037,7 +3079,7 @@ module.exports = {
             "Pathfinder"
           ],
           "n": 1,
-          "pct": 14.3
+          "pct": 10.0
         },
         {
           "heroes": [
@@ -3051,7 +3093,7 @@ module.exports = {
             "Pathfinder"
           ],
           "n": 1,
-          "pct": 14.3
+          "pct": 10.0
         },
         {
           "heroes": [
@@ -3065,7 +3107,7 @@ module.exports = {
             "Pathfinder"
           ],
           "n": 1,
-          "pct": 14.3
+          "pct": 10.0
         },
         {
           "heroes": [
@@ -3079,7 +3121,7 @@ module.exports = {
             "Loba"
           ],
           "n": 1,
-          "pct": 14.3
+          "pct": 10.0
         }
       ],
       "weapons": [
@@ -3409,6 +3451,34 @@ module.exports = {
         {
           "heroes": [
             "亡灵",
+            "探路者",
+            "暴雷"
+          ],
+          "en": [
+            "Revenant",
+            "Pathfinder",
+            "Fuse"
+          ],
+          "n": 2,
+          "pct": 50.0
+        },
+        {
+          "heroes": [
+            "亡灵",
+            "命脉",
+            "命脉"
+          ],
+          "en": [
+            "Revenant",
+            "Lifeline",
+            "Lifeline"
+          ],
+          "n": 1,
+          "pct": 25.0
+        },
+        {
+          "heroes": [
+            "亡灵",
             "命脉",
             "恶灵"
           ],
@@ -3418,21 +3488,7 @@ module.exports = {
             "Wraith"
           ],
           "n": 1,
-          "pct": 50.0
-        },
-        {
-          "heroes": [
-            "亡灵",
-            "探路者",
-            "暴雷"
-          ],
-          "en": [
-            "Revenant",
-            "Pathfinder",
-            "Fuse"
-          ],
-          "n": 1,
-          "pct": 50.0
+          "pct": 25.0
         }
       ],
       "weapons": [
@@ -3989,7 +4045,7 @@ module.exports = {
             "Pathfinder",
             "Bangalore"
           ],
-          "n": 1,
+          "n": 2,
           "pct": 100.0
         }
       ],
@@ -4232,8 +4288,8 @@ module.exports = {
             "Lifeline",
             "Pathfinder"
           ],
-          "n": 3,
-          "pct": 75.0
+          "n": 6,
+          "pct": 85.7
         },
         {
           "heroes": [
@@ -4247,7 +4303,7 @@ module.exports = {
             "Pathfinder"
           ],
           "n": 1,
-          "pct": 25.0
+          "pct": 14.3
         }
       ],
       "weapons": [
@@ -4606,7 +4662,7 @@ module.exports = {
             "Octane",
             "Lifeline"
           ],
-          "n": 3,
+          "n": 11,
           "pct": 100.0
         }
       ],
@@ -4843,6 +4899,20 @@ module.exports = {
           "heroes": [
             "亡灵",
             "变换",
+            "命脉"
+          ],
+          "en": [
+            "Revenant",
+            "Alter",
+            "Lifeline"
+          ],
+          "n": 5,
+          "pct": 71.4
+        },
+        {
+          "heroes": [
+            "亡灵",
+            "变换",
             "疯马吉"
           ],
           "en": [
@@ -4851,21 +4921,7 @@ module.exports = {
             "Mad Maggie"
           ],
           "n": 2,
-          "pct": 50.0
-        },
-        {
-          "heroes": [
-            "亡灵",
-            "变换",
-            "命脉"
-          ],
-          "en": [
-            "Revenant",
-            "Alter",
-            "Lifeline"
-          ],
-          "n": 2,
-          "pct": 50.0
+          "pct": 28.6
         }
       ],
       "weapons": [
@@ -5548,7 +5604,22 @@ module.exports = {
           "pct": 9.1
         }
       ],
-      "combos": [],
+      "combos": [
+        {
+          "heroes": [
+            "亡灵",
+            "命脉",
+            "探路者"
+          ],
+          "en": [
+            "Revenant",
+            "Lifeline",
+            "Pathfinder"
+          ],
+          "n": 1,
+          "pct": 100.0
+        }
+      ],
       "weapons": [
         {
           "zh": "暴走轻机枪",
