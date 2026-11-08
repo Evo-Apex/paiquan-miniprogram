@@ -1,7 +1,7 @@
 {
  "note": "战队队标对照表（tools/build_pro_logos.py 生成，别手改）：Liquipedia 战队页面名 → 云存储里的文件名（不带 .png）。base = 云存储里 pro/logos/<version>/ 的 fileID 前缀，传完队标以后填；空着就不放队标（页面照旧写缩写）",
  "version": "v1",
- "base": "",
+ "base": "cloud://cloud1-d8ggx095757c58e20.636c-cloud1-d8ggx095757c58e20-1497557706/pro/logos/v1/",
  "files": {
   "100_Thieves": "t_100_Thieves",
   "10K_Club": "t_10K_Club",
