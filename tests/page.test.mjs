@@ -1051,11 +1051,22 @@ describe("我的 · 设置列表", () => {
     assert.equal(inst.data.themeText, "深色");
   });
 
-  test("语言换成 English：整页文案跟着换；没有群二维码时不出「加入玩家群」", () => {
+  test("加入玩家群 → 玩家群页（QQ 群，写群号、放二维码）", () => {
+    const { inst } = loadPage("me");
+    const urls = [];
+    global.wx.navigateTo = (o) => urls.push(o.url);
+    inst.onGroup();
+    assert.deepEqual(urls, ["/evo/group/group"]);
+    const g = loadPage("evo/group").inst;
+    g.onShow();
+    assert.equal(g.data.number, "1128519951");
+    assert.match(g.data.T.groupHow, /QQ/);
+  });
+
+  test("语言换成 English：整页文案跟着换", () => {
     const { inst } = loadPage("me");
     inst.onLoad();
     inst.onShow();
-    assert.equal(inst.data.hasGroup, false);
     withSheet((items) => items.indexOf("English"));
     inst.onLanguage();
     assert.equal(inst.data.lang, "en");

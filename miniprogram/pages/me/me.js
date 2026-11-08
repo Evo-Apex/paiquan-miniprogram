@@ -4,15 +4,12 @@
  * 上半部分（游戏 ID + 绑定状态、三格统计、电脑上的 Evo）是分包 evo 里的 devices 组件
  * （异步引用，见 me.json 的 componentPlaceholder：主包只剩约 120 KB 余量，Evo 的东西都放分包）。
  * 下面的设置列表在这里：分享卡片（带不带游戏名）、外观（跟随系统 / 深色 / 浅色）、语言、隐私说明、
- * 加入玩家群（有群二维码才出）、关于 Evo、版本。原来左上角的 ⚙ 面板（语言、主题）挪进了列表。
+ * 加入玩家群（Evo 的 QQ 群，→ evo/group）、关于 Evo、版本。原来左上角的 ⚙ 面板（语言、主题）挪进了列表。
  * 不做的（August 定的）：头像昵称用游戏 ID 代替、每周战报 / 地图轮换推送、意见反馈、导出战绩、删除全部战绩。
  */
 var i18n = require("../../utils/i18n.js");
 var theme = require("../../utils/theme.js");
 var prefs = require("../../utils/prefs.js");
-
-// 玩家群的二维码（云存储的 cloud:// 地址）；空着就不出「加入玩家群」这一行（等 August 给群码）
-var GROUP_QR = "";
 
 /** 自定义导航栏的尺寸（和地图页、「战绩」页同一套算法）：内容从胶囊按钮那一行下面开始 */
 function navMetrics() {
@@ -50,7 +47,6 @@ Page({
     shareText: "",
     themeText: "",
     langText: "",
-    hasGroup: !!GROUP_QR,
     version: ""
   },
 
@@ -133,10 +129,9 @@ Page({
     wx.openPrivacyContract({ fail: fallback });
   },
 
-  /** 加入玩家群：大图打开群二维码，长按识别 */
+  /** 加入玩家群：是 QQ 群（微信里加不了），专门一页写群号、放二维码、讲怎么加 */
   onGroup: function () {
-    if (!GROUP_QR) return;
-    wx.previewImage({ urls: [GROUP_QR], current: GROUP_QR });
+    wx.navigateTo({ url: "/evo/group/group" });
   },
 
   onAboutEvo: function () {

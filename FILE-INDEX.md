@@ -68,6 +68,7 @@
 | `bind/` | 绑定确认（扫码后打开；小程序码的 scene 或 Evo 二维码的 c 是绑定码） |
 | `accounts/` | 游戏账号（「我的」页「管理游戏账号」，2026-11-08）：账号列表 + 怎么合并的说明 |
 | `about/` | 关于 Evo（「我的」页，2026-11-08）：原来写在「我的」页底下的说明和官网 |
+| `group/` | 加入玩家群（「我的」页，2026-11-08）：Evo 的 QQ 群号 + 二维码（`assets/qq-group.jpg`，63 KB）+ 怎么用 QQ 加 |
 | `assets/ranks/*.png` | 段位徽章（7 张 256 色 png，80 KB；EA 的游戏素材，同 `assets/heroes/`。不用 webp：iPhone 上的微信显示不了包里的 webp） |
 
 > 页面 js 里**只该有**：`onLoad/onShow`、`cloud.callCloud`、`setData`。
@@ -168,7 +169,7 @@
 |---|---|---|
 | `core.test.mjs` | 68 | 归一化/uid/错误分类/涨幅/译名"不许猜" |
 | `handler.test.mjs` | 49 | 云函数 handler |
-| `page.test.mjs` | 85 | 页面行为 |
+| `page.test.mjs` | 86 | 页面行为 |
 | `static.test.mjs` | 32 | 隐私接口黑名单、存储白名单、WXML 一致性 |
 | `sync.test.mjs` | 9 | 两份 `core.js` 一致、依赖白名单、不用全局 fetch |
 | `i18n.test.mjs` | 18 | 中英成对/不混排/译名清单 |

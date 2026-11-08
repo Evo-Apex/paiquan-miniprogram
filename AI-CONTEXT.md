@@ -160,7 +160,7 @@ pages/maps.wxml  {{...}}  ← 只渲染，不含业务判断
 | 圈型速判 | 分包 `games/ringpick/` | 本地 `games/data/rings_data.js` + `map_ends_data.js` | `games/utils/ringpick.js` | 四选一，10 秒一题 |
 | 英雄/武器轮盘 | 分包 `games/wheel/` | 本地 `codex_data.js` | `wheel_data.js`（在主包 `utils/`，分类页也要用） | 纯随机，不按选取率加权 |
 | 我的（tab） | `pages/me/` | 云端 `evo_mp`（`me`） | 分包 `evo/components/devices`、`utils/theme.js` | 2026-11-08 照 August 的设计稿改版：游戏 ID + 三格统计 + 电脑上的 Evo（组件）→ 设置列表（分享卡片、外观、语言、隐私说明、关于 Evo、版本）（§17） |
-| 游戏账号 / 关于 Evo | 分包 `evo/accounts`、`evo/about` | `evo_mp`（`me`）/ 本地文案 | `evo/utils/view.js` | 「我的」页的两个二级页（2026-11-08） |
+| 游戏账号 / 关于 Evo / 玩家群 | 分包 `evo/accounts`、`evo/about`、`evo/group` | `evo_mp`（`me`）/ 本地文案 | `evo/utils/view.js` | 「我的」页的三个二级页（2026-11-08） |
 | 全部对局 / 对局详情 / 绑定电脑 | 分包 `evo/matches`、`evo/match`、`evo/bind` | 云端 `evo_mp` | `evo/utils/view.js` | Evo 战绩的子页面（§17） |
 
 **注意**：`pages/maps/` **没有自己的 `.wxss`**（只有 js/json/wxml），它的样式全部在根目录 `app.wxss` 里。
@@ -346,7 +346,7 @@ pages/maps.wxml  {{...}}  ← 只渲染，不含业务判断
 |---|---|---|---|
 | `core.test.mjs` | 68 | 归一化、uid、错误分类、涨幅计算、译名"不许猜" | 改 core.js |
 | `handler.test.mjs` | 49 | 云函数 handler：uid 重试、store 注入、追踪 action | 改 handler/index |
-| `page.test.mjs` | 85 | 页面行为：取数、查询、涨幅、猜圈、速判、轮盘、比赛页连接、选手页、战队页、「我的」设置列表 | 改页面 |
+| `page.test.mjs` | 86 | 页面行为：取数、查询、涨幅、猜圈、速判、轮盘、比赛页连接、选手页、战队页、「我的」设置列表 | 改页面 |
 | `static.test.mjs` | 32 | 隐私接口黑名单、本地存储白名单、WXML 一致性、颜色不表意 | 改任何 WXML/JS |
 | `sync.test.mjs` | 9 | 两份 core.js 字节一致、依赖白名单、不许用全局 fetch | 改 core.js / 云函数 |
 | `i18n.test.mjs` | 18 | 中英成对、不混排、地图译名清单、外壳跟随 | 加文案/改译名 |
@@ -637,7 +637,8 @@ git update-index --no-skip-worktree project.config.json miniprogram/app.js
   **新赛季开始时要加一行、重新部署 `evo_mp`**，否则会把上个赛季的段位算进来。
 - 下面的设置列表在主包 `pages/me`：分享卡片（首页「上一局」转发标题带不带游戏名，界面偏好 `shareName`，默认不带）、
   外观（跟随系统 / 深色 / 浅色）、语言、隐私说明（`wx.openPrivacyContract`，打不开就弹一段本地说明）、
-  加入玩家群（`me.js` 的 `GROUP_QR` 有群二维码才出）、关于 Evo（`evo/about`）、版本（正式版、体验版才有）、底部声明。
+  加入玩家群（Evo 的 **QQ 群**，微信里加不了 → `evo/group` 写群号、放二维码 `evo/assets/qq-group.jpg`、讲怎么用 QQ 加；
+  QQ 群码不会 7 天过期，换群时换图、改 `group.js` 的群号再发版）、关于 Evo（`evo/about`）、版本（正式版、体验版才有）、底部声明。
 - 「跟随系统」：`app.json` 开了 `"darkmode": true`（只为读到手机的深浅色；导航栏、tab 照旧由 `theme.applyChrome` 设），
   `theme.js` 分「模式」（system / dark / light）和「主题」（dark / light），手机切换时 `app.js` 的 `wx.onThemeChange` 刷新当前页面。
   别的页面 ⚙ 面板里直接点深色 / 浅色 = 不再跟随。

@@ -16,7 +16,8 @@
         "match/match",
         "bind/bind",
         "accounts/accounts",
-        "about/about"
+        "about/about",
+        "group/group"
       ]
     },
     {

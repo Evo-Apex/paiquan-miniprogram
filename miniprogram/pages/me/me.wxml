@@ -36,9 +36,10 @@
   </view>
 
   <view class="me-group">
-    <!-- 玩家群：有群二维码才出这一行（GROUP_QR，me.js） -->
-    <view wx:if="{{hasGroup}}" class="me-row" hover-class="me-pressed" bindtap="onGroup">
+    <!-- 玩家群是 QQ 群：右边先写明，免得点进去才发现 -->
+    <view class="me-row" hover-class="me-pressed" bindtap="onGroup">
       <text class="me-row-t">{{T.meGroup}}</text>
+      <text class="me-row-v">{{T.meGroupValue}}</text>
       <text class="me-chev">›</text>
     </view>
     <view class="me-row" hover-class="me-pressed" bindtap="onAboutEvo">
