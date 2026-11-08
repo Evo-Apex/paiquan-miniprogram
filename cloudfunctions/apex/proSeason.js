@@ -6,7 +6,8 @@
  *     **换赛季时改 SEASON**（页面名照 Liquipedia；联赛只看亚太南：国内战队都在这个赛区），重新部署 apex。
  *   小比赛：开赛日期落在 SEASON.from–to 里、办在中国的比赛（August 定的：只收中国的），全部等级都收。
  *   自己录入：集合 pro_manual_events（在云开发控制台手动加记录，字段见 normManual）。
- *   所有 CN 战队：S2 联赛（SEASON.cnLeague）里 Liquipedia 赛区写着 China 的队，按联赛名次排。
+ *   所有 CN 战队：S2 联赛（SEASON.cnLeague）里的国内队，按联赛名次排。怎么认国内队见 isCnTeam
+ *     （Liquipedia 战队的"赛区"对国内队不可靠：TEC、Kirisame 写成 Southeast Asia，Black Hole、2C1M 空着，2026-11-08 实测）。
  *
  * 只回数字和原文（日期、名次、英文队名），中英文和"进行中 / 还有几天"由小程序的 pro/utils/seasonview.js 算。
  */
@@ -48,6 +49,19 @@ function pickTournaments(list) {
 function placeNum(p) {
   var n = parseInt(String(p || ""), 10);
   return isFinite(n) ? n : 9999;
+}
+
+/**
+ * 国内战队：Liquipedia 的赛区写着 China，或者现役选手里至少 2 人国籍是中国（战队同步存的历史名单里有国籍）。
+ * @param info    战队资料（readTeamInfos）；没有 → null
+ * @param members 历史名单（readTeams）；没有 → null
+ */
+function isCnTeam(info, members) {
+  if (info && info.region === "China") return true;
+  var cn = (members || []).filter(function (m) {
+    return (!m.type || m.type === "player") && m.status === "active" && !m.leave && m.nat === "China";
+  });
+  return cn.length >= 2;
 }
 
 function winnerOf(rows) {
@@ -97,12 +111,20 @@ function proSeason(event, deps) {
     var picked = pickTournaments(doc.tournaments);
     var league = results[SEASON.cnLeague] || [];
     var leaguePages = league.map(function (r) { return r.team.replace(/ /g, "_"); });
+    // 选主队用：这个赛季五站里出现过的队（去重，联赛的在前）
+    var allTeams = [];
+    [SEASON.cnLeague].concat(stagePages()).forEach(function (p) {
+      (results[p] || []).forEach(function (r) { if (allTeams.indexOf(r.team) < 0) allTeams.push(r.team); });
+    });
+    var allPages = allTeams.map(function (t) { return t.replace(/ /g, "_"); });
     return Promise.all([
-      store.readTeamInfos ? Promise.resolve(store.readTeamInfos(leaguePages)).catch(function () { return {}; }) : {},
-      store.readManualEvents ? Promise.resolve(store.readManualEvents()).catch(function () { return []; }) : []
+      store.readTeamInfos ? Promise.resolve(store.readTeamInfos(allPages)).catch(function () { return {}; }) : {},
+      store.readManualEvents ? Promise.resolve(store.readManualEvents()).catch(function () { return []; }) : [],
+      store.readTeams ? Promise.resolve(store.readTeams(leaguePages)).catch(function () { return {}; }) : {}
     ]).then(function (got) {
       var infos = got[0] || {};
       var manual = (got[1] || []).map(normManual).filter(Boolean).slice(0, MAX_MANUAL);
+      var rosters = got[2] || {};
       var stages = SEASON.stages.map(function (s) {
         var t = picked.stages[s.page] || {};
         var rows = (results[s.page] || []).slice().sort(function (a, b) { return placeNum(a.place) - placeNum(b.place); });
@@ -122,8 +144,7 @@ function proSeason(event, deps) {
         };
       }).concat(manual).sort(function (a, b) { return a.start.localeCompare(b.start); });
       var cnTeams = league.filter(function (r, i) {
-        var info = infos[leaguePages[i]];
-        return info && info.region === "China";
+        return isCnTeam(infos[leaguePages[i]], rosters[leaguePages[i]]);
       }).map(function (r) {
         return {
           team: r.team, page: r.team.replace(/ /g, "_"), place: r.place,
@@ -132,7 +153,11 @@ function proSeason(event, deps) {
       }).sort(function (a, b) { return placeNum(a.place) - placeNum(b.place); });
       return {
         ok: true, kind: "ok", message: "",
-        data: { year: SEASON.year, stages: stages, minor: minor, cnTeams: cnTeams, at: Number(doc.at) || 0 }
+        data: {
+          year: SEASON.year, stages: stages, minor: minor, cnTeams: cnTeams,
+          teams: allTeams.map(function (t, i) { var info = infos[allPages[i]]; return { team: t, page: allPages[i], region: info ? info.region || "" : "" }; }),
+          at: Number(doc.at) || 0
+        }
       };
     });
   });
@@ -143,5 +168,6 @@ module.exports = {
   stagePages: stagePages,
   pickTournaments: pickTournaments,
   normManual: normManual,
+  isCnTeam: isCnTeam,
   proSeason: proSeason
 };

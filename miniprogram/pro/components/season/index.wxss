@@ -1,0 +1,287 @@
+/* 比赛页上半部分（2026-11-08 照 August 的「赛季进度条」设计稿：设计稿的 px × 2 = 这里的 rpx）。
+   颜色只用 app.wxss 的令牌（赛季卡用 --hero-*：两套主题都是深色底；主队卡用 --accent 底 + 白字）；
+   白色只在强调色底上用（theme.test 允许 #ffffff）；字号只用令牌档位；可点的行、按钮 ≥ 88rpx。 */
+
+.ss { color: var(--ink); }
+.ss-grow { flex: 1; min-width: 0; }
+.ss-pressed { opacity: 0.7; }
+.ss-pressed-card { background: var(--raised); }
+.ss-small { display: block; font-size: var(--fs-min); color: var(--ink3); line-height: 1.5; }
+.ss-ellipsis { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ss-chev { flex: none; width: 24rpx; margin-left: var(--sp-3); text-align: right; color: var(--ink3); }
+.ss-mine-tag {
+  display: inline-block;
+  margin-left: var(--sp-3);
+  padding: 4rpx 8rpx;
+  border-radius: 4rpx;
+  background: var(--accent);
+  color: #ffffff;
+  font-size: var(--fs-min);
+  font-weight: var(--fw-bold);
+  line-height: 1;
+  vertical-align: 4rpx;
+}
+
+/* ---------- 赛季卡 ---------- */
+.ss-season {
+  display: flex;
+  flex-direction: column;
+  padding: var(--sp-8);
+  margin-bottom: var(--sp-6);
+  border-radius: var(--r-xl);
+  background: var(--hero-bg);
+  color: var(--hero-ink);
+}
+.ss-yr { font-size: var(--fs-min); color: var(--hero-ink2); }
+.ss-t { margin-top: 4rpx; font-size: var(--fs-title); font-weight: var(--fw-bold); }
+.ss-track { display: flex; margin-top: var(--sp-6); }
+.ss-seg { flex: 1; height: 12rpx; margin-left: 8rpx; border-radius: 2rpx; background: var(--hero-track); }
+.ss-seg:first-child { margin-left: 0; }
+.ss-seg-done { background: var(--hero-ink2); }
+.ss-seg-now { background: var(--accent); }
+.ss-track-l { display: flex; margin-top: var(--sp-2); }
+.ss-tl { flex: 1; min-width: 0; margin-left: 8rpx; font-size: var(--fs-min); line-height: 1.4; color: var(--hero-ink2); }
+.ss-tl:first-child { margin-left: 0; }
+.ss-tl-now { color: var(--hero-ink); font-weight: var(--fw-bold); }
+.ss-tl .ss-mine-tag { display: table; margin: 4rpx 0 0; }
+/* 小比赛圆点：一个点一场，落在开赛时的那一站下面；红 = 进行中，红圈 = 主队参加 */
+.ss-dots { display: flex; margin-top: var(--sp-3); }
+.ss-dotcol { flex: 1; display: flex; flex-wrap: wrap; justify-content: center; margin-left: 8rpx; }
+.ss-dotcol:first-child { margin-left: 0; }
+.ss-dot { width: 10rpx; height: 10rpx; margin: 0 3rpx 6rpx; border-radius: var(--r-full); background: var(--hero-ink2); opacity: 0.55; }
+.ss-dot-now { background: var(--accent); opacity: 1; }
+.ss-dot-mine { background: transparent; opacity: 1; box-shadow: inset 0 0 0 3rpx var(--accent); width: 14rpx; height: 14rpx; margin-top: -2rpx; }
+.ss-legend { display: flex; flex-wrap: wrap; margin-top: var(--sp-3); font-size: var(--fs-min); color: var(--hero-ink2); }
+.ss-lg { display: flex; align-items: center; margin-right: var(--sp-6); }
+.ss-lg-bar { width: 24rpx; height: 8rpx; margin-right: var(--sp-2); background: var(--hero-ink2); }
+.ss-lg-dot { width: 10rpx; height: 10rpx; margin-right: var(--sp-2); border-radius: var(--r-full); background: var(--hero-ink2); }
+.ss-lg-ring { width: 14rpx; height: 14rpx; margin-right: var(--sp-2); border-radius: var(--r-full); box-shadow: inset 0 0 0 3rpx var(--accent); }
+.ss-next {
+  display: flex;
+  align-items: center;
+  min-height: 88rpx;
+  margin-top: var(--sp-6);
+  padding: var(--sp-4) var(--sp-5);
+  box-sizing: border-box;
+  border-radius: var(--r-lg);
+  background: var(--hero-track);
+}
+.ss-next-t { display: block; font-size: var(--fs-body); font-weight: var(--fw-bold); }
+.ss-next-s { display: block; font-size: var(--fs-min); color: var(--hero-ink2); }
+.ss-chev-l { flex: none; margin-left: var(--sp-3); color: var(--hero-ink2); }
+
+/* ---------- 主队卡（强调色底，白字） ---------- */
+.ss-home { margin-bottom: var(--sp-6); border-radius: var(--r-xl); background: var(--accent); color: #ffffff; overflow: hidden; }
+.ss-home-top { display: flex; align-items: center; padding: var(--sp-6) var(--sp-8) var(--sp-5); }
+.ss-home-logo {
+  width: 104rpx;
+  height: 104rpx;
+  flex: none;
+  margin-right: var(--sp-5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  color: var(--accent);
+  font-size: var(--fs-body);
+  font-weight: var(--fw-num);
+  clip-path: polygon(0 0, 100% 0, 100% 74%, 74% 100%, 0 100%);
+}
+.ss-home-k { display: block; font-size: var(--fs-min); }
+.ss-home-n { display: block; font-size: var(--fs-title); font-weight: var(--fw-num); line-height: 1.25; word-break: break-word; }
+.ss-home-chg {
+  flex: none;
+  align-self: flex-start;
+  min-height: 64rpx;
+  line-height: 64rpx;
+  padding: 0 var(--sp-5);
+  border: 1rpx solid #ffffff;
+  border-radius: var(--r-full);
+  font-size: var(--fs-min);
+  font-weight: var(--fw-bold);
+}
+.ss-home-next { display: flex; align-items: center; margin: 0 var(--sp-6); padding: var(--sp-5); border-radius: var(--r-lg); border: 1rpx solid #ffffff; }
+.ss-home-w { display: block; font-size: var(--fs-min); }
+.ss-home-nn { display: block; font-size: var(--fs-body); font-weight: var(--fw-bold); }
+.ss-home-d { flex: none; margin-left: var(--sp-4); text-align: right; font-size: var(--fs-head); font-weight: var(--fw-bold); white-space: nowrap; }
+.ss-home-ds { display: block; font-size: var(--fs-min); font-weight: var(--fw-body); }
+.ss-home-res { display: flex; flex-wrap: wrap; padding: var(--sp-5) var(--sp-6) var(--sp-6); }
+.ss-home-chip { margin: 0 var(--sp-3) var(--sp-2) 0; padding: 8rpx 16rpx; border-radius: var(--r-sm); border: 1rpx solid #ffffff; font-size: var(--fs-min); }
+.ss-home-chip-b { margin-left: var(--sp-2); font-weight: var(--fw-num); }
+
+/* ---------- 卡片 ---------- */
+.ss-card { background: var(--card); border-radius: var(--r-xl); padding: 28rpx 32rpx 24rpx; margin-bottom: var(--sp-6); }
+.ss-prompt { display: flex; align-items: center; }
+.ss-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: var(--sp-5); }
+.ss-h { display: block; font-size: var(--fs-section); font-weight: var(--fw-bold); color: var(--ink); }
+.ss-prompt .ss-h { margin-bottom: 4rpx; }
+.ss-hs { margin-left: var(--sp-4); font-size: var(--fs-min); color: var(--ink3); }
+.ss-btn {
+  flex: none;
+  margin-left: var(--sp-4);
+  min-height: 72rpx;
+  line-height: 72rpx;
+  padding: 0 var(--sp-6);
+  border-radius: var(--r-full);
+  background: var(--accent);
+  color: #ffffff;
+  font-size: var(--fs-sub);
+  font-weight: var(--fw-bold);
+}
+.ss-more {
+  margin-top: var(--sp-5);
+  min-height: 80rpx;
+  line-height: 80rpx;
+  text-align: center;
+  font-size: var(--fs-sub);
+  color: var(--ink2);
+  background: var(--raised);
+  border-radius: var(--r-lg);
+}
+
+/* 筛选：放不下就换行（不横向滚动、不截掉）；选中的是深色实心 + 加粗，不只靠颜色 */
+.ss-chips { display: flex; flex-wrap: wrap; margin-bottom: var(--sp-3); }
+.ss-chip {
+  min-height: 64rpx;
+  line-height: 62rpx;
+  padding: 0 var(--sp-5);
+  margin: 0 var(--sp-3) var(--sp-3) 0;
+  box-sizing: border-box;
+  border: 1rpx solid var(--line);
+  border-radius: var(--r-full);
+  font-size: var(--fs-sub);
+  color: var(--ink2);
+  background: var(--card);
+}
+.ss-chip-on { background: var(--ink); border-color: var(--ink); color: var(--bg); font-weight: var(--fw-bold); }
+
+/* 近期比赛的一行 */
+.ss-list { display: block; }
+.ss-ev { display: flex; align-items: center; min-height: 88rpx; padding: 22rpx 0; border-top: 1rpx solid var(--line); }
+.ss-ev:first-child { border-top: none; }
+.ss-ev-n { font-size: var(--fs-body); font-weight: var(--fw-bold); color: var(--ink); line-height: 1.5; }
+.ss-ev-r { flex: none; margin-left: var(--sp-4); text-align: right; font-size: var(--fs-sub); font-weight: var(--fw-bold); color: var(--ink); white-space: nowrap; }
+.ss-ev-rs { display: block; font-size: var(--fs-min); font-weight: var(--fw-body); color: var(--ink3); }
+/* 主队参加：左边一条红线 + 日期放进红底块（底色不用半透明色值：令牌里没有，用 --raised 再加红线） */
+.ss-ev-mine { position: relative; margin: 0 -32rpx; padding-left: 32rpx; padding-right: 32rpx; background: var(--raised); border-top-color: transparent; }
+.ss-ev-mine::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 8rpx; background: var(--accent); }
+.ss-ev-mine + .ss-ev { border-top-color: transparent; }
+.ss-ev-r-mine { padding: 12rpx 16rpx; border-radius: var(--r-md); background: var(--accent); color: #ffffff; }
+.ss-ev-r-mine .ss-ev-rs { color: #ffffff; }
+.ss-live { color: var(--accent-ink); }
+/* 类型标签：上面写着字（ALGS / 国内 / 资格赛 / 邀请赛），颜色只是加强 */
+.ss-kind {
+  display: inline-block;
+  margin-right: var(--sp-3);
+  padding: 6rpx 10rpx;
+  border-radius: 4rpx;
+  font-size: var(--fs-min);
+  font-weight: var(--fw-bold);
+  line-height: 1;
+  vertical-align: 4rpx;
+  background: var(--track);
+  color: var(--ink2);
+}
+.ss-kind-cn { background: var(--accent); color: #ffffff; }
+.ss-kind-q { background: var(--info-ink); color: var(--card); }
+.ss-kind-major { background: var(--ink); color: var(--bg); }
+
+/* 这个赛季：五站大菱形，小比赛小圆点 */
+.ss-toggle { display: flex; align-items: center; justify-content: space-between; min-height: 72rpx; margin-bottom: var(--sp-3); font-size: var(--fs-sub); color: var(--ink2); }
+.ss-sw { position: relative; width: 72rpx; height: 40rpx; border-radius: var(--r-full); background: var(--track); }
+.ss-sw-on { background: var(--accent); }
+.ss-sw-k { position: absolute; top: 4rpx; left: 4rpx; width: 32rpx; height: 32rpx; border-radius: var(--r-full); background: var(--card); }
+.ss-sw-on .ss-sw-k { left: 36rpx; background: #ffffff; }
+.ss-stage { display: block; }
+.ss-st { position: relative; display: flex; align-items: flex-start; min-height: 88rpx; padding-bottom: var(--sp-6); box-sizing: border-box; }
+.ss-st:last-child { padding-bottom: 0; }
+.ss-st::after { content: ""; position: absolute; left: 14rpx; top: 32rpx; bottom: 0; width: 4rpx; background: var(--track); }
+.ss-st:last-child::after { display: none; }
+.ss-st-dt { flex: none; width: 24rpx; height: 24rpx; margin: 8rpx 24rpx 0 2rpx; border-radius: 4rpx; transform: rotate(45deg); background: var(--track); }
+.ss-st-done .ss-st-dt { background: var(--ink3); }
+.ss-st-now .ss-st-dt { background: var(--accent); }
+.ss-st-mine .ss-st-dt { background: var(--accent); box-shadow: 0 0 0 6rpx var(--raised); }
+.ss-st-n { font-size: var(--fs-body); font-weight: var(--fw-bold); color: var(--ink); line-height: 1.5; }
+.ss-st-w { flex: none; margin-left: var(--sp-4); text-align: right; font-size: var(--fs-sub); font-weight: var(--fw-bold); color: var(--ink); white-space: nowrap; }
+.ss-st-mine .ss-st-w { color: var(--accent-ink); }
+.ss-st-minor { min-height: 0; padding-bottom: var(--sp-5); }
+.ss-st-minor .ss-st-dt { width: 12rpx; height: 12rpx; margin: 14rpx 30rpx 0 8rpx; transform: none; border-radius: var(--r-full); background: var(--ink3); }
+.ss-st-minor .ss-st-n { font-size: var(--fs-sub); font-weight: var(--fw-body); color: var(--ink2); }
+.ss-st-minor .ss-st-w { font-size: var(--fs-min); font-weight: var(--fw-body); color: var(--ink2); }
+
+/* 所有 CN 战队 */
+.ss-cnflag { display: inline-flex; margin-bottom: var(--sp-4); font-size: var(--fs-min); line-height: 1; clip-path: polygon(0 0, 100% 0, calc(100% - 12rpx) 100%, 0 100%); }
+.ss-cnflag-b { padding: 8rpx 12rpx; background: var(--accent); color: #ffffff; font-weight: var(--fw-num); }
+.ss-cnflag-s { padding: 8rpx 24rpx 8rpx 12rpx; background: var(--raised); color: var(--ink2); }
+.ss-cn { display: flex; align-items: center; min-height: 104rpx; padding: 20rpx 0; box-sizing: border-box; border-top: 1rpx solid var(--line); }
+.ss-cn:first-child { border-top: none; }
+.ss-cn-logo {
+  width: 80rpx;
+  height: 80rpx;
+  flex: none;
+  margin-right: var(--sp-5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--fs-min);
+  font-weight: var(--fw-num);
+  background: var(--hero-bg);
+  color: var(--hero-ink);
+  clip-path: polygon(0 0, 100% 0, 100% 74%, 74% 100%, 0 100%);
+}
+.ss-cn-n { font-size: var(--fs-body); font-weight: var(--fw-bold); color: var(--ink); }
+
+/* ---------- 选主队弹层 ---------- */
+.ss-mask { position: fixed; left: 0; right: 0; top: 0; bottom: 0; z-index: 60; display: flex; align-items: flex-end; background: rgba(0, 0, 0, 0.55); }
+.ss-sheet {
+  width: 100%;
+  max-height: 86vh;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  padding: var(--sp-6);
+  padding-bottom: calc(var(--sp-6) + env(safe-area-inset-bottom));
+  border-radius: var(--r-xl) var(--r-xl) 0 0;
+  background: var(--card);
+  color: var(--ink);
+}
+.ss-sheet-h { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--sp-2); }
+.ss-sheet-t { font-size: var(--fs-head); font-weight: var(--fw-bold); }
+.ss-sheet-x { min-height: 72rpx; line-height: 72rpx; padding: 0 var(--sp-5); border: 1rpx solid var(--line); border-radius: var(--r-full); font-size: var(--fs-sub); color: var(--ink2); }
+.ss-search { height: 80rpx; margin: var(--sp-5) 0 var(--sp-4); padding: 0 var(--sp-6); border-radius: var(--r-full); background: var(--raised); color: var(--ink); font-size: var(--fs-body); }
+.ss-search-ph { color: var(--ink3); }
+.ss-grid-wrap { flex: 1; min-height: 240rpx; max-height: 50vh; }
+.ss-grid { display: flex; flex-wrap: wrap; margin-right: -16rpx; }
+.ss-tpick {
+  width: calc((100% - 48rpx) / 3);
+  margin: 0 16rpx 16rpx 0;
+  padding: var(--sp-5) var(--sp-3);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  border: 4rpx solid transparent;
+  border-radius: var(--r-lg);
+  background: var(--raised);
+}
+.ss-tpick-on { border-color: var(--accent); }
+.ss-tpick-lg {
+  width: 72rpx;
+  height: 72rpx;
+  margin-bottom: var(--sp-3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--fs-min);
+  font-weight: var(--fw-num);
+  background: var(--track);
+  color: var(--ink2);
+  clip-path: polygon(0 0, 100% 0, 100% 72%, 72% 100%, 0 100%);
+}
+.ss-tpick-on .ss-tpick-lg { background: var(--accent); color: #ffffff; }
+.ss-tpick-n { font-size: var(--fs-min); font-weight: var(--fw-bold); word-break: break-word; }
+.ss-sheet-btns { display: flex; margin-top: var(--sp-5); }
+.ss-btn2 { flex: none; min-height: 88rpx; line-height: 88rpx; padding: 0 var(--sp-6); margin-right: var(--sp-4); border-radius: var(--r-lg); background: var(--raised); color: var(--ink2); font-size: var(--fs-body); }
+.ss-cta { flex: 1; min-height: 88rpx; line-height: 88rpx; text-align: center; border-radius: var(--r-lg); background: var(--accent); color: #ffffff; font-size: var(--fs-body); font-weight: var(--fw-bold); }
+.ss-cta-off { opacity: 0.5; }

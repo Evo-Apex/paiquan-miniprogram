@@ -604,6 +604,12 @@ describe("比赛页的赛季（云端）", () => {
     await store.saveTeam("Wolves_Esports", { info: { region: "China" } });
     await store.saveTeam("TEC", { info: { region: "China" } });
     await store.saveTeam("Team_RRQ", { info: { region: "Southeast Asia" } });
+    // Liquipedia 写成东南亚的国内队：现役里 2 个中国选手就算
+    store.seasonDoc.results.find((x) => x.page === S.cnLeague).rows.push({ team: "Kirisame", place: "13", players: [] });
+    await store.saveTeam("Kirisame", { info: { region: "Southeast Asia" }, members: [
+      { page: "a", id: "a", type: "player", nat: "China", status: "active", leave: "" },
+      { page: "b", id: "b", type: "player", nat: "China", status: "active", leave: "" },
+      { page: "c", id: "c", type: "player", nat: "China", status: "former", leave: "2025-01-01" }] });
     const d = (await season.proSeason({}, { store })).data;
     assert.equal(d.year, 6);
     assert.equal(d.stages.length, 5);
@@ -611,7 +617,11 @@ describe("比赛页的赛季（云端）", () => {
     assert.deepEqual([s2.name, s2.winner, s2.results.map((r) => r.team)], ["ALGS: 2026 Split 2 Playoffs", "Team Liquid", ["Team Liquid", "Team Vision"]]);
     assert.equal(d.stages[0].name, "", "没抓到的站：名字空着，页面用自己的叫法");
     assert.deepEqual(d.minor.map((m) => [m.name, m.kind, m.winner]), [["BiliBili Stellar Cup - Season #8", "cn", "Black Hole"], ["周末职业表演赛", "invitational", ""]]);
-    assert.deepEqual(d.cnTeams.map((c) => [c.team, c.place, c.page]), [["Wolves Esports", "2", "Wolves_Esports"], ["TEC", "3", "TEC"]]);
+    assert.deepEqual(d.cnTeams.map((c) => [c.team, c.place, c.page]), [["Wolves Esports", "2", "Wolves_Esports"], ["TEC", "3", "TEC"], ["Kirisame", "13", "Kirisame"]]);
+    assert.equal(season.isCnTeam({ region: "Southeast Asia" }, [{ type: "player", nat: "China", status: "active", leave: "" }]), false, "只有 1 个中国选手不算");
+    assert.equal(season.isCnTeam({ region: "Southeast Asia" }, [{ type: "staff", nat: "China", status: "active" }, { type: "staff", nat: "China", status: "active" }]), false, "教练不算");
+    assert.deepEqual(d.teams.map((t) => [t.team, t.region]), [["TEC", "China"], ["Team RRQ", "Southeast Asia"], ["Wolves Esports", "China"], ["Kirisame", "Southeast Asia"], ["Team Vision", ""], ["Team Liquid", ""]],
+      "选主队的队伍：联赛的在前，再按各站；资料没抓到的赛区空着");
     assert.equal(d.at, 9);
     assert.equal((await season.proSeason({}, { store: memStore() })).data, null, "还没抓过：data:null");
   });
