@@ -99,7 +99,7 @@ pages/maps.wxml  {{...}}  ← 只渲染，不含业务判断
 ## 4. 云函数：action 总表
 
 入口 `cloudfunctions/apex/index.js`；共享逻辑在 `handler.js`。
-**两种调用方式**：前端按需 `callFunction({action})`，或定时触发器 `event.Type === "Timer"`。
+**两种调用方式**：前端按需 `callFunction({action})`，或定时触发器（`event.Type` 线上是小写 `"timer"`，2026-11-08 实测；代码大小写都认）。
 
 | action | 做什么 | 上游/数据 | 缓存 | 依赖数据库 |
 |---|---|---|---|---|

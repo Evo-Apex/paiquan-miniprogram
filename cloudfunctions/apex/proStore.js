@@ -19,7 +19,6 @@ var STATE_ID = "state";
 var SEASON_ID = "season";             // 比赛页的赛季：比赛列表 + 名次（2026-11-08）
 var MANUAL = "pro_manual_events";     // 自己录入的比赛（在云开发控制台里加，见 proSeason.normManual）
 var CN_TEAMS = "pro_cn_teams";        // 「所有 CN 战队」的名单（在云开发控制台里加，见 proSeason.cnListOf）
-var CALL_NOTE_ID = "call_note";        // 临时排查定时器用（2026-11-08），查清后删掉
 
 /** 页面名 → 文档 _id：只留字母数字和 - _，其它字符写成 ~十六进制~（可逆、不会撞） */
 function docId(page) {
@@ -64,27 +63,6 @@ function createProStore(cloud) {
       } catch (e) {
         console.warn("写选手同步进度失败：" + msgOf(e));
         return false;
-      }
-    },
-
-    /** 临时排查（2026-11-08）：记下最近一次没有 action 的调用，覆盖同一条。查清后删掉这两个方法 */
-    noteCall: async function (info) {
-      try {
-        await ensure(META);
-        await db.collection(META).doc(CALL_NOTE_ID).set({ data: info });
-        return true;
-      } catch (e) {
-        console.warn("记录调用失败：" + msgOf(e));
-        return false;
-      }
-    },
-
-    readCallNote: async function () {
-      try {
-        var res = await db.collection(META).doc(CALL_NOTE_ID).get();
-        return res && res.data ? res.data : null;
-      } catch (e) {
-        return null;
       }
     },
 
