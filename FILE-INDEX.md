@@ -213,7 +213,7 @@
 | `scan-hardcoded-colors.mjs` | 扫硬编码色值 |
 | `fix-type-floor.mjs` / `fix-accent-border.mjs` | 一次性修正脚本（历史遗留，只作参考） |
 | `build_team_icons.mjs` | 抓 ALGS 队标 → `assets/teams/` |
-| `pro_cn_teams_import.json` | 「所有 CN 战队」的初始名单（设计稿的 14 支），云开发控制台导入到集合 `pro_cn_teams`（AI-CONTEXT §18「比赛页」） |
+| `pro_cn_teams_import.json` | 「所有 CN 战队」的初始名单（设计稿的 14 支去掉 TEC，13 支），云开发控制台导入到集合 `pro_cn_teams`（AI-CONTEXT §18「比赛页」） |
 | `build_pro_photos.py` | 选手照片：ALGS 定妆照对到 Liquipedia 页面名、压成 WebP（传云存储），生成 `cloudfunctions/apex/pro_photos.json`（AI-CONTEXT §18） |
 | `make-*-tabicon.py` | 生成 tabBar 图标 |
 | `make-home-assets.py` | 生成「首页」tab 图标和首页导航栏的品牌标 `logo-mark.png`（Noto Sans SC） |

@@ -731,7 +731,7 @@ S2 季后赛放 `match_result_data` 的最终成绩（`event.js` 的 `RESULT_STA
   `teams`（几支队）、`winner`（冠军队名）、`teamsIn`（参赛队名的数组，主队参加的会标出来）、`note`（一句说明）。名字或日期不对的整条不要。
 - **所有 CN 战队的名单**：集合 `pro_cn_teams`。一条一支队 `{ team, name }`，或一条一整个名单 `{ list: [{ team, name }, "队名", ...] }`；
   `team` 写 Liquipedia 上的队名（对联赛名次、首发用），`name` 是页面上显示的名字。初始名单在 `tools/pro_cn_teams_import.json`
-  （设计稿的 14 支，一行一条记录，控制台「导入」选 JSON）。不自动认的原因：Liquipedia 战队的"赛区"对国内队不可靠（TEC、Kirisame 写成 Southeast Asia，Black Hole、2C1M 空着）。
+  （设计稿的 14 支去掉 TEC，13 支：Liquipedia 上的 Titan Esports Club 现役是泰国选手，August 2026-11-08 定的不再显示；一行一条记录，控制台「导入」选 JSON）。不自动认的原因：Liquipedia 战队的"赛区"对国内队不可靠（TEC、Kirisame 写成 Southeast Asia，Black Hole、2C1M 空着）。
 - 名次里的 TBD（还没定的名额）不算一支队。
 
 **测试**：`node tests/season.test.mjs`（视图模型）；云端在 `pro.test.mjs`「比赛页的赛季（云端）」；详情页在 `page.test.mjs`「赛季的一站」。
