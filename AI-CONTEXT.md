@@ -727,7 +727,7 @@ git update-index --no-skip-worktree project.config.json miniprogram/app.js
 "现在的队友"照 Liquipedia 战队页上的在队名单（实测狼队那页和季后赛上场的三人不完全一样，照 Liquipedia 显示，不自己改）。
 
 **上线要做的事**（合作者部署）：
-1. 部署 `apex`（「上传并部署：云端安装依赖」）
+1. 部署 `apex`（「上传并部署：云端安装依赖」），再在开发者工具里右键 `cloudfunctions/apex`「上传触发器」（`config.json`：每 5 分钟。没有定时器什么都不抓，2026-11-08 以前线上就是这样）
 2. `apex` 的环境变量加 `LIQUIPEDIA_API_KEY`（August 给；**条款：Key 不许给第三方**）。没配就不抓，选手页显示"还没有这位选手的资料"，别的功能不受影响
 3. 等两三个小时（第一轮抓完），比赛页的名次行、选手名才能点
 4. 选手照片、战队队标传到云存储（`pro/photos/v1/`、`pro/logos/v1/`，权限「所有用户可读」），对照表填 `base` 后再部署一次 `apex`

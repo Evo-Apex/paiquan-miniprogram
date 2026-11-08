@@ -161,6 +161,7 @@
 | `evo_pc/index.js` | 电脑上的 Evo 调（HTTP API + 匿名登录）：`hello` / `bind_code` / `upload` / `unbind` |
 | `evo_mp/index.js` | 小程序调（按 OPENID 只看自己的）：`status` / `bind` / `me` / `unbind` / `overview` / `matches` / `match` |
 | `evo_mp/stats.js` | ✅ 纯函数：统计（和 Evo 电脑窗口同一套算法，`tests/evo.test.mjs`） |
+| `apex/config.json` | `apex` 的定时触发器（每 5 分钟）：轮询追踪名单、记轮换、抓选手数据。改了要在开发者工具里「上传触发器」 |
 | `evo_qrpool/` | 定时触发（每 5 分钟）：预先生成带绑定码的小程序码，存进 `evo_qr_pool` |
 
 ---
