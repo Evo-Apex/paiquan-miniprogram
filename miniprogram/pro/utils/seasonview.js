@@ -5,7 +5,7 @@
  *   赛季卡：五站进度条（打完 / 现在这一站 / 还没到）+ 下面一排小圆点（一个点一场小比赛，落在它开赛时的那一站下面）+ 下一站；
  *   主队卡：主队下一场（这个赛季里主队已经确定参加、还没打完的最早那场）+ 主队每一站的名次；
  *   近期比赛：进行中、60 天内要开打、30 天内刚结束的，主队参加的置顶，可按类型筛；
- *   这个赛季：五站由近到远，小比赛夹在中间（开关）；所有 CN 战队：S2 亚太南联赛里的国内队，按联赛名次。
+ *   这个赛季：五站由近到远，小比赛夹在中间（开关）；所有 CN 战队：手动名单里的队，在 S2 亚太南联赛里的按联赛名次。
  * 不编数据：Liquipedia 只有日期没有几点开打，所以只写日期；没打完的不写冠军；没名次的不写名次。
  */
 var i18n = require("../../utils/i18n.js");
@@ -256,7 +256,7 @@ function season(raw, lang, nowMs, home) {
   var cn = (raw && raw.cnTeams || []).map(function (c) {
     var n = parseInt(c.place, 10);
     return {
-      key: c.page, page: c.page, name: c.team, initials: view.initials(c.team),
+      key: c.page, page: c.page, name: c.name || c.team, initials: view.initials(c.team),
       players: (c.players || []).map(function (p) { return p.id; }).join(sep),
       rank: isFinite(n) ? T.seasonPlace.replace("{n}", String(n)) : "",
       mine: !!home && sameTeam(c.team, home)

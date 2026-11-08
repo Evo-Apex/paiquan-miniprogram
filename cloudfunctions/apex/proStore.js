@@ -18,6 +18,7 @@ var META = "pro_meta";
 var STATE_ID = "state";
 var SEASON_ID = "season";             // 比赛页的赛季：比赛列表 + 名次（2026-11-08）
 var MANUAL = "pro_manual_events";     // 自己录入的比赛（在云开发控制台里加，见 proSeason.normManual）
+var CN_TEAMS = "pro_cn_teams";        // 「所有 CN 战队」的名单（在云开发控制台里加，见 proSeason.cnListOf）
 
 /** 页面名 → 文档 _id：只留字母数字和 - _，其它字符写成 ~十六进制~（可逆、不会撞） */
 function docId(page) {
@@ -217,6 +218,16 @@ function createProStore(cloud) {
     readManualEvents: async function () {
       try {
         var res = await db.collection(MANUAL).limit(100).get();
+        return res.data || [];
+      } catch (e) {
+        return [];
+      }
+    },
+
+    /** 「所有 CN 战队」的名单（集合 pro_cn_teams，整个集合读）；没有集合 → [] */
+    readCnTeams: async function () {
+      try {
+        var res = await db.collection(CN_TEAMS).limit(100).get();
         return res.data || [];
       } catch (e) {
         return [];

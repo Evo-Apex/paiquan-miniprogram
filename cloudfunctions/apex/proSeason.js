@@ -6,8 +6,9 @@
  *     **换赛季时改 SEASON**（页面名照 Liquipedia；联赛只看亚太南：国内战队都在这个赛区），重新部署 apex。
  *   小比赛：开赛日期落在 SEASON.from–to 里、办在中国的比赛（August 定的：只收中国的），全部等级都收。
  *   自己录入：集合 pro_manual_events（在云开发控制台手动加记录，字段见 normManual）。
- *   所有 CN 战队：S2 联赛（SEASON.cnLeague）里的国内队，按联赛名次排。怎么认国内队见 isCnTeam
- *     （Liquipedia 战队的"赛区"对国内队不可靠：TEC、Kirisame 写成 Southeast Asia，Black Hole、2C1M 空着，2026-11-08 实测）。
+ *   所有 CN 战队：**一份手动名单**（集合 pro_cn_teams，August 2026-11-08 定的；格式见 cnListOf），
+ *     在 S2 联赛（SEASON.cnLeague）里的写联赛名次和首发，按名次排，不在联赛里的接在后面。
+ *     不自动认：Liquipedia 战队的"赛区"对国内队不可靠（TEC、Kirisame 写成 Southeast Asia，Black Hole、2C1M 空着，2026-11-08 实测）。
  *
  * 只回数字和原文（日期、名次、英文队名），中英文和"进行中 / 还有几天"由小程序的 pro/utils/seasonview.js 算。
  */
@@ -52,16 +53,26 @@ function placeNum(p) {
 }
 
 /**
- * 国内战队：Liquipedia 的赛区写着 China，或者现役选手里至少 2 人国籍是中国（战队同步存的历史名单里有国籍）。
- * @param info    战队资料（readTeamInfos）；没有 → null
- * @param members 历史名单（readTeams）；没有 → null
+ * 国内战队名单（集合 pro_cn_teams，在云开发控制台里加；控制台建的记录 _id 是自动生成的，所以整个集合读）。两种写法都认：
+ *   一条记录一支队：{ team: "Black Hole", name: "黑洞 Black Hole" }
+ *   一条记录一整个名单：{ list: [{ team: "Wolves Esports", name: "狼队 Wolves Esports" }, "VK Gaming", ...] }
+ * team 写 Liquipedia 上的队名（用来对联赛名次、首发），name 是页面上显示的名字（不写就用 team）。重复的只留第一个。
  */
-function isCnTeam(info, members) {
-  if (info && info.region === "China") return true;
-  var cn = (members || []).filter(function (m) {
-    return (!m.type || m.type === "player") && m.status === "active" && !m.leave && m.nat === "China";
+function cnListOf(docs) {
+  var out = [];
+  var add = function (x) {
+    var t = typeof x === "string" ? { team: x } : x;
+    if (!t || typeof t.team !== "string" || !t.team.trim()) return;
+    var team = t.team.trim().slice(0, 60);
+    var key = team.toLowerCase().replace(/[^a-z0-9]/g, "");
+    if (!key || out.some(function (o) { return o.key === key; })) return;
+    out.push({ key: key, team: team, name: typeof t.name === "string" && t.name.trim() ? t.name.trim().slice(0, 60) : team });
+  };
+  (docs || []).forEach(function (d) {
+    if (d && Array.isArray(d.list)) d.list.forEach(add);
+    else add(d);
   });
-  return cn.length >= 2;
+  return out.slice(0, 60);
 }
 
 function winnerOf(rows) {
@@ -120,11 +131,11 @@ function proSeason(event, deps) {
     return Promise.all([
       store.readTeamInfos ? Promise.resolve(store.readTeamInfos(allPages)).catch(function () { return {}; }) : {},
       store.readManualEvents ? Promise.resolve(store.readManualEvents()).catch(function () { return []; }) : [],
-      store.readTeams ? Promise.resolve(store.readTeams(leaguePages)).catch(function () { return {}; }) : {}
+      store.readCnTeams ? Promise.resolve(store.readCnTeams()).catch(function () { return []; }) : []
     ]).then(function (got) {
       var infos = got[0] || {};
       var manual = (got[1] || []).map(normManual).filter(Boolean).slice(0, MAX_MANUAL);
-      var rosters = got[2] || {};
+      var cnList = cnListOf(got[2]);
       var stages = SEASON.stages.map(function (s) {
         var t = picked.stages[s.page] || {};
         var rows = (results[s.page] || []).slice().sort(function (a, b) { return placeNum(a.place) - placeNum(b.place); });
@@ -143,14 +154,15 @@ function proSeason(event, deps) {
           teamsIn: rows.map(function (r) { return r.team; }), note: "", manual: false
         };
       }).concat(manual).sort(function (a, b) { return a.start.localeCompare(b.start); });
-      var cnTeams = league.filter(function (r, i) {
-        return isCnTeam(infos[leaguePages[i]], rosters[leaguePages[i]]);
-      }).map(function (r) {
+      // 名单里的队：在联赛里的写名次和首发（队名去空格大小写后相等就算），按名次排；不在联赛里的照名单的顺序接在后面
+      var cnTeams = cnList.map(function (c, i) {
+        var r = league.filter(function (x) { return x.team.toLowerCase().replace(/[^a-z0-9]/g, "") === c.key; })[0];
+        var team = r ? r.team : c.team;
         return {
-          team: r.team, page: r.team.replace(/ /g, "_"), place: r.place,
-          players: (r.players || []).map(function (p) { return { page: p.page, id: p.id }; })
+          team: team, name: c.name, page: team.replace(/ /g, "_"), place: r ? r.place : "", order: i,
+          players: r ? (r.players || []).map(function (p) { return { page: p.page, id: p.id }; }) : []
         };
-      }).sort(function (a, b) { return placeNum(a.place) - placeNum(b.place); });
+      }).sort(function (a, b) { return placeNum(a.place) - placeNum(b.place) || a.order - b.order; });
       return {
         ok: true, kind: "ok", message: "",
         data: {
@@ -168,6 +180,6 @@ module.exports = {
   stagePages: stagePages,
   pickTournaments: pickTournaments,
   normManual: normManual,
-  isCnTeam: isCnTeam,
+  cnListOf: cnListOf,
   proSeason: proSeason
 };

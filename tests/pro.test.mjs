@@ -99,6 +99,8 @@ function memStore() {
       return o;
     },
     readManualEvents: async function () { return this.manual; },
+    cnDocs: [],
+    readCnTeams: async function () { return this.cnDocs; },
     readBriefs: async (pages) => {
       const o = {};
       pages.forEach((p) => { const d = players[p]; if (d && d.profile) o[p] = { id: d.profile.id, nat: d.profile.nats[0] || "", input: d.profile.input }; });
@@ -587,7 +589,7 @@ describe("比赛页的赛季（云端）", () => {
     assert.ok(teams.pages.includes("Wolves_Esports"), "联赛的队也有战队页");
   });
 
-  test("proSeason：五站按名次排、写冠军；小比赛和自己录入的按日期合在一起；CN 战队只要赛区是中国的，按联赛名次排", async () => {
+  test("proSeason：五站按名次排、写冠军；小比赛和自己录入的按日期合在一起；CN 战队照手动名单，在联赛里的按名次排", async () => {
     const store = memStore();
     store.seasonDoc = {
       at: 9,
@@ -604,12 +606,9 @@ describe("比赛页的赛季（云端）", () => {
     await store.saveTeam("Wolves_Esports", { info: { region: "China" } });
     await store.saveTeam("TEC", { info: { region: "China" } });
     await store.saveTeam("Team_RRQ", { info: { region: "Southeast Asia" } });
-    // Liquipedia 写成东南亚的国内队：现役里 2 个中国选手就算
     store.seasonDoc.results.find((x) => x.page === S.cnLeague).rows.push({ team: "Kirisame", place: "13", players: [] });
-    await store.saveTeam("Kirisame", { info: { region: "Southeast Asia" }, members: [
-      { page: "a", id: "a", type: "player", nat: "China", status: "active", leave: "" },
-      { page: "b", id: "b", type: "player", nat: "China", status: "active", leave: "" },
-      { page: "c", id: "c", type: "player", nat: "China", status: "former", leave: "2025-01-01" }] });
+    // 「所有 CN 战队」只看手动名单（August 定的）：一条一支队、一条一整个名单都认；不在联赛里的接在后面
+    store.cnDocs = [{ list: [{ team: "Black Hole", name: "黑洞 Black Hole" }, "kirisame", { team: "Wolves Esports", name: "狼队 Wolves Esports" }] }, { team: "TEC" }, { team: "" }];
     const d = (await season.proSeason({}, { store })).data;
     assert.equal(d.year, 6);
     assert.equal(d.stages.length, 5);
@@ -617,10 +616,12 @@ describe("比赛页的赛季（云端）", () => {
     assert.deepEqual([s2.name, s2.winner, s2.results.map((r) => r.team)], ["ALGS: 2026 Split 2 Playoffs", "Team Liquid", ["Team Liquid", "Team Vision"]]);
     assert.equal(d.stages[0].name, "", "没抓到的站：名字空着，页面用自己的叫法");
     assert.deepEqual(d.minor.map((m) => [m.name, m.kind, m.winner]), [["BiliBili Stellar Cup - Season #8", "cn", "Black Hole"], ["周末职业表演赛", "invitational", ""]]);
-    assert.deepEqual(d.cnTeams.map((c) => [c.team, c.place, c.page]), [["Wolves Esports", "2", "Wolves_Esports"], ["TEC", "3", "TEC"], ["Kirisame", "13", "Kirisame"]]);
-    assert.equal(season.isCnTeam({ region: "Southeast Asia" }, [{ type: "player", nat: "China", status: "active", leave: "" }]), false, "只有 1 个中国选手不算");
-    assert.equal(season.isCnTeam({ region: "Southeast Asia" }, [{ type: "staff", nat: "China", status: "active" }, { type: "staff", nat: "China", status: "active" }]), false, "教练不算");
-    assert.deepEqual(d.teams.map((t) => [t.team, t.region]), [["TEC", "China"], ["Team RRQ", "Southeast Asia"], ["Wolves Esports", "China"], ["Kirisame", "Southeast Asia"], ["Team Vision", ""], ["Team Liquid", ""]],
+    assert.deepEqual(d.cnTeams.map((c) => [c.name, c.place, c.page]), [
+      ["狼队 Wolves Esports", "2", "Wolves_Esports"], ["TEC", "3", "TEC"], ["kirisame", "13", "Kirisame"], ["黑洞 Black Hole", "", "Black_Hole"]],
+      "在联赛里的按名次排（名单里写小写也对得上，页面名用 Liquipedia 的写法），不在的接在后面；空队名不要");
+    assert.deepEqual(d.cnTeams[0].players.map((p) => p.id), ["CrazyCong"]);
+    assert.deepEqual(season.cnListOf([{ team: "A" }, "a", { list: ["B", { team: "C", name: "丙" }] }]).map((c) => [c.team, c.name]), [["A", "A"], ["B", "B"], ["C", "丙"]], "重复的只留第一个");
+    assert.deepEqual(d.teams.map((t) => [t.team, t.region]), [["TEC", "China"], ["Team RRQ", "Southeast Asia"], ["Wolves Esports", "China"], ["Kirisame", ""], ["Team Vision", ""], ["Team Liquid", ""]],
       "选主队的队伍：联赛的在前，再按各站；资料没抓到的赛区空着");
     assert.equal(d.at, 9);
     assert.equal((await season.proSeason({}, { store: memStore() })).data, null, "还没抓过：data:null");
