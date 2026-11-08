@@ -3,5 +3,11 @@
   "navigationBarTitleText": "比赛",
   "enablePullDownRefresh": false,
   "backgroundTextStyle": "dark",
-  "backgroundColor": "#f4f5f7"
+  "backgroundColor": "#f4f5f7",
+  "usingComponents": {
+    "pro-season": "/pro/components/season/index"
+  },
+  "componentPlaceholder": {
+    "pro-season": "view"
+  }
 }

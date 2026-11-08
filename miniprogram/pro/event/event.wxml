@@ -1,0 +1,431 @@
+<!-- 赛季里的一站（2026-11-08，比赛页「这个赛季」点进来）：这一站的日期、冠军、名次（Liquipedia）；
+     有现成快照的站再放原来比赛页的那几块：S2 季后赛的最终成绩（排名 / 选手 / 每局 / 战队 / 英雄）、
+     下一场比赛的分组赛程（快照对得上这一站时）、ALGS 职业赛场的赛后统计（这一站有的话）。 -->
+<view class="wrap theme-{{theme}} ev-wrap" data-lang="{{lang}}">
+  <view wx:if="{{state === 'loading'}}" class="ev-head ev-skel"></view>
+
+  <!-- 这一站的头：两套主题都是深色底 -->
+  <view wx:if="{{stage}}" class="ev-head">
+    <text class="ev-name">{{stage.name}}</text>
+    <text wx:if="{{stage.lpName}}" class="ev-lp">{{stage.lpName}}</text>
+    <view class="ev-facts">
+      <view class="ev-fact"><text class="ev-fact-v">{{stage.dates}}</text><text class="ev-fact-k">{{stage.status}}</text></view>
+      <view wx:if="{{stage.teams}}" class="ev-fact"><text class="ev-fact-v">{{stage.teams}}</text><text class="ev-fact-k">{{T.stageTeamsK}}</text></view>
+      <view wx:if="{{stage.winner}}" class="ev-fact"><text class="ev-fact-v">{{stage.winner}}</text><text class="ev-fact-k">{{stage.winnerSub}}</text></view>
+    </view>
+  </view>
+
+  <!-- ================= 比赛专区 · 最终成绩 =================
+     2026-11-02 拉斯维加斯季后赛打完后加的：原来这里放「下一场比赛」，
+     赛程全打完就没有下一场了，改成放最终成绩（冠军 / 决赛前 10 / 中国大陆三队）。
+     数据是离线快照（data/match_result_data.js），来源逐条可查，页面上标注。 -->
+<block wx:if="{{result}}">
+  <view class="sec-head">
+    <text class="sec-title">{{result.title}}</text>
+    <text class="sec-hint">{{result.updatedText}}</text>
+  </view>
+
+  <view class="rs-event">
+    <text class="rs-event-name">{{result.eventName}}</text>
+    <text class="rs-event-meta">{{result.metaText}}</text>
+  </view>
+
+  <!-- 冠军卡：整页唯一用强调色底的地方 -->
+  <view class="rs-champ">
+    <view class="rs-champ-top">
+      <text class="rs-champ-label">{{result.champLabel}}</text>
+      <text class="rs-champ-points">{{result.champPoints}}</text>
+    </view>
+    <!-- 有战队页就能点进去（右边一个 ›） -->
+    <view class="rs-champ-teamrow {{result.champTeamPage ? 'rs-champ-tap' : ''}}" data-page="{{result.champTeamPage}}"
+          bindtap="onOpenTeam" hover-class="{{result.champTeamPage ? 'rs-chip-hover' : 'none'}}">
+      <!-- 队标（参赛名单从云端到了才有；没有就只写队名） -->
+      <view wx:if="{{result.champTeamLogo}}" class="rs-champ-logo">
+        <image class="rs-champ-logo-img" aria-hidden="{{true}}" src="{{result.champTeamLogo}}" mode="aspectFit" binderror="onChampLogoError"></image>
+      </view>
+      <text class="rs-champ-team">{{result.champTeam}}</text>
+      <text wx:if="{{result.champTeamPage}}" class="rs-champ-x">›</text>
+    </view>
+    <!-- 拿到 Liquipedia 名单后，冠军队员一人一块，点进选手页；没拿到就照旧一行字 -->
+    <view wx:if="{{result.champChips.length}}" class="rs-chips">
+      <view wx:for="{{result.champChips}}" wx:key="name" class="rs-chip"
+            data-page="{{item.page}}" bindtap="onOpenPlayer" hover-class="{{item.page ? 'rs-chip-hover' : 'none'}}">
+        <text class="rs-chip-n">{{item.name}}</text>
+        <text wx:if="{{item.page}}" class="rs-chip-x">›</text>
+      </view>
+    </view>
+    <text wx:else class="rs-champ-players">{{result.champPlayers}}</text>
+    <view class="rs-champ-foot">
+      <text class="rs-champ-coach">{{result.champCoach}}</text>
+      <text class="rs-champ-prize">{{result.champPrize}}</text>
+    </view>
+  </view>
+
+  <!-- 分段切换：排名 / 选手 / 每局 / 英雄。只渲染选中的那一块，页面不至于长到没法读 -->
+  <view class="rs-seg">
+    <view class="rs-seg-i {{rseg === 'rank' ? 'rs-seg-on' : ''}}" data-k="rank" bindtap="onRSeg">{{result.tableTitle}}</view>
+    <view class="rs-seg-i {{rseg === 'players' ? 'rs-seg-on' : ''}}" data-k="players" bindtap="onRSeg">{{result.playersTitle}}</view>
+    <view class="rs-seg-i {{rseg === 'games' ? 'rs-seg-on' : ''}}" data-k="games" bindtap="onRSeg">{{result.gamesTitle}}</view>
+    <view class="rs-seg-i {{rseg === 'teams' ? 'rs-seg-on' : ''}}" data-k="teams" bindtap="onRSeg">{{result.teamStatsTitle}}</view>
+    <view class="rs-seg-i {{rseg === 'legends' ? 'rs-seg-on' : ''}}" data-k="legends" bindtap="onRSeg">{{result.legendsTitle}}</view>
+  </view>
+
+<block wx:if="{{rseg === 'rank'}}">
+  <!-- 决赛前 10 -->
+  <view class="sec-head">
+    <text class="sec-title">{{result.tableTitle}}</text>
+    <text class="sec-hint">{{result.gamesText}}</text>
+  </view>
+  <view class="rs-table">
+    <view class="rs-tr rs-th">
+      <text class="rs-c-rank">{{result.rankHead}}</text>
+      <text class="rs-c-team">{{result.teamHead}}</text>
+      <text class="rs-c-kills">{{result.killsHead}}</text>
+      <text class="rs-c-pts">{{result.pointsHead}}</text>
+      <text class="rs-c-go"></text>
+    </view>
+    <!-- 对上 Liquipedia 名单的队（ti ≥ 0）能点：弹层看三名队员 → 选手页 -->
+    <view wx:for="{{result.rows}}" wx:key="rank" class="rs-tr {{item.cn ? 'rs-tr-cn' : ''}} {{item.ti >= 0 ? 'rs-tr-tap' : ''}}"
+          data-ti="{{item.ti}}" bindtap="onRankTeam" hover-class="{{item.ti >= 0 ? 'rs-tr-hover' : 'none'}}">
+      <text class="rs-c-rank">{{item.rank}}</text>
+      <text class="rs-c-team">{{item.team}}</text>
+      <text class="rs-c-kills">{{item.kills}}</text>
+      <text class="rs-c-pts">{{item.points}}</text>
+      <text class="rs-c-go">{{item.ti >= 0 ? '›' : ''}}</text>
+    </view>
+  </view>
+  </block>
+
+<block wx:if="{{rseg === 'players'}}">
+  <!-- 选手榜：决赛 9 局汇总，伤害前 10 -->
+  <view class="sec-head">
+    <text class="sec-title">{{result.playersTitle}}</text>
+  </view>
+  <view wx:if="{{result.killsKingText}}" class="rs-king">{{result.killsKingText}}</view>
+  <view class="rs-table">
+    <view class="rs-tr rs-th">
+      <text class="rs-c-player">{{result.playerHead}}</text>
+      <text class="rs-c-kills">{{result.killsHead}}</text>
+      <text class="rs-c-pts">{{result.damageHead}}</text>
+      <text class="rs-c-go"></text>
+    </view>
+    <view wx:for="{{result.playerRows}}" wx:key="player" class="rs-tr"
+          data-page="{{item.page}}" bindtap="onOpenPlayer" hover-class="{{item.page ? 'rs-tr-hover' : 'none'}}">
+      <view class="rs-c-player">
+        <text class="rs-p-name">{{item.player}}</text>
+        <text class="rs-p-team">{{item.team}}</text>
+      </view>
+      <text class="rs-c-kills">{{item.kills}}</text>
+      <text class="rs-c-pts">{{item.damage}}</text>
+      <text class="rs-c-go">{{item.page ? '›' : ''}}</text>
+    </view>
+  </view>
+  <view class="rs-note">{{result.playersNote}}</view>
+  </block>
+
+  <!-- 战队数据 -->
+  <block wx:if="{{rseg === 'teams'}}">
+    <view class="sec-head">
+      <text class="sec-title">{{result.teamStatsTitle}}</text>
+      <text class="sec-hint">{{result.gamesText}}</text>
+    </view>
+    <view class="rs-table">
+      <view class="rs-tr rs-th">
+        <text class="rs-c-team">{{result.teamHead}}</text>
+        <text class="rs-c-kills">{{result.dmgHead}}</text>
+        <text class="rs-c-kills">{{result.knocksHead}}</text>
+        <text class="rs-c-pts">{{result.takenHead}}</text>
+      </view>
+      <view wx:for="{{result.teamRows}}" wx:key="team" class="rs-tr">
+        <text class="rs-c-team">{{item.team}}</text>
+        <text class="rs-c-kills">{{item.dmg}}</text>
+        <text class="rs-c-kills">{{item.knocks}}</text>
+        <text class="rs-c-pts">{{item.taken}}</text>
+      </view>
+    </view>
+  </block>
+
+<block wx:if="{{rseg === 'games'}}">
+  <!-- 每局战况 -->
+  <view class="sec-head">
+    <text class="sec-title">{{result.gamesTitle}}</text>
+    <text class="sec-hint">{{result.gamesText}}</text>
+  </view>
+  <view class="rs-games">
+    <view class="rs-game" wx:for="{{result.gameRows}}" wx:key="no">
+      <view class="rs-game-head">
+        <text class="rs-game-no">{{item.noText}}</text>
+        <text class="rs-game-map">{{item.map}}</text>
+        <text class="rs-game-kills">{{item.killsText}}</text>
+      </view>
+      <view class="rs-game-row">
+        <text class="rs-game-1">{{item.first}}</text>
+        <text class="rs-game-23">{{item.second}} · {{item.third}}</text>
+      </view>
+    </view>
+  </view>
+  </block>
+
+<block wx:if="{{rseg === 'legends'}}">
+  <!-- 英雄选取率 -->
+  <view class="sec-head">
+    <text class="sec-title">{{result.legendsTitle}}</text>
+  </view>
+  <view class="rs-legends">
+    <view class="rs-legend" wx:for="{{result.legendRows}}" wx:key="name">
+      <view class="rs-legend-top">
+        <text class="rs-legend-name">{{item.name}}</text>
+        <text class="rs-legend-pct">{{item.pctText}}</text>
+      </view>
+      <view class="rs-bar"><view class="rs-bar-fill" style="width: {{item.barW}}%;"></view></view>
+      <text class="rs-legend-picks">{{item.picksText}}</text>
+    </view>
+  </view>
+  </block>
+
+
+  <view class="rs-format">{{result.formatText}}</view>
+  <view class="rs-src">{{result.sourceText}}</view>
+</block>
+
+<!-- ================= 比赛专区 · 下一场比赛 =================
+       2026-10-18 用户要求：一打开先看到「未来最近一场比赛」的分组与时间安排；
+       官方还没排期时只显示分组；点队伍看队员。
+       数据是离线快照（data/next_match_data.js，由 直播识别/build_next_match.mjs 生成），
+       所以"还有几天"由视图模型按**打开页面的时刻**算，界面不写死。 -->
+  <block wx:if="{{next}}">
+    <view class="sec-title">
+      {{T.nextTitle}}
+      <text class="sec-hint">{{next.updatedText}}</text>
+    </view>
+
+    <view class="nx-hero">
+      <view class="nx-hero-top">
+        <view class="nx-hero-l">
+          <text class="nx-event">{{next.eventLabel}}</text>
+          <text class="nx-sub">{{next.eventSub}}</text>
+        </view>
+        <view wx:if="{{next.hasStatus}}" class="nx-pill {{next.hasNext ? '' : 'nx-pill-off'}}">{{next.statusText}}</view>
+      </view>
+      <view class="nx-next">
+        <text class="nx-next-k">{{T.nextMatchLabel}}</text>
+        <text class="nx-next-time">{{next.nextTimeText}}</text>
+        <text class="nx-next-name">{{next.nextMatchText}}</text>
+      </view>
+      <view class="nx-meta">{{next.metaText}}</view>
+    </view>
+
+    <!-- 赛制：赛事页 info-banner 的转写（官方英文原文里写死的晋级路径）。
+         默认收起 —— 展开会占掉小半屏，而"下一场几点"才是打开这一页的第一需求。 -->
+    <view wx:if="{{next.format}}" class="nx-fmt" bindtap="onFormat" hover-class="nx-fmt-hover">
+      <view class="nx-fmt-h">
+        <text class="nx-fmt-t">{{T.nextFormat}}</text>
+        <text class="nx-fmt-x">{{fmtOpen ? '▴' : '▾'}}</text>
+      </view>
+      <text class="nx-fmt-s">{{next.format.summary}}</text>
+      <block wx:if="{{fmtOpen}}">
+        <view class="nx-fmt-row" wx:for="{{next.format.lines}}" wx:key="k">
+          <text class="nx-fmt-k">{{item.k}}</text>
+          <text class="nx-fmt-v">{{item.v}}</text>
+        </view>
+      </block>
+    </view>
+
+    <!-- 时间安排：一场一格（日期 + 时间 + 场次），两列排。
+         官方一场都没排时间时**整块不渲染**（用户要求：那就只显示分组），
+         分组标题下面会写一句说明；排了部分场次时，没排的用「时间待定」的格子列在后面。 -->
+    <view wx:if="{{next.hasTimes}}" class="pblock">
+      <view class="pblock-h">
+        <text class="pblock-t">{{T.nextSchedule}}</text>
+        <text class="pblock-n">{{next.tzText}}</text>
+      </view>
+      <view class="nx-slots">
+        <view class="nx-slot" wx:for="{{next.slots}}" wx:key="key">
+          <text class="nx-slot-t">{{item.label}}</text>
+          <text class="nx-slot-n">{{item.name}}</text>
+        </view>
+        <view class="nx-slot" wx:for="{{next.untimed}}" wx:for-item="r" wx:key="key">
+          <text class="nx-slot-t">{{T.nextUntimed}}</text>
+          <text class="nx-slot-n">{{r.name}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 分组：A/B/C/D 四个组，一屏内只展开当前组（40 支队一次铺开没法读）；
+         组标签上带队伍数，所以"分组"这件事一打开就看得到。 -->
+    <view class="pblock">
+      <view class="pblock-h">
+        <text class="pblock-t">{{T.nextGroups}}</text>
+        <text class="pblock-n">{{T.nextGroupsHint}}</text>
+      </view>
+      <view wx:if="{{!next.hasTimes}}" class="nx-note">{{next.noTimeNote}}</view>
+      <view class="nx-tabs">
+        <view wx:for="{{next.groups}}" wx:key="key"
+              class="nx-tab {{item.active ? 'nx-tab-on' : ''}}"
+              data-k="{{item.key}}" bindtap="onNextGroup">
+          <text class="nx-tab-k">{{item.name}}</text>
+          <text class="nx-tab-n">{{item.countText}}</text>
+        </view>
+      </view>
+      <!-- 当前组的出场安排：换组就跟着换（A 组 → 10/30 01:00 vs B …） -->
+      <view wx:if="{{next.activeMatchesText}}" class="nx-gsched">{{next.activeMatchesText}}</view>
+      <view class="nx-grid">
+        <view class="nx-team" wx:for="{{next.teams}}" wx:key="name"
+              data-i="{{index}}" bindtap="onTeam" hover-class="nx-team-hover">
+          <image wx:if="{{item.hasIcon}}" class="nx-team-ic" src="{{item.icon}}" mode="aspectFit"></image>
+          <text class="nx-team-n">{{item.name}}</text>
+          <text class="nx-team-x">›</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="note">{{next.caveat}}</view>
+  </block>
+
+
+  <!-- ================= ALGS 职业赛场 =================
+       官方赛事（冠军赛 / 季后赛 / 职业联赛…）的赛后统计：战队名次 + 英雄选取率 +
+       三人组合。和上面两块一样是**本地离线快照**（algs_data.js），不联网。
+       为什么只能是快照：数据源除赛事页外都有人机校验，云函数取不到 —— 见 utils/algs.js。 -->
+  <block wx:if="{{algs}}">
+    <view class="sec-title">
+      {{T.algsTitle}}
+      <text class="sec-hint">{{algs.updatedText}}</text>
+    </view>
+
+    <scroll-view wx:if="{{algs.chips.length}}" class="prochips" scroll-x="true" enable-flex="true">
+      <view wx:for="{{algs.chips}}" wx:key="id" data-id="{{item.id}}" bindtap="onAlgsChip"
+            class="prochip {{item.active ? 'prochip-on' : ''}}">{{item.name}}</view>
+    </scroll-view>
+
+    <block wx:if="{{algs.ev}}">
+      <!-- 赛事头：赛事名 + 赛季/赛区 + 冠军 -->
+      <view class="algs-head">
+        <view class="algs-head-l">
+          <text class="algs-name">{{algs.ev.label}}</text>
+          <text class="algs-sub">{{algs.ev.sub}}</text>
+          <view class="algs-meta">
+            <text wx:if="{{algs.ev.teamsText}}" class="algs-meta-i">{{algs.ev.teamsText}}</text>
+            <text wx:if="{{algs.ev.gamesText}}" class="algs-meta-i">{{algs.ev.gamesText}}</text>
+          </view>
+        </view>
+        <view wx:if="{{algs.ev.championText}}" class="algs-head-r">
+          <text class="algs-champ-k">{{algs.ev.championLabel}}</text>
+          <text class="algs-champ-v">{{algs.ev.championText}}</text>
+        </view>
+      </view>
+
+      <view wx:if="{{algs.ev.mapsText}}" class="algs-maps">{{T.algsMaps}} · {{algs.ev.mapsText}}</view>
+
+      <!-- 战队排名：名次口径写在标题右边（决赛名次 / 阶段名次 / 累计积分） -->
+      <view wx:if="{{algs.ev.hasStandings}}" class="pblock">
+        <view class="pblock-h"><text class="pblock-t">{{T.algsStandings}}</text></view>
+        <!-- 口径说明单独占一行：这句比较长，塞进标题右边会把「战队排名」挤成两行 -->
+        <view class="algs-note">{{algs.ev.rankNote}}</view>
+        <view class="srow {{item.top3 ? 'srow-top3' : ''}}" wx:for="{{algs.ev.standings}}" wx:key="rank">
+          <text class="srow-rank">{{item.rank}}</text>
+          <text class="srow-team">{{item.team}}</text>
+          <text wx:if="{{item.winsText}}" class="srow-wins">{{item.winsText}}</text>
+          <text class="srow-score">{{item.scoreText}}</text>
+        </view>
+      </view>
+
+      <!-- 英雄选取率：和「排位专区」同一套视觉（头像 + 条形 + 百分比），
+           但**用自己的 .acell**，不复用那边的 .hcell —— 那边是一行五格的固定卡，
+           两处混用会互相牵制（见 predator.wxss 里的说明）。 -->
+      <view wx:if="{{algs.ev.hasLegends}}" class="pblock">
+        <view class="pblock-h">
+          <text class="pblock-t">{{T.algsLegends}}</text>
+          <text class="pblock-n">{{algs.ev.legendTotalText}}</text>
+        </view>
+        <view class="agrid">
+          <view wx:for="{{algs.ev.legends}}" wx:key="key" class="acell">
+            <view class="acell-pic">
+              <image wx:if="{{item.hasIcon}}" class="acell-ic" src="{{item.icon}}" mode="aspectFill"></image>
+            </view>
+            <text class="acell-name">{{item.main}}</text>
+            <view class="acell-bar"><view class="acell-fill" style="width: {{item.bar}}%"></view></view>
+            <text class="acell-pct">{{item.pctText}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 三人组合：同样是三个头像并排 -->
+      <view wx:if="{{algs.ev.hasCombos}}" class="pblock">
+        <view class="pblock-h"><text class="pblock-t">{{T.algsCombos}}</text></view>
+        <view class="crow" wx:for="{{algs.ev.combos}}" wx:key="key">
+          <view class="crow-avs">
+            <image wx:if="{{item.hasAvatars}}" wx:for="{{item.avatars}}" wx:for-item="av" wx:key="*this"
+                   class="crow-av" src="{{av}}" mode="aspectFill"></image>
+          </view>
+          <view class="crow-txt">
+            <text class="crow-name">{{item.text}}</text>
+            <view class="crow-bar"><view class="crow-fill" style="width: {{item.bar}}%"></view></view>
+          </view>
+          <view class="crow-v">
+            <text class="crow-pct">{{item.pctText}}</text>
+            <text class="crow-n">{{item.nText}}</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="note">{{algs.caveat}}</view>
+    </block>
+  </block>
+
+  <!-- 名次（Liquipedia）：上面没有现成的名次表时才放；还没打的站是已晋级的队 -->
+  <view wx:if="{{showStandings}}" class="ev-card">
+    <view class="ev-card-h"><text class="ev-card-t">{{stage.rowsTitle}}</text><text class="ev-card-s">{{T.stageFromLp}}</text></view>
+    <view class="ev-rows">
+      <view wx:for="{{stage.rows}}" wx:key="key" class="ev-row {{item.mine ? 'ev-row-mine' : ''}}" data-page="{{item.page}}" bindtap="onOpenTeam" hover-class="ev-pressed">
+        <text class="ev-place">{{item.placeText}}</text>
+        <text class="ev-team">{{item.team}}</text>
+        <text wx:if="{{item.mine}}" class="ev-mine">{{T.seasonChipMine}}</text>
+        <text class="ev-chev">›</text>
+      </view>
+    </view>
+  </view>
+  <view wx:if="{{state === 'ready' && !showStandings && !result && !algs && !next}}" class="msg msg-info">
+    <text class="msg-title">{{T.stageNoData}}</text>
+  </view>
+
+  <view class="foot">
+    {{T.foot1}}
+    {{T.foot2}}
+  </view>
+
+  <!-- 队伍 → 队员弹层。点遮罩或「关闭」收起；catchtap 拦住冒泡，
+       否则点弹层内部也会被遮罩的 bindtap 关掉。 -->
+  <view wx:if="{{openTeam}}" class="nx-mask" bindtap="onCloseTeam" catchtouchmove="noop">
+    <view class="nx-sheet" catchtap="noop">
+      <view class="nx-sheet-h">
+        <view class="nx-sheet-hl">
+          <view class="nx-sheet-title">
+            <image wx:if="{{openTeam.hasIcon}}" class="nx-sheet-ic" src="{{openTeam.icon}}" mode="aspectFit"></image>
+            <view class="nx-sheet-txt">
+              <text class="nx-sheet-name">{{openTeam.name}}</text>
+              <text class="nx-sheet-sub">{{openTeam.groupName}}<text wx:if="{{openTeam.hasPlayers}}"> · {{openTeam.countText}}</text></text>
+            </view>
+          </view>
+        </view>
+        <view class="nx-sheet-x" bindtap="onCloseTeam">{{T.nextClose}}</view>
+      </view>
+      <!-- 这支队有战队页：第一行是入口 -->
+      <view wx:if="{{openTeam.teamPage}}" class="nx-player nx-player-tap" data-page="{{openTeam.teamPage}}"
+            bindtap="onOpenTeam" hover-class="nx-team-hover">
+        <text class="nx-player-n nx-teamlink">{{T.proTeamHome}}</text>
+        <text class="nx-team-x">›</text>
+      </view>
+      <block wx:if="{{openTeam.hasPlayers}}">
+        <!-- 有 page 的（来自 Liquipedia 名单）能点进选手页 -->
+        <view class="nx-player {{item.page ? 'nx-player-tap' : ''}}" wx:for="{{openTeam.players}}" wx:key="name"
+              data-page="{{item.page}}" bindtap="onOpenPlayer" hover-class="{{item.page ? 'nx-team-hover' : 'none'}}">
+          <text class="nx-player-n">{{item.name}}</text>
+          <text wx:if="{{item.meta}}" class="nx-player-m">{{item.meta}}</text>
+          <text wx:if="{{item.page}}" class="nx-team-x">›</text>
+        </view>
+      </block>
+      <view wx:else class="nx-note">{{T.nextNoRoster}}</view>
+    </view>
+  </view>
+</view>

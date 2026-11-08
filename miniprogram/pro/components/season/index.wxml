@@ -1,0 +1,141 @@
+<!-- 比赛页上半部分（2026-11-08 照 August 的「赛季进度条」设计稿）。字段由 pro/utils/seasonview.js 拼好；读不到数据整块不出 -->
+<view wx:if="{{ready}}" class="ss">
+  <!-- 赛季卡（两套主题都是深色底）：五站进度条 + 小比赛圆点 + 图例 + 下一站 -->
+  <view class="ss-season">
+    <text class="ss-yr">{{v.yearText}}</text>
+    <text class="ss-t">{{v.title}}</text>
+    <view class="ss-track">
+      <view wx:for="{{v.track}}" wx:key="key" class="ss-seg ss-seg-{{item.state}}"></view>
+    </view>
+    <view class="ss-track-l">
+      <view wx:for="{{v.track}}" wx:key="key" class="ss-tl {{item.state === 'now' ? 'ss-tl-now' : ''}}">
+        <text>{{item.label}}</text>
+        <text wx:if="{{item.mine}}" class="ss-mine-tag">{{T.seasonChipMine}}</text>
+      </view>
+    </view>
+    <view wx:if="{{v.hasDots}}" class="ss-dots">
+      <view wx:for="{{v.dots}}" wx:key="key" class="ss-dotcol">
+        <view wx:for="{{item.dots}}" wx:for-item="d" wx:key="key" class="ss-dot {{d.cls ? 'ss-dot-' + d.cls : ''}}"></view>
+      </view>
+    </view>
+    <view class="ss-legend">
+      <view class="ss-lg"><view class="ss-lg-bar"></view><text>{{T.seasonLegendMajor}}</text></view>
+      <view wx:if="{{v.hasDots}}" class="ss-lg"><view class="ss-lg-dot"></view><text>{{T.seasonLegendMinor}}</text></view>
+      <view wx:if="{{v.home}}" class="ss-lg"><view class="ss-lg-ring"></view><text>{{T.seasonLegendHome}}</text></view>
+    </view>
+    <view wx:if="{{v.next}}" class="ss-next" hover-class="ss-pressed" data-k="{{v.next.key}}" bindtap="onStage">
+      <view class="ss-grow"><text class="ss-next-t">{{v.next.text}}</text><text class="ss-next-s">{{v.next.sub}}</text></view>
+      <text class="ss-chev-l">›</text>
+    </view>
+  </view>
+
+  <!-- 主队卡（强调色底）；没选主队时是一张请你选的卡 -->
+  <view wx:if="{{v.home}}" class="ss-home">
+    <view class="ss-home-top">
+      <view class="ss-home-logo">{{v.home.initials}}</view>
+      <view class="ss-grow"><text class="ss-home-k">{{T.homeK}}</text><text class="ss-home-n">{{v.home.name}}</text></view>
+      <view class="ss-home-chg" hover-class="ss-pressed" bindtap="onPickOpen">{{T.homeChange}}</view>
+    </view>
+    <view class="ss-home-next">
+      <view class="ss-grow">
+        <text class="ss-home-w">{{T.homeNextK}}</text>
+        <text class="ss-home-nn">{{v.home.next ? v.home.next.name : T.homeNoNext}}</text>
+      </view>
+      <view wx:if="{{v.home.next}}" class="ss-home-d"><text>{{v.home.next.date}}</text><text wx:if="{{v.home.next.sub}}" class="ss-home-ds">{{v.home.next.sub}}</text></view>
+    </view>
+    <view wx:if="{{v.home.results.length}}" class="ss-home-res">
+      <view wx:for="{{v.home.results}}" wx:key="key" class="ss-home-chip"><text>{{item.label}}</text><text class="ss-home-chip-b">{{item.place}}</text></view>
+    </view>
+  </view>
+  <view wx:else class="ss-card ss-prompt" hover-class="ss-pressed-card" bindtap="onPickOpen">
+    <view class="ss-grow"><text class="ss-h">{{T.homePromptT}}</text><text class="ss-small">{{T.homePromptB}}</text></view>
+    <text class="ss-btn">{{T.homePick}}</text>
+  </view>
+
+  <!-- 近期比赛：主队参加的置顶（浅红底 + 左边红线 + 日期红底块）；类型标签上写字，不只靠颜色 -->
+  <view class="ss-card">
+    <view class="ss-head"><text class="ss-h">{{T.seasonRecent}}</text><text class="ss-hs">{{v.todayText}}</text></view>
+    <view wx:if="{{v.chips.length > 1}}" class="ss-chips">
+      <view wx:for="{{v.chips}}" wx:key="key" class="ss-chip {{chip === item.key ? 'ss-chip-on' : ''}}" data-k="{{item.key}}" bindtap="onChip">{{item.text}}</view>
+    </view>
+    <text wx:if="{{!recent.rows.length}}" class="ss-small">{{T.seasonRecentNone}}</text>
+    <view class="ss-list">
+      <view wx:for="{{recent.rows}}" wx:key="key" class="ss-ev {{item.mine ? 'ss-ev-mine' : ''}}"
+            data-k="{{item.stageKey}}" bindtap="onStage" hover-class="{{item.stageKey ? 'ss-pressed' : 'none'}}">
+        <view class="ss-grow">
+          <view class="ss-ev-n"><text class="ss-kind ss-kind-{{item.kindCls}}">{{item.kindText}}</text><text>{{item.name}}</text><text wx:if="{{item.mine}}" class="ss-mine-tag">{{item.mineText}}</text></view>
+          <text class="ss-small {{item.live ? 'ss-live' : ''}}">{{item.sub}}</text>
+        </view>
+        <view class="ss-ev-r {{item.mine ? 'ss-ev-r-mine' : ''}}"><text>{{item.right}}</text><text wx:if="{{item.rightSub}}" class="ss-ev-rs">{{item.rightSub}}</text></view>
+      </view>
+    </view>
+    <view wx:if="{{recent.moreText}}" class="ss-more" hover-class="ss-pressed" bindtap="onRecentMore">{{recent.moreText}}</view>
+  </view>
+
+  <!-- 这个赛季：五站是大菱形（点进去看这一站的详情），小比赛是小圆点、字小一号 -->
+  <view class="ss-card">
+    <view class="ss-head"><text class="ss-h">{{T.seasonTimeline}}</text><text class="ss-hs">{{T.seasonTimelineSub}}</text></view>
+    <view wx:if="{{v.hasMinor}}" class="ss-toggle" bindtap="onToggleMinor">
+      <text>{{T.seasonShowMinor}}</text>
+      <view class="ss-sw {{showMinor ? 'ss-sw-on' : ''}}"><view class="ss-sw-k"></view></view>
+    </view>
+    <view class="ss-stage">
+      <view wx:for="{{timeline}}" wx:key="key" class="ss-st {{item.major ? '' : 'ss-st-minor'}} {{item.state ? 'ss-st-' + item.state : ''}} {{item.mine ? 'ss-st-mine' : ''}}"
+            data-k="{{item.stageKey}}" bindtap="onStage" hover-class="{{item.stageKey ? 'ss-pressed' : 'none'}}">
+        <view class="ss-st-dt"></view>
+        <view class="ss-grow">
+          <view class="ss-st-n"><text>{{item.name}}</text><text wx:if="{{item.mine}}" class="ss-mine-tag">{{item.mineText}}</text></view>
+          <text wx:if="{{item.sub}}" class="ss-small">{{item.sub}}</text>
+        </view>
+        <view class="ss-st-w"><text>{{item.right}}</text><text wx:if="{{item.rightSub}}" class="ss-ev-rs">{{item.rightSub}}</text></view>
+        <text class="ss-chev">{{item.stageKey ? '›' : ''}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 所有 CN 战队：S2 亚太南联赛里的国内队，按联赛名次；点进战队页 -->
+  <view wx:if="{{v.cn.length}}" class="ss-card">
+    <view class="ss-head"><text class="ss-h">{{T.seasonCn}}</text><text class="ss-hs">{{v.cnCountText}}</text></view>
+    <view class="ss-cnflag"><text class="ss-cnflag-b">APAC-S</text><text class="ss-cnflag-s">{{T.seasonCnLeague}}</text></view>
+    <view class="ss-list">
+      <view wx:for="{{cn.rows}}" wx:key="key" class="ss-cn" data-page="{{item.page}}" bindtap="onTeam" hover-class="ss-pressed">
+        <view class="ss-cn-logo">{{item.initials}}</view>
+        <view class="ss-grow">
+          <view class="ss-cn-n"><text>{{item.name}}</text><text wx:if="{{item.mine}}" class="ss-mine-tag">{{T.seasonChipMine}}</text></view>
+          <text class="ss-small ss-ellipsis">{{item.players}}</text>
+        </view>
+        <view wx:if="{{item.rank}}" class="ss-ev-r"><text>{{item.rank}}</text><text class="ss-ev-rs">{{T.seasonCnRankSub}}</text></view>
+        <text class="ss-chev">›</text>
+      </view>
+    </view>
+    <view wx:if="{{cn.moreText}}" class="ss-more" hover-class="ss-pressed" bindtap="onCnMore">{{cn.moreText}}</view>
+  </view>
+
+  <!-- 选主队弹层：点遮罩或「关闭」收起；catchtap 拦住冒泡 -->
+  <view wx:if="{{picking}}" class="ss-mask" bindtap="onPickClose" catchtouchmove="noop">
+    <view class="ss-sheet" catchtap="noop">
+      <view class="ss-sheet-h">
+        <text class="ss-sheet-t">{{T.homePickTitle}}</text>
+        <view class="ss-sheet-x" hover-class="ss-pressed" bindtap="onPickClose">{{T.homePickClose}}</view>
+      </view>
+      <text class="ss-small">{{T.homePickBody}}</text>
+      <input class="ss-search" placeholder="{{T.homePickSearch}}" placeholder-class="ss-search-ph" value="{{pickQuery}}" bindinput="onPickSearch" confirm-type="search" />
+      <view wx:if="{{pick.regions.length > 2}}" class="ss-chips">
+        <view wx:for="{{pick.regions}}" wx:key="key" class="ss-chip {{item.on ? 'ss-chip-on' : ''}}" data-k="{{item.key}}" bindtap="onPickRegion">{{item.text}}</view>
+      </view>
+      <scroll-view scroll-y class="ss-grid-wrap">
+        <text wx:if="{{!pick.teams.length}}" class="ss-small">{{T.homePickNone}}</text>
+        <view class="ss-grid">
+          <view wx:for="{{pick.teams}}" wx:key="key" class="ss-tpick {{item.on ? 'ss-tpick-on' : ''}}" data-team="{{item.team}}" bindtap="onPickTeam">
+            <view class="ss-tpick-lg">{{item.initials}}</view>
+            <text class="ss-tpick-n">{{item.team}}</text>
+          </view>
+        </view>
+      </scroll-view>
+      <view class="ss-sheet-btns">
+        <view class="ss-btn2" hover-class="ss-pressed" bindtap="onPickClear">{{T.homePickClear}}</view>
+        <view class="ss-cta {{pickTeam ? '' : 'ss-cta-off'}}" hover-class="ss-pressed" bindtap="onPickDone">{{T.homePickDone}}</view>
+      </view>
+    </view>
+  </view>
+</view>
