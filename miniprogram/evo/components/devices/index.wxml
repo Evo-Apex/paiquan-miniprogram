@@ -36,7 +36,7 @@
       </view>
     </view>
 
-    <!-- 每台电脑一张卡：状态标签带字（不只靠颜色）、几分钟前同步、Evo 版本；解除绑定用强调色文字，点了还要选、要确认 -->
+    <!-- 每台电脑一张卡：状态标签带字（不只靠颜色）、几分钟前同步、Evo 版本；解除绑定用强调色文字，点了要确认（云端的数据一起删） -->
     <view wx:for="{{v.devices}}" wx:key="id" class="me-card">
       <view class="me-pc">
         <image class="me-pc-ic" src="/evo/assets/link-pc.svg" mode="aspectFit"></image>
