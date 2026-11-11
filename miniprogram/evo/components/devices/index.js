@@ -1,7 +1,7 @@
 /**
  * 「我的」页上半部分（在分包 evo 里，由主包的 pages/me 异步引用，同 overview 组件）：
  * 游戏 ID + 绑定状态、三格统计、每台电脑一张「电脑上的 Evo」卡（2026-11-08 照 August 的设计稿）。
- * 解绑时先选云端的数据怎么办，选了删除再确认一次（删了不能恢复）：每次都问（Evo 的用户决定）。
+ * 解绑就删掉这台电脑传到云端的数据，确认一次（删了不能恢复；2026-11-11 用户决定，去掉了"只解绑、云端留着"）。
  */
 var i18n = require("../../../utils/i18n.js");
 var view = require("../../utils/view.js");
@@ -71,40 +71,39 @@ Component({
       evoCloud.scanToBind(this.data.T);
     },
 
+    // 原来先选"只解绑、云端留着"还是"解绑并删除"：留着的数据手机上看不到、也删不掉，玩家以为全没了；
+    // 删除那一项的确认按钮「解绑并删除」超过微信限的 4 个字，弹框出不来、也不报错（点了没反应）。
+    // 确认、取消按钮的字数 tests/evo.test.mjs 里查
     onUnbind: function (e) {
       var self = this;
       var T = this.data.T;
       var device = this.data.v.devices[e.currentTarget.dataset.index];
-      wx.showActionSheet({
-        alertText: view.fill(T.evoUnbindAsk, { pc: device.name }),
-        itemList: [T.evoUnbindKeep, T.evoUnbindDelete],
-        success: function (res) {
-          if (res.tapIndex === 0) {
-            self.doUnbind(device, false);
-            return;
-          }
-          wx.showModal({
-            title: T.evoDeleteTitle,
-            content: view.count(T.evoDeleteBody, device.matches, { pc: device.name }),
-            confirmText: T.evoDeleteConfirm,
-            confirmColor: "#d92b2b",   // = --accent（弹窗是原生的，读不到 CSS 变量）
-            success: function (r) { if (r.confirm) self.doUnbind(device, true); }
-          });
+      wx.showModal({
+        title: view.fill(T.evoUnbindAsk, { pc: device.name }),
+        content: device.matches > 0 ? view.count(T.evoUnbindBody, device.matches) : T.evoUnbindBodyNone,
+        confirmText: T.evoUnbind,
+        confirmColor: "#d92b2b",   // = --accent（弹窗是原生的，读不到 CSS 变量）
+        success: function (r) { if (r.confirm) self.doUnbind(device); },
+        // 弹框出不来时也要让人知道，不能点了没反应
+        fail: function (err) {
+          console.warn("解绑的确认框没弹出来", err);
+          wx.showToast({ title: T.evoUnbindFail, icon: "none" });
         }
       });
     },
 
-    doUnbind: function (device, deleteData) {
+    doUnbind: function (device) {
       var self = this;
       var T = this.data.T;
       wx.showLoading({ title: T.evoUnbinding, mask: true });
-      evoCloud.callEvo("unbind", { device: device.id, delete_data: deleteData }).then(function (r) {
+      // delete_data 照旧传 true：云函数现在一律删，还没部署新云函数时也照这个删
+      evoCloud.callEvo("unbind", { device: device.id, delete_data: true }).then(function (r) {
         wx.hideLoading();
         if (!r.ok) {
           wx.showModal({ title: T.evoUnbindFail, content: view.errText(r.code, T), showCancel: false });
           return;
         }
-        wx.showToast({ title: deleteData ? T.evoUnboundDeleted : T.evoUnbound, icon: "success" });
+        wx.showToast({ title: T.evoUnbound, icon: "success" });
         state.dirty = true;
         state.account = null;
         self.load();

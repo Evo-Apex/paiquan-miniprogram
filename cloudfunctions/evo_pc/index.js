@@ -7,7 +7,8 @@
 //   （云函数 evo_qrpool 定时生成；这里生成不了：云调用只能从小程序里或定时触发器触发，电脑调的回 INVALID_WX_ACCESS_TOKEN）。
 //   码池空了只回绑定码，Evo 自己画二维码（要在小程序「我的」里点"扫码绑定"扫）
 // - upload：传对局、大厅读数、账号（只有绑定了才收）；deleted 是电脑上删掉的局
-// - unbind：解绑；delete_data 为 true 时同时删掉这台电脑传上来的所有数据
+// - unbind：解绑，同时删掉这台电脑传上来的所有数据（2026-11-11 起一律删，不再看 delete_data：
+//   原来"只解绑、云端留着"的数据谁也看不到、也删不掉。0.5.x 的 Evo 还会传 false，照样删）
 // 回 { ok: true, ... } 或 { ok: false, error: 'not_bound' | 'bad_request' | 'no_identity' | 'server', message }
 const cloud = require('wx-server-sdk')
 
@@ -224,8 +225,8 @@ async function unbind(uid, event) {
   if (device) {
     await withCollection('evo_devices', (c) => c.doc(uid).update({ data: { openid: null, unbound_at: Date.now() } }))
   }
-  if (event.delete_data === true) await removeData(uid)
-  return { ok: true, deleted: event.delete_data === true }
+  await removeData(uid)
+  return { ok: true, deleted: true }
 }
 
 exports.main = async (event, context) => {

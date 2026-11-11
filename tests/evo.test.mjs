@@ -495,3 +495,194 @@ describe("evo · 首页（段位条、今日、大家在玩什么）", () => {
     assert.equal(en.combo, null);
   });
 });
+
+/* ============================================================
+   解绑（2026-11-11）：解绑就删掉这台电脑传到云端的数据，确认一次。
+   原来先选"只解绑、云端留着"还是"解绑并删除"：留着的数据手机上看不到、也删不掉，玩家以为全没了；
+   删除那一项的确认按钮「解绑并删除」超过微信限的字数，弹框出不来、也不报错（点了没反应）
+   ============================================================ */
+
+// 微信基础库的检查（开发者工具 WAService.js 里的原样）：中文算 2、英文算 1，超过 8 就 fail，弹框不出来
+const modalButtonOk = (s) => String(s).replace(/[^\x00-\xff]/g, "##").length <= 8;
+
+describe("evo · 解绑", () => {
+  test("原生弹框的确认、取消按钮：中英文都不超过微信的字数（超了弹框出不来，也不报错）", () => {
+    assert.equal(modalButtonOk("解绑并删除"), false, "原来的按钮就是超了");
+    assert.equal(modalButtonOk("解绑"), true);
+    const list = (dir) => readdirSync(dir, { withFileTypes: true }).flatMap((d) =>
+      d.isDirectory() ? list(path.join(dir, d.name)) : d.name.endsWith(".js") ? [path.join(dir, d.name)] : []);
+    let seen = 0;
+    for (const file of list(MP)) {
+      const src = readFileSync(file, "utf8");
+      for (const m of src.matchAll(/(?:confirmText|cancelText)\s*:\s*(?:T\.(\w+)|"([^"]*)")/g)) {
+        seen++;
+        const values = m[1] ? [ZH[m[1]], EN[m[1]]] : [m[2]];
+        for (const v of values) {
+          assert.ok(typeof v === "string" && v.length, path.relative(MP, file) + " 的 " + m[0] + " 没有词条");
+          assert.ok(modalButtonOk(v), path.relative(MP, file) + "：按钮文字「" + v + "」太长（中文最多 4 个字，英文 8 个字母）");
+        }
+      }
+    }
+    assert.ok(seen >= 2, "至少有解绑和隐私说明两处");
+  });
+
+  /** 用桩把「我的」页的 devices 组件加载起来；showModal 照微信的规矩：按钮字数超了就 fail */
+  function loadDevices(T, responses = {}) {
+    let def = null;
+    global.Component = (d) => { def = d; };
+    const calls = { modal: [], toast: [], cloud: [] };
+    global.wx = {
+      cloud: {
+        callFunction(o) {
+          calls.cloud.push(o.data);
+          const r = responses[o.data.action] || { ok: true, devices: [], accounts: [], profile: null };
+          return Promise.resolve({ result: r });
+        },
+      },
+      showModal(o) {
+        if (!modalButtonOk(o.confirmText || "") || !modalButtonOk(o.cancelText || "")) {
+          if (o.fail) o.fail({ errMsg: "showModal:fail confirmText length should not larger than 4 Chinese characters" });
+          return;
+        }
+        calls.modal.push(o);
+      },
+      showLoading() {},
+      hideLoading() {},
+      showToast(o) { calls.toast.push(o); },
+    };
+    const p = path.join(MP, "evo", "components", "devices", "index.js");
+    delete require.cache[require.resolve(p)];
+    require(p);
+    const inst = Object.assign({}, def.methods);
+    inst.data = Object.assign(JSON.parse(JSON.stringify(def.data)), { T });
+    inst.setData = (patch) => Object.assign(inst.data, patch);
+    inst.data.v = { devices: [{ id: "pc-1", name: T === EN ? "PC 1" : "电脑 1", matches: 12 }, { id: "pc-2", name: "电脑 2", matches: 0 }] };
+    return { inst, calls };
+  }
+  const tap = (index) => ({ currentTarget: { dataset: { index } } });
+  const tick = () => new Promise((r) => setTimeout(r, 5));
+
+  test("点「解除绑定」：只弹一个确认框，写明云端的局会一起删；确认以后让云函数删", async () => {
+    const { inst, calls } = loadDevices(ZH, { unbind: { ok: true, deleted: true } });
+    inst.onUnbind(tap(0));
+    assert.equal(calls.modal.length, 1, "确认框弹出来了");
+    const m = calls.modal[0];
+    assert.equal(m.title, "解绑电脑 1？");
+    assert.match(m.content, /12 局会一起删掉/);
+    assert.match(m.content, /电脑上的战绩不受影响/);
+    assert.equal(m.confirmText, "解绑");
+    m.success({ confirm: true });
+    await tick();
+    assert.deepEqual(calls.cloud[0], { action: "unbind", device: "pc-1", delete_data: true });
+    assert.equal(calls.toast[0].title, "已解绑");
+    assert.equal(calls.cloud[1].action, "me", "解绑以后重新读「我的」");
+  });
+
+  test("点了取消：不解绑", async () => {
+    const { inst, calls } = loadDevices(ZH);
+    inst.onUnbind(tap(0));
+    calls.modal[0].success({ confirm: false, cancel: true });
+    await tick();
+    assert.equal(calls.cloud.length, 0);
+  });
+
+  test("云端还没有对局：不写「0 局」", () => {
+    const { inst, calls } = loadDevices(ZH);
+    inst.onUnbind(tap(1));
+    assert.equal(calls.modal[0].content, ZH.evoUnbindBodyNone);
+    assert.doesNotMatch(calls.modal[0].content, /0 局/);
+  });
+
+  test("英文：分单复数，没有中文", () => {
+    const { inst, calls } = loadDevices(EN);
+    inst.onUnbind(tap(0));
+    const m = calls.modal[0];
+    assert.equal(m.title, "Unlink PC 1?");
+    assert.match(m.content, /the 12 matches already in the cloud will be deleted/);
+    assert.equal(m.confirmText, "Unlink");
+    assert.ok(!CJK.test(m.title + m.content + m.confirmText));
+    inst.data.v.devices[0].matches = 1;
+    inst.onUnbind(tap(0));
+    assert.match(calls.modal[1].content, /the 1 match already/);
+  });
+
+  test("确认框弹不出来时也要提示，不能点了没反应", () => {
+    const { inst, calls } = loadDevices(ZH);
+    global.wx.showModal = (o) => o.fail({ errMsg: "showModal:fail" });
+    inst.onUnbind(tap(0));
+    assert.equal(calls.toast[0].title, "没解绑成功");
+  });
+
+  /** 用一个内存里的假数据库加载云函数（不连真的云端） */
+  function loadCloudFunction(name, store, wxContext) {
+    const Module = require("module");
+    const where = (rows, cond) => rows.filter((r) => Object.keys(cond).every((k) =>
+      (cond[k] && cond[k].$in ? cond[k].$in.includes(r[k]) : r[k] === cond[k])));
+    const collection = (cname) => {
+      const rows = () => store[cname] || (store[cname] = []);
+      const query = (cond, skip = 0, lim = Infinity) => ({
+        skip: (n) => query(cond, n, lim),
+        limit: (n) => query(cond, skip, n),
+        get: async () => ({ data: where(rows(), cond).slice(skip, skip + lim).map((r) => ({ ...r })) }),
+        count: async () => ({ total: where(rows(), cond).length }),
+        remove: async () => { store[cname] = rows().filter((r) => !where([r], cond).length); return { stats: {} }; },
+      });
+      const find = (id) => {
+        const r = rows().find((x) => x._id === id);
+        if (!r) throw new Error("document does not exist");
+        return r;
+      };
+      return {
+        where: (cond) => query(cond),
+        doc: (id) => ({
+          get: async () => ({ data: { ...find(id) } }),
+          update: async ({ data }) => { Object.assign(find(id), data); return { stats: { updated: 1 } }; },
+          remove: async () => { find(id); store[cname] = rows().filter((x) => x._id !== id); return {}; },
+        }),
+      };
+    };
+    const db = { collection, command: { in: (arr) => ({ $in: arr }) }, serverDate: () => new Date(), createCollection: async () => ({}) };
+    const fake = { DYNAMIC_CURRENT_ENV: "test", init() {}, database: () => db, getWXContext: () => wxContext };
+    const p = path.join(ROOT, "cloudfunctions", name, "index.js");
+    const resolve = Module._resolveFilename;
+    Module._resolveFilename = function (req, ...rest) { return req === "wx-server-sdk" ? "wx-server-sdk" : resolve.call(this, req, ...rest); };
+    require.cache["wx-server-sdk"] = { id: "wx-server-sdk", filename: "wx-server-sdk", loaded: true, exports: fake, children: [] };
+    delete require.cache[require.resolve(p)];
+    try {
+      return require(p);
+    } finally {
+      Module._resolveFilename = resolve;
+      delete require.cache["wx-server-sdk"];
+      delete require.cache[p];
+    }
+  }
+
+  const twoPcs = () => ({
+    evo_devices: [{ _id: "pc-1", openid: "me" }, { _id: "pc-2", openid: "someone" }],
+    evo_matches: [{ _id: "pc-1:1", uid: "pc-1" }, { _id: "pc-1:2", uid: "pc-1" }, { _id: "pc-2:1", uid: "pc-2" }],
+    evo_lobby: [{ _id: "pc-1:1", uid: "pc-1" }, { _id: "pc-2:1", uid: "pc-2" }],
+    evo_accounts: [{ _id: "pc-1", uid: "pc-1" }, { _id: "pc-2", uid: "pc-2" }],
+  });
+  const left = (store) => ["evo_matches", "evo_lobby", "evo_accounts"].map((c) => store[c].map((r) => r._id).join(",")).join(" | ");
+
+  test("云函数 evo_mp：手机上解绑一律删掉这台电脑的数据（传 delete_data: false 也删），别人的不动", async () => {
+    const store = twoPcs();
+    const fn = loadCloudFunction("evo_mp", store, { OPENID: "me" });
+    const r = await fn.main({ action: "unbind", device: "pc-1", delete_data: false });
+    assert.deepEqual(r, { ok: true, deleted: true });
+    assert.equal(store.evo_devices[0].openid, null);
+    assert.equal(left(store), "pc-2:1 | pc-2:1 | pc-2");
+    const no = await fn.main({ action: "unbind", device: "pc-2" });
+    assert.equal(no.error, "not_yours", "别人的电脑解绑不了");
+    assert.equal(left(store), "pc-2:1 | pc-2:1 | pc-2");
+  });
+
+  test("云函数 evo_pc：电脑上解绑也一律删（0.5.x 的 Evo 选了「只解绑」还会传 false）", async () => {
+    const store = twoPcs();
+    const fn = loadCloudFunction("evo_pc", store, {});
+    const r = await fn.main({ action: "unbind", delete_data: false }, { environ: "TCB_UUID=pc-1;OTHER=x" });
+    assert.deepEqual(r, { ok: true, deleted: true });
+    assert.equal(store.evo_devices[0].openid, null);
+    assert.equal(left(store), "pc-2:1 | pc-2:1 | pc-2");
+  });
+});

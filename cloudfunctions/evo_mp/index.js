@@ -6,7 +6,8 @@
 // - status：绑定了没有（「战绩」页决定默认显示哪一栏）
 // - bind：{ code } 扫码绑定，把绑定码对应的电脑绑到这个微信
 // - me：绑定的电脑、游戏账号，和「我的」页顶上那块（默认账号的局数、冠军次数、本赛季最高段位）
-// - unbind：{ device, delete_data } 解绑一台电脑，delete_data 为 true 时同时删掉它传上来的数据
+// - unbind：{ device } 解绑一台电脑，同时删掉它传上来的数据（2026-11-11 起一律删，不再看 delete_data：
+//   原来"只解绑、云端留着"的数据谁也看不到、也删不掉）
 // - overview：{ account, range } 我的战绩（段位、RP 走势、统计数字、最近对局、传奇表现）
 // - matches：{ account, mode, review, page } 全部对局（每页 20 局）
 // - match：{ id } 单局详情（含队友）
@@ -142,11 +143,9 @@ async function unbind(openid, event) {
   const devices = await myDevices(openid)
   if (!devices.some((d) => d._id === uid)) return { ok: false, error: 'not_yours' }
   await db.collection('evo_devices').doc(uid).update({ data: { openid: null, unbound_at: Date.now() } })
-  if (event.delete_data === true) {
-    for (const name of ['evo_matches', 'evo_lobby']) await safe(() => db.collection(name).where({ uid }).remove(), null)
-    await db.collection('evo_accounts').doc(uid).remove().catch(() => null)
-  }
-  return { ok: true, deleted: event.delete_data === true }
+  for (const name of ['evo_matches', 'evo_lobby']) await safe(() => db.collection(name).where({ uid }).remove(), null)
+  await db.collection('evo_accounts').doc(uid).remove().catch(() => null)
+  return { ok: true, deleted: true }
 }
 
 async function overview(openid, event) {
