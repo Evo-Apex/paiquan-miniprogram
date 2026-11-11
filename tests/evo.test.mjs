@@ -614,10 +614,12 @@ describe("evo · 解绑", () => {
   });
 
   /** 用一个内存里的假数据库加载云函数（不连真的云端） */
-  function loadCloudFunction(name, store, wxContext) {
+  // hooks.failRemove：这个集合的 where().remove() 报错（模拟删到一半出错）
+  function loadCloudFunction(name, store, wxContext, hooks = {}) {
     const Module = require("module");
-    const where = (rows, cond) => rows.filter((r) => Object.keys(cond).every((k) =>
-      (cond[k] && cond[k].$in ? cond[k].$in.includes(r[k]) : r[k] === cond[k])));
+    const pred = (f) => ({ __pred: f });
+    const match = (v, c) => (c && c.__pred ? c.__pred(v) : v === c);
+    const where = (rows, cond) => rows.filter((r) => Object.keys(cond).every((k) => match(r[k], cond[k])));
     const collection = (cname) => {
       const rows = () => store[cname] || (store[cname] = []);
       const query = (cond, skip = 0, lim = Infinity) => ({
@@ -625,7 +627,11 @@ describe("evo · 解绑", () => {
         limit: (n) => query(cond, skip, n),
         get: async () => ({ data: where(rows(), cond).slice(skip, skip + lim).map((r) => ({ ...r })) }),
         count: async () => ({ total: where(rows(), cond).length }),
-        remove: async () => { store[cname] = rows().filter((r) => !where([r], cond).length); return { stats: {} }; },
+        remove: async () => {
+          if (hooks.failRemove === cname) throw new Error("timeout");
+          store[cname] = rows().filter((r) => !where([r], cond).length);
+          return { stats: {} };
+        },
       });
       const find = (id) => {
         const r = rows().find((x) => x._id === id);
@@ -636,13 +642,23 @@ describe("evo · 解绑", () => {
         where: (cond) => query(cond),
         doc: (id) => ({
           get: async () => ({ data: { ...find(id) } }),
+          set: async ({ data }) => { store[cname] = rows().filter((x) => x._id !== id).concat([{ _id: id, ...data }]); return {}; },
           update: async ({ data }) => { Object.assign(find(id), data); return { stats: { updated: 1 } }; },
-          remove: async () => { find(id); store[cname] = rows().filter((x) => x._id !== id); return {}; },
+          remove: async () => { store[cname] = rows().filter((x) => x._id !== id); return { stats: {} }; },
         }),
       };
     };
-    const db = { collection, command: { in: (arr) => ({ $in: arr }) }, serverDate: () => new Date(), createCollection: async () => ({}) };
-    const fake = { DYNAMIC_CURRENT_ENV: "test", init() {}, database: () => db, getWXContext: () => wxContext };
+    const command = {
+      in: (arr) => pred((v) => arr.includes(v)),
+      neq: (x) => pred((v) => v !== x),
+      lt: (x) => pred((v) => v < x),
+      exists: (yes) => pred((v) => (v !== undefined) === yes),
+    };
+    const db = { collection, command, serverDate: () => new Date(), createCollection: async () => ({}) };
+    const fake = {
+      DYNAMIC_CURRENT_ENV: "test", init() {}, database: () => db, getWXContext: () => wxContext,
+      openapi: { wxacode: { getUnlimited: async () => ({ buffer: Buffer.from("png") }) } },
+    };
     const p = path.join(ROOT, "cloudfunctions", name, "index.js");
     const resolve = Module._resolveFilename;
     Module._resolveFilename = function (req, ...rest) { return req === "wx-server-sdk" ? "wx-server-sdk" : resolve.call(this, req, ...rest); };
@@ -684,5 +700,55 @@ describe("evo · 解绑", () => {
     assert.deepEqual(r, { ok: true, deleted: true });
     assert.equal(store.evo_devices[0].openid, null);
     assert.equal(left(store), "pc-2:1 | pc-2:1 | pc-2");
+  });
+
+  /* 定时的 evo_qrpool 补完码顺带清：11-11 以前选「只解绑、云端留着」留下的数据（August 定：清掉） */
+  const withData = (uids) => ({
+    evo_matches: uids.map((u) => ({ _id: u + ":1", uid: u })),
+    evo_lobby: uids.map((u) => ({ _id: u + ":1", uid: u })),
+    evo_accounts: uids.map((u) => ({ _id: u, uid: u })),
+  });
+
+  test("evo_qrpool：清解绑过、云端还留着数据的电脑；绑着的、没绑过的、清过的不动；码照样补", async () => {
+    const store = {
+      evo_devices: [
+        { _id: "kept", openid: null, unbound_at: 1 },               // 以前选了「只解绑」
+        { _id: "rebound", openid: "me", unbound_at: 1 },            // 解绑过、后来又绑上了
+        { _id: "never", openid: null, created_at: 1 },              // 打开过绑定对话框、没绑过
+        { _id: "done", openid: null, unbound_at: 1, swept_at: 5 },  // 清过了
+      ],
+      ...withData(["kept", "rebound", "done"]),
+    };
+    const fn = loadCloudFunction("evo_qrpool", store, {});
+    const r = await fn.main();
+    assert.equal(r.swept, 1);
+    assert.equal(r.made, 2, "码照样补");
+    assert.deepEqual(r.errors, []);
+    assert.equal(left(store), "rebound:1,done:1 | rebound:1,done:1 | rebound,done");
+    assert.ok(store.evo_devices[0].swept_at > 0, "清过的记下来，以后不再看");
+    assert.equal(store.evo_devices[1].swept_at, undefined);
+    assert.equal(store.evo_devices[2].swept_at, undefined, "没绑过的没有数据，不用清");
+    assert.equal((await fn.main()).swept, 0, "第二次没有要清的");
+  });
+
+  test("evo_qrpool：一次最多清 5 台，剩下的下一次接着清", async () => {
+    const uids = ["a", "b", "c", "d", "e", "f", "g"];
+    const store = { evo_devices: uids.map((u) => ({ _id: u, openid: null, unbound_at: 1 })), ...withData(uids) };
+    const fn = loadCloudFunction("evo_qrpool", store, {});
+    assert.equal((await fn.main()).swept, 5);
+    assert.equal(store.evo_matches.length, 2);
+    assert.equal((await fn.main()).swept, 2);
+    assert.equal(left(store), " |  | ");
+  });
+
+  test("evo_qrpool：删到一半出错不记清过，下一次再清；补码不受影响", async () => {
+    const store = { evo_devices: [{ _id: "kept", openid: null, unbound_at: 1 }], ...withData(["kept"]) };
+    const r = await loadCloudFunction("evo_qrpool", store, {}, { failRemove: "evo_lobby" }).main();
+    assert.equal(r.swept, 0);
+    assert.equal(r.made, 2);
+    assert.match(r.errors.join(), /sweep kept: timeout/);
+    assert.equal(store.evo_devices[0].swept_at, undefined);
+    assert.equal((await loadCloudFunction("evo_qrpool", store, {}).main()).swept, 1, "下一次清掉了");
+    assert.equal(left(store), " |  | ");
   });
 });
