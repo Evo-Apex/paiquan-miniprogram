@@ -2,23 +2,970 @@
 // 数据来源：B站直播回放的离线识别（同域模板匹配 + 武器名 OCR）。
 // ⚠️ 未经人工核验，仅供预览。
 module.exports = {
-  "updated": "2026-11-12",
+  "updated": "2026-11-13",
   "season": "S31",
   "players": [
+    {
+      "id": "jackyar",
+      "name": "Jackyar",
+      "tag": "",
+      "role": "主播",
+      "source": "B站直播回放 · 第31赛季排位 · 381 帧",
+      "hours": 0,
+      "note": "英雄覆盖 65.7% · 未人工核验",
+      "heroes": [
+        {
+          "zh": "动力小子",
+          "en": "Octane",
+          "n": 176,
+          "pct": 29.3
+        },
+        {
+          "zh": "探路者",
+          "en": "Pathfinder",
+          "n": 138,
+          "pct": 23.0
+        },
+        {
+          "zh": "命脉",
+          "en": "Lifeline",
+          "n": 117,
+          "pct": 19.5
+        },
+        {
+          "zh": "罗芭",
+          "en": "Loba",
+          "n": 78,
+          "pct": 13.0
+        },
+        {
+          "zh": "亡灵",
+          "en": "Revenant",
+          "n": 34,
+          "pct": 5.7
+        },
+        {
+          "zh": "变换",
+          "en": "Alter",
+          "n": 26,
+          "pct": 4.3
+        },
+        {
+          "zh": "班加罗尔",
+          "en": "Bangalore",
+          "n": 13,
+          "pct": 2.2
+        },
+        {
+          "zh": "恶灵",
+          "en": "Wraith",
+          "n": 8,
+          "pct": 1.3
+        },
+        {
+          "zh": "疯马吉",
+          "en": "Mad Maggie",
+          "n": 6,
+          "pct": 1.0
+        },
+        {
+          "zh": "密客",
+          "en": "Crypto",
+          "n": 4,
+          "pct": 0.7
+        }
+      ],
+      "combos": [
+        {
+          "heroes": [
+            "亡灵",
+            "动力小子",
+            "命脉"
+          ],
+          "en": [
+            "Revenant",
+            "Octane",
+            "Lifeline"
+          ],
+          "n": 12,
+          "pct": 50.0
+        },
+        {
+          "heroes": [
+            "动力小子",
+            "命脉",
+            "探路者"
+          ],
+          "en": [
+            "Octane",
+            "Lifeline",
+            "Pathfinder"
+          ],
+          "n": 12,
+          "pct": 50.0
+        }
+      ],
+      "weapons": [
+        {
+          "zh": "C.A.R冲锋枪",
+          "zhShort": "C.A.R",
+          "en": "C.A.R.",
+          "n": 34,
+          "pct": 38.6
+        },
+        {
+          "zh": "VK-47平行步枪",
+          "zhShort": "VK-47平行",
+          "en": "VK-47 Flatline",
+          "n": 29,
+          "pct": 33.0
+        },
+        {
+          "zh": "R-301自动步枪",
+          "zhShort": "R-301",
+          "en": "R-301",
+          "n": 7,
+          "pct": 8.0
+        },
+        {
+          "zh": "复仇女神连发突击步枪",
+          "zhShort": "复仇女神",
+          "en": "Nemesis",
+          "n": 4,
+          "pct": 4.5
+        },
+        {
+          "zh": "转换者冲锋枪",
+          "zhShort": "转换者",
+          "en": "Alternator",
+          "n": 3,
+          "pct": 3.4
+        },
+        {
+          "zh": "辅助手枪",
+          "zhShort": "辅助",
+          "en": "Wingman",
+          "n": 3,
+          "pct": 3.4
+        },
+        {
+          "zh": "赫姆洛克突击步枪",
+          "zhShort": "赫姆洛克",
+          "en": "Hemlok",
+          "n": 2,
+          "pct": 2.3
+        },
+        {
+          "zh": "哈沃克步枪",
+          "zhShort": "哈沃克",
+          "en": "Havoc",
+          "n": 2,
+          "pct": 2.3
+        },
+        {
+          "zh": "电能冲锋枪",
+          "zhShort": "电能",
+          "en": "Volt",
+          "n": 2,
+          "pct": 2.3
+        },
+        {
+          "zh": "暴走轻机枪",
+          "zhShort": "暴走",
+          "en": "Rampage",
+          "n": 1,
+          "pct": 1.1
+        },
+        {
+          "zh": "专注轻机枪",
+          "zhShort": "专注",
+          "en": "Devotion",
+          "n": 1,
+          "pct": 1.1
+        }
+      ],
+      "weaponPairs": [
+        {
+          "zh": [
+            "C.A.R",
+            "VK-47平行"
+          ],
+          "zhFull": [
+            "C.A.R冲锋枪",
+            "VK-47平行步枪"
+          ],
+          "en": [
+            "C.A.R.",
+            "VK-47 Flatline"
+          ],
+          "n": 24,
+          "pct": 66.7
+        },
+        {
+          "zh": [
+            "C.A.R",
+            "复仇女神"
+          ],
+          "zhFull": [
+            "C.A.R冲锋枪",
+            "复仇女神连发突击步枪"
+          ],
+          "en": [
+            "C.A.R.",
+            "Nemesis"
+          ],
+          "n": 3,
+          "pct": 8.3
+        },
+        {
+          "zh": [
+            "C.A.R",
+            "赫姆洛克"
+          ],
+          "zhFull": [
+            "C.A.R冲锋枪",
+            "赫姆洛克突击步枪"
+          ],
+          "en": [
+            "C.A.R.",
+            "Hemlok"
+          ],
+          "n": 2,
+          "pct": 5.6
+        },
+        {
+          "zh": [
+            "VK-47平行",
+            "电能"
+          ],
+          "zhFull": [
+            "VK-47平行步枪",
+            "电能冲锋枪"
+          ],
+          "en": [
+            "VK-47 Flatline",
+            "Volt"
+          ],
+          "n": 2,
+          "pct": 5.6
+        },
+        {
+          "zh": [
+            "转换者",
+            "R-301"
+          ],
+          "zhFull": [
+            "转换者冲锋枪",
+            "R-301自动步枪"
+          ],
+          "en": [
+            "Alternator",
+            "R-301"
+          ],
+          "n": 1,
+          "pct": 2.8
+        },
+        {
+          "zh": [
+            "转换者",
+            "复仇女神"
+          ],
+          "zhFull": [
+            "转换者冲锋枪",
+            "复仇女神连发突击步枪"
+          ],
+          "en": [
+            "Alternator",
+            "Nemesis"
+          ],
+          "n": 1,
+          "pct": 2.8
+        },
+        {
+          "zh": [
+            "C.A.R",
+            "暴走"
+          ],
+          "zhFull": [
+            "C.A.R冲锋枪",
+            "暴走轻机枪"
+          ],
+          "en": [
+            "C.A.R.",
+            "Rampage"
+          ],
+          "n": 1,
+          "pct": 2.8
+        },
+        {
+          "zh": [
+            "转换者",
+            "哈沃克"
+          ],
+          "zhFull": [
+            "转换者冲锋枪",
+            "哈沃克步枪"
+          ],
+          "en": [
+            "Alternator",
+            "Havoc"
+          ],
+          "n": 1,
+          "pct": 2.8
+        },
+        {
+          "zh": [
+            "C.A.R",
+            "R-301"
+          ],
+          "zhFull": [
+            "C.A.R冲锋枪",
+            "R-301自动步枪"
+          ],
+          "en": [
+            "C.A.R.",
+            "R-301"
+          ],
+          "n": 1,
+          "pct": 2.8
+        }
+      ],
+      "selfHeroes": [
+        {
+          "zh": "动力小子",
+          "n": 385,
+          "pct": 41.5
+        },
+        {
+          "zh": "探路者",
+          "n": 123,
+          "pct": 13.3
+        },
+        {
+          "zh": "罗芭",
+          "n": 93,
+          "pct": 10.0
+        },
+        {
+          "zh": "恶灵",
+          "n": 81,
+          "pct": 8.7
+        },
+        {
+          "zh": "直布罗陀",
+          "n": 79,
+          "pct": 8.5
+        },
+        {
+          "zh": "密客",
+          "n": 66,
+          "pct": 7.1
+        },
+        {
+          "zh": "亡灵",
+          "n": 56,
+          "pct": 6.0
+        },
+        {
+          "zh": "卡特莉丝",
+          "n": 12,
+          "pct": 1.3
+        },
+        {
+          "zh": "变换",
+          "n": 3,
+          "pct": 0.3
+        }
+      ]
+    },
+    {
+      "id": "faide",
+      "name": "faide",
+      "tag": "",
+      "role": "主播",
+      "source": "B站直播回放 · 第31赛季排位 · 295 帧",
+      "hours": 0,
+      "note": "英雄覆盖 70.6% · 未人工核验",
+      "heroes": [
+        {
+          "zh": "恶灵",
+          "en": "Wraith",
+          "n": 243,
+          "pct": 50.2
+        },
+        {
+          "zh": "罗芭",
+          "en": "Loba",
+          "n": 55,
+          "pct": 11.4
+        },
+        {
+          "zh": "动力小子",
+          "en": "Octane",
+          "n": 47,
+          "pct": 9.7
+        },
+        {
+          "zh": "探路者",
+          "en": "Pathfinder",
+          "n": 35,
+          "pct": 7.2
+        },
+        {
+          "zh": "变换",
+          "en": "Alter",
+          "n": 28,
+          "pct": 5.8
+        },
+        {
+          "zh": "命脉",
+          "en": "Lifeline",
+          "n": 27,
+          "pct": 5.6
+        },
+        {
+          "zh": "亡灵",
+          "en": "Revenant",
+          "n": 27,
+          "pct": 5.6
+        },
+        {
+          "zh": "疯马吉",
+          "en": "Mad Maggie",
+          "n": 15,
+          "pct": 3.1
+        },
+        {
+          "zh": "班加罗尔",
+          "en": "Bangalore",
+          "n": 5,
+          "pct": 1.0
+        },
+        {
+          "zh": "万蒂奇",
+          "en": "Vantage",
+          "n": 2,
+          "pct": 0.4
+        }
+      ],
+      "combos": [
+        {
+          "heroes": [
+            "亡灵",
+            "动力小子",
+            "恶灵"
+          ],
+          "en": [
+            "Revenant",
+            "Octane",
+            "Wraith"
+          ],
+          "n": 2,
+          "pct": 20.0
+        },
+        {
+          "heroes": [
+            "动力小子",
+            "恶灵",
+            "探路者"
+          ],
+          "en": [
+            "Octane",
+            "Wraith",
+            "Pathfinder"
+          ],
+          "n": 2,
+          "pct": 20.0
+        },
+        {
+          "heroes": [
+            "命脉",
+            "恶灵",
+            "罗芭"
+          ],
+          "en": [
+            "Lifeline",
+            "Wraith",
+            "Loba"
+          ],
+          "n": 1,
+          "pct": 10.0
+        },
+        {
+          "heroes": [
+            "动力小子",
+            "恶灵",
+            "班加罗尔"
+          ],
+          "en": [
+            "Octane",
+            "Wraith",
+            "Bangalore"
+          ],
+          "n": 1,
+          "pct": 10.0
+        },
+        {
+          "heroes": [
+            "动力小子",
+            "命脉",
+            "恶灵"
+          ],
+          "en": [
+            "Octane",
+            "Lifeline",
+            "Wraith"
+          ],
+          "n": 1,
+          "pct": 10.0
+        },
+        {
+          "heroes": [
+            "动力小子",
+            "恶灵",
+            "罗芭"
+          ],
+          "en": [
+            "Octane",
+            "Wraith",
+            "Loba"
+          ],
+          "n": 1,
+          "pct": 10.0
+        },
+        {
+          "heroes": [
+            "变换",
+            "恶灵",
+            "探路者"
+          ],
+          "en": [
+            "Alter",
+            "Wraith",
+            "Pathfinder"
+          ],
+          "n": 1,
+          "pct": 10.0
+        },
+        {
+          "heroes": [
+            "亡灵",
+            "变换",
+            "恶灵"
+          ],
+          "en": [
+            "Revenant",
+            "Alter",
+            "Wraith"
+          ],
+          "n": 1,
+          "pct": 10.0
+        }
+      ],
+      "weapons": [
+        {
+          "zh": "和平捍卫者霰弹枪",
+          "zhShort": "和平捍卫者",
+          "en": "Peacekeeper",
+          "n": 132,
+          "pct": 16.8
+        },
+        {
+          "zh": "敖犬霰弹枪",
+          "zhShort": "敖犬",
+          "en": "Mastiff",
+          "n": 116,
+          "pct": 14.8
+        },
+        {
+          "zh": "电能冲锋枪",
+          "zhShort": "电能",
+          "en": "Volt",
+          "n": 60,
+          "pct": 7.6
+        },
+        {
+          "zh": "EVA-8自动霰弹枪",
+          "zhShort": "EVA-8自动",
+          "en": "EVA-8",
+          "n": 58,
+          "pct": 7.4
+        },
+        {
+          "zh": "C.A.R冲锋枪",
+          "zhShort": "C.A.R",
+          "en": "C.A.R.",
+          "n": 55,
+          "pct": 7.0
+        },
+        {
+          "zh": "L-STAR能量机枪",
+          "zhShort": "L-STAR",
+          "en": "L-STAR",
+          "n": 53,
+          "pct": 6.7
+        },
+        {
+          "zh": "辅助手枪",
+          "zhShort": "辅助",
+          "en": "Wingman",
+          "n": 46,
+          "pct": 5.9
+        },
+        {
+          "zh": "R-301自动步枪",
+          "zhShort": "R-301",
+          "en": "R-301",
+          "n": 44,
+          "pct": 5.6
+        },
+        {
+          "zh": "VK-47平行步枪",
+          "zhShort": "VK-47平行",
+          "en": "VK-47 Flatline",
+          "n": 41,
+          "pct": 5.2
+        },
+        {
+          "zh": "哨兵狙击步枪",
+          "zhShort": "哨兵",
+          "en": "Sentinel",
+          "n": 38,
+          "pct": 4.8
+        },
+        {
+          "zh": "R-99冲锋枪",
+          "zhShort": "R-99",
+          "en": "R-99",
+          "n": 27,
+          "pct": 3.4
+        },
+        {
+          "zh": "复仇女神连发突击步枪",
+          "zhShort": "复仇女神",
+          "en": "Nemesis",
+          "n": 24,
+          "pct": 3.1
+        },
+        {
+          "zh": "哈沃克步枪",
+          "zhShort": "哈沃克",
+          "en": "Havoc",
+          "n": 14,
+          "pct": 1.8
+        },
+        {
+          "zh": "赫姆洛克突击步枪",
+          "zhShort": "赫姆洛克",
+          "en": "Hemlok",
+          "n": 14,
+          "pct": 1.8
+        },
+        {
+          "zh": "P2020手枪",
+          "zhShort": "P2020",
+          "en": "P2020",
+          "n": 13,
+          "pct": 1.7
+        },
+        {
+          "zh": "转换者冲锋枪",
+          "zhShort": "转换者",
+          "en": "Alternator",
+          "n": 12,
+          "pct": 1.5
+        },
+        {
+          "zh": "克雷贝尔50口径狙击枪",
+          "zhShort": "克雷贝尔50口径",
+          "en": "Kraber",
+          "n": 11,
+          "pct": 1.4
+        },
+        {
+          "zh": "三重式狙击枪",
+          "zhShort": "三重式",
+          "en": "Triple Take",
+          "n": 8,
+          "pct": 1.0
+        },
+        {
+          "zh": "暴走轻机枪",
+          "zhShort": "暴走",
+          "en": "Rampage",
+          "n": 7,
+          "pct": 0.9
+        },
+        {
+          "zh": "猎兽冲锋枪",
+          "zhShort": "猎兽",
+          "en": "Prowler",
+          "n": 6,
+          "pct": 0.8
+        },
+        {
+          "zh": "RE-45自动手枪",
+          "zhShort": "RE-45",
+          "en": "RE-45",
+          "n": 4,
+          "pct": 0.5
+        },
+        {
+          "zh": "长弓精确步枪",
+          "zhShort": "长弓",
+          "en": "Longbow DMR",
+          "n": 2,
+          "pct": 0.3
+        },
+        {
+          "zh": "M600喷火轻机枪",
+          "zhShort": "M600喷火",
+          "en": "M600 Spitfire",
+          "n": 1,
+          "pct": 0.1
+        }
+      ],
+      "weaponPairs": [
+        {
+          "zh": [
+            "C.A.R",
+            "哨兵"
+          ],
+          "zhFull": [
+            "C.A.R冲锋枪",
+            "哨兵狙击步枪"
+          ],
+          "en": [
+            "C.A.R.",
+            "Sentinel"
+          ],
+          "n": 33,
+          "pct": 13.6
+        },
+        {
+          "zh": [
+            "和平捍卫者",
+            "R-301"
+          ],
+          "zhFull": [
+            "和平捍卫者霰弹枪",
+            "R-301自动步枪"
+          ],
+          "en": [
+            "Peacekeeper",
+            "R-301"
+          ],
+          "n": 26,
+          "pct": 10.7
+        },
+        {
+          "zh": [
+            "L-STAR",
+            "和平捍卫者"
+          ],
+          "zhFull": [
+            "L-STAR能量机枪",
+            "和平捍卫者霰弹枪"
+          ],
+          "en": [
+            "L-STAR",
+            "Peacekeeper"
+          ],
+          "n": 23,
+          "pct": 9.5
+        },
+        {
+          "zh": [
+            "VK-47平行",
+            "敖犬"
+          ],
+          "zhFull": [
+            "VK-47平行步枪",
+            "敖犬霰弹枪"
+          ],
+          "en": [
+            "VK-47 Flatline",
+            "Mastiff"
+          ],
+          "n": 19,
+          "pct": 7.9
+        },
+        {
+          "zh": [
+            "L-STAR",
+            "敖犬"
+          ],
+          "zhFull": [
+            "L-STAR能量机枪",
+            "敖犬霰弹枪"
+          ],
+          "en": [
+            "L-STAR",
+            "Mastiff"
+          ],
+          "n": 19,
+          "pct": 7.9
+        },
+        {
+          "zh": [
+            "敖犬",
+            "复仇女神"
+          ],
+          "zhFull": [
+            "敖犬霰弹枪",
+            "复仇女神连发突击步枪"
+          ],
+          "en": [
+            "Mastiff",
+            "Nemesis"
+          ],
+          "n": 18,
+          "pct": 7.4
+        },
+        {
+          "zh": [
+            "EVA-8自动",
+            "克雷贝尔50口径"
+          ],
+          "zhFull": [
+            "EVA-8自动霰弹枪",
+            "克雷贝尔50口径狙击枪"
+          ],
+          "en": [
+            "EVA-8",
+            "Kraber"
+          ],
+          "n": 11,
+          "pct": 4.5
+        },
+        {
+          "zh": [
+            "EVA-8自动",
+            "VK-47平行"
+          ],
+          "zhFull": [
+            "EVA-8自动霰弹枪",
+            "VK-47平行步枪"
+          ],
+          "en": [
+            "EVA-8",
+            "VK-47 Flatline"
+          ],
+          "n": 11,
+          "pct": 4.5
+        },
+        {
+          "zh": [
+            "敖犬",
+            "R-301"
+          ],
+          "zhFull": [
+            "敖犬霰弹枪",
+            "R-301自动步枪"
+          ],
+          "en": [
+            "Mastiff",
+            "R-301"
+          ],
+          "n": 10,
+          "pct": 4.1
+        },
+        {
+          "zh": [
+            "EVA-8自动",
+            "哈沃克"
+          ],
+          "zhFull": [
+            "EVA-8自动霰弹枪",
+            "哈沃克步枪"
+          ],
+          "en": [
+            "EVA-8",
+            "Havoc"
+          ],
+          "n": 9,
+          "pct": 3.7
+        },
+        {
+          "zh": [
+            "和平捍卫者",
+            "三重式"
+          ],
+          "zhFull": [
+            "和平捍卫者霰弹枪",
+            "三重式狙击枪"
+          ],
+          "en": [
+            "Peacekeeper",
+            "Triple Take"
+          ],
+          "n": 7,
+          "pct": 2.9
+        },
+        {
+          "zh": [
+            "R-301",
+            "辅助"
+          ],
+          "zhFull": [
+            "R-301自动步枪",
+            "辅助手枪"
+          ],
+          "en": [
+            "R-301",
+            "Wingman"
+          ],
+          "n": 7,
+          "pct": 2.9
+        }
+      ],
+      "selfHeroes": [
+        {
+          "zh": "恶灵",
+          "n": 375,
+          "pct": 75.2
+        },
+        {
+          "zh": "命脉",
+          "n": 67,
+          "pct": 13.4
+        },
+        {
+          "zh": "疯马吉",
+          "n": 12,
+          "pct": 2.4
+        },
+        {
+          "zh": "班加罗尔",
+          "n": 8,
+          "pct": 1.6
+        },
+        {
+          "zh": "亡灵",
+          "n": 5,
+          "pct": 1.0
+        },
+        {
+          "zh": "动力小子",
+          "n": 4,
+          "pct": 0.8
+        }
+      ]
+    },
     {
       "id": "ttv_bolin",
       "name": "ttv_bolin",
       "tag": "",
       "role": "主播",
-      "source": "B站直播回放 · 第31赛季排位 · 271 帧",
+      "source": "B站直播回放 · 第31赛季排位 · 273 帧",
       "hours": 0,
-      "note": "英雄覆盖 71.0% · 未人工核验",
+      "note": "英雄覆盖 70.7% · 未人工核验",
       "heroes": [
         {
           "zh": "罗芭",
           "en": "Loba",
           "n": 153,
-          "pct": 38.2
+          "pct": 38.1
         },
         {
           "zh": "探路者",
@@ -35,8 +982,8 @@ module.exports = {
         {
           "zh": "疯马吉",
           "en": "Mad Maggie",
-          "n": 58,
-          "pct": 14.5
+          "n": 59,
+          "pct": 14.7
         },
         {
           "zh": "亡灵",
@@ -146,50 +1093,50 @@ module.exports = {
           "zh": "C.A.R冲锋枪",
           "zhShort": "C.A.R",
           "en": "C.A.R.",
-          "n": 98,
+          "n": 99,
           "pct": 20.8
         },
         {
           "zh": "复仇女神连发突击步枪",
           "zhShort": "复仇女神",
           "en": "Nemesis",
-          "n": 97,
+          "n": 98,
           "pct": 20.6
         },
         {
           "zh": "辅助手枪",
           "zhShort": "辅助",
           "en": "Wingman",
-          "n": 73,
-          "pct": 15.5
+          "n": 74,
+          "pct": 15.6
         },
         {
           "zh": "猎兽冲锋枪",
           "zhShort": "猎兽",
           "en": "Prowler",
-          "n": 48,
-          "pct": 10.2
+          "n": 49,
+          "pct": 10.3
         },
         {
           "zh": "哈沃克步枪",
           "zhShort": "哈沃克",
           "en": "Havoc",
           "n": 31,
-          "pct": 6.6
+          "pct": 6.5
         },
         {
           "zh": "VK-47平行步枪",
           "zhShort": "VK-47平行",
           "en": "VK-47 Flatline",
           "n": 30,
-          "pct": 6.4
+          "pct": 6.3
         },
         {
           "zh": "三重式狙击枪",
           "zhShort": "三重式",
           "en": "Triple Take",
           "n": 30,
-          "pct": 6.4
+          "pct": 6.3
         },
         {
           "zh": "电能冲锋枪",
@@ -263,7 +1210,7 @@ module.exports = {
             "Wingman"
           ],
           "n": 33,
-          "pct": 17.8
+          "pct": 17.7
         },
         {
           "zh": [
@@ -278,8 +1225,8 @@ module.exports = {
             "Nemesis",
             "Prowler"
           ],
-          "n": 30,
-          "pct": 16.2
+          "n": 31,
+          "pct": 16.7
         },
         {
           "zh": [
@@ -295,7 +1242,7 @@ module.exports = {
             "Havoc"
           ],
           "n": 22,
-          "pct": 11.9
+          "pct": 11.8
         },
         {
           "zh": [
@@ -327,7 +1274,7 @@ module.exports = {
             "Nemesis"
           ],
           "n": 19,
-          "pct": 10.3
+          "pct": 10.2
         },
         {
           "zh": [
@@ -343,7 +1290,7 @@ module.exports = {
             "Triple Take"
           ],
           "n": 14,
-          "pct": 7.6
+          "pct": 7.5
         },
         {
           "zh": [
@@ -375,7 +1322,7 @@ module.exports = {
             "Volt"
           ],
           "n": 9,
-          "pct": 4.9
+          "pct": 4.8
         },
         {
           "zh": [
@@ -391,7 +1338,7 @@ module.exports = {
             "P2020"
           ],
           "n": 9,
-          "pct": 4.9
+          "pct": 4.8
         },
         {
           "zh": [
@@ -470,57 +1417,57 @@ module.exports = {
       "name": "文轩Wenxx",
       "tag": "",
       "role": "主播",
-      "source": "B站直播回放 · 第31赛季排位 · 215 帧",
+      "source": "B站直播回放 · 第31赛季排位 · 221 帧",
       "hours": 0,
-      "note": "英雄覆盖 75.9% · 未人工核验",
+      "note": "英雄覆盖 75.6% · 未人工核验",
       "heroes": [
         {
           "zh": "疯马吉",
           "en": "Mad Maggie",
-          "n": 90,
-          "pct": 30.4
+          "n": 92,
+          "pct": 30.1
         },
         {
           "zh": "探路者",
           "en": "Pathfinder",
-          "n": 61,
-          "pct": 20.6
+          "n": 65,
+          "pct": 21.2
         },
         {
           "zh": "亡灵",
           "en": "Revenant",
-          "n": 56,
-          "pct": 18.9
+          "n": 57,
+          "pct": 18.6
         },
         {
           "zh": "罗芭",
           "en": "Loba",
-          "n": 29,
-          "pct": 9.8
+          "n": 31,
+          "pct": 10.1
         },
         {
           "zh": "命脉",
           "en": "Lifeline",
-          "n": 24,
-          "pct": 8.1
+          "n": 25,
+          "pct": 8.2
         },
         {
           "zh": "班加罗尔",
           "en": "Bangalore",
           "n": 22,
-          "pct": 7.4
+          "pct": 7.2
         },
         {
           "zh": "动力小子",
           "en": "Octane",
           "n": 10,
-          "pct": 3.4
+          "pct": 3.3
         },
         {
           "zh": "密客",
           "en": "Crypto",
           "n": 4,
-          "pct": 1.4
+          "pct": 1.3
         }
       ],
       "combos": [
@@ -558,78 +1505,78 @@ module.exports = {
           "zh": "复仇女神连发突击步枪",
           "zhShort": "复仇女神",
           "en": "Nemesis",
-          "n": 101,
-          "pct": 19.0
+          "n": 102,
+          "pct": 18.7
         },
         {
           "zh": "C.A.R冲锋枪",
           "zhShort": "C.A.R",
           "en": "C.A.R.",
-          "n": 99,
-          "pct": 18.6
+          "n": 102,
+          "pct": 18.7
         },
         {
           "zh": "赫姆洛克突击步枪",
           "zhShort": "赫姆洛克",
           "en": "Hemlok",
-          "n": 92,
-          "pct": 17.3
+          "n": 93,
+          "pct": 17.0
         },
         {
           "zh": "EVA-8自动霰弹枪",
           "zhShort": "EVA-8自动",
           "en": "EVA-8",
-          "n": 77,
-          "pct": 14.5
+          "n": 78,
+          "pct": 14.3
         },
         {
           "zh": "电能冲锋枪",
           "zhShort": "电能",
           "en": "Volt",
-          "n": 35,
+          "n": 36,
           "pct": 6.6
         },
         {
           "zh": "三重式狙击枪",
           "zhShort": "三重式",
           "en": "Triple Take",
-          "n": 26,
+          "n": 27,
           "pct": 4.9
         },
         {
           "zh": "猎兽冲锋枪",
           "zhShort": "猎兽",
           "en": "Prowler",
-          "n": 21,
-          "pct": 3.9
+          "n": 23,
+          "pct": 4.2
+        },
+        {
+          "zh": "G7侦查步枪",
+          "zhShort": "G7",
+          "en": "G7 Scout",
+          "n": 13,
+          "pct": 2.4
         },
         {
           "zh": "R-99冲锋枪",
           "zhShort": "R-99",
           "en": "R-99",
           "n": 12,
-          "pct": 2.3
-        },
-        {
-          "zh": "G7侦查步枪",
-          "zhShort": "G7",
-          "en": "G7 Scout",
-          "n": 11,
-          "pct": 2.1
+          "pct": 2.2
         },
         {
           "zh": "暴走轻机枪",
           "zhShort": "暴走",
           "en": "Rampage",
-          "n": 8,
-          "pct": 1.5
+          "n": 9,
+          "pct": 1.6
         },
         {
           "zh": "L-STAR能量机枪",
           "zhShort": "L-STAR",
           "en": "L-STAR",
-          "n": 8,
-          "pct": 1.5
+          "n": 9,
+          "pct": 1.6
         },
         {
           "zh": "辅助手枪",
@@ -657,28 +1604,28 @@ module.exports = {
           "zhShort": "VK-47平行",
           "en": "VK-47 Flatline",
           "n": 4,
-          "pct": 0.8
+          "pct": 0.7
         },
         {
           "zh": "敖犬霰弹枪",
           "zhShort": "敖犬",
           "en": "Mastiff",
           "n": 4,
-          "pct": 0.8
+          "pct": 0.7
         },
         {
           "zh": "哈沃克步枪",
           "zhShort": "哈沃克",
           "en": "Havoc",
           "n": 4,
-          "pct": 0.8
+          "pct": 0.7
         },
         {
           "zh": "和平捍卫者霰弹枪",
           "zhShort": "和平捍卫者",
           "en": "Peacekeeper",
           "n": 3,
-          "pct": 0.6
+          "pct": 0.5
         },
         {
           "zh": "P2020手枪",
@@ -744,8 +1691,8 @@ module.exports = {
             "C.A.R.",
             "Hemlok"
           ],
-          "n": 51,
-          "pct": 20.8
+          "n": 52,
+          "pct": 20.6
         },
         {
           "zh": [
@@ -761,7 +1708,7 @@ module.exports = {
             "Nemesis"
           ],
           "n": 48,
-          "pct": 19.6
+          "pct": 19.0
         },
         {
           "zh": [
@@ -776,7 +1723,7 @@ module.exports = {
             "C.A.R.",
             "Nemesis"
           ],
-          "n": 39,
+          "n": 40,
           "pct": 15.9
         },
         {
@@ -793,7 +1740,7 @@ module.exports = {
             "Volt"
           ],
           "n": 21,
-          "pct": 8.6
+          "pct": 8.3
         },
         {
           "zh": [
@@ -809,7 +1756,7 @@ module.exports = {
             "Hemlok"
           ],
           "n": 17,
-          "pct": 6.9
+          "pct": 6.7
         },
         {
           "zh": [
@@ -824,8 +1771,8 @@ module.exports = {
             "G7 Scout",
             "Prowler"
           ],
-          "n": 10,
-          "pct": 4.1
+          "n": 12,
+          "pct": 4.8
         },
         {
           "zh": [
@@ -841,7 +1788,39 @@ module.exports = {
             "R-99"
           ],
           "n": 10,
-          "pct": 4.1
+          "pct": 4.0
+        },
+        {
+          "zh": [
+            "L-STAR",
+            "电能"
+          ],
+          "zhFull": [
+            "L-STAR能量机枪",
+            "电能冲锋枪"
+          ],
+          "en": [
+            "L-STAR",
+            "Volt"
+          ],
+          "n": 5,
+          "pct": 2.0
+        },
+        {
+          "zh": [
+            "EVA-8自动",
+            "暴走"
+          ],
+          "zhFull": [
+            "EVA-8自动霰弹枪",
+            "暴走轻机枪"
+          ],
+          "en": [
+            "EVA-8",
+            "Rampage"
+          ],
+          "n": 5,
+          "pct": 2.0
         },
         {
           "zh": [
@@ -861,22 +1840,6 @@ module.exports = {
         },
         {
           "zh": [
-            "L-STAR",
-            "电能"
-          ],
-          "zhFull": [
-            "L-STAR能量机枪",
-            "电能冲锋枪"
-          ],
-          "en": [
-            "L-STAR",
-            "Volt"
-          ],
-          "n": 4,
-          "pct": 1.6
-        },
-        {
-          "zh": [
             "复仇女神",
             "电能"
           ],
@@ -903,22 +1866,6 @@ module.exports = {
           "en": [
             "Nemesis",
             "Prowler"
-          ],
-          "n": 4,
-          "pct": 1.6
-        },
-        {
-          "zh": [
-            "EVA-8自动",
-            "暴走"
-          ],
-          "zhFull": [
-            "EVA-8自动霰弹枪",
-            "暴走轻机枪"
-          ],
-          "en": [
-            "EVA-8",
-            "Rampage"
           ],
           "n": 4,
           "pct": 1.6
@@ -962,39 +1909,45 @@ module.exports = {
       "name": "APEX-QQ (皮蛋）",
       "tag": "",
       "role": "主播",
-      "source": "B站直播回放 · 第31赛季排位 · 196 帧",
+      "source": "B站直播回放 · 第31赛季排位 · 211 帧",
       "hours": 0,
-      "note": "英雄覆盖 89.7% · 未人工核验",
+      "note": "英雄覆盖 88.5% · 未人工核验",
       "heroes": [
         {
           "zh": "变换",
           "en": "Alter",
-          "n": 147,
-          "pct": 33.2
-        },
-        {
-          "zh": "疯马吉",
-          "en": "Mad Maggie",
-          "n": 125,
-          "pct": 28.2
+          "n": 149,
+          "pct": 32.1
         },
         {
           "zh": "探路者",
           "en": "Pathfinder",
-          "n": 118,
-          "pct": 26.6
+          "n": 131,
+          "pct": 28.2
+        },
+        {
+          "zh": "疯马吉",
+          "en": "Mad Maggie",
+          "n": 126,
+          "pct": 27.2
         },
         {
           "zh": "恶灵",
           "en": "Wraith",
-          "n": 50,
-          "pct": 11.3
+          "n": 53,
+          "pct": 11.4
         },
         {
           "zh": "罗芭",
           "en": "Loba",
           "n": 3,
-          "pct": 0.7
+          "pct": 0.6
+        },
+        {
+          "zh": "动力小子",
+          "en": "Octane",
+          "n": 2,
+          "pct": 0.4
         }
       ],
       "combos": [
@@ -1032,57 +1985,71 @@ module.exports = {
           "zh": "复仇女神连发突击步枪",
           "zhShort": "复仇女神",
           "en": "Nemesis",
-          "n": 154,
-          "pct": 40.2
+          "n": 158,
+          "pct": 38.5
         },
         {
           "zh": "C.A.R冲锋枪",
           "zhShort": "C.A.R",
           "en": "C.A.R.",
-          "n": 142,
-          "pct": 37.1
+          "n": 145,
+          "pct": 35.4
         },
         {
           "zh": "电能冲锋枪",
           "zhShort": "电能",
           "en": "Volt",
           "n": 23,
-          "pct": 6.0
+          "pct": 5.6
         },
         {
           "zh": "哈沃克步枪",
           "zhShort": "哈沃克",
           "en": "Havoc",
-          "n": 15,
+          "n": 16,
           "pct": 3.9
+        },
+        {
+          "zh": "充能步枪",
+          "zhShort": "充能",
+          "en": "Charge Rifle",
+          "n": 14,
+          "pct": 3.4
         },
         {
           "zh": "三重式狙击枪",
           "zhShort": "三重式",
           "en": "Triple Take",
           "n": 14,
-          "pct": 3.7
+          "pct": 3.4
         },
         {
           "zh": "R-99冲锋枪",
           "zhShort": "R-99",
           "en": "R-99",
           "n": 12,
-          "pct": 3.1
+          "pct": 2.9
         },
         {
           "zh": "转换者冲锋枪",
           "zhShort": "转换者",
           "en": "Alternator",
           "n": 10,
-          "pct": 2.6
+          "pct": 2.4
+        },
+        {
+          "zh": "辅助手枪",
+          "zhShort": "辅助",
+          "en": "Wingman",
+          "n": 6,
+          "pct": 1.5
         },
         {
           "zh": "L-STAR能量机枪",
           "zhShort": "L-STAR",
           "en": "L-STAR",
           "n": 5,
-          "pct": 1.3
+          "pct": 1.2
         },
         {
           "zh": "赫姆洛克突击步枪",
@@ -1092,18 +2059,18 @@ module.exports = {
           "pct": 1.0
         },
         {
-          "zh": "充能步枪",
-          "zhShort": "充能",
-          "en": "Charge Rifle",
-          "n": 3,
-          "pct": 0.8
+          "zh": "莫桑比克霰弹枪",
+          "zhShort": "莫桑比克",
+          "en": "Mozambique",
+          "n": 2,
+          "pct": 0.5
         },
         {
-          "zh": "辅助手枪",
-          "zhShort": "辅助",
-          "en": "Wingman",
+          "zh": "R-301自动步枪",
+          "zhShort": "R-301",
+          "en": "R-301",
           "n": 1,
-          "pct": 0.3
+          "pct": 0.2
         }
       ],
       "weaponPairs": [
@@ -1120,8 +2087,8 @@ module.exports = {
             "C.A.R.",
             "Nemesis"
           ],
-          "n": 104,
-          "pct": 62.3
+          "n": 107,
+          "pct": 60.5
         },
         {
           "zh": [
@@ -1137,7 +2104,7 @@ module.exports = {
             "Volt"
           ],
           "n": 23,
-          "pct": 13.8
+          "pct": 13.0
         },
         {
           "zh": [
@@ -1153,7 +2120,7 @@ module.exports = {
             "Nemesis"
           ],
           "n": 9,
-          "pct": 5.4
+          "pct": 5.1
         },
         {
           "zh": [
@@ -1169,7 +2136,7 @@ module.exports = {
             "Triple Take"
           ],
           "n": 7,
-          "pct": 4.2
+          "pct": 4.0
         },
         {
           "zh": [
@@ -1185,7 +2152,23 @@ module.exports = {
             "Triple Take"
           ],
           "n": 7,
-          "pct": 4.2
+          "pct": 4.0
+        },
+        {
+          "zh": [
+            "充能",
+            "辅助"
+          ],
+          "zhFull": [
+            "充能步枪",
+            "辅助手枪"
+          ],
+          "en": [
+            "Charge Rifle",
+            "Wingman"
+          ],
+          "n": 6,
+          "pct": 3.4
         },
         {
           "zh": [
@@ -1201,7 +2184,7 @@ module.exports = {
             "R-99"
           ],
           "n": 5,
-          "pct": 3.0
+          "pct": 2.8
         },
         {
           "zh": [
@@ -1217,7 +2200,7 @@ module.exports = {
             "Hemlok"
           ],
           "n": 4,
-          "pct": 2.4
+          "pct": 2.3
         },
         {
           "zh": [
@@ -1233,7 +2216,23 @@ module.exports = {
             "L-STAR"
           ],
           "n": 4,
-          "pct": 2.4
+          "pct": 2.3
+        },
+        {
+          "zh": [
+            "充能",
+            "莫桑比克"
+          ],
+          "zhFull": [
+            "充能步枪",
+            "莫桑比克霰弹枪"
+          ],
+          "en": [
+            "Charge Rifle",
+            "Mozambique"
+          ],
+          "n": 2,
+          "pct": 1.1
         },
         {
           "zh": [
@@ -1249,23 +2248,7 @@ module.exports = {
             "Havoc"
           ],
           "n": 2,
-          "pct": 1.2
-        },
-        {
-          "zh": [
-            "充能",
-            "辅助"
-          ],
-          "zhFull": [
-            "充能步枪",
-            "辅助手枪"
-          ],
-          "en": [
-            "Charge Rifle",
-            "Wingman"
-          ],
-          "n": 1,
-          "pct": 0.6
+          "pct": 1.1
         },
         {
           "zh": [
@@ -1308,49 +2291,781 @@ module.exports = {
       ]
     },
     {
-      "id": "tec-ck空白（apex）",
-      "name": "TEC-ck空白（APEX）",
+      "id": "apex-邓远东eastyy",
+      "name": "Apex-邓远东Eastyy",
       "tag": "",
       "role": "主播",
-      "source": "B站直播回放 · 第31赛季排位 · 191 帧",
+      "source": "B站直播回放 · 第31赛季排位 · 184 帧",
       "hours": 0,
-      "note": "英雄覆盖 44.6% · 未人工核验",
+      "note": "英雄覆盖 53.4% · 未人工核验",
+      "heroes": [
+        {
+          "zh": "命脉",
+          "en": "Lifeline",
+          "n": 62,
+          "pct": 34.1
+        },
+        {
+          "zh": "探路者",
+          "en": "Pathfinder",
+          "n": 49,
+          "pct": 26.9
+        },
+        {
+          "zh": "罗芭",
+          "en": "Loba",
+          "n": 33,
+          "pct": 18.1
+        },
+        {
+          "zh": "疯马吉",
+          "en": "Mad Maggie",
+          "n": 14,
+          "pct": 7.7
+        },
+        {
+          "zh": "亡灵",
+          "en": "Revenant",
+          "n": 13,
+          "pct": 7.1
+        },
+        {
+          "zh": "动力小子",
+          "en": "Octane",
+          "n": 5,
+          "pct": 2.7
+        },
+        {
+          "zh": "班加罗尔",
+          "en": "Bangalore",
+          "n": 4,
+          "pct": 2.2
+        },
+        {
+          "zh": "希尔",
+          "en": "Seer",
+          "n": 1,
+          "pct": 0.5
+        },
+        {
+          "zh": "恶灵",
+          "en": "Wraith",
+          "n": 1,
+          "pct": 0.5
+        }
+      ],
+      "combos": [
+        {
+          "heroes": [
+            "亡灵",
+            "探路者",
+            "罗芭"
+          ],
+          "en": [
+            "Revenant",
+            "Pathfinder",
+            "Loba"
+          ],
+          "n": 3,
+          "pct": 42.9
+        },
+        {
+          "heroes": [
+            "探路者",
+            "疯马吉",
+            "罗芭"
+          ],
+          "en": [
+            "Pathfinder",
+            "Mad Maggie",
+            "Loba"
+          ],
+          "n": 3,
+          "pct": 42.9
+        },
+        {
+          "heroes": [
+            "动力小子",
+            "探路者",
+            "罗芭"
+          ],
+          "en": [
+            "Octane",
+            "Pathfinder",
+            "Loba"
+          ],
+          "n": 1,
+          "pct": 14.3
+        }
+      ],
+      "weapons": [
+        {
+          "zh": "复仇女神连发突击步枪",
+          "zhShort": "复仇女神",
+          "en": "Nemesis",
+          "n": 34,
+          "pct": 42.5
+        },
+        {
+          "zh": "C.A.R冲锋枪",
+          "zhShort": "C.A.R",
+          "en": "C.A.R.",
+          "n": 33,
+          "pct": 41.2
+        },
+        {
+          "zh": "哈沃克步枪",
+          "zhShort": "哈沃克",
+          "en": "Havoc",
+          "n": 4,
+          "pct": 5.0
+        },
+        {
+          "zh": "EVA-8自动霰弹枪",
+          "zhShort": "EVA-8自动",
+          "en": "EVA-8",
+          "n": 4,
+          "pct": 5.0
+        },
+        {
+          "zh": "猎兽冲锋枪",
+          "zhShort": "猎兽",
+          "en": "Prowler",
+          "n": 2,
+          "pct": 2.5
+        },
+        {
+          "zh": "R-99冲锋枪",
+          "zhShort": "R-99",
+          "en": "R-99",
+          "n": 1,
+          "pct": 1.2
+        },
+        {
+          "zh": "VK-47平行步枪",
+          "zhShort": "VK-47平行",
+          "en": "VK-47 Flatline",
+          "n": 1,
+          "pct": 1.2
+        },
+        {
+          "zh": "P2020手枪",
+          "zhShort": "P2020",
+          "en": "P2020",
+          "n": 1,
+          "pct": 1.2
+        }
+      ],
+      "weaponPairs": [
+        {
+          "zh": [
+            "C.A.R",
+            "复仇女神"
+          ],
+          "zhFull": [
+            "C.A.R冲锋枪",
+            "复仇女神连发突击步枪"
+          ],
+          "en": [
+            "C.A.R.",
+            "Nemesis"
+          ],
+          "n": 31,
+          "pct": 81.6
+        },
+        {
+          "zh": [
+            "C.A.R",
+            "哈沃克"
+          ],
+          "zhFull": [
+            "C.A.R冲锋枪",
+            "哈沃克步枪"
+          ],
+          "en": [
+            "C.A.R.",
+            "Havoc"
+          ],
+          "n": 2,
+          "pct": 5.3
+        },
+        {
+          "zh": [
+            "复仇女神",
+            "R-99"
+          ],
+          "zhFull": [
+            "复仇女神连发突击步枪",
+            "R-99冲锋枪"
+          ],
+          "en": [
+            "Nemesis",
+            "R-99"
+          ],
+          "n": 1,
+          "pct": 2.6
+        },
+        {
+          "zh": [
+            "VK-47平行",
+            "P2020"
+          ],
+          "zhFull": [
+            "VK-47平行步枪",
+            "P2020手枪"
+          ],
+          "en": [
+            "VK-47 Flatline",
+            "P2020"
+          ],
+          "n": 1,
+          "pct": 2.6
+        },
+        {
+          "zh": [
+            "哈沃克",
+            "猎兽"
+          ],
+          "zhFull": [
+            "哈沃克步枪",
+            "猎兽冲锋枪"
+          ],
+          "en": [
+            "Havoc",
+            "Prowler"
+          ],
+          "n": 1,
+          "pct": 2.6
+        },
+        {
+          "zh": [
+            "复仇女神",
+            "猎兽"
+          ],
+          "zhFull": [
+            "复仇女神连发突击步枪",
+            "猎兽冲锋枪"
+          ],
+          "en": [
+            "Nemesis",
+            "Prowler"
+          ],
+          "n": 1,
+          "pct": 2.6
+        },
+        {
+          "zh": [
+            "EVA-8自动",
+            "哈沃克"
+          ],
+          "zhFull": [
+            "EVA-8自动霰弹枪",
+            "哈沃克步枪"
+          ],
+          "en": [
+            "EVA-8",
+            "Havoc"
+          ],
+          "n": 1,
+          "pct": 2.6
+        }
+      ],
+      "selfHeroes": [
+        {
+          "zh": "探路者",
+          "n": 239,
+          "pct": 74.7
+        },
+        {
+          "zh": "疯马吉",
+          "n": 13,
+          "pct": 4.1
+        },
+        {
+          "zh": "班加罗尔",
+          "n": 4,
+          "pct": 1.2
+        },
+        {
+          "zh": "卡特莉丝",
+          "n": 4,
+          "pct": 1.2
+        },
+        {
+          "zh": "罗芭",
+          "n": 3,
+          "pct": 0.9
+        },
+        {
+          "zh": "直布罗陀",
+          "n": 3,
+          "pct": 0.9
+        },
+        {
+          "zh": "亡灵",
+          "n": 2,
+          "pct": 0.6
+        },
+        {
+          "zh": "希尔",
+          "n": 1,
+          "pct": 0.3
+        }
+      ]
+    },
+    {
+      "id": "ihatetheworld",
+      "name": "iHateTheWorld",
+      "tag": "",
+      "role": "主播",
+      "source": "B站直播回放 · 第31赛季排位 · 184 帧",
+      "hours": 0,
+      "note": "英雄覆盖 33.2% · 未人工核验",
       "heroes": [
         {
           "zh": "探路者",
           "en": "Pathfinder",
-          "n": 116,
-          "pct": 57.7
+          "n": 113,
+          "pct": 82.5
+        },
+        {
+          "zh": "罗芭",
+          "en": "Loba",
+          "n": 7,
+          "pct": 5.1
+        },
+        {
+          "zh": "恶灵",
+          "en": "Wraith",
+          "n": 5,
+          "pct": 3.6
+        },
+        {
+          "zh": "亡灵",
+          "en": "Revenant",
+          "n": 4,
+          "pct": 2.9
+        },
+        {
+          "zh": "命脉",
+          "en": "Lifeline",
+          "n": 4,
+          "pct": 2.9
+        },
+        {
+          "zh": "密客",
+          "en": "Crypto",
+          "n": 3,
+          "pct": 2.2
+        },
+        {
+          "zh": "希尔",
+          "en": "Seer",
+          "n": 1,
+          "pct": 0.7
+        }
+      ],
+      "combos": [],
+      "weapons": [
+        {
+          "zh": "复仇女神连发突击步枪",
+          "zhShort": "复仇女神",
+          "en": "Nemesis",
+          "n": 77,
+          "pct": 28.9
+        },
+        {
+          "zh": "C.A.R冲锋枪",
+          "zhShort": "C.A.R",
+          "en": "C.A.R.",
+          "n": 47,
+          "pct": 17.7
+        },
+        {
+          "zh": "辅助手枪",
+          "zhShort": "辅助",
+          "en": "Wingman",
+          "n": 34,
+          "pct": 12.8
+        },
+        {
+          "zh": "赫姆洛克突击步枪",
+          "zhShort": "赫姆洛克",
+          "en": "Hemlok",
+          "n": 22,
+          "pct": 8.3
+        },
+        {
+          "zh": "L-STAR能量机枪",
+          "zhShort": "L-STAR",
+          "en": "L-STAR",
+          "n": 19,
+          "pct": 7.1
+        },
+        {
+          "zh": "电能冲锋枪",
+          "zhShort": "电能",
+          "en": "Volt",
+          "n": 16,
+          "pct": 6.0
+        },
+        {
+          "zh": "三重式狙击枪",
+          "zhShort": "三重式",
+          "en": "Triple Take",
+          "n": 9,
+          "pct": 3.4
+        },
+        {
+          "zh": "猎兽冲锋枪",
+          "zhShort": "猎兽",
+          "en": "Prowler",
+          "n": 9,
+          "pct": 3.4
+        },
+        {
+          "zh": "哈沃克步枪",
+          "zhShort": "哈沃克",
+          "en": "Havoc",
+          "n": 9,
+          "pct": 3.4
+        },
+        {
+          "zh": "克雷贝尔50口径狙击枪",
+          "zhShort": "克雷贝尔50口径",
+          "en": "Kraber",
+          "n": 5,
+          "pct": 1.9
+        },
+        {
+          "zh": "和平捍卫者霰弹枪",
+          "zhShort": "和平捍卫者",
+          "en": "Peacekeeper",
+          "n": 3,
+          "pct": 1.1
+        },
+        {
+          "zh": "转换者冲锋枪",
+          "zhShort": "转换者",
+          "en": "Alternator",
+          "n": 2,
+          "pct": 0.8
+        },
+        {
+          "zh": "RE-45自动手枪",
+          "zhShort": "RE-45",
+          "en": "RE-45",
+          "n": 2,
+          "pct": 0.8
+        },
+        {
+          "zh": "VK-47平行步枪",
+          "zhShort": "VK-47平行",
+          "en": "VK-47 Flatline",
+          "n": 2,
+          "pct": 0.8
+        },
+        {
+          "zh": "暴走轻机枪",
+          "zhShort": "暴走",
+          "en": "Rampage",
+          "n": 2,
+          "pct": 0.8
+        },
+        {
+          "zh": "EVA-8自动霰弹枪",
+          "zhShort": "EVA-8自动",
+          "en": "EVA-8",
+          "n": 2,
+          "pct": 0.8
+        },
+        {
+          "zh": "充能步枪",
+          "zhShort": "充能",
+          "en": "Charge Rifle",
+          "n": 2,
+          "pct": 0.8
+        },
+        {
+          "zh": "哨兵狙击步枪",
+          "zhShort": "哨兵",
+          "en": "Sentinel",
+          "n": 1,
+          "pct": 0.4
+        },
+        {
+          "zh": "R-99冲锋枪",
+          "zhShort": "R-99",
+          "en": "R-99",
+          "n": 1,
+          "pct": 0.4
+        },
+        {
+          "zh": "长弓精确步枪",
+          "zhShort": "长弓",
+          "en": "Longbow DMR",
+          "n": 1,
+          "pct": 0.4
+        },
+        {
+          "zh": "敖犬霰弹枪",
+          "zhShort": "敖犬",
+          "en": "Mastiff",
+          "n": 1,
+          "pct": 0.4
+        }
+      ],
+      "weaponPairs": [
+        {
+          "zh": [
+            "C.A.R",
+            "复仇女神"
+          ],
+          "zhFull": [
+            "C.A.R冲锋枪",
+            "复仇女神连发突击步枪"
+          ],
+          "en": [
+            "C.A.R.",
+            "Nemesis"
+          ],
+          "n": 32,
+          "pct": 32.7
+        },
+        {
+          "zh": [
+            "复仇女神",
+            "辅助"
+          ],
+          "zhFull": [
+            "复仇女神连发突击步枪",
+            "辅助手枪"
+          ],
+          "en": [
+            "Nemesis",
+            "Wingman"
+          ],
+          "n": 15,
+          "pct": 15.3
+        },
+        {
+          "zh": [
+            "赫姆洛克",
+            "电能"
+          ],
+          "zhFull": [
+            "赫姆洛克突击步枪",
+            "电能冲锋枪"
+          ],
+          "en": [
+            "Hemlok",
+            "Volt"
+          ],
+          "n": 7,
+          "pct": 7.1
+        },
+        {
+          "zh": [
+            "哈沃克",
+            "辅助"
+          ],
+          "zhFull": [
+            "哈沃克步枪",
+            "辅助手枪"
+          ],
+          "en": [
+            "Havoc",
+            "Wingman"
+          ],
+          "n": 6,
+          "pct": 6.1
+        },
+        {
+          "zh": [
+            "C.A.R",
+            "赫姆洛克"
+          ],
+          "zhFull": [
+            "C.A.R冲锋枪",
+            "赫姆洛克突击步枪"
+          ],
+          "en": [
+            "C.A.R.",
+            "Hemlok"
+          ],
+          "n": 5,
+          "pct": 5.1
+        },
+        {
+          "zh": [
+            "复仇女神",
+            "猎兽"
+          ],
+          "zhFull": [
+            "复仇女神连发突击步枪",
+            "猎兽冲锋枪"
+          ],
+          "en": [
+            "Nemesis",
+            "Prowler"
+          ],
+          "n": 5,
+          "pct": 5.1
+        },
+        {
+          "zh": [
+            "C.A.R",
+            "三重式"
+          ],
+          "zhFull": [
+            "C.A.R冲锋枪",
+            "三重式狙击枪"
+          ],
+          "en": [
+            "C.A.R.",
+            "Triple Take"
+          ],
+          "n": 4,
+          "pct": 4.1
+        },
+        {
+          "zh": [
+            "赫姆洛克",
+            "辅助"
+          ],
+          "zhFull": [
+            "赫姆洛克突击步枪",
+            "辅助手枪"
+          ],
+          "en": [
+            "Hemlok",
+            "Wingman"
+          ],
+          "n": 4,
+          "pct": 4.1
+        },
+        {
+          "zh": [
+            "L-STAR",
+            "辅助"
+          ],
+          "zhFull": [
+            "L-STAR能量机枪",
+            "辅助手枪"
+          ],
+          "en": [
+            "L-STAR",
+            "Wingman"
+          ],
+          "n": 2,
+          "pct": 2.0
+        },
+        {
+          "zh": [
+            "C.A.R",
+            "克雷贝尔50口径"
+          ],
+          "zhFull": [
+            "C.A.R冲锋枪",
+            "克雷贝尔50口径狙击枪"
+          ],
+          "en": [
+            "C.A.R.",
+            "Kraber"
+          ],
+          "n": 2,
+          "pct": 2.0
+        },
+        {
+          "zh": [
+            "VK-47平行",
+            "和平捍卫者"
+          ],
+          "zhFull": [
+            "VK-47平行步枪",
+            "和平捍卫者霰弹枪"
+          ],
+          "en": [
+            "VK-47 Flatline",
+            "Peacekeeper"
+          ],
+          "n": 2,
+          "pct": 2.0
+        },
+        {
+          "zh": [
+            "哈沃克",
+            "电能"
+          ],
+          "zhFull": [
+            "哈沃克步枪",
+            "电能冲锋枪"
+          ],
+          "en": [
+            "Havoc",
+            "Volt"
+          ],
+          "n": 2,
+          "pct": 2.0
+        }
+      ],
+      "selfHeroes": [
+        {
+          "zh": "探路者",
+          "n": 62,
+          "pct": 12.4
+        },
+        {
+          "zh": "亡灵",
+          "n": 11,
+          "pct": 2.2
+        }
+      ]
+    },
+    {
+      "id": "tec-ck空白（apex）",
+      "name": "TEC-ck空白（APEX）",
+      "tag": "",
+      "role": "主播",
+      "source": "B站直播回放 · 第31赛季排位 · 179 帧",
+      "hours": 0,
+      "note": "英雄覆盖 45.9% · 未人工核验",
+      "heroes": [
+        {
+          "zh": "探路者",
+          "en": "Pathfinder",
+          "n": 102,
+          "pct": 54.8
         },
         {
           "zh": "沃特森",
           "en": "Wattson",
           "n": 34,
-          "pct": 16.9
+          "pct": 18.3
         },
         {
           "zh": "命脉",
           "en": "Lifeline",
-          "n": 26,
-          "pct": 12.9
-        },
-        {
-          "zh": "罗芭",
-          "en": "Loba",
-          "n": 11,
-          "pct": 5.5
+          "n": 23,
+          "pct": 12.4
         },
         {
           "zh": "动力小子",
           "en": "Octane",
           "n": 11,
-          "pct": 5.5
+          "pct": 5.9
+        },
+        {
+          "zh": "罗芭",
+          "en": "Loba",
+          "n": 9,
+          "pct": 4.8
         },
         {
           "zh": "密客",
           "en": "Crypto",
-          "n": 2,
-          "pct": 1.0
+          "n": 6,
+          "pct": 3.2
         },
         {
           "zh": "恶灵",
@@ -1362,102 +3077,102 @@ module.exports = {
       "combos": [],
       "weapons": [
         {
-          "zh": "C.A.R冲锋枪",
-          "zhShort": "C.A.R",
-          "en": "C.A.R.",
-          "n": 108,
-          "pct": 28.1
-        },
-        {
           "zh": "复仇女神连发突击步枪",
           "zhShort": "复仇女神",
           "en": "Nemesis",
-          "n": 104,
-          "pct": 27.1
+          "n": 95,
+          "pct": 27.0
+        },
+        {
+          "zh": "C.A.R冲锋枪",
+          "zhShort": "C.A.R",
+          "en": "C.A.R.",
+          "n": 95,
+          "pct": 27.0
         },
         {
           "zh": "赫姆洛克突击步枪",
           "zhShort": "赫姆洛克",
           "en": "Hemlok",
-          "n": 53,
-          "pct": 13.8
+          "n": 50,
+          "pct": 14.2
         },
         {
           "zh": "辅助手枪",
           "zhShort": "辅助",
           "en": "Wingman",
-          "n": 40,
-          "pct": 10.4
+          "n": 37,
+          "pct": 10.5
         },
         {
           "zh": "猎兽冲锋枪",
           "zhShort": "猎兽",
           "en": "Prowler",
           "n": 34,
-          "pct": 8.9
+          "pct": 9.7
         },
         {
           "zh": "R-301自动步枪",
           "zhShort": "R-301",
           "en": "R-301",
-          "n": 18,
-          "pct": 4.7
+          "n": 15,
+          "pct": 4.3
         },
         {
           "zh": "L-STAR能量机枪",
           "zhShort": "L-STAR",
           "en": "L-STAR",
           "n": 6,
-          "pct": 1.6
+          "pct": 1.7
         },
         {
           "zh": "电能冲锋枪",
           "zhShort": "电能",
           "en": "Volt",
           "n": 4,
-          "pct": 1.0
+          "pct": 1.1
         },
         {
           "zh": "和平捍卫者霰弹枪",
           "zhShort": "和平捍卫者",
           "en": "Peacekeeper",
           "n": 4,
-          "pct": 1.0
-        },
-        {
-          "zh": "敖犬霰弹枪",
-          "zhShort": "敖犬",
-          "en": "Mastiff",
-          "n": 2,
-          "pct": 0.5
+          "pct": 1.1
         },
         {
           "zh": "P2020手枪",
           "zhShort": "P2020",
           "en": "P2020",
           "n": 2,
-          "pct": 0.5
+          "pct": 0.6
         },
         {
           "zh": "RE-45自动手枪",
           "zhShort": "RE-45",
           "en": "RE-45",
           "n": 2,
-          "pct": 0.5
+          "pct": 0.6
         },
         {
           "zh": "三重式狙击枪",
           "zhShort": "三重式",
           "en": "Triple Take",
           "n": 2,
-          "pct": 0.5
+          "pct": 0.6
         },
         {
           "zh": "30-30连发枪",
           "zhShort": "30-30",
           "en": "30-30 Repeater",
           "n": 2,
-          "pct": 0.5
+          "pct": 0.6
+        },
+        {
+          "zh": "敖犬霰弹枪",
+          "zhShort": "敖犬",
+          "en": "Mastiff",
+          "n": 1,
+          "pct": 0.3
         },
         {
           "zh": "转换者冲锋枪",
@@ -1495,8 +3210,8 @@ module.exports = {
             "C.A.R.",
             "Nemesis"
           ],
-          "n": 75,
-          "pct": 44.6
+          "n": 68,
+          "pct": 43.9
         },
         {
           "zh": [
@@ -1512,7 +3227,7 @@ module.exports = {
             "Prowler"
           ],
           "n": 32,
-          "pct": 19.0
+          "pct": 20.6
         },
         {
           "zh": [
@@ -1528,7 +3243,7 @@ module.exports = {
             "Wingman"
           ],
           "n": 14,
-          "pct": 8.3
+          "pct": 9.0
         },
         {
           "zh": [
@@ -1543,8 +3258,8 @@ module.exports = {
             "C.A.R.",
             "Hemlok"
           ],
-          "n": 14,
-          "pct": 8.3
+          "n": 11,
+          "pct": 7.1
         },
         {
           "zh": [
@@ -1559,8 +3274,8 @@ module.exports = {
             "R-301",
             "Wingman"
           ],
-          "n": 12,
-          "pct": 7.1
+          "n": 10,
+          "pct": 6.5
         },
         {
           "zh": [
@@ -1576,23 +3291,7 @@ module.exports = {
             "L-STAR"
           ],
           "n": 4,
-          "pct": 2.4
-        },
-        {
-          "zh": [
-            "敖犬",
-            "R-301"
-          ],
-          "zhFull": [
-            "敖犬霰弹枪",
-            "R-301自动步枪"
-          ],
-          "en": [
-            "Mastiff",
-            "R-301"
-          ],
-          "n": 2,
-          "pct": 1.2
+          "pct": 2.6
         },
         {
           "zh": [
@@ -1608,7 +3307,7 @@ module.exports = {
             "P2020"
           ],
           "n": 2,
-          "pct": 1.2
+          "pct": 1.3
         },
         {
           "zh": [
@@ -1624,7 +3323,7 @@ module.exports = {
             "Peacekeeper"
           ],
           "n": 2,
-          "pct": 1.2
+          "pct": 1.3
         },
         {
           "zh": [
@@ -1640,7 +3339,7 @@ module.exports = {
             "Triple Take"
           ],
           "n": 2,
-          "pct": 1.2
+          "pct": 1.3
         },
         {
           "zh": [
@@ -1656,7 +3355,7 @@ module.exports = {
             "C.A.R."
           ],
           "n": 2,
-          "pct": 1.2
+          "pct": 1.3
         },
         {
           "zh": [
@@ -1673,518 +3372,34 @@ module.exports = {
           ],
           "n": 1,
           "pct": 0.6
+        },
+        {
+          "zh": [
+            "敖犬",
+            "R-301"
+          ],
+          "zhFull": [
+            "敖犬霰弹枪",
+            "R-301自动步枪"
+          ],
+          "en": [
+            "Mastiff",
+            "R-301"
+          ],
+          "n": 1,
+          "pct": 0.6
         }
       ],
       "selfHeroes": [
         {
           "zh": "探路者",
-          "n": 23,
-          "pct": 7.1
+          "n": 120,
+          "pct": 28.5
         },
         {
           "zh": "密客",
           "n": 3,
-          "pct": 0.9
-        }
-      ]
-    },
-    {
-      "id": "faide",
-      "name": "faide",
-      "tag": "",
-      "role": "主播",
-      "source": "B站直播回放 · 第31赛季排位 · 162 帧",
-      "hours": 0,
-      "note": "英雄覆盖 68.6% · 未人工核验",
-      "heroes": [
-        {
-          "zh": "恶灵",
-          "en": "Wraith",
-          "n": 142,
-          "pct": 52.0
-        },
-        {
-          "zh": "探路者",
-          "en": "Pathfinder",
-          "n": 29,
-          "pct": 10.6
-        },
-        {
-          "zh": "变换",
-          "en": "Alter",
-          "n": 26,
-          "pct": 9.5
-        },
-        {
-          "zh": "亡灵",
-          "en": "Revenant",
-          "n": 25,
-          "pct": 9.2
-        },
-        {
-          "zh": "罗芭",
-          "en": "Loba",
-          "n": 24,
-          "pct": 8.8
-        },
-        {
-          "zh": "动力小子",
-          "en": "Octane",
-          "n": 23,
-          "pct": 8.4
-        },
-        {
-          "zh": "疯马吉",
-          "en": "Mad Maggie",
-          "n": 4,
-          "pct": 1.5
-        }
-      ],
-      "combos": [
-        {
-          "heroes": [
-            "亡灵",
-            "动力小子",
-            "恶灵"
-          ],
-          "en": [
-            "Revenant",
-            "Octane",
-            "Wraith"
-          ],
-          "n": 2,
-          "pct": 33.3
-        },
-        {
-          "heroes": [
-            "动力小子",
-            "恶灵",
-            "探路者"
-          ],
-          "en": [
-            "Octane",
-            "Wraith",
-            "Pathfinder"
-          ],
-          "n": 2,
-          "pct": 33.3
-        },
-        {
-          "heroes": [
-            "变换",
-            "恶灵",
-            "探路者"
-          ],
-          "en": [
-            "Alter",
-            "Wraith",
-            "Pathfinder"
-          ],
-          "n": 1,
-          "pct": 16.7
-        },
-        {
-          "heroes": [
-            "亡灵",
-            "变换",
-            "恶灵"
-          ],
-          "en": [
-            "Revenant",
-            "Alter",
-            "Wraith"
-          ],
-          "n": 1,
-          "pct": 16.7
-        }
-      ],
-      "weapons": [
-        {
-          "zh": "和平捍卫者霰弹枪",
-          "zhShort": "和平捍卫者",
-          "en": "Peacekeeper",
-          "n": 56,
-          "pct": 16.4
-        },
-        {
-          "zh": "敖犬霰弹枪",
-          "zhShort": "敖犬",
-          "en": "Mastiff",
-          "n": 52,
-          "pct": 15.2
-        },
-        {
-          "zh": "EVA-8自动霰弹枪",
-          "zhShort": "EVA-8自动",
-          "en": "EVA-8",
-          "n": 35,
-          "pct": 10.2
-        },
-        {
-          "zh": "R-301自动步枪",
-          "zhShort": "R-301",
-          "en": "R-301",
-          "n": 28,
-          "pct": 8.2
-        },
-        {
-          "zh": "复仇女神连发突击步枪",
-          "zhShort": "复仇女神",
-          "en": "Nemesis",
-          "n": 24,
-          "pct": 7.0
-        },
-        {
-          "zh": "辅助手枪",
-          "zhShort": "辅助",
-          "en": "Wingman",
-          "n": 20,
-          "pct": 5.8
-        },
-        {
-          "zh": "VK-47平行步枪",
-          "zhShort": "VK-47平行",
-          "en": "VK-47 Flatline",
-          "n": 19,
-          "pct": 5.6
-        },
-        {
-          "zh": "R-99冲锋枪",
-          "zhShort": "R-99",
-          "en": "R-99",
-          "n": 18,
-          "pct": 5.3
-        },
-        {
-          "zh": "C.A.R冲锋枪",
-          "zhShort": "C.A.R",
-          "en": "C.A.R.",
-          "n": 16,
-          "pct": 4.7
-        },
-        {
-          "zh": "电能冲锋枪",
-          "zhShort": "电能",
-          "en": "Volt",
-          "n": 15,
-          "pct": 4.4
-        },
-        {
-          "zh": "赫姆洛克突击步枪",
-          "zhShort": "赫姆洛克",
-          "en": "Hemlok",
-          "n": 12,
-          "pct": 3.5
-        },
-        {
-          "zh": "哈沃克步枪",
-          "zhShort": "哈沃克",
-          "en": "Havoc",
-          "n": 8,
-          "pct": 2.3
-        },
-        {
-          "zh": "三重式狙击枪",
-          "zhShort": "三重式",
-          "en": "Triple Take",
-          "n": 8,
-          "pct": 2.3
-        },
-        {
-          "zh": "暴走轻机枪",
-          "zhShort": "暴走",
-          "en": "Rampage",
-          "n": 6,
-          "pct": 1.8
-        },
-        {
-          "zh": "L-STAR能量机枪",
-          "zhShort": "L-STAR",
-          "en": "L-STAR",
-          "n": 5,
-          "pct": 1.5
-        },
-        {
-          "zh": "克雷贝尔50口径狙击枪",
-          "zhShort": "克雷贝尔50口径",
-          "en": "Kraber",
-          "n": 5,
-          "pct": 1.5
-        },
-        {
-          "zh": "猎兽冲锋枪",
-          "zhShort": "猎兽",
-          "en": "Prowler",
-          "n": 3,
-          "pct": 0.9
-        },
-        {
-          "zh": "RE-45自动手枪",
-          "zhShort": "RE-45",
-          "en": "RE-45",
-          "n": 3,
-          "pct": 0.9
-        },
-        {
-          "zh": "哨兵狙击步枪",
-          "zhShort": "哨兵",
-          "en": "Sentinel",
-          "n": 3,
-          "pct": 0.9
-        },
-        {
-          "zh": "P2020手枪",
-          "zhShort": "P2020",
-          "en": "P2020",
-          "n": 2,
-          "pct": 0.6
-        },
-        {
-          "zh": "长弓精确步枪",
-          "zhShort": "长弓",
-          "en": "Longbow DMR",
-          "n": 2,
-          "pct": 0.6
-        },
-        {
-          "zh": "M600喷火轻机枪",
-          "zhShort": "M600喷火",
-          "en": "M600 Spitfire",
-          "n": 1,
-          "pct": 0.3
-        },
-        {
-          "zh": "转换者冲锋枪",
-          "zhShort": "转换者",
-          "en": "Alternator",
-          "n": 1,
-          "pct": 0.3
-        }
-      ],
-      "weaponPairs": [
-        {
-          "zh": [
-            "和平捍卫者",
-            "R-301"
-          ],
-          "zhFull": [
-            "和平捍卫者霰弹枪",
-            "R-301自动步枪"
-          ],
-          "en": [
-            "Peacekeeper",
-            "R-301"
-          ],
-          "n": 23,
-          "pct": 19.8
-        },
-        {
-          "zh": [
-            "敖犬",
-            "复仇女神"
-          ],
-          "zhFull": [
-            "敖犬霰弹枪",
-            "复仇女神连发突击步枪"
-          ],
-          "en": [
-            "Mastiff",
-            "Nemesis"
-          ],
-          "n": 18,
-          "pct": 15.5
-        },
-        {
-          "zh": [
-            "EVA-8自动",
-            "VK-47平行"
-          ],
-          "zhFull": [
-            "EVA-8自动霰弹枪",
-            "VK-47平行步枪"
-          ],
-          "en": [
-            "EVA-8",
-            "VK-47 Flatline"
-          ],
-          "n": 11,
-          "pct": 9.5
-        },
-        {
-          "zh": [
-            "和平捍卫者",
-            "三重式"
-          ],
-          "zhFull": [
-            "和平捍卫者霰弹枪",
-            "三重式狙击枪"
-          ],
-          "en": [
-            "Peacekeeper",
-            "Triple Take"
-          ],
-          "n": 7,
-          "pct": 6.0
-        },
-        {
-          "zh": [
-            "EVA-8自动",
-            "克雷贝尔50口径"
-          ],
-          "zhFull": [
-            "EVA-8自动霰弹枪",
-            "克雷贝尔50口径狙击枪"
-          ],
-          "en": [
-            "EVA-8",
-            "Kraber"
-          ],
-          "n": 5,
-          "pct": 4.3
-        },
-        {
-          "zh": [
-            "VK-47平行",
-            "敖犬"
-          ],
-          "zhFull": [
-            "VK-47平行步枪",
-            "敖犬霰弹枪"
-          ],
-          "en": [
-            "VK-47 Flatline",
-            "Mastiff"
-          ],
-          "n": 5,
-          "pct": 4.3
-        },
-        {
-          "zh": [
-            "赫姆洛克",
-            "电能"
-          ],
-          "zhFull": [
-            "赫姆洛克突击步枪",
-            "电能冲锋枪"
-          ],
-          "en": [
-            "Hemlok",
-            "Volt"
-          ],
-          "n": 5,
-          "pct": 4.3
-        },
-        {
-          "zh": [
-            "敖犬",
-            "R-301"
-          ],
-          "zhFull": [
-            "敖犬霰弹枪",
-            "R-301自动步枪"
-          ],
-          "en": [
-            "Mastiff",
-            "R-301"
-          ],
-          "n": 5,
-          "pct": 4.3
-        },
-        {
-          "zh": [
-            "哈沃克",
-            "和平捍卫者"
-          ],
-          "zhFull": [
-            "哈沃克步枪",
-            "和平捍卫者霰弹枪"
-          ],
-          "en": [
-            "Havoc",
-            "Peacekeeper"
-          ],
-          "n": 4,
-          "pct": 3.4
-        },
-        {
-          "zh": [
-            "EVA-8自动",
-            "哈沃克"
-          ],
-          "zhFull": [
-            "EVA-8自动霰弹枪",
-            "哈沃克步枪"
-          ],
-          "en": [
-            "EVA-8",
-            "Havoc"
-          ],
-          "n": 4,
-          "pct": 3.4
-        },
-        {
-          "zh": [
-            "和平捍卫者",
-            "暴走"
-          ],
-          "zhFull": [
-            "和平捍卫者霰弹枪",
-            "暴走轻机枪"
-          ],
-          "en": [
-            "Peacekeeper",
-            "Rampage"
-          ],
-          "n": 4,
-          "pct": 3.4
-        },
-        {
-          "zh": [
-            "C.A.R",
-            "哨兵"
-          ],
-          "zhFull": [
-            "C.A.R冲锋枪",
-            "哨兵狙击步枪"
-          ],
-          "en": [
-            "C.A.R.",
-            "Sentinel"
-          ],
-          "n": 3,
-          "pct": 2.6
-        }
-      ],
-      "selfHeroes": [
-        {
-          "zh": "恶灵",
-          "n": 375,
-          "pct": 75.2
-        },
-        {
-          "zh": "命脉",
-          "n": 67,
-          "pct": 13.4
-        },
-        {
-          "zh": "疯马吉",
-          "n": 12,
-          "pct": 2.4
-        },
-        {
-          "zh": "班加罗尔",
-          "n": 8,
-          "pct": 1.6
-        },
-        {
-          "zh": "亡灵",
-          "n": 5,
-          "pct": 1.0
-        },
-        {
-          "zh": "动力小子",
-          "n": 4,
-          "pct": 0.8
+          "pct": 0.7
         }
       ]
     },
@@ -2193,33 +3408,33 @@ module.exports = {
       "name": "_refra1n",
       "tag": "",
       "role": "主播",
-      "source": "B站直播回放 · 第31赛季排位 · 147 帧",
+      "source": "B站直播回放 · 第31赛季排位 · 151 帧",
       "hours": 0,
-      "note": "英雄覆盖 74.7% · 未人工核验",
+      "note": "英雄覆盖 74.9% · 未人工核验",
       "heroes": [
         {
           "zh": "亡灵",
           "en": "Revenant",
-          "n": 112,
-          "pct": 43.1
+          "n": 115,
+          "pct": 42.9
         },
         {
           "zh": "命脉",
           "en": "Lifeline",
-          "n": 108,
-          "pct": 41.5
+          "n": 112,
+          "pct": 41.8
         },
         {
           "zh": "疯马吉",
           "en": "Mad Maggie",
           "n": 21,
-          "pct": 8.1
+          "pct": 7.8
         },
         {
           "zh": "探路者",
           "en": "Pathfinder",
-          "n": 12,
-          "pct": 4.6
+          "n": 13,
+          "pct": 4.9
         },
         {
           "zh": "变换",
@@ -2231,7 +3446,7 @@ module.exports = {
           "zh": "班加罗尔",
           "en": "Bangalore",
           "n": 2,
-          "pct": 0.8
+          "pct": 0.7
         },
         {
           "zh": "罗芭",
@@ -2290,42 +3505,42 @@ module.exports = {
           "zhShort": "复仇女神",
           "en": "Nemesis",
           "n": 68,
-          "pct": 26.2
+          "pct": 25.8
         },
         {
           "zh": "C.A.R冲锋枪",
           "zhShort": "C.A.R",
           "en": "C.A.R.",
           "n": 46,
-          "pct": 17.7
+          "pct": 17.4
         },
         {
           "zh": "猎兽冲锋枪",
           "zhShort": "猎兽",
           "en": "Prowler",
           "n": 35,
-          "pct": 13.5
+          "pct": 13.3
+        },
+        {
+          "zh": "电能冲锋枪",
+          "zhShort": "电能",
+          "en": "Volt",
+          "n": 18,
+          "pct": 6.8
         },
         {
           "zh": "赫姆洛克突击步枪",
           "zhShort": "赫姆洛克",
           "en": "Hemlok",
           "n": 17,
-          "pct": 6.5
-        },
-        {
-          "zh": "电能冲锋枪",
-          "zhShort": "电能",
-          "en": "Volt",
-          "n": 17,
-          "pct": 6.5
+          "pct": 6.4
         },
         {
           "zh": "VK-47平行步枪",
           "zhShort": "VK-47平行",
           "en": "VK-47 Flatline",
           "n": 13,
-          "pct": 5.0
+          "pct": 4.9
         },
         {
           "zh": "辅助手枪",
@@ -2339,14 +3554,14 @@ module.exports = {
           "zhShort": "三重式",
           "en": "Triple Take",
           "n": 8,
-          "pct": 3.1
+          "pct": 3.0
         },
         {
           "zh": "哈沃克步枪",
           "zhShort": "哈沃克",
           "en": "Havoc",
-          "n": 7,
-          "pct": 2.7
+          "n": 8,
+          "pct": 3.0
         },
         {
           "zh": "EVA-8自动霰弹枪",
@@ -2354,6 +3569,13 @@ module.exports = {
           "en": "EVA-8",
           "n": 7,
           "pct": 2.7
+        },
+        {
+          "zh": "敖犬霰弹枪",
+          "zhShort": "敖犬",
+          "en": "Mastiff",
+          "n": 5,
+          "pct": 1.9
         },
         {
           "zh": "P2020手枪",
@@ -2370,13 +3592,6 @@ module.exports = {
           "pct": 1.9
         },
         {
-          "zh": "敖犬霰弹枪",
-          "zhShort": "敖犬",
-          "en": "Mastiff",
-          "n": 4,
-          "pct": 1.5
-        },
-        {
           "zh": "转换者冲锋枪",
           "zhShort": "转换者",
           "en": "Alternator",
@@ -2391,6 +3606,13 @@ module.exports = {
           "pct": 1.5
         },
         {
+          "zh": "RE-45自动手枪",
+          "zhShort": "RE-45",
+          "en": "RE-45",
+          "n": 3,
+          "pct": 1.1
+        },
+        {
           "zh": "L-STAR能量机枪",
           "zhShort": "L-STAR",
           "en": "L-STAR",
@@ -2401,13 +3623,6 @@ module.exports = {
           "zh": "G7侦查步枪",
           "zhShort": "G7",
           "en": "G7 Scout",
-          "n": 2,
-          "pct": 0.8
-        },
-        {
-          "zh": "RE-45自动手枪",
-          "zhShort": "RE-45",
-          "en": "RE-45",
           "n": 2,
           "pct": 0.8
         },
@@ -2448,7 +3663,7 @@ module.exports = {
             "Prowler"
           ],
           "n": 25,
-          "pct": 22.5
+          "pct": 22.3
         },
         {
           "zh": [
@@ -2464,7 +3679,7 @@ module.exports = {
             "Nemesis"
           ],
           "n": 19,
-          "pct": 17.1
+          "pct": 17.0
         },
         {
           "zh": [
@@ -2480,7 +3695,7 @@ module.exports = {
             "Hemlok"
           ],
           "n": 10,
-          "pct": 9.0
+          "pct": 8.9
         },
         {
           "zh": [
@@ -2496,7 +3711,7 @@ module.exports = {
             "Volt"
           ],
           "n": 9,
-          "pct": 8.1
+          "pct": 8.0
         },
         {
           "zh": [
@@ -2512,7 +3727,7 @@ module.exports = {
             "VK-47 Flatline"
           ],
           "n": 7,
-          "pct": 6.3
+          "pct": 6.2
         },
         {
           "zh": [
@@ -2646,55 +3861,618 @@ module.exports = {
       ]
     },
     {
-      "id": "laozhang",
-      "name": "老张zxx",
+      "id": "感情以外全部嘘",
+      "name": "感情以外全部嘘",
       "tag": "",
       "role": "主播",
-      "source": "B站直播回放 · 第31赛季排位 · 136 帧",
+      "source": "B站直播回放 · 第31赛季排位 · 147 帧",
       "hours": 0,
-      "note": "英雄覆盖 73.5% · 未人工核验",
+      "note": "英雄覆盖 71.7% · 未人工核验",
       "heroes": [
         {
-          "zh": "探路者",
-          "en": "Pathfinder",
-          "n": 74,
-          "pct": 38.1
+          "zh": "亡灵",
+          "en": "Revenant",
+          "n": 77,
+          "pct": 33.3
         },
         {
           "zh": "疯马吉",
           "en": "Mad Maggie",
-          "n": 58,
-          "pct": 29.9
+          "n": 43,
+          "pct": 18.6
+        },
+        {
+          "zh": "探路者",
+          "en": "Pathfinder",
+          "n": 42,
+          "pct": 18.2
+        },
+        {
+          "zh": "命脉",
+          "en": "Lifeline",
+          "n": 31,
+          "pct": 13.4
+        },
+        {
+          "zh": "变换",
+          "en": "Alter",
+          "n": 21,
+          "pct": 9.1
+        },
+        {
+          "zh": "罗芭",
+          "en": "Loba",
+          "n": 12,
+          "pct": 5.2
+        },
+        {
+          "zh": "动力小子",
+          "en": "Octane",
+          "n": 3,
+          "pct": 1.3
         },
         {
           "zh": "恶灵",
           "en": "Wraith",
-          "n": 20,
-          "pct": 10.3
+          "n": 1,
+          "pct": 0.4
+        },
+        {
+          "zh": "希尔",
+          "en": "Seer",
+          "n": 1,
+          "pct": 0.4
+        }
+      ],
+      "combos": [
+        {
+          "heroes": [
+            "亡灵",
+            "变换",
+            "命脉"
+          ],
+          "en": [
+            "Revenant",
+            "Alter",
+            "Lifeline"
+          ],
+          "n": 4,
+          "pct": 30.8
+        },
+        {
+          "heroes": [
+            "亡灵",
+            "变换",
+            "疯马吉"
+          ],
+          "en": [
+            "Revenant",
+            "Alter",
+            "Mad Maggie"
+          ],
+          "n": 2,
+          "pct": 15.4
+        },
+        {
+          "heroes": [
+            "亡灵",
+            "探路者",
+            "疯马吉"
+          ],
+          "en": [
+            "Revenant",
+            "Pathfinder",
+            "Mad Maggie"
+          ],
+          "n": 2,
+          "pct": 15.4
+        },
+        {
+          "heroes": [
+            "命脉",
+            "探路者",
+            "疯马吉"
+          ],
+          "en": [
+            "Lifeline",
+            "Pathfinder",
+            "Mad Maggie"
+          ],
+          "n": 1,
+          "pct": 7.7
+        },
+        {
+          "heroes": [
+            "亡灵",
+            "命脉",
+            "探路者"
+          ],
+          "en": [
+            "Revenant",
+            "Lifeline",
+            "Pathfinder"
+          ],
+          "n": 1,
+          "pct": 7.7
+        },
+        {
+          "heroes": [
+            "亡灵",
+            "动力小子",
+            "命脉"
+          ],
+          "en": [
+            "Revenant",
+            "Octane",
+            "Lifeline"
+          ],
+          "n": 1,
+          "pct": 7.7
+        },
+        {
+          "heroes": [
+            "动力小子",
+            "命脉",
+            "疯马吉"
+          ],
+          "en": [
+            "Octane",
+            "Lifeline",
+            "Mad Maggie"
+          ],
+          "n": 1,
+          "pct": 7.7
+        },
+        {
+          "heroes": [
+            "亡灵",
+            "命脉",
+            "疯马吉"
+          ],
+          "en": [
+            "Revenant",
+            "Lifeline",
+            "Mad Maggie"
+          ],
+          "n": 1,
+          "pct": 7.7
+        }
+      ],
+      "weapons": [
+        {
+          "zh": "复仇女神连发突击步枪",
+          "zhShort": "复仇女神",
+          "en": "Nemesis",
+          "n": 88,
+          "pct": 26.0
+        },
+        {
+          "zh": "C.A.R冲锋枪",
+          "zhShort": "C.A.R",
+          "en": "C.A.R.",
+          "n": 86,
+          "pct": 25.4
+        },
+        {
+          "zh": "赫姆洛克突击步枪",
+          "zhShort": "赫姆洛克",
+          "en": "Hemlok",
+          "n": 37,
+          "pct": 10.9
+        },
+        {
+          "zh": "哈沃克步枪",
+          "zhShort": "哈沃克",
+          "en": "Havoc",
+          "n": 33,
+          "pct": 9.7
+        },
+        {
+          "zh": "猎兽冲锋枪",
+          "zhShort": "猎兽",
+          "en": "Prowler",
+          "n": 30,
+          "pct": 8.8
+        },
+        {
+          "zh": "L-STAR能量机枪",
+          "zhShort": "L-STAR",
+          "en": "L-STAR",
+          "n": 13,
+          "pct": 3.8
+        },
+        {
+          "zh": "R-99冲锋枪",
+          "zhShort": "R-99",
+          "en": "R-99",
+          "n": 7,
+          "pct": 2.1
+        },
+        {
+          "zh": "RE-45自动手枪",
+          "zhShort": "RE-45",
+          "en": "RE-45",
+          "n": 6,
+          "pct": 1.8
+        },
+        {
+          "zh": "克雷贝尔50口径狙击枪",
+          "zhShort": "克雷贝尔50口径",
+          "en": "Kraber",
+          "n": 6,
+          "pct": 1.8
+        },
+        {
+          "zh": "EVA-8自动霰弹枪",
+          "zhShort": "EVA-8自动",
+          "en": "EVA-8",
+          "n": 6,
+          "pct": 1.8
+        },
+        {
+          "zh": "电能冲锋枪",
+          "zhShort": "电能",
+          "en": "Volt",
+          "n": 5,
+          "pct": 1.5
+        },
+        {
+          "zh": "R-301自动步枪",
+          "zhShort": "R-301",
+          "en": "R-301",
+          "n": 4,
+          "pct": 1.2
+        },
+        {
+          "zh": "转换者冲锋枪",
+          "zhShort": "转换者",
+          "en": "Alternator",
+          "n": 3,
+          "pct": 0.9
+        },
+        {
+          "zh": "暴走轻机枪",
+          "zhShort": "暴走",
+          "en": "Rampage",
+          "n": 2,
+          "pct": 0.6
+        },
+        {
+          "zh": "和平捍卫者霰弹枪",
+          "zhShort": "和平捍卫者",
+          "en": "Peacekeeper",
+          "n": 2,
+          "pct": 0.6
+        },
+        {
+          "zh": "敖犬霰弹枪",
+          "zhShort": "敖犬",
+          "en": "Mastiff",
+          "n": 2,
+          "pct": 0.6
+        },
+        {
+          "zh": "充能步枪",
+          "zhShort": "充能",
+          "en": "Charge Rifle",
+          "n": 2,
+          "pct": 0.6
+        },
+        {
+          "zh": "辅助手枪",
+          "zhShort": "辅助",
+          "en": "Wingman",
+          "n": 2,
+          "pct": 0.6
+        },
+        {
+          "zh": "G7侦查步枪",
+          "zhShort": "G7",
+          "en": "G7 Scout",
+          "n": 1,
+          "pct": 0.3
+        },
+        {
+          "zh": "P2020手枪",
+          "zhShort": "P2020",
+          "en": "P2020",
+          "n": 1,
+          "pct": 0.3
+        },
+        {
+          "zh": "长弓精确步枪",
+          "zhShort": "长弓",
+          "en": "Longbow DMR",
+          "n": 1,
+          "pct": 0.3
+        },
+        {
+          "zh": "三重式狙击枪",
+          "zhShort": "三重式",
+          "en": "Triple Take",
+          "n": 1,
+          "pct": 0.3
+        },
+        {
+          "zh": "VK-47平行步枪",
+          "zhShort": "VK-47平行",
+          "en": "VK-47 Flatline",
+          "n": 1,
+          "pct": 0.3
+        }
+      ],
+      "weaponPairs": [
+        {
+          "zh": [
+            "C.A.R",
+            "复仇女神"
+          ],
+          "zhFull": [
+            "C.A.R冲锋枪",
+            "复仇女神连发突击步枪"
+          ],
+          "en": [
+            "C.A.R.",
+            "Nemesis"
+          ],
+          "n": 63,
+          "pct": 45.0
+        },
+        {
+          "zh": [
+            "复仇女神",
+            "猎兽"
+          ],
+          "zhFull": [
+            "复仇女神连发突击步枪",
+            "猎兽冲锋枪"
+          ],
+          "en": [
+            "Nemesis",
+            "Prowler"
+          ],
+          "n": 18,
+          "pct": 12.9
+        },
+        {
+          "zh": [
+            "C.A.R",
+            "赫姆洛克"
+          ],
+          "zhFull": [
+            "C.A.R冲锋枪",
+            "赫姆洛克突击步枪"
+          ],
+          "en": [
+            "C.A.R.",
+            "Hemlok"
+          ],
+          "n": 17,
+          "pct": 12.1
+        },
+        {
+          "zh": [
+            "哈沃克",
+            "猎兽"
+          ],
+          "zhFull": [
+            "哈沃克步枪",
+            "猎兽冲锋枪"
+          ],
+          "en": [
+            "Havoc",
+            "Prowler"
+          ],
+          "n": 8,
+          "pct": 5.7
+        },
+        {
+          "zh": [
+            "哈沃克",
+            "RE-45"
+          ],
+          "zhFull": [
+            "哈沃克步枪",
+            "RE-45自动手枪"
+          ],
+          "en": [
+            "Havoc",
+            "RE-45"
+          ],
+          "n": 4,
+          "pct": 2.9
+        },
+        {
+          "zh": [
+            "EVA-8自动",
+            "哈沃克"
+          ],
+          "zhFull": [
+            "EVA-8自动霰弹枪",
+            "哈沃克步枪"
+          ],
+          "en": [
+            "EVA-8",
+            "Havoc"
+          ],
+          "n": 3,
+          "pct": 2.1
+        },
+        {
+          "zh": [
+            "赫姆洛克",
+            "R-99"
+          ],
+          "zhFull": [
+            "赫姆洛克突击步枪",
+            "R-99冲锋枪"
+          ],
+          "en": [
+            "Hemlok",
+            "R-99"
+          ],
+          "n": 3,
+          "pct": 2.1
+        },
+        {
+          "zh": [
+            "复仇女神",
+            "R-99"
+          ],
+          "zhFull": [
+            "复仇女神连发突击步枪",
+            "R-99冲锋枪"
+          ],
+          "en": [
+            "Nemesis",
+            "R-99"
+          ],
+          "n": 3,
+          "pct": 2.1
+        },
+        {
+          "zh": [
+            "C.A.R",
+            "R-301"
+          ],
+          "zhFull": [
+            "C.A.R冲锋枪",
+            "R-301自动步枪"
+          ],
+          "en": [
+            "C.A.R.",
+            "R-301"
+          ],
+          "n": 2,
+          "pct": 1.4
+        },
+        {
+          "zh": [
+            "C.A.R",
+            "哈沃克"
+          ],
+          "zhFull": [
+            "C.A.R冲锋枪",
+            "哈沃克步枪"
+          ],
+          "en": [
+            "C.A.R.",
+            "Havoc"
+          ],
+          "n": 2,
+          "pct": 1.4
+        },
+        {
+          "zh": [
+            "暴走",
+            "电能"
+          ],
+          "zhFull": [
+            "暴走轻机枪",
+            "电能冲锋枪"
+          ],
+          "en": [
+            "Rampage",
+            "Volt"
+          ],
+          "n": 1,
+          "pct": 0.7
+        },
+        {
+          "zh": [
+            "复仇女神",
+            "RE-45"
+          ],
+          "zhFull": [
+            "复仇女神连发突击步枪",
+            "RE-45自动手枪"
+          ],
+          "en": [
+            "Nemesis",
+            "RE-45"
+          ],
+          "n": 1,
+          "pct": 0.7
+        }
+      ],
+      "selfHeroes": [
+        {
+          "zh": "亡灵",
+          "n": 200,
+          "pct": 48.8
+        },
+        {
+          "zh": "疯马吉",
+          "n": 126,
+          "pct": 30.7
+        },
+        {
+          "zh": "恶灵",
+          "n": 27,
+          "pct": 6.6
+        },
+        {
+          "zh": "恶灵*红",
+          "n": 2,
+          "pct": 0.5
+        },
+        {
+          "zh": "变换",
+          "n": 2,
+          "pct": 0.5
+        }
+      ]
+    },
+    {
+      "id": "laozhang",
+      "name": "老张zxx",
+      "tag": "",
+      "role": "主播",
+      "source": "B站直播回放 · 第31赛季排位 · 144 帧",
+      "hours": 0,
+      "note": "英雄覆盖 73.6% · 未人工核验",
+      "heroes": [
+        {
+          "zh": "探路者",
+          "en": "Pathfinder",
+          "n": 80,
+          "pct": 38.8
+        },
+        {
+          "zh": "疯马吉",
+          "en": "Mad Maggie",
+          "n": 61,
+          "pct": 29.6
+        },
+        {
+          "zh": "恶灵",
+          "en": "Wraith",
+          "n": 22,
+          "pct": 10.7
         },
         {
           "zh": "亡灵",
           "en": "Revenant",
           "n": 20,
-          "pct": 10.3
+          "pct": 9.7
         },
         {
           "zh": "罗芭",
           "en": "Loba",
           "n": 9,
-          "pct": 4.6
+          "pct": 4.4
         },
         {
           "zh": "动力小子",
           "en": "Octane",
           "n": 5,
-          "pct": 2.6
+          "pct": 2.4
         },
         {
           "zh": "班加罗尔",
           "en": "Bangalore",
           "n": 5,
-          "pct": 2.6
+          "pct": 2.4
         },
         {
           "zh": "变换",
@@ -2705,6 +4483,12 @@ module.exports = {
         {
           "zh": "希尔",
           "en": "Seer",
+          "n": 1,
+          "pct": 0.5
+        },
+        {
+          "zh": "命脉",
+          "en": "Lifeline",
           "n": 1,
           "pct": 0.5
         }
@@ -2758,85 +4542,92 @@ module.exports = {
           "zh": "C.A.R冲锋枪",
           "zhShort": "C.A.R",
           "en": "C.A.R.",
-          "n": 102,
-          "pct": 44.0
+          "n": 116,
+          "pct": 43.8
         },
         {
           "zh": "赫姆洛克突击步枪",
           "zhShort": "赫姆洛克",
           "en": "Hemlok",
-          "n": 62,
-          "pct": 26.7
+          "n": 70,
+          "pct": 26.4
         },
         {
           "zh": "电能冲锋枪",
           "zhShort": "电能",
           "en": "Volt",
-          "n": 14,
-          "pct": 6.0
+          "n": 15,
+          "pct": 5.7
         },
         {
           "zh": "VK-47平行步枪",
           "zhShort": "VK-47平行",
           "en": "VK-47 Flatline",
-          "n": 13,
-          "pct": 5.6
+          "n": 14,
+          "pct": 5.3
         },
         {
           "zh": "EVA-8自动霰弹枪",
           "zhShort": "EVA-8自动",
           "en": "EVA-8",
-          "n": 9,
-          "pct": 3.9
+          "n": 13,
+          "pct": 4.9
+        },
+        {
+          "zh": "L-STAR能量机枪",
+          "zhShort": "L-STAR",
+          "en": "L-STAR",
+          "n": 7,
+          "pct": 2.6
         },
         {
           "zh": "波塞克复合弓",
           "zhShort": "波塞克复合弓",
           "en": "Bocek Compound Bow",
           "n": 7,
-          "pct": 3.0
+          "pct": 2.6
         },
         {
           "zh": "30-30连发枪",
           "zhShort": "30-30",
           "en": "30-30 Repeater",
           "n": 5,
-          "pct": 2.2
+          "pct": 1.9
         },
         {
           "zh": "R-99冲锋枪",
           "zhShort": "R-99",
           "en": "R-99",
           "n": 5,
-          "pct": 2.2
+          "pct": 1.9
         },
         {
           "zh": "哈沃克步枪",
           "zhShort": "哈沃克",
           "en": "Havoc",
           "n": 4,
-          "pct": 1.7
-        },
-        {
-          "zh": "L-STAR能量机枪",
-          "zhShort": "L-STAR",
-          "en": "L-STAR",
-          "n": 4,
-          "pct": 1.7
+          "pct": 1.5
         },
         {
           "zh": "R-301自动步枪",
           "zhShort": "R-301",
           "en": "R-301",
-          "n": 3,
-          "pct": 1.3
+          "n": 4,
+          "pct": 1.5
         },
         {
           "zh": "RE-45自动手枪",
           "zhShort": "RE-45",
           "en": "RE-45",
           "n": 2,
-          "pct": 0.9
+          "pct": 0.8
+        },
+        {
+          "zh": "哨兵狙击步枪",
+          "zhShort": "哨兵",
+          "en": "Sentinel",
+          "n": 1,
+          "pct": 0.4
         },
         {
           "zh": "G7侦查步枪",
@@ -2867,8 +4658,8 @@ module.exports = {
             "C.A.R.",
             "Hemlok"
           ],
-          "n": 54,
-          "pct": 64.3
+          "n": 60,
+          "pct": 64.5
         },
         {
           "zh": [
@@ -2884,7 +4675,23 @@ module.exports = {
             "C.A.R."
           ],
           "n": 7,
-          "pct": 8.3
+          "pct": 7.5
+        },
+        {
+          "zh": [
+            "EVA-8自动",
+            "赫姆洛克"
+          ],
+          "zhFull": [
+            "EVA-8自动霰弹枪",
+            "赫姆洛克突击步枪"
+          ],
+          "en": [
+            "EVA-8",
+            "Hemlok"
+          ],
+          "n": 4,
+          "pct": 4.3
         },
         {
           "zh": [
@@ -2900,7 +4707,7 @@ module.exports = {
             "Volt"
           ],
           "n": 4,
-          "pct": 4.8
+          "pct": 4.3
         },
         {
           "zh": [
@@ -2916,7 +4723,7 @@ module.exports = {
             "R-99"
           ],
           "n": 4,
-          "pct": 4.8
+          "pct": 4.3
         },
         {
           "zh": [
@@ -2932,23 +4739,23 @@ module.exports = {
             "VK-47 Flatline"
           ],
           "n": 3,
-          "pct": 3.6
+          "pct": 3.2
         },
         {
           "zh": [
             "EVA-8自动",
-            "赫姆洛克"
+            "R-301"
           ],
           "zhFull": [
             "EVA-8自动霰弹枪",
-            "赫姆洛克突击步枪"
+            "R-301自动步枪"
           ],
           "en": [
             "EVA-8",
-            "Hemlok"
+            "R-301"
           ],
-          "n": 3,
-          "pct": 3.6
+          "n": 2,
+          "pct": 2.2
         },
         {
           "zh": [
@@ -2964,7 +4771,23 @@ module.exports = {
             "Volt"
           ],
           "n": 1,
-          "pct": 1.2
+          "pct": 1.1
+        },
+        {
+          "zh": [
+            "EVA-8自动",
+            "哨兵"
+          ],
+          "zhFull": [
+            "EVA-8自动霰弹枪",
+            "哨兵狙击步枪"
+          ],
+          "en": [
+            "EVA-8",
+            "Sentinel"
+          ],
+          "n": 1,
+          "pct": 1.1
         },
         {
           "zh": [
@@ -2980,7 +4803,7 @@ module.exports = {
             "Havoc"
           ],
           "n": 1,
-          "pct": 1.2
+          "pct": 1.1
         },
         {
           "zh": [
@@ -2996,7 +4819,7 @@ module.exports = {
             "R-301"
           ],
           "n": 1,
-          "pct": 1.2
+          "pct": 1.1
         },
         {
           "zh": [
@@ -3012,39 +4835,7 @@ module.exports = {
             "Volt"
           ],
           "n": 1,
-          "pct": 1.2
-        },
-        {
-          "zh": [
-            "转换者",
-            "赫姆洛克"
-          ],
-          "zhFull": [
-            "转换者冲锋枪",
-            "赫姆洛克突击步枪"
-          ],
-          "en": [
-            "Alternator",
-            "Hemlok"
-          ],
-          "n": 1,
-          "pct": 1.2
-        },
-        {
-          "zh": [
-            "C.A.R",
-            "VK-47平行"
-          ],
-          "zhFull": [
-            "C.A.R冲锋枪",
-            "VK-47平行步枪"
-          ],
-          "en": [
-            "C.A.R.",
-            "VK-47 Flatline"
-          ],
-          "n": 1,
-          "pct": 1.2
+          "pct": 1.1
         }
       ],
       "selfHeroes": [
@@ -3076,65 +4867,65 @@ module.exports = {
       ]
     },
     {
-      "id": "感情以外全部嘘",
-      "name": "感情以外全部嘘",
+      "id": "pite174",
+      "name": "皮特174",
       "tag": "",
       "role": "主播",
-      "source": "B站直播回放 · 第31赛季排位 · 125 帧",
+      "source": "B站直播回放 · 第31赛季排位 · 134 帧",
       "hours": 0,
-      "note": "英雄覆盖 73.1% · 未人工核验",
+      "note": "英雄覆盖 70.0% · 未人工核验",
       "heroes": [
-        {
-          "zh": "亡灵",
-          "en": "Revenant",
-          "n": 63,
-          "pct": 33.2
-        },
         {
           "zh": "探路者",
           "en": "Pathfinder",
-          "n": 35,
-          "pct": 18.4
+          "n": 65,
+          "pct": 31.2
         },
         {
-          "zh": "疯马吉",
-          "en": "Mad Maggie",
-          "n": 29,
-          "pct": 15.3
-        },
-        {
-          "zh": "命脉",
-          "en": "Lifeline",
-          "n": 27,
-          "pct": 14.2
-        },
-        {
-          "zh": "变换",
-          "en": "Alter",
-          "n": 21,
-          "pct": 11.1
+          "zh": "亡灵",
+          "en": "Revenant",
+          "n": 55,
+          "pct": 26.4
         },
         {
           "zh": "罗芭",
           "en": "Loba",
-          "n": 10,
-          "pct": 5.3
+          "n": 40,
+          "pct": 19.2
         },
         {
-          "zh": "恶灵",
-          "en": "Wraith",
-          "n": 3,
-          "pct": 1.6
+          "zh": "变换",
+          "en": "Alter",
+          "n": 22,
+          "pct": 10.6
         },
         {
-          "zh": "希尔",
-          "en": "Seer",
-          "n": 1,
-          "pct": 0.5
+          "zh": "命脉",
+          "en": "Lifeline",
+          "n": 8,
+          "pct": 3.8
+        },
+        {
+          "zh": "班加罗尔",
+          "en": "Bangalore",
+          "n": 8,
+          "pct": 3.8
+        },
+        {
+          "zh": "疯马吉",
+          "en": "Mad Maggie",
+          "n": 7,
+          "pct": 3.4
         },
         {
           "zh": "动力小子",
           "en": "Octane",
+          "n": 2,
+          "pct": 1.0
+        },
+        {
+          "zh": "密客",
+          "en": "Crypto",
           "n": 1,
           "pct": 0.5
         }
@@ -3143,30 +4934,58 @@ module.exports = {
         {
           "heroes": [
             "亡灵",
-            "变换",
-            "命脉"
+            "探路者",
+            "罗芭"
           ],
           "en": [
             "Revenant",
-            "Alter",
-            "Lifeline"
+            "Pathfinder",
+            "Loba"
           ],
           "n": 4,
-          "pct": 40.0
+          "pct": 36.4
+        },
+        {
+          "heroes": [
+            "亡灵",
+            "探路者",
+            "班加罗尔"
+          ],
+          "en": [
+            "Revenant",
+            "Pathfinder",
+            "Bangalore"
+          ],
+          "n": 2,
+          "pct": 18.2
         },
         {
           "heroes": [
             "亡灵",
             "变换",
-            "疯马吉"
+            "罗芭"
           ],
           "en": [
             "Revenant",
             "Alter",
-            "Mad Maggie"
+            "Loba"
           ],
           "n": 2,
-          "pct": 20.0
+          "pct": 18.2
+        },
+        {
+          "heroes": [
+            "亡灵",
+            "命脉",
+            "罗芭"
+          ],
+          "en": [
+            "Revenant",
+            "Lifeline",
+            "Loba"
+          ],
+          "n": 1,
+          "pct": 9.1
         },
         {
           "heroes": [
@@ -3180,600 +4999,147 @@ module.exports = {
             "Mad Maggie"
           ],
           "n": 1,
-          "pct": 10.0
-        },
-        {
-          "heroes": [
-            "动力小子",
-            "命脉",
-            "疯马吉"
-          ],
-          "en": [
-            "Octane",
-            "Lifeline",
-            "Mad Maggie"
-          ],
-          "n": 1,
-          "pct": 10.0
+          "pct": 9.1
         },
         {
           "heroes": [
             "亡灵",
-            "命脉",
+            "探路者",
             "疯马吉"
           ],
           "en": [
             "Revenant",
-            "Lifeline",
+            "Pathfinder",
             "Mad Maggie"
           ],
           "n": 1,
-          "pct": 10.0
-        },
-        {
-          "heroes": [
-            "亡灵",
-            "恶灵",
-            "罗芭"
-          ],
-          "en": [
-            "Revenant",
-            "Wraith",
-            "Loba"
-          ],
-          "n": 1,
-          "pct": 10.0
+          "pct": 9.1
         }
       ],
       "weapons": [
         {
-          "zh": "C.A.R冲锋枪",
-          "zhShort": "C.A.R",
-          "en": "C.A.R.",
-          "n": 91,
-          "pct": 30.3
+          "zh": "辅助手枪",
+          "zhShort": "辅助",
+          "en": "Wingman",
+          "n": 40,
+          "pct": 17.0
         },
         {
           "zh": "复仇女神连发突击步枪",
           "zhShort": "复仇女神",
           "en": "Nemesis",
-          "n": 78,
-          "pct": 26.0
+          "n": 37,
+          "pct": 15.7
+        },
+        {
+          "zh": "C.A.R冲锋枪",
+          "zhShort": "C.A.R",
+          "en": "C.A.R.",
+          "n": 31,
+          "pct": 13.2
         },
         {
           "zh": "赫姆洛克突击步枪",
           "zhShort": "赫姆洛克",
           "en": "Hemlok",
-          "n": 35,
-          "pct": 11.7
+          "n": 28,
+          "pct": 11.9
         },
         {
-          "zh": "哈沃克步枪",
-          "zhShort": "哈沃克",
-          "en": "Havoc",
-          "n": 30,
-          "pct": 10.0
+          "zh": "电能冲锋枪",
+          "zhShort": "电能",
+          "en": "Volt",
+          "n": 21,
+          "pct": 8.9
         },
         {
-          "zh": "猎兽冲锋枪",
-          "zhShort": "猎兽",
-          "en": "Prowler",
-          "n": 14,
+          "zh": "转换者冲锋枪",
+          "zhShort": "转换者",
+          "en": "Alternator",
+          "n": 11,
           "pct": 4.7
         },
         {
           "zh": "L-STAR能量机枪",
           "zhShort": "L-STAR",
           "en": "L-STAR",
-          "n": 12,
-          "pct": 4.0
-        },
-        {
-          "zh": "克雷贝尔50口径狙击枪",
-          "zhShort": "克雷贝尔50口径",
-          "en": "Kraber",
-          "n": 7,
-          "pct": 2.3
-        },
-        {
-          "zh": "RE-45自动手枪",
-          "zhShort": "RE-45",
-          "en": "RE-45",
-          "n": 6,
-          "pct": 2.0
-        },
-        {
-          "zh": "电能冲锋枪",
-          "zhShort": "电能",
-          "en": "Volt",
-          "n": 5,
-          "pct": 1.7
-        },
-        {
-          "zh": "转换者冲锋枪",
-          "zhShort": "转换者",
-          "en": "Alternator",
-          "n": 4,
-          "pct": 1.3
-        },
-        {
-          "zh": "EVA-8自动霰弹枪",
-          "zhShort": "EVA-8自动",
-          "en": "EVA-8",
-          "n": 3,
-          "pct": 1.0
-        },
-        {
-          "zh": "R-99冲锋枪",
-          "zhShort": "R-99",
-          "en": "R-99",
-          "n": 3,
-          "pct": 1.0
-        },
-        {
-          "zh": "暴走轻机枪",
-          "zhShort": "暴走",
-          "en": "Rampage",
-          "n": 2,
-          "pct": 0.7
+          "n": 10,
+          "pct": 4.3
         },
         {
           "zh": "R-301自动步枪",
           "zhShort": "R-301",
           "en": "R-301",
-          "n": 2,
-          "pct": 0.7
+          "n": 8,
+          "pct": 3.4
+        },
+        {
+          "zh": "莫桑比克霰弹枪",
+          "zhShort": "莫桑比克",
+          "en": "Mozambique",
+          "n": 8,
+          "pct": 3.4
+        },
+        {
+          "zh": "VK-47平行步枪",
+          "zhShort": "VK-47平行",
+          "en": "VK-47 Flatline",
+          "n": 7,
+          "pct": 3.0
         },
         {
           "zh": "和平捍卫者霰弹枪",
           "zhShort": "和平捍卫者",
           "en": "Peacekeeper",
-          "n": 2,
-          "pct": 0.7
-        },
-        {
-          "zh": "G7侦查步枪",
-          "zhShort": "G7",
-          "en": "G7 Scout",
-          "n": 1,
-          "pct": 0.3
+          "n": 7,
+          "pct": 3.0
         },
         {
           "zh": "P2020手枪",
           "zhShort": "P2020",
           "en": "P2020",
-          "n": 1,
-          "pct": 0.3
-        },
-        {
-          "zh": "三重式狙击枪",
-          "zhShort": "三重式",
-          "en": "Triple Take",
-          "n": 1,
-          "pct": 0.3
-        },
-        {
-          "zh": "辅助手枪",
-          "zhShort": "辅助",
-          "en": "Wingman",
-          "n": 1,
-          "pct": 0.3
-        },
-        {
-          "zh": "敖犬霰弹枪",
-          "zhShort": "敖犬",
-          "en": "Mastiff",
-          "n": 1,
-          "pct": 0.3
-        },
-        {
-          "zh": "VK-47平行步枪",
-          "zhShort": "VK-47平行",
-          "en": "VK-47 Flatline",
-          "n": 1,
-          "pct": 0.3
-        }
-      ],
-      "weaponPairs": [
-        {
-          "zh": [
-            "C.A.R",
-            "复仇女神"
-          ],
-          "zhFull": [
-            "C.A.R冲锋枪",
-            "复仇女神连发突击步枪"
-          ],
-          "en": [
-            "C.A.R.",
-            "Nemesis"
-          ],
-          "n": 72,
-          "pct": 59.0
-        },
-        {
-          "zh": [
-            "C.A.R",
-            "赫姆洛克"
-          ],
-          "zhFull": [
-            "C.A.R冲锋枪",
-            "赫姆洛克突击步枪"
-          ],
-          "en": [
-            "C.A.R.",
-            "Hemlok"
-          ],
-          "n": 14,
-          "pct": 11.5
-        },
-        {
-          "zh": [
-            "哈沃克",
-            "猎兽"
-          ],
-          "zhFull": [
-            "哈沃克步枪",
-            "猎兽冲锋枪"
-          ],
-          "en": [
-            "Havoc",
-            "Prowler"
-          ],
-          "n": 8,
-          "pct": 6.6
-        },
-        {
-          "zh": [
-            "复仇女神",
-            "猎兽"
-          ],
-          "zhFull": [
-            "复仇女神连发突击步枪",
-            "猎兽冲锋枪"
-          ],
-          "en": [
-            "Nemesis",
-            "Prowler"
-          ],
           "n": 5,
-          "pct": 4.1
-        },
-        {
-          "zh": [
-            "哈沃克",
-            "RE-45"
-          ],
-          "zhFull": [
-            "哈沃克步枪",
-            "RE-45自动手枪"
-          ],
-          "en": [
-            "Havoc",
-            "RE-45"
-          ],
-          "n": 4,
-          "pct": 3.3
-        },
-        {
-          "zh": [
-            "C.A.R",
-            "克雷贝尔50口径"
-          ],
-          "zhFull": [
-            "C.A.R冲锋枪",
-            "克雷贝尔50口径狙击枪"
-          ],
-          "en": [
-            "C.A.R.",
-            "Kraber"
-          ],
-          "n": 2,
-          "pct": 1.6
-        },
-        {
-          "zh": [
-            "EVA-8自动",
-            "赫姆洛克"
-          ],
-          "zhFull": [
-            "EVA-8自动霰弹枪",
-            "赫姆洛克突击步枪"
-          ],
-          "en": [
-            "EVA-8",
-            "Hemlok"
-          ],
-          "n": 2,
-          "pct": 1.6
-        },
-        {
-          "zh": [
-            "赫姆洛克",
-            "R-99"
-          ],
-          "zhFull": [
-            "赫姆洛克突击步枪",
-            "R-99冲锋枪"
-          ],
-          "en": [
-            "Hemlok",
-            "R-99"
-          ],
-          "n": 2,
-          "pct": 1.6
-        },
-        {
-          "zh": [
-            "暴走",
-            "电能"
-          ],
-          "zhFull": [
-            "暴走轻机枪",
-            "电能冲锋枪"
-          ],
-          "en": [
-            "Rampage",
-            "Volt"
-          ],
-          "n": 1,
-          "pct": 0.8
-        },
-        {
-          "zh": [
-            "复仇女神",
-            "RE-45"
-          ],
-          "zhFull": [
-            "复仇女神连发突击步枪",
-            "RE-45自动手枪"
-          ],
-          "en": [
-            "Nemesis",
-            "RE-45"
-          ],
-          "n": 1,
-          "pct": 0.8
-        },
-        {
-          "zh": [
-            "EVA-8自动",
-            "哈沃克"
-          ],
-          "zhFull": [
-            "EVA-8自动霰弹枪",
-            "哈沃克步枪"
-          ],
-          "en": [
-            "EVA-8",
-            "Havoc"
-          ],
-          "n": 1,
-          "pct": 0.8
-        },
-        {
-          "zh": [
-            "C.A.R",
-            "G7"
-          ],
-          "zhFull": [
-            "C.A.R冲锋枪",
-            "G7侦查步枪"
-          ],
-          "en": [
-            "C.A.R.",
-            "G7 Scout"
-          ],
-          "n": 1,
-          "pct": 0.8
-        }
-      ],
-      "selfHeroes": [
-        {
-          "zh": "亡灵",
-          "n": 200,
-          "pct": 48.8
-        },
-        {
-          "zh": "疯马吉",
-          "n": 126,
-          "pct": 30.7
-        },
-        {
-          "zh": "恶灵",
-          "n": 27,
-          "pct": 6.6
-        },
-        {
-          "zh": "恶灵*红",
-          "n": 2,
-          "pct": 0.5
-        },
-        {
-          "zh": "变换",
-          "n": 2,
-          "pct": 0.5
-        }
-      ]
-    },
-    {
-      "id": "ihatetheworld",
-      "name": "iHateTheWorld",
-      "tag": "",
-      "role": "主播",
-      "source": "B站直播回放 · 第31赛季排位 · 121 帧",
-      "hours": 0,
-      "note": "英雄覆盖 37.5% · 未人工核验",
-      "heroes": [
-        {
-          "zh": "探路者",
-          "en": "Pathfinder",
-          "n": 67,
-          "pct": 67.7
-        },
-        {
-          "zh": "亡灵",
-          "en": "Revenant",
-          "n": 10,
-          "pct": 10.1
-        },
-        {
-          "zh": "罗芭",
-          "en": "Loba",
-          "n": 9,
-          "pct": 9.1
-        },
-        {
-          "zh": "恶灵",
-          "en": "Wraith",
-          "n": 5,
-          "pct": 5.1
-        },
-        {
-          "zh": "命脉",
-          "en": "Lifeline",
-          "n": 4,
-          "pct": 4.0
-        },
-        {
-          "zh": "密客",
-          "en": "Crypto",
-          "n": 3,
-          "pct": 3.0
-        },
-        {
-          "zh": "希尔",
-          "en": "Seer",
-          "n": 1,
-          "pct": 1.0
-        }
-      ],
-      "combos": [
-        {
-          "heroes": [
-            "亡灵",
-            "亡灵",
-            "罗芭"
-          ],
-          "en": [
-            "Revenant",
-            "Revenant",
-            "Loba"
-          ],
-          "n": 1,
-          "pct": 100.0
-        }
-      ],
-      "weapons": [
-        {
-          "zh": "复仇女神连发突击步枪",
-          "zhShort": "复仇女神",
-          "en": "Nemesis",
-          "n": 64,
-          "pct": 28.7
-        },
-        {
-          "zh": "C.A.R冲锋枪",
-          "zhShort": "C.A.R",
-          "en": "C.A.R.",
-          "n": 35,
-          "pct": 15.7
-        },
-        {
-          "zh": "辅助手枪",
-          "zhShort": "辅助",
-          "en": "Wingman",
-          "n": 29,
-          "pct": 13.0
-        },
-        {
-          "zh": "L-STAR能量机枪",
-          "zhShort": "L-STAR",
-          "en": "L-STAR",
-          "n": 16,
-          "pct": 7.2
-        },
-        {
-          "zh": "赫姆洛克突击步枪",
-          "zhShort": "赫姆洛克",
-          "en": "Hemlok",
-          "n": 15,
-          "pct": 6.7
-        },
-        {
-          "zh": "电能冲锋枪",
-          "zhShort": "电能",
-          "en": "Volt",
-          "n": 14,
-          "pct": 6.3
+          "pct": 2.1
         },
         {
           "zh": "猎兽冲锋枪",
           "zhShort": "猎兽",
           "en": "Prowler",
-          "n": 9,
-          "pct": 4.0
-        },
-        {
-          "zh": "哈沃克步枪",
-          "zhShort": "哈沃克",
-          "en": "Havoc",
-          "n": 8,
-          "pct": 3.6
-        },
-        {
-          "zh": "三重式狙击枪",
-          "zhShort": "三重式",
-          "en": "Triple Take",
-          "n": 7,
-          "pct": 3.1
-        },
-        {
-          "zh": "充能步枪",
-          "zhShort": "充能",
-          "en": "Charge Rifle",
-          "n": 7,
-          "pct": 3.1
-        },
-        {
-          "zh": "克雷贝尔50口径狙击枪",
-          "zhShort": "克雷贝尔50口径",
-          "en": "Kraber",
-          "n": 4,
-          "pct": 1.8
-        },
-        {
-          "zh": "和平捍卫者霰弹枪",
-          "zhShort": "和平捍卫者",
-          "en": "Peacekeeper",
           "n": 3,
           "pct": 1.3
-        },
-        {
-          "zh": "转换者冲锋枪",
-          "zhShort": "转换者",
-          "en": "Alternator",
-          "n": 2,
-          "pct": 0.9
         },
         {
           "zh": "RE-45自动手枪",
           "zhShort": "RE-45",
           "en": "RE-45",
+          "n": 3,
+          "pct": 1.3
+        },
+        {
+          "zh": "克雷贝尔50口径狙击枪",
+          "zhShort": "克雷贝尔50口径",
+          "en": "Kraber",
+          "n": 3,
+          "pct": 1.3
+        },
+        {
+          "zh": "哈沃克步枪",
+          "zhShort": "哈沃克",
+          "en": "Havoc",
           "n": 2,
           "pct": 0.9
         },
         {
-          "zh": "VK-47平行步枪",
-          "zhShort": "VK-47平行",
-          "en": "VK-47 Flatline",
+          "zh": "M600喷火轻机枪",
+          "zhShort": "M600喷火",
+          "en": "M600 Spitfire",
           "n": 2,
           "pct": 0.9
         },
         {
-          "zh": "暴走轻机枪",
-          "zhShort": "暴走",
-          "en": "Rampage",
+          "zh": "专注轻机枪",
+          "zhShort": "专注",
+          "en": "Devotion",
           "n": 2,
           "pct": 0.9
         },
@@ -3781,13 +5147,27 @@ module.exports = {
           "zh": "EVA-8自动霰弹枪",
           "zhShort": "EVA-8自动",
           "en": "EVA-8",
-          "n": 2,
-          "pct": 0.9
+          "n": 1,
+          "pct": 0.4
         },
         {
-          "zh": "R-99冲锋枪",
-          "zhShort": "R-99",
-          "en": "R-99",
+          "zh": "暴走轻机枪",
+          "zhShort": "暴走",
+          "en": "Rampage",
+          "n": 1,
+          "pct": 0.4
+        },
+        {
+          "zh": "30-30连发枪",
+          "zhShort": "30-30",
+          "en": "30-30 Repeater",
+          "n": 1,
+          "pct": 0.4
+        },
+        {
+          "zh": "哨兵狙击步枪",
+          "zhShort": "哨兵",
+          "en": "Sentinel",
           "n": 1,
           "pct": 0.4
         },
@@ -3797,27 +5177,25 @@ module.exports = {
           "en": "Longbow DMR",
           "n": 1,
           "pct": 0.4
+        },
+        {
+          "zh": "敖犬霰弹枪",
+          "zhShort": "敖犬",
+          "en": "Mastiff",
+          "n": 1,
+          "pct": 0.4
+        },
+        {
+          "zh": "R-99冲锋枪",
+          "zhShort": "R-99",
+          "en": "R-99",
+          "n": 1,
+          "pct": 0.4
         }
       ],
       "weaponPairs": [
         {
           "zh": [
-            "C.A.R",
-            "复仇女神"
-          ],
-          "zhFull": [
-            "C.A.R冲锋枪",
-            "复仇女神连发突击步枪"
-          ],
-          "en": [
-            "C.A.R.",
-            "Nemesis"
-          ],
-          "n": 25,
-          "pct": 30.5
-        },
-        {
-          "zh": [
             "复仇女神",
             "辅助"
           ],
@@ -3829,72 +5207,8 @@ module.exports = {
             "Nemesis",
             "Wingman"
           ],
-          "n": 11,
-          "pct": 13.4
-        },
-        {
-          "zh": [
-            "赫姆洛克",
-            "电能"
-          ],
-          "zhFull": [
-            "赫姆洛克突击步枪",
-            "电能冲锋枪"
-          ],
-          "en": [
-            "Hemlok",
-            "Volt"
-          ],
-          "n": 6,
-          "pct": 7.3
-        },
-        {
-          "zh": [
-            "充能",
-            "辅助"
-          ],
-          "zhFull": [
-            "充能步枪",
-            "辅助手枪"
-          ],
-          "en": [
-            "Charge Rifle",
-            "Wingman"
-          ],
-          "n": 6,
-          "pct": 7.3
-        },
-        {
-          "zh": [
-            "复仇女神",
-            "猎兽"
-          ],
-          "zhFull": [
-            "复仇女神连发突击步枪",
-            "猎兽冲锋枪"
-          ],
-          "en": [
-            "Nemesis",
-            "Prowler"
-          ],
-          "n": 5,
-          "pct": 6.1
-        },
-        {
-          "zh": [
-            "哈沃克",
-            "辅助"
-          ],
-          "zhFull": [
-            "哈沃克步枪",
-            "辅助手枪"
-          ],
-          "en": [
-            "Havoc",
-            "Wingman"
-          ],
-          "n": 5,
-          "pct": 6.1
+          "n": 17,
+          "pct": 19.5
         },
         {
           "zh": [
@@ -3909,100 +5223,220 @@ module.exports = {
             "C.A.R.",
             "Hemlok"
           ],
-          "n": 3,
-          "pct": 3.7
+          "n": 9,
+          "pct": 10.3
         },
         {
           "zh": [
-            "C.A.R",
-            "三重式"
-          ],
-          "zhFull": [
-            "C.A.R冲锋枪",
-            "三重式狙击枪"
-          ],
-          "en": [
-            "C.A.R.",
-            "Triple Take"
-          ],
-          "n": 2,
-          "pct": 2.4
-        },
-        {
-          "zh": [
-            "L-STAR",
+            "赫姆洛克",
             "辅助"
           ],
           "zhFull": [
-            "L-STAR能量机枪",
+            "赫姆洛克突击步枪",
             "辅助手枪"
           ],
           "en": [
-            "L-STAR",
+            "Hemlok",
             "Wingman"
           ],
-          "n": 2,
-          "pct": 2.4
+          "n": 9,
+          "pct": 10.3
         },
         {
           "zh": [
             "C.A.R",
-            "克雷贝尔50口径"
+            "复仇女神"
           ],
           "zhFull": [
             "C.A.R冲锋枪",
-            "克雷贝尔50口径狙击枪"
+            "复仇女神连发突击步枪"
           ],
           "en": [
             "C.A.R.",
-            "Kraber"
+            "Nemesis"
           ],
-          "n": 2,
-          "pct": 2.4
+          "n": 7,
+          "pct": 8.0
+        },
+        {
+          "zh": [
+            "R-301",
+            "电能"
+          ],
+          "zhFull": [
+            "R-301自动步枪",
+            "电能冲锋枪"
+          ],
+          "en": [
+            "R-301",
+            "Volt"
+          ],
+          "n": 6,
+          "pct": 6.9
+        },
+        {
+          "zh": [
+            "转换者",
+            "复仇女神"
+          ],
+          "zhFull": [
+            "转换者冲锋枪",
+            "复仇女神连发突击步枪"
+          ],
+          "en": [
+            "Alternator",
+            "Nemesis"
+          ],
+          "n": 6,
+          "pct": 6.9
+        },
+        {
+          "zh": [
+            "转换者",
+            "赫姆洛克"
+          ],
+          "zhFull": [
+            "转换者冲锋枪",
+            "赫姆洛克突击步枪"
+          ],
+          "en": [
+            "Alternator",
+            "Hemlok"
+          ],
+          "n": 4,
+          "pct": 4.6
+        },
+        {
+          "zh": [
+            "赫姆洛克",
+            "电能"
+          ],
+          "zhFull": [
+            "赫姆洛克突击步枪",
+            "电能冲锋枪"
+          ],
+          "en": [
+            "Hemlok",
+            "Volt"
+          ],
+          "n": 3,
+          "pct": 3.4
+        },
+        {
+          "zh": [
+            "克雷贝尔50口径",
+            "莫桑比克"
+          ],
+          "zhFull": [
+            "克雷贝尔50口径狙击枪",
+            "莫桑比克霰弹枪"
+          ],
+          "en": [
+            "Kraber",
+            "Mozambique"
+          ],
+          "n": 3,
+          "pct": 3.4
         },
         {
           "zh": [
             "VK-47平行",
-            "和平捍卫者"
+            "RE-45"
           ],
           "zhFull": [
             "VK-47平行步枪",
-            "和平捍卫者霰弹枪"
+            "RE-45自动手枪"
           ],
           "en": [
             "VK-47 Flatline",
-            "Peacekeeper"
+            "RE-45"
           ],
           "n": 2,
-          "pct": 2.4
+          "pct": 2.3
         },
         {
           "zh": [
-            "哈沃克",
+            "赫姆洛克",
+            "P2020"
+          ],
+          "zhFull": [
+            "赫姆洛克突击步枪",
+            "P2020手枪"
+          ],
+          "en": [
+            "Hemlok",
+            "P2020"
+          ],
+          "n": 2,
+          "pct": 2.3
+        },
+        {
+          "zh": [
+            "VK-47平行",
             "电能"
           ],
           "zhFull": [
-            "哈沃克步枪",
+            "VK-47平行步枪",
             "电能冲锋枪"
           ],
           "en": [
-            "Havoc",
+            "VK-47 Flatline",
             "Volt"
           ],
           "n": 2,
-          "pct": 2.4
+          "pct": 2.3
         }
       ],
       "selfHeroes": [
         {
           "zh": "探路者",
-          "n": 62,
-          "pct": 16.2
+          "n": 306,
+          "pct": 33.1
+        },
+        {
+          "zh": "疯马吉",
+          "n": 108,
+          "pct": 11.7
+        },
+        {
+          "zh": "希尔",
+          "n": 83,
+          "pct": 9.0
         },
         {
           "zh": "亡灵",
-          "n": 11,
-          "pct": 2.9
+          "n": 81,
+          "pct": 8.8
+        },
+        {
+          "zh": "直布罗陀",
+          "n": 55,
+          "pct": 6.0
+        },
+        {
+          "zh": "密客",
+          "n": 19,
+          "pct": 2.1
+        },
+        {
+          "zh": "地平线",
+          "n": 14,
+          "pct": 1.5
+        },
+        {
+          "zh": "罗芭",
+          "n": 10,
+          "pct": 1.1
+        },
+        {
+          "zh": "恶灵",
+          "n": 7,
+          "pct": 0.8
+        },
+        {
+          "zh": "动力小子",
+          "n": 1,
+          "pct": 0.1
         }
       ]
     },
@@ -4011,27 +5445,27 @@ module.exports = {
       "name": "别云A",
       "tag": "",
       "role": "主播",
-      "source": "B站直播回放 · 第31赛季排位 · 116 帧",
+      "source": "B站直播回放 · 第31赛季排位 · 117 帧",
       "hours": 0,
-      "note": "英雄覆盖 85.8% · 未人工核验",
+      "note": "英雄覆盖 86.0% · 未人工核验",
       "heroes": [
         {
           "zh": "亡灵",
           "en": "Revenant",
-          "n": 85,
+          "n": 86,
           "pct": 35.1
         },
         {
           "zh": "罗芭",
           "en": "Loba",
-          "n": 82,
+          "n": 83,
           "pct": 33.9
         },
         {
           "zh": "探路者",
           "en": "Pathfinder",
-          "n": 64,
-          "pct": 26.4
+          "n": 65,
+          "pct": 26.5
         },
         {
           "zh": "班加罗尔",
@@ -4043,7 +5477,7 @@ module.exports = {
           "zh": "万蒂奇",
           "en": "Vantage",
           "n": 4,
-          "pct": 1.7
+          "pct": 1.6
         }
       ],
       "combos": [
@@ -4058,7 +5492,7 @@ module.exports = {
             "Pathfinder",
             "Loba"
           ],
-          "n": 7,
+          "n": 8,
           "pct": 100.0
         }
       ],
@@ -4067,22 +5501,22 @@ module.exports = {
           "zh": "复仇女神连发突击步枪",
           "zhShort": "复仇女神",
           "en": "Nemesis",
-          "n": 114,
-          "pct": 41.0
+          "n": 115,
+          "pct": 41.1
         },
         {
           "zh": "C.A.R冲锋枪",
           "zhShort": "C.A.R",
           "en": "C.A.R.",
           "n": 57,
-          "pct": 20.5
+          "pct": 20.4
         },
         {
           "zh": "EVA-8自动霰弹枪",
           "zhShort": "EVA-8自动",
           "en": "EVA-8",
           "n": 41,
-          "pct": 14.7
+          "pct": 14.6
         },
         {
           "zh": "L-STAR能量机枪",
@@ -4120,16 +5554,16 @@ module.exports = {
           "pct": 1.4
         },
         {
-          "zh": "哨兵狙击步枪",
-          "zhShort": "哨兵",
-          "en": "Sentinel",
-          "n": 3,
-          "pct": 1.1
-        },
-        {
           "zh": "猎兽冲锋枪",
           "zhShort": "猎兽",
           "en": "Prowler",
+          "n": 4,
+          "pct": 1.4
+        },
+        {
+          "zh": "哨兵狙击步枪",
+          "zhShort": "哨兵",
+          "en": "Sentinel",
           "n": 3,
           "pct": 1.1
         },
@@ -4170,7 +5604,7 @@ module.exports = {
             "Nemesis"
           ],
           "n": 45,
-          "pct": 37.5
+          "pct": 37.2
         },
         {
           "zh": [
@@ -4186,7 +5620,7 @@ module.exports = {
             "Nemesis"
           ],
           "n": 39,
-          "pct": 32.5
+          "pct": 32.2
         },
         {
           "zh": [
@@ -4202,7 +5636,7 @@ module.exports = {
             "Wingman"
           ],
           "n": 8,
-          "pct": 6.7
+          "pct": 6.6
         },
         {
           "zh": [
@@ -4238,6 +5672,22 @@ module.exports = {
         },
         {
           "zh": [
+            "复仇女神",
+            "猎兽"
+          ],
+          "zhFull": [
+            "复仇女神连发突击步枪",
+            "猎兽冲锋枪"
+          ],
+          "en": [
+            "Nemesis",
+            "Prowler"
+          ],
+          "n": 4,
+          "pct": 3.3
+        },
+        {
+          "zh": [
             "转换者",
             "哨兵"
           ],
@@ -4264,22 +5714,6 @@ module.exports = {
           "en": [
             "Nemesis",
             "Volt"
-          ],
-          "n": 3,
-          "pct": 2.5
-        },
-        {
-          "zh": [
-            "复仇女神",
-            "猎兽"
-          ],
-          "zhFull": [
-            "复仇女神连发突击步枪",
-            "猎兽冲锋枪"
-          ],
-          "en": [
-            "Nemesis",
-            "Prowler"
           ],
           "n": 3,
           "pct": 2.5
@@ -4364,6 +5798,532 @@ module.exports = {
           "zh": "地平线",
           "n": 1,
           "pct": 0.3
+        }
+      ]
+    },
+    {
+      "id": "dandanshu",
+      "name": "蛋蛋鼠",
+      "tag": "",
+      "role": "主播",
+      "source": "B站直播回放 · 第31赛季排位 · 114 帧",
+      "hours": 0,
+      "note": "英雄覆盖 72.1% · 未人工核验",
+      "heroes": [
+        {
+          "zh": "探路者",
+          "en": "Pathfinder",
+          "n": 66,
+          "pct": 39.3
+        },
+        {
+          "zh": "恶灵",
+          "en": "Wraith",
+          "n": 54,
+          "pct": 32.1
+        },
+        {
+          "zh": "亡灵",
+          "en": "Revenant",
+          "n": 17,
+          "pct": 10.1
+        },
+        {
+          "zh": "罗芭",
+          "en": "Loba",
+          "n": 13,
+          "pct": 7.7
+        },
+        {
+          "zh": "命脉",
+          "en": "Lifeline",
+          "n": 8,
+          "pct": 4.8
+        },
+        {
+          "zh": "疯马吉",
+          "en": "Mad Maggie",
+          "n": 3,
+          "pct": 1.8
+        },
+        {
+          "zh": "动力小子",
+          "en": "Octane",
+          "n": 3,
+          "pct": 1.8
+        },
+        {
+          "zh": "班加罗尔",
+          "en": "Bangalore",
+          "n": 2,
+          "pct": 1.2
+        },
+        {
+          "zh": "万蒂奇",
+          "en": "Vantage",
+          "n": 1,
+          "pct": 0.6
+        },
+        {
+          "zh": "变换",
+          "en": "Alter",
+          "n": 1,
+          "pct": 0.6
+        }
+      ],
+      "combos": [
+        {
+          "heroes": [
+            "亡灵",
+            "探路者",
+            "罗芭"
+          ],
+          "en": [
+            "Revenant",
+            "Pathfinder",
+            "Loba"
+          ],
+          "n": 4,
+          "pct": 36.4
+        },
+        {
+          "heroes": [
+            "命脉",
+            "恶灵",
+            "探路者"
+          ],
+          "en": [
+            "Lifeline",
+            "Wraith",
+            "Pathfinder"
+          ],
+          "n": 2,
+          "pct": 18.2
+        },
+        {
+          "heroes": [
+            "亡灵",
+            "命脉",
+            "探路者"
+          ],
+          "en": [
+            "Revenant",
+            "Lifeline",
+            "Pathfinder"
+          ],
+          "n": 1,
+          "pct": 9.1
+        },
+        {
+          "heroes": [
+            "亡灵",
+            "命脉",
+            "罗芭"
+          ],
+          "en": [
+            "Revenant",
+            "Lifeline",
+            "Loba"
+          ],
+          "n": 1,
+          "pct": 9.1
+        },
+        {
+          "heroes": [
+            "亡灵",
+            "动力小子",
+            "探路者"
+          ],
+          "en": [
+            "Revenant",
+            "Octane",
+            "Pathfinder"
+          ],
+          "n": 1,
+          "pct": 9.1
+        },
+        {
+          "heroes": [
+            "探路者",
+            "疯马吉",
+            "罗芭"
+          ],
+          "en": [
+            "Pathfinder",
+            "Mad Maggie",
+            "Loba"
+          ],
+          "n": 1,
+          "pct": 9.1
+        },
+        {
+          "heroes": [
+            "变换",
+            "班加罗尔",
+            "罗芭"
+          ],
+          "en": [
+            "Alter",
+            "Bangalore",
+            "Loba"
+          ],
+          "n": 1,
+          "pct": 9.1
+        }
+      ],
+      "weapons": [
+        {
+          "zh": "C.A.R冲锋枪",
+          "zhShort": "C.A.R",
+          "en": "C.A.R.",
+          "n": 65,
+          "pct": 42.2
+        },
+        {
+          "zh": "赫姆洛克突击步枪",
+          "zhShort": "赫姆洛克",
+          "en": "Hemlok",
+          "n": 20,
+          "pct": 13.0
+        },
+        {
+          "zh": "长弓精确步枪",
+          "zhShort": "长弓",
+          "en": "Longbow DMR",
+          "n": 12,
+          "pct": 7.8
+        },
+        {
+          "zh": "哨兵狙击步枪",
+          "zhShort": "哨兵",
+          "en": "Sentinel",
+          "n": 10,
+          "pct": 6.5
+        },
+        {
+          "zh": "R-301自动步枪",
+          "zhShort": "R-301",
+          "en": "R-301",
+          "n": 9,
+          "pct": 5.8
+        },
+        {
+          "zh": "电能冲锋枪",
+          "zhShort": "电能",
+          "en": "Volt",
+          "n": 7,
+          "pct": 4.5
+        },
+        {
+          "zh": "哈沃克步枪",
+          "zhShort": "哈沃克",
+          "en": "Havoc",
+          "n": 6,
+          "pct": 3.9
+        },
+        {
+          "zh": "L-STAR能量机枪",
+          "zhShort": "L-STAR",
+          "en": "L-STAR",
+          "n": 5,
+          "pct": 3.2
+        },
+        {
+          "zh": "P2020手枪",
+          "zhShort": "P2020",
+          "en": "P2020",
+          "n": 5,
+          "pct": 3.2
+        },
+        {
+          "zh": "RE-45自动手枪",
+          "zhShort": "RE-45",
+          "en": "RE-45",
+          "n": 4,
+          "pct": 2.6
+        },
+        {
+          "zh": "转换者冲锋枪",
+          "zhShort": "转换者",
+          "en": "Alternator",
+          "n": 3,
+          "pct": 1.9
+        },
+        {
+          "zh": "波塞克复合弓",
+          "zhShort": "波塞克复合弓",
+          "en": "Bocek Compound Bow",
+          "n": 2,
+          "pct": 1.3
+        },
+        {
+          "zh": "R-99冲锋枪",
+          "zhShort": "R-99",
+          "en": "R-99",
+          "n": 2,
+          "pct": 1.3
+        },
+        {
+          "zh": "G7侦查步枪",
+          "zhShort": "G7",
+          "en": "G7 Scout",
+          "n": 2,
+          "pct": 1.3
+        },
+        {
+          "zh": "辅助手枪",
+          "zhShort": "辅助",
+          "en": "Wingman",
+          "n": 1,
+          "pct": 0.6
+        },
+        {
+          "zh": "充能步枪",
+          "zhShort": "充能",
+          "en": "Charge Rifle",
+          "n": 1,
+          "pct": 0.6
+        }
+      ],
+      "weaponPairs": [
+        {
+          "zh": [
+            "C.A.R",
+            "长弓"
+          ],
+          "zhFull": [
+            "C.A.R冲锋枪",
+            "长弓精确步枪"
+          ],
+          "en": [
+            "C.A.R.",
+            "Longbow DMR"
+          ],
+          "n": 11,
+          "pct": 36.7
+        },
+        {
+          "zh": [
+            "赫姆洛克",
+            "电能"
+          ],
+          "zhFull": [
+            "赫姆洛克突击步枪",
+            "电能冲锋枪"
+          ],
+          "en": [
+            "Hemlok",
+            "Volt"
+          ],
+          "n": 4,
+          "pct": 13.3
+        },
+        {
+          "zh": [
+            "赫姆洛克",
+            "P2020"
+          ],
+          "zhFull": [
+            "赫姆洛克突击步枪",
+            "P2020手枪"
+          ],
+          "en": [
+            "Hemlok",
+            "P2020"
+          ],
+          "n": 4,
+          "pct": 13.3
+        },
+        {
+          "zh": [
+            "C.A.R",
+            "哈沃克"
+          ],
+          "zhFull": [
+            "C.A.R冲锋枪",
+            "哈沃克步枪"
+          ],
+          "en": [
+            "C.A.R.",
+            "Havoc"
+          ],
+          "n": 2,
+          "pct": 6.7
+        },
+        {
+          "zh": [
+            "转换者",
+            "赫姆洛克"
+          ],
+          "zhFull": [
+            "转换者冲锋枪",
+            "赫姆洛克突击步枪"
+          ],
+          "en": [
+            "Alternator",
+            "Hemlok"
+          ],
+          "n": 2,
+          "pct": 6.7
+        },
+        {
+          "zh": [
+            "R-301",
+            "电能"
+          ],
+          "zhFull": [
+            "R-301自动步枪",
+            "电能冲锋枪"
+          ],
+          "en": [
+            "R-301",
+            "Volt"
+          ],
+          "n": 1,
+          "pct": 3.3
+        },
+        {
+          "zh": [
+            "R-301",
+            "R-99"
+          ],
+          "zhFull": [
+            "R-301自动步枪",
+            "R-99冲锋枪"
+          ],
+          "en": [
+            "R-301",
+            "R-99"
+          ],
+          "n": 1,
+          "pct": 3.3
+        },
+        {
+          "zh": [
+            "L-STAR",
+            "电能"
+          ],
+          "zhFull": [
+            "L-STAR能量机枪",
+            "电能冲锋枪"
+          ],
+          "en": [
+            "L-STAR",
+            "Volt"
+          ],
+          "n": 1,
+          "pct": 3.3
+        },
+        {
+          "zh": [
+            "C.A.R",
+            "赫姆洛克"
+          ],
+          "zhFull": [
+            "C.A.R冲锋枪",
+            "赫姆洛克突击步枪"
+          ],
+          "en": [
+            "C.A.R.",
+            "Hemlok"
+          ],
+          "n": 1,
+          "pct": 3.3
+        },
+        {
+          "zh": [
+            "C.A.R",
+            "G7"
+          ],
+          "zhFull": [
+            "C.A.R冲锋枪",
+            "G7侦查步枪"
+          ],
+          "en": [
+            "C.A.R.",
+            "G7 Scout"
+          ],
+          "n": 1,
+          "pct": 3.3
+        },
+        {
+          "zh": [
+            "波塞克复合弓",
+            "C.A.R"
+          ],
+          "zhFull": [
+            "波塞克复合弓",
+            "C.A.R冲锋枪"
+          ],
+          "en": [
+            "Bocek Compound Bow",
+            "C.A.R."
+          ],
+          "n": 1,
+          "pct": 3.3
+        },
+        {
+          "zh": [
+            "C.A.R",
+            "哨兵"
+          ],
+          "zhFull": [
+            "C.A.R冲锋枪",
+            "哨兵狙击步枪"
+          ],
+          "en": [
+            "C.A.R.",
+            "Sentinel"
+          ],
+          "n": 1,
+          "pct": 3.3
+        }
+      ],
+      "selfHeroes": [
+        {
+          "zh": "变换",
+          "n": 170,
+          "pct": 33.5
+        },
+        {
+          "zh": "恶灵",
+          "n": 144,
+          "pct": 28.4
+        },
+        {
+          "zh": "探路者",
+          "n": 100,
+          "pct": 19.7
+        },
+        {
+          "zh": "亡灵",
+          "n": 57,
+          "pct": 11.2
+        },
+        {
+          "zh": "班加罗尔",
+          "n": 3,
+          "pct": 0.6
+        },
+        {
+          "zh": "密客",
+          "n": 3,
+          "pct": 0.6
+        },
+        {
+          "zh": "命脉",
+          "n": 2,
+          "pct": 0.4
+        },
+        {
+          "zh": "罗芭",
+          "n": 1,
+          "pct": 0.2
+        },
+        {
+          "zh": "动力小子",
+          "n": 1,
+          "pct": 0.2
         }
       ]
     },
@@ -4808,1078 +6768,6 @@ module.exports = {
       ]
     },
     {
-      "id": "dandanshu",
-      "name": "蛋蛋鼠",
-      "tag": "",
-      "role": "主播",
-      "source": "B站直播回放 · 第31赛季排位 · 107 帧",
-      "hours": 0,
-      "note": "英雄覆盖 71.8% · 未人工核验",
-      "heroes": [
-        {
-          "zh": "探路者",
-          "en": "Pathfinder",
-          "n": 62,
-          "pct": 39.2
-        },
-        {
-          "zh": "恶灵",
-          "en": "Wraith",
-          "n": 51,
-          "pct": 32.3
-        },
-        {
-          "zh": "亡灵",
-          "en": "Revenant",
-          "n": 16,
-          "pct": 10.1
-        },
-        {
-          "zh": "罗芭",
-          "en": "Loba",
-          "n": 12,
-          "pct": 7.6
-        },
-        {
-          "zh": "命脉",
-          "en": "Lifeline",
-          "n": 8,
-          "pct": 5.1
-        },
-        {
-          "zh": "动力小子",
-          "en": "Octane",
-          "n": 3,
-          "pct": 1.9
-        },
-        {
-          "zh": "班加罗尔",
-          "en": "Bangalore",
-          "n": 2,
-          "pct": 1.3
-        },
-        {
-          "zh": "疯马吉",
-          "en": "Mad Maggie",
-          "n": 2,
-          "pct": 1.3
-        },
-        {
-          "zh": "万蒂奇",
-          "en": "Vantage",
-          "n": 1,
-          "pct": 0.6
-        },
-        {
-          "zh": "变换",
-          "en": "Alter",
-          "n": 1,
-          "pct": 0.6
-        }
-      ],
-      "combos": [
-        {
-          "heroes": [
-            "亡灵",
-            "探路者",
-            "罗芭"
-          ],
-          "en": [
-            "Revenant",
-            "Pathfinder",
-            "Loba"
-          ],
-          "n": 4,
-          "pct": 40.0
-        },
-        {
-          "heroes": [
-            "命脉",
-            "恶灵",
-            "探路者"
-          ],
-          "en": [
-            "Lifeline",
-            "Wraith",
-            "Pathfinder"
-          ],
-          "n": 2,
-          "pct": 20.0
-        },
-        {
-          "heroes": [
-            "亡灵",
-            "命脉",
-            "探路者"
-          ],
-          "en": [
-            "Revenant",
-            "Lifeline",
-            "Pathfinder"
-          ],
-          "n": 1,
-          "pct": 10.0
-        },
-        {
-          "heroes": [
-            "亡灵",
-            "命脉",
-            "罗芭"
-          ],
-          "en": [
-            "Revenant",
-            "Lifeline",
-            "Loba"
-          ],
-          "n": 1,
-          "pct": 10.0
-        },
-        {
-          "heroes": [
-            "亡灵",
-            "动力小子",
-            "探路者"
-          ],
-          "en": [
-            "Revenant",
-            "Octane",
-            "Pathfinder"
-          ],
-          "n": 1,
-          "pct": 10.0
-        },
-        {
-          "heroes": [
-            "变换",
-            "班加罗尔",
-            "罗芭"
-          ],
-          "en": [
-            "Alter",
-            "Bangalore",
-            "Loba"
-          ],
-          "n": 1,
-          "pct": 10.0
-        }
-      ],
-      "weapons": [
-        {
-          "zh": "C.A.R冲锋枪",
-          "zhShort": "C.A.R",
-          "en": "C.A.R.",
-          "n": 63,
-          "pct": 42.6
-        },
-        {
-          "zh": "赫姆洛克突击步枪",
-          "zhShort": "赫姆洛克",
-          "en": "Hemlok",
-          "n": 19,
-          "pct": 12.8
-        },
-        {
-          "zh": "长弓精确步枪",
-          "zhShort": "长弓",
-          "en": "Longbow DMR",
-          "n": 11,
-          "pct": 7.4
-        },
-        {
-          "zh": "哨兵狙击步枪",
-          "zhShort": "哨兵",
-          "en": "Sentinel",
-          "n": 9,
-          "pct": 6.1
-        },
-        {
-          "zh": "R-301自动步枪",
-          "zhShort": "R-301",
-          "en": "R-301",
-          "n": 8,
-          "pct": 5.4
-        },
-        {
-          "zh": "电能冲锋枪",
-          "zhShort": "电能",
-          "en": "Volt",
-          "n": 7,
-          "pct": 4.7
-        },
-        {
-          "zh": "哈沃克步枪",
-          "zhShort": "哈沃克",
-          "en": "Havoc",
-          "n": 6,
-          "pct": 4.1
-        },
-        {
-          "zh": "L-STAR能量机枪",
-          "zhShort": "L-STAR",
-          "en": "L-STAR",
-          "n": 5,
-          "pct": 3.4
-        },
-        {
-          "zh": "P2020手枪",
-          "zhShort": "P2020",
-          "en": "P2020",
-          "n": 5,
-          "pct": 3.4
-        },
-        {
-          "zh": "RE-45自动手枪",
-          "zhShort": "RE-45",
-          "en": "RE-45",
-          "n": 4,
-          "pct": 2.7
-        },
-        {
-          "zh": "转换者冲锋枪",
-          "zhShort": "转换者",
-          "en": "Alternator",
-          "n": 3,
-          "pct": 2.0
-        },
-        {
-          "zh": "波塞克复合弓",
-          "zhShort": "波塞克复合弓",
-          "en": "Bocek Compound Bow",
-          "n": 2,
-          "pct": 1.4
-        },
-        {
-          "zh": "R-99冲锋枪",
-          "zhShort": "R-99",
-          "en": "R-99",
-          "n": 2,
-          "pct": 1.4
-        },
-        {
-          "zh": "G7侦查步枪",
-          "zhShort": "G7",
-          "en": "G7 Scout",
-          "n": 2,
-          "pct": 1.4
-        },
-        {
-          "zh": "辅助手枪",
-          "zhShort": "辅助",
-          "en": "Wingman",
-          "n": 1,
-          "pct": 0.7
-        },
-        {
-          "zh": "充能步枪",
-          "zhShort": "充能",
-          "en": "Charge Rifle",
-          "n": 1,
-          "pct": 0.7
-        }
-      ],
-      "weaponPairs": [
-        {
-          "zh": [
-            "C.A.R",
-            "长弓"
-          ],
-          "zhFull": [
-            "C.A.R冲锋枪",
-            "长弓精确步枪"
-          ],
-          "en": [
-            "C.A.R.",
-            "Longbow DMR"
-          ],
-          "n": 10,
-          "pct": 34.5
-        },
-        {
-          "zh": [
-            "赫姆洛克",
-            "电能"
-          ],
-          "zhFull": [
-            "赫姆洛克突击步枪",
-            "电能冲锋枪"
-          ],
-          "en": [
-            "Hemlok",
-            "Volt"
-          ],
-          "n": 4,
-          "pct": 13.8
-        },
-        {
-          "zh": [
-            "赫姆洛克",
-            "P2020"
-          ],
-          "zhFull": [
-            "赫姆洛克突击步枪",
-            "P2020手枪"
-          ],
-          "en": [
-            "Hemlok",
-            "P2020"
-          ],
-          "n": 4,
-          "pct": 13.8
-        },
-        {
-          "zh": [
-            "C.A.R",
-            "哈沃克"
-          ],
-          "zhFull": [
-            "C.A.R冲锋枪",
-            "哈沃克步枪"
-          ],
-          "en": [
-            "C.A.R.",
-            "Havoc"
-          ],
-          "n": 2,
-          "pct": 6.9
-        },
-        {
-          "zh": [
-            "转换者",
-            "赫姆洛克"
-          ],
-          "zhFull": [
-            "转换者冲锋枪",
-            "赫姆洛克突击步枪"
-          ],
-          "en": [
-            "Alternator",
-            "Hemlok"
-          ],
-          "n": 2,
-          "pct": 6.9
-        },
-        {
-          "zh": [
-            "R-301",
-            "电能"
-          ],
-          "zhFull": [
-            "R-301自动步枪",
-            "电能冲锋枪"
-          ],
-          "en": [
-            "R-301",
-            "Volt"
-          ],
-          "n": 1,
-          "pct": 3.4
-        },
-        {
-          "zh": [
-            "R-301",
-            "R-99"
-          ],
-          "zhFull": [
-            "R-301自动步枪",
-            "R-99冲锋枪"
-          ],
-          "en": [
-            "R-301",
-            "R-99"
-          ],
-          "n": 1,
-          "pct": 3.4
-        },
-        {
-          "zh": [
-            "L-STAR",
-            "电能"
-          ],
-          "zhFull": [
-            "L-STAR能量机枪",
-            "电能冲锋枪"
-          ],
-          "en": [
-            "L-STAR",
-            "Volt"
-          ],
-          "n": 1,
-          "pct": 3.4
-        },
-        {
-          "zh": [
-            "C.A.R",
-            "赫姆洛克"
-          ],
-          "zhFull": [
-            "C.A.R冲锋枪",
-            "赫姆洛克突击步枪"
-          ],
-          "en": [
-            "C.A.R.",
-            "Hemlok"
-          ],
-          "n": 1,
-          "pct": 3.4
-        },
-        {
-          "zh": [
-            "C.A.R",
-            "G7"
-          ],
-          "zhFull": [
-            "C.A.R冲锋枪",
-            "G7侦查步枪"
-          ],
-          "en": [
-            "C.A.R.",
-            "G7 Scout"
-          ],
-          "n": 1,
-          "pct": 3.4
-        },
-        {
-          "zh": [
-            "波塞克复合弓",
-            "C.A.R"
-          ],
-          "zhFull": [
-            "波塞克复合弓",
-            "C.A.R冲锋枪"
-          ],
-          "en": [
-            "Bocek Compound Bow",
-            "C.A.R."
-          ],
-          "n": 1,
-          "pct": 3.4
-        },
-        {
-          "zh": [
-            "C.A.R",
-            "哨兵"
-          ],
-          "zhFull": [
-            "C.A.R冲锋枪",
-            "哨兵狙击步枪"
-          ],
-          "en": [
-            "C.A.R.",
-            "Sentinel"
-          ],
-          "n": 1,
-          "pct": 3.4
-        }
-      ],
-      "selfHeroes": [
-        {
-          "zh": "变换",
-          "n": 170,
-          "pct": 33.5
-        },
-        {
-          "zh": "恶灵",
-          "n": 144,
-          "pct": 28.4
-        },
-        {
-          "zh": "探路者",
-          "n": 100,
-          "pct": 19.7
-        },
-        {
-          "zh": "亡灵",
-          "n": 57,
-          "pct": 11.2
-        },
-        {
-          "zh": "班加罗尔",
-          "n": 3,
-          "pct": 0.6
-        },
-        {
-          "zh": "密客",
-          "n": 3,
-          "pct": 0.6
-        },
-        {
-          "zh": "命脉",
-          "n": 2,
-          "pct": 0.4
-        },
-        {
-          "zh": "罗芭",
-          "n": 1,
-          "pct": 0.2
-        },
-        {
-          "zh": "动力小子",
-          "n": 1,
-          "pct": 0.2
-        }
-      ]
-    },
-    {
-      "id": "pite174",
-      "name": "皮特174",
-      "tag": "",
-      "role": "主播",
-      "source": "B站直播回放 · 第31赛季排位 · 101 帧",
-      "hours": 0,
-      "note": "英雄覆盖 75.2% · 未人工核验",
-      "heroes": [
-        {
-          "zh": "亡灵",
-          "en": "Revenant",
-          "n": 53,
-          "pct": 30.1
-        },
-        {
-          "zh": "探路者",
-          "en": "Pathfinder",
-          "n": 46,
-          "pct": 26.1
-        },
-        {
-          "zh": "罗芭",
-          "en": "Loba",
-          "n": 36,
-          "pct": 20.5
-        },
-        {
-          "zh": "变换",
-          "en": "Alter",
-          "n": 17,
-          "pct": 9.7
-        },
-        {
-          "zh": "班加罗尔",
-          "en": "Bangalore",
-          "n": 8,
-          "pct": 4.5
-        },
-        {
-          "zh": "命脉",
-          "en": "Lifeline",
-          "n": 7,
-          "pct": 4.0
-        },
-        {
-          "zh": "疯马吉",
-          "en": "Mad Maggie",
-          "n": 7,
-          "pct": 4.0
-        },
-        {
-          "zh": "动力小子",
-          "en": "Octane",
-          "n": 1,
-          "pct": 0.6
-        },
-        {
-          "zh": "密客",
-          "en": "Crypto",
-          "n": 1,
-          "pct": 0.6
-        }
-      ],
-      "combos": [
-        {
-          "heroes": [
-            "亡灵",
-            "探路者",
-            "罗芭"
-          ],
-          "en": [
-            "Revenant",
-            "Pathfinder",
-            "Loba"
-          ],
-          "n": 4,
-          "pct": 36.4
-        },
-        {
-          "heroes": [
-            "亡灵",
-            "探路者",
-            "班加罗尔"
-          ],
-          "en": [
-            "Revenant",
-            "Pathfinder",
-            "Bangalore"
-          ],
-          "n": 2,
-          "pct": 18.2
-        },
-        {
-          "heroes": [
-            "亡灵",
-            "变换",
-            "罗芭"
-          ],
-          "en": [
-            "Revenant",
-            "Alter",
-            "Loba"
-          ],
-          "n": 2,
-          "pct": 18.2
-        },
-        {
-          "heroes": [
-            "亡灵",
-            "命脉",
-            "罗芭"
-          ],
-          "en": [
-            "Revenant",
-            "Lifeline",
-            "Loba"
-          ],
-          "n": 1,
-          "pct": 9.1
-        },
-        {
-          "heroes": [
-            "命脉",
-            "探路者",
-            "疯马吉"
-          ],
-          "en": [
-            "Lifeline",
-            "Pathfinder",
-            "Mad Maggie"
-          ],
-          "n": 1,
-          "pct": 9.1
-        },
-        {
-          "heroes": [
-            "亡灵",
-            "探路者",
-            "疯马吉"
-          ],
-          "en": [
-            "Revenant",
-            "Pathfinder",
-            "Mad Maggie"
-          ],
-          "n": 1,
-          "pct": 9.1
-        }
-      ],
-      "weapons": [
-        {
-          "zh": "辅助手枪",
-          "zhShort": "辅助",
-          "en": "Wingman",
-          "n": 40,
-          "pct": 18.6
-        },
-        {
-          "zh": "复仇女神连发突击步枪",
-          "zhShort": "复仇女神",
-          "en": "Nemesis",
-          "n": 36,
-          "pct": 16.7
-        },
-        {
-          "zh": "C.A.R冲锋枪",
-          "zhShort": "C.A.R",
-          "en": "C.A.R.",
-          "n": 29,
-          "pct": 13.5
-        },
-        {
-          "zh": "赫姆洛克突击步枪",
-          "zhShort": "赫姆洛克",
-          "en": "Hemlok",
-          "n": 25,
-          "pct": 11.6
-        },
-        {
-          "zh": "电能冲锋枪",
-          "zhShort": "电能",
-          "en": "Volt",
-          "n": 20,
-          "pct": 9.3
-        },
-        {
-          "zh": "转换者冲锋枪",
-          "zhShort": "转换者",
-          "en": "Alternator",
-          "n": 11,
-          "pct": 5.1
-        },
-        {
-          "zh": "L-STAR能量机枪",
-          "zhShort": "L-STAR",
-          "en": "L-STAR",
-          "n": 9,
-          "pct": 4.2
-        },
-        {
-          "zh": "R-301自动步枪",
-          "zhShort": "R-301",
-          "en": "R-301",
-          "n": 8,
-          "pct": 3.7
-        },
-        {
-          "zh": "VK-47平行步枪",
-          "zhShort": "VK-47平行",
-          "en": "VK-47 Flatline",
-          "n": 7,
-          "pct": 3.3
-        },
-        {
-          "zh": "和平捍卫者霰弹枪",
-          "zhShort": "和平捍卫者",
-          "en": "Peacekeeper",
-          "n": 7,
-          "pct": 3.3
-        },
-        {
-          "zh": "莫桑比克霰弹枪",
-          "zhShort": "莫桑比克",
-          "en": "Mozambique",
-          "n": 5,
-          "pct": 2.3
-        },
-        {
-          "zh": "猎兽冲锋枪",
-          "zhShort": "猎兽",
-          "en": "Prowler",
-          "n": 3,
-          "pct": 1.4
-        },
-        {
-          "zh": "RE-45自动手枪",
-          "zhShort": "RE-45",
-          "en": "RE-45",
-          "n": 3,
-          "pct": 1.4
-        },
-        {
-          "zh": "哈沃克步枪",
-          "zhShort": "哈沃克",
-          "en": "Havoc",
-          "n": 2,
-          "pct": 0.9
-        },
-        {
-          "zh": "M600喷火轻机枪",
-          "zhShort": "M600喷火",
-          "en": "M600 Spitfire",
-          "n": 2,
-          "pct": 0.9
-        },
-        {
-          "zh": "P2020手枪",
-          "zhShort": "P2020",
-          "en": "P2020",
-          "n": 1,
-          "pct": 0.5
-        },
-        {
-          "zh": "暴走轻机枪",
-          "zhShort": "暴走",
-          "en": "Rampage",
-          "n": 1,
-          "pct": 0.5
-        },
-        {
-          "zh": "专注轻机枪",
-          "zhShort": "专注",
-          "en": "Devotion",
-          "n": 1,
-          "pct": 0.5
-        },
-        {
-          "zh": "30-30连发枪",
-          "zhShort": "30-30",
-          "en": "30-30 Repeater",
-          "n": 1,
-          "pct": 0.5
-        },
-        {
-          "zh": "哨兵狙击步枪",
-          "zhShort": "哨兵",
-          "en": "Sentinel",
-          "n": 1,
-          "pct": 0.5
-        },
-        {
-          "zh": "长弓精确步枪",
-          "zhShort": "长弓",
-          "en": "Longbow DMR",
-          "n": 1,
-          "pct": 0.5
-        },
-        {
-          "zh": "敖犬霰弹枪",
-          "zhShort": "敖犬",
-          "en": "Mastiff",
-          "n": 1,
-          "pct": 0.5
-        },
-        {
-          "zh": "R-99冲锋枪",
-          "zhShort": "R-99",
-          "en": "R-99",
-          "n": 1,
-          "pct": 0.5
-        }
-      ],
-      "weaponPairs": [
-        {
-          "zh": [
-            "复仇女神",
-            "辅助"
-          ],
-          "zhFull": [
-            "复仇女神连发突击步枪",
-            "辅助手枪"
-          ],
-          "en": [
-            "Nemesis",
-            "Wingman"
-          ],
-          "n": 17,
-          "pct": 21.0
-        },
-        {
-          "zh": [
-            "赫姆洛克",
-            "辅助"
-          ],
-          "zhFull": [
-            "赫姆洛克突击步枪",
-            "辅助手枪"
-          ],
-          "en": [
-            "Hemlok",
-            "Wingman"
-          ],
-          "n": 9,
-          "pct": 11.1
-        },
-        {
-          "zh": [
-            "C.A.R",
-            "赫姆洛克"
-          ],
-          "zhFull": [
-            "C.A.R冲锋枪",
-            "赫姆洛克突击步枪"
-          ],
-          "en": [
-            "C.A.R.",
-            "Hemlok"
-          ],
-          "n": 8,
-          "pct": 9.9
-        },
-        {
-          "zh": [
-            "C.A.R",
-            "复仇女神"
-          ],
-          "zhFull": [
-            "C.A.R冲锋枪",
-            "复仇女神连发突击步枪"
-          ],
-          "en": [
-            "C.A.R.",
-            "Nemesis"
-          ],
-          "n": 7,
-          "pct": 8.6
-        },
-        {
-          "zh": [
-            "R-301",
-            "电能"
-          ],
-          "zhFull": [
-            "R-301自动步枪",
-            "电能冲锋枪"
-          ],
-          "en": [
-            "R-301",
-            "Volt"
-          ],
-          "n": 6,
-          "pct": 7.4
-        },
-        {
-          "zh": [
-            "转换者",
-            "复仇女神"
-          ],
-          "zhFull": [
-            "转换者冲锋枪",
-            "复仇女神连发突击步枪"
-          ],
-          "en": [
-            "Alternator",
-            "Nemesis"
-          ],
-          "n": 6,
-          "pct": 7.4
-        },
-        {
-          "zh": [
-            "转换者",
-            "赫姆洛克"
-          ],
-          "zhFull": [
-            "转换者冲锋枪",
-            "赫姆洛克突击步枪"
-          ],
-          "en": [
-            "Alternator",
-            "Hemlok"
-          ],
-          "n": 4,
-          "pct": 4.9
-        },
-        {
-          "zh": [
-            "赫姆洛克",
-            "电能"
-          ],
-          "zhFull": [
-            "赫姆洛克突击步枪",
-            "电能冲锋枪"
-          ],
-          "en": [
-            "Hemlok",
-            "Volt"
-          ],
-          "n": 3,
-          "pct": 3.7
-        },
-        {
-          "zh": [
-            "VK-47平行",
-            "RE-45"
-          ],
-          "zhFull": [
-            "VK-47平行步枪",
-            "RE-45自动手枪"
-          ],
-          "en": [
-            "VK-47 Flatline",
-            "RE-45"
-          ],
-          "n": 2,
-          "pct": 2.5
-        },
-        {
-          "zh": [
-            "VK-47平行",
-            "电能"
-          ],
-          "zhFull": [
-            "VK-47平行步枪",
-            "电能冲锋枪"
-          ],
-          "en": [
-            "VK-47 Flatline",
-            "Volt"
-          ],
-          "n": 2,
-          "pct": 2.5
-        },
-        {
-          "zh": [
-            "C.A.R",
-            "哈沃克"
-          ],
-          "zhFull": [
-            "C.A.R冲锋枪",
-            "哈沃克步枪"
-          ],
-          "en": [
-            "C.A.R.",
-            "Havoc"
-          ],
-          "n": 1,
-          "pct": 1.2
-        },
-        {
-          "zh": [
-            "哈沃克",
-            "猎兽"
-          ],
-          "zhFull": [
-            "哈沃克步枪",
-            "猎兽冲锋枪"
-          ],
-          "en": [
-            "Havoc",
-            "Prowler"
-          ],
-          "n": 1,
-          "pct": 1.2
-        }
-      ],
-      "selfHeroes": [
-        {
-          "zh": "探路者",
-          "n": 159,
-          "pct": 21.2
-        },
-        {
-          "zh": "疯马吉",
-          "n": 108,
-          "pct": 14.4
-        },
-        {
-          "zh": "希尔",
-          "n": 83,
-          "pct": 11.1
-        },
-        {
-          "zh": "亡灵",
-          "n": 81,
-          "pct": 10.8
-        },
-        {
-          "zh": "直布罗陀",
-          "n": 55,
-          "pct": 7.3
-        },
-        {
-          "zh": "密客",
-          "n": 19,
-          "pct": 2.5
-        },
-        {
-          "zh": "地平线",
-          "n": 14,
-          "pct": 1.9
-        },
-        {
-          "zh": "罗芭",
-          "n": 10,
-          "pct": 1.3
-        },
-        {
-          "zh": "恶灵",
-          "n": 7,
-          "pct": 0.9
-        },
-        {
-          "zh": "动力小子",
-          "n": 1,
-          "pct": 0.1
-        }
-      ]
-    },
-    {
       "id": "congcong",
       "name": "葱葱Freddie",
       "tag": "",
@@ -6312,21 +7200,21 @@ module.exports = {
       "name": "逢春OvO",
       "tag": "",
       "role": "主播",
-      "source": "B站直播回放 · 第31赛季排位 · 77 帧",
+      "source": "B站直播回放 · 第31赛季排位 · 78 帧",
       "hours": 0,
-      "note": "英雄覆盖 64.8% · 未人工核验",
+      "note": "英雄覆盖 63.5% · 未人工核验",
       "heroes": [
         {
           "zh": "亡灵",
           "en": "Revenant",
-          "n": 47,
-          "pct": 50.0
+          "n": 48,
+          "pct": 51.1
         },
         {
           "zh": "探路者",
           "en": "Pathfinder",
-          "n": 17,
-          "pct": 18.1
+          "n": 15,
+          "pct": 16.0
         },
         {
           "zh": "罗芭",
@@ -6337,8 +7225,8 @@ module.exports = {
         {
           "zh": "命脉",
           "en": "Lifeline",
-          "n": 6,
-          "pct": 6.4
+          "n": 7,
+          "pct": 7.4
         },
         {
           "zh": "变换",
@@ -6409,49 +7297,56 @@ module.exports = {
           "zhShort": "C.A.R",
           "en": "C.A.R.",
           "n": 55,
-          "pct": 34.8
+          "pct": 34.0
         },
         {
           "zh": "复仇女神连发突击步枪",
           "zhShort": "复仇女神",
           "en": "Nemesis",
-          "n": 54,
-          "pct": 34.2
+          "n": 53,
+          "pct": 32.7
         },
         {
           "zh": "赫姆洛克突击步枪",
           "zhShort": "赫姆洛克",
           "en": "Hemlok",
           "n": 9,
-          "pct": 5.7
+          "pct": 5.6
         },
         {
           "zh": "电能冲锋枪",
           "zhShort": "电能",
           "en": "Volt",
           "n": 8,
-          "pct": 5.1
+          "pct": 4.9
         },
         {
           "zh": "猎兽冲锋枪",
           "zhShort": "猎兽",
           "en": "Prowler",
           "n": 7,
-          "pct": 4.4
+          "pct": 4.3
         },
         {
           "zh": "VK-47平行步枪",
           "zhShort": "VK-47平行",
           "en": "VK-47 Flatline",
           "n": 6,
-          "pct": 3.8
+          "pct": 3.7
         },
         {
           "zh": "L-STAR能量机枪",
           "zhShort": "L-STAR",
           "en": "L-STAR",
           "n": 5,
-          "pct": 3.2
+          "pct": 3.1
+        },
+        {
+          "zh": "R-99冲锋枪",
+          "zhShort": "R-99",
+          "en": "R-99",
+          "n": 4,
+          "pct": 2.5
         },
         {
           "zh": "转换者冲锋枪",
@@ -6461,25 +7356,32 @@ module.exports = {
           "pct": 2.5
         },
         {
-          "zh": "R-99冲锋枪",
-          "zhShort": "R-99",
-          "en": "R-99",
+          "zh": "三重式狙击枪",
+          "zhShort": "三重式",
+          "en": "Triple Take",
           "n": 3,
           "pct": 1.9
         },
         {
-          "zh": "三重式狙击枪",
-          "zhShort": "三重式",
-          "en": "Triple Take",
+          "zh": "P2020手枪",
+          "zhShort": "P2020",
+          "en": "P2020",
           "n": 2,
-          "pct": 1.3
+          "pct": 1.2
+        },
+        {
+          "zh": "和平捍卫者霰弹枪",
+          "zhShort": "和平捍卫者",
+          "en": "Peacekeeper",
+          "n": 2,
+          "pct": 1.2
         },
         {
           "zh": "RE-45自动手枪",
           "zhShort": "RE-45",
           "en": "RE-45",
           "n": 2,
-          "pct": 1.3
+          "pct": 1.2
         },
         {
           "zh": "辅助手枪",
@@ -6492,13 +7394,6 @@ module.exports = {
           "zh": "哈沃克步枪",
           "zhShort": "哈沃克",
           "en": "Havoc",
-          "n": 1,
-          "pct": 0.6
-        },
-        {
-          "zh": "P2020手枪",
-          "zhShort": "P2020",
-          "en": "P2020",
           "n": 1,
           "pct": 0.6
         }
@@ -6571,22 +7466,6 @@ module.exports = {
         {
           "zh": [
             "复仇女神",
-            "猎兽"
-          ],
-          "zhFull": [
-            "复仇女神连发突击步枪",
-            "猎兽冲锋枪"
-          ],
-          "en": [
-            "Nemesis",
-            "Prowler"
-          ],
-          "n": 4,
-          "pct": 5.6
-        },
-        {
-          "zh": [
-            "复仇女神",
             "R-99"
           ],
           "zhFull": [
@@ -6612,6 +7491,22 @@ module.exports = {
           "en": [
             "C.A.R.",
             "L-STAR"
+          ],
+          "n": 3,
+          "pct": 4.2
+        },
+        {
+          "zh": [
+            "复仇女神",
+            "猎兽"
+          ],
+          "zhFull": [
+            "复仇女神连发突击步枪",
+            "猎兽冲锋枪"
+          ],
+          "en": [
+            "Nemesis",
+            "Prowler"
           ],
           "n": 3,
           "pct": 4.2
@@ -6679,6 +7574,22 @@ module.exports = {
           ],
           "n": 1,
           "pct": 1.4
+        },
+        {
+          "zh": [
+            "R-99",
+            "三重式"
+          ],
+          "zhFull": [
+            "R-99冲锋枪",
+            "三重式狙击枪"
+          ],
+          "en": [
+            "R-99",
+            "Triple Take"
+          ],
+          "n": 1,
+          "pct": 1.4
         }
       ],
       "selfHeroes": [
@@ -6719,45 +7630,45 @@ module.exports = {
       "name": "XXFPS",
       "tag": "",
       "role": "主播",
-      "source": "B站直播回放 · 第31赛季排位 · 66 帧",
+      "source": "B站直播回放 · 第31赛季排位 · 71 帧",
       "hours": 0,
-      "note": "英雄覆盖 86.1% · 未人工核验",
+      "note": "英雄覆盖 86.2% · 未人工核验",
       "heroes": [
         {
           "zh": "探路者",
           "en": "Pathfinder",
-          "n": 62,
-          "pct": 43.4
+          "n": 67,
+          "pct": 42.9
         },
         {
           "zh": "命脉",
           "en": "Lifeline",
-          "n": 35,
-          "pct": 24.5
+          "n": 38,
+          "pct": 24.4
         },
         {
           "zh": "疯马吉",
           "en": "Mad Maggie",
-          "n": 27,
-          "pct": 18.9
+          "n": 30,
+          "pct": 19.2
         },
         {
           "zh": "班加罗尔",
           "en": "Bangalore",
-          "n": 15,
-          "pct": 10.5
+          "n": 17,
+          "pct": 10.9
         },
         {
           "zh": "亡灵",
           "en": "Revenant",
           "n": 2,
-          "pct": 1.4
+          "pct": 1.3
         },
         {
           "zh": "罗芭",
           "en": "Loba",
           "n": 2,
-          "pct": 1.4
+          "pct": 1.3
         }
       ],
       "combos": [
@@ -6795,50 +7706,50 @@ module.exports = {
           "zh": "哈沃克步枪",
           "zhShort": "哈沃克",
           "en": "Havoc",
-          "n": 41,
-          "pct": 34.2
+          "n": 44,
+          "pct": 34.4
         },
         {
           "zh": "C.A.R冲锋枪",
           "zhShort": "C.A.R",
           "en": "C.A.R.",
-          "n": 23,
-          "pct": 19.2
+          "n": 24,
+          "pct": 18.8
         },
         {
           "zh": "专注轻机枪",
           "zhShort": "专注",
           "en": "Devotion",
-          "n": 19,
-          "pct": 15.8
+          "n": 20,
+          "pct": 15.6
         },
         {
           "zh": "M600喷火轻机枪",
           "zhShort": "M600喷火",
           "en": "M600 Spitfire",
           "n": 15,
-          "pct": 12.5
+          "pct": 11.7
         },
         {
           "zh": "转换者冲锋枪",
           "zhShort": "转换者",
           "en": "Alternator",
-          "n": 12,
-          "pct": 10.0
+          "n": 14,
+          "pct": 10.9
         },
         {
           "zh": "R-99冲锋枪",
           "zhShort": "R-99",
           "en": "R-99",
-          "n": 6,
-          "pct": 5.0
+          "n": 7,
+          "pct": 5.5
         },
         {
           "zh": "VK-47平行步枪",
           "zhShort": "VK-47平行",
           "en": "VK-47 Flatline",
           "n": 2,
-          "pct": 1.7
+          "pct": 1.6
         },
         {
           "zh": "猎兽冲锋枪",
@@ -6869,8 +7780,8 @@ module.exports = {
             "C.A.R.",
             "Devotion"
           ],
-          "n": 14,
-          "pct": 34.1
+          "n": 15,
+          "pct": 33.3
         },
         {
           "zh": [
@@ -6885,8 +7796,8 @@ module.exports = {
             "Alternator",
             "Havoc"
           ],
-          "n": 10,
-          "pct": 24.4
+          "n": 12,
+          "pct": 26.7
         },
         {
           "zh": [
@@ -6902,7 +7813,7 @@ module.exports = {
             "Havoc"
           ],
           "n": 9,
-          "pct": 22.0
+          "pct": 20.0
         },
         {
           "zh": [
@@ -6917,8 +7828,8 @@ module.exports = {
             "Havoc",
             "R-99"
           ],
-          "n": 6,
-          "pct": 14.6
+          "n": 7,
+          "pct": 15.6
         },
         {
           "zh": [
@@ -6934,7 +7845,7 @@ module.exports = {
             "VK-47 Flatline"
           ],
           "n": 2,
-          "pct": 4.9
+          "pct": 4.4
         }
       ],
       "selfHeroes": [
@@ -6966,334 +7877,43 @@ module.exports = {
       ]
     },
     {
-      "id": "apex-邓远东eastyy",
-      "name": "Apex-邓远东Eastyy",
-      "tag": "",
-      "role": "主播",
-      "source": "B站直播回放 · 第31赛季排位 · 48 帧",
-      "hours": 0,
-      "note": "英雄覆盖 94.9% · 未人工核验",
-      "heroes": [
-        {
-          "zh": "探路者",
-          "en": "Pathfinder",
-          "n": 30,
-          "pct": 32.3
-        },
-        {
-          "zh": "罗芭",
-          "en": "Loba",
-          "n": 29,
-          "pct": 31.2
-        },
-        {
-          "zh": "疯马吉",
-          "en": "Mad Maggie",
-          "n": 14,
-          "pct": 15.1
-        },
-        {
-          "zh": "亡灵",
-          "en": "Revenant",
-          "n": 13,
-          "pct": 14.0
-        },
-        {
-          "zh": "动力小子",
-          "en": "Octane",
-          "n": 5,
-          "pct": 5.4
-        },
-        {
-          "zh": "命脉",
-          "en": "Lifeline",
-          "n": 1,
-          "pct": 1.1
-        },
-        {
-          "zh": "班加罗尔",
-          "en": "Bangalore",
-          "n": 1,
-          "pct": 1.1
-        }
-      ],
-      "combos": [
-        {
-          "heroes": [
-            "亡灵",
-            "探路者",
-            "罗芭"
-          ],
-          "en": [
-            "Revenant",
-            "Pathfinder",
-            "Loba"
-          ],
-          "n": 3,
-          "pct": 42.9
-        },
-        {
-          "heroes": [
-            "探路者",
-            "疯马吉",
-            "罗芭"
-          ],
-          "en": [
-            "Pathfinder",
-            "Mad Maggie",
-            "Loba"
-          ],
-          "n": 3,
-          "pct": 42.9
-        },
-        {
-          "heroes": [
-            "动力小子",
-            "探路者",
-            "罗芭"
-          ],
-          "en": [
-            "Octane",
-            "Pathfinder",
-            "Loba"
-          ],
-          "n": 1,
-          "pct": 14.3
-        }
-      ],
-      "weapons": [
-        {
-          "zh": "复仇女神连发突击步枪",
-          "zhShort": "复仇女神",
-          "en": "Nemesis",
-          "n": 34,
-          "pct": 43.6
-        },
-        {
-          "zh": "C.A.R冲锋枪",
-          "zhShort": "C.A.R",
-          "en": "C.A.R.",
-          "n": 32,
-          "pct": 41.0
-        },
-        {
-          "zh": "EVA-8自动霰弹枪",
-          "zhShort": "EVA-8自动",
-          "en": "EVA-8",
-          "n": 4,
-          "pct": 5.1
-        },
-        {
-          "zh": "哈沃克步枪",
-          "zhShort": "哈沃克",
-          "en": "Havoc",
-          "n": 3,
-          "pct": 3.8
-        },
-        {
-          "zh": "猎兽冲锋枪",
-          "zhShort": "猎兽",
-          "en": "Prowler",
-          "n": 2,
-          "pct": 2.6
-        },
-        {
-          "zh": "R-99冲锋枪",
-          "zhShort": "R-99",
-          "en": "R-99",
-          "n": 1,
-          "pct": 1.3
-        },
-        {
-          "zh": "VK-47平行步枪",
-          "zhShort": "VK-47平行",
-          "en": "VK-47 Flatline",
-          "n": 1,
-          "pct": 1.3
-        },
-        {
-          "zh": "P2020手枪",
-          "zhShort": "P2020",
-          "en": "P2020",
-          "n": 1,
-          "pct": 1.3
-        }
-      ],
-      "weaponPairs": [
-        {
-          "zh": [
-            "C.A.R",
-            "复仇女神"
-          ],
-          "zhFull": [
-            "C.A.R冲锋枪",
-            "复仇女神连发突击步枪"
-          ],
-          "en": [
-            "C.A.R.",
-            "Nemesis"
-          ],
-          "n": 31,
-          "pct": 83.8
-        },
-        {
-          "zh": [
-            "C.A.R",
-            "哈沃克"
-          ],
-          "zhFull": [
-            "C.A.R冲锋枪",
-            "哈沃克步枪"
-          ],
-          "en": [
-            "C.A.R.",
-            "Havoc"
-          ],
-          "n": 1,
-          "pct": 2.7
-        },
-        {
-          "zh": [
-            "复仇女神",
-            "R-99"
-          ],
-          "zhFull": [
-            "复仇女神连发突击步枪",
-            "R-99冲锋枪"
-          ],
-          "en": [
-            "Nemesis",
-            "R-99"
-          ],
-          "n": 1,
-          "pct": 2.7
-        },
-        {
-          "zh": [
-            "VK-47平行",
-            "P2020"
-          ],
-          "zhFull": [
-            "VK-47平行步枪",
-            "P2020手枪"
-          ],
-          "en": [
-            "VK-47 Flatline",
-            "P2020"
-          ],
-          "n": 1,
-          "pct": 2.7
-        },
-        {
-          "zh": [
-            "哈沃克",
-            "猎兽"
-          ],
-          "zhFull": [
-            "哈沃克步枪",
-            "猎兽冲锋枪"
-          ],
-          "en": [
-            "Havoc",
-            "Prowler"
-          ],
-          "n": 1,
-          "pct": 2.7
-        },
-        {
-          "zh": [
-            "复仇女神",
-            "猎兽"
-          ],
-          "zhFull": [
-            "复仇女神连发突击步枪",
-            "猎兽冲锋枪"
-          ],
-          "en": [
-            "Nemesis",
-            "Prowler"
-          ],
-          "n": 1,
-          "pct": 2.7
-        },
-        {
-          "zh": [
-            "EVA-8自动",
-            "哈沃克"
-          ],
-          "zhFull": [
-            "EVA-8自动霰弹枪",
-            "哈沃克步枪"
-          ],
-          "en": [
-            "EVA-8",
-            "Havoc"
-          ],
-          "n": 1,
-          "pct": 2.7
-        }
-      ],
-      "selfHeroes": [
-        {
-          "zh": "探路者",
-          "n": 97,
-          "pct": 60.2
-        },
-        {
-          "zh": "疯马吉",
-          "n": 13,
-          "pct": 8.1
-        },
-        {
-          "zh": "卡特莉丝",
-          "n": 4,
-          "pct": 2.5
-        },
-        {
-          "zh": "直布罗陀",
-          "n": 3,
-          "pct": 1.9
-        }
-      ]
-    },
-    {
       "id": "hinson",
       "name": "西装 Hinson",
       "tag": "",
       "role": "主播",
-      "source": "B站直播回放 · 第31赛季排位 · 46 帧",
+      "source": "B站直播回放 · 第31赛季排位 · 69 帧",
       "hours": 0,
       "note": "英雄覆盖 91.5% · 未人工核验",
       "heroes": [
         {
           "zh": "亡灵",
           "en": "Revenant",
-          "n": 39,
+          "n": 59,
           "pct": 36.4
-        },
-        {
-          "zh": "命脉",
-          "en": "Lifeline",
-          "n": 33,
-          "pct": 30.8
         },
         {
           "zh": "密客",
           "en": "Crypto",
-          "n": 31,
+          "n": 48,
+          "pct": 29.6
+        },
+        {
+          "zh": "命脉",
+          "en": "Lifeline",
+          "n": 47,
           "pct": 29.0
         },
         {
           "zh": "探路者",
           "en": "Pathfinder",
-          "n": 3,
-          "pct": 2.8
+          "n": 7,
+          "pct": 4.3
         },
         {
           "zh": "班加罗尔",
           "en": "Bangalore",
           "n": 1,
-          "pct": 0.9
+          "pct": 0.6
         }
       ],
       "combos": [
@@ -7308,8 +7928,8 @@ module.exports = {
             "Lifeline",
             "Crypto"
           ],
-          "n": 12,
-          "pct": 85.7
+          "n": 13,
+          "pct": 92.9
         },
         {
           "heroes": [
@@ -7322,8 +7942,8 @@ module.exports = {
             "Crypto",
             "Pathfinder"
           ],
-          "n": 2,
-          "pct": 14.3
+          "n": 1,
+          "pct": 7.1
         }
       ],
       "weapons": [
@@ -7331,78 +7951,78 @@ module.exports = {
           "zh": "L-STAR能量机枪",
           "zhShort": "L-STAR",
           "en": "L-STAR",
-          "n": 32,
-          "pct": 35.6
+          "n": 50,
+          "pct": 37.0
         },
         {
           "zh": "C.A.R冲锋枪",
           "zhShort": "C.A.R",
           "en": "C.A.R.",
-          "n": 19,
-          "pct": 21.1
+          "n": 34,
+          "pct": 25.2
         },
         {
           "zh": "赫姆洛克突击步枪",
           "zhShort": "赫姆洛克",
           "en": "Hemlok",
-          "n": 11,
-          "pct": 12.2
+          "n": 14,
+          "pct": 10.4
         },
         {
           "zh": "猎兽冲锋枪",
           "zhShort": "猎兽",
           "en": "Prowler",
-          "n": 8,
+          "n": 12,
           "pct": 8.9
         },
         {
           "zh": "复仇女神连发突击步枪",
           "zhShort": "复仇女神",
           "en": "Nemesis",
-          "n": 7,
-          "pct": 7.8
+          "n": 10,
+          "pct": 7.4
+        },
+        {
+          "zh": "EVA-8自动霰弹枪",
+          "zhShort": "EVA-8自动",
+          "en": "EVA-8",
+          "n": 4,
+          "pct": 3.0
         },
         {
           "zh": "三重式狙击枪",
           "zhShort": "三重式",
           "en": "Triple Take",
           "n": 3,
-          "pct": 3.3
-        },
-        {
-          "zh": "EVA-8自动霰弹枪",
-          "zhShort": "EVA-8自动",
-          "en": "EVA-8",
-          "n": 3,
-          "pct": 3.3
+          "pct": 2.2
         },
         {
           "zh": "R-99冲锋枪",
           "zhShort": "R-99",
           "en": "R-99",
           "n": 3,
-          "pct": 3.3
+          "pct": 2.2
         },
         {
           "zh": "转换者冲锋枪",
           "zhShort": "转换者",
           "en": "Alternator",
           "n": 2,
-          "pct": 2.2
+          "pct": 1.5
+        },
+        {
+          "zh": "和平捍卫者霰弹枪",
+          "zhShort": "和平捍卫者",
+          "en": "Peacekeeper",
+          "n": 2,
+          "pct": 1.5
         },
         {
           "zh": "辅助手枪",
           "zhShort": "辅助",
           "en": "Wingman",
           "n": 1,
-          "pct": 1.1
-        },
-        {
-          "zh": "和平捍卫者霰弹枪",
-          "zhShort": "和平捍卫者",
-          "en": "Peacekeeper",
-          "n": 1,
-          "pct": 1.1
+          "pct": 0.7
         }
       ],
       "weaponPairs": [
@@ -7419,24 +8039,8 @@ module.exports = {
             "C.A.R.",
             "L-STAR"
           ],
-          "n": 16,
-          "pct": 45.7
-        },
-        {
-          "zh": [
-            "L-STAR",
-            "猎兽"
-          ],
-          "zhFull": [
-            "L-STAR能量机枪",
-            "猎兽冲锋枪"
-          ],
-          "en": [
-            "L-STAR",
-            "Prowler"
-          ],
-          "n": 4,
-          "pct": 11.4
+          "n": 30,
+          "pct": 55.6
         },
         {
           "zh": [
@@ -7451,8 +8055,24 @@ module.exports = {
             "Nemesis",
             "Prowler"
           ],
-          "n": 3,
-          "pct": 8.6
+          "n": 5,
+          "pct": 9.3
+        },
+        {
+          "zh": [
+            "L-STAR",
+            "猎兽"
+          ],
+          "zhFull": [
+            "L-STAR能量机枪",
+            "猎兽冲锋枪"
+          ],
+          "en": [
+            "L-STAR",
+            "Prowler"
+          ],
+          "n": 5,
+          "pct": 9.3
         },
         {
           "zh": [
@@ -7468,7 +8088,23 @@ module.exports = {
             "Hemlok"
           ],
           "n": 3,
-          "pct": 8.6
+          "pct": 5.6
+        },
+        {
+          "zh": [
+            "EVA-8自动",
+            "赫姆洛克"
+          ],
+          "zhFull": [
+            "EVA-8自动霰弹枪",
+            "赫姆洛克突击步枪"
+          ],
+          "en": [
+            "EVA-8",
+            "Hemlok"
+          ],
+          "n": 2,
+          "pct": 3.7
         },
         {
           "zh": [
@@ -7484,7 +8120,23 @@ module.exports = {
             "Hemlok"
           ],
           "n": 2,
-          "pct": 5.7
+          "pct": 3.7
+        },
+        {
+          "zh": [
+            "C.A.R",
+            "复仇女神"
+          ],
+          "zhFull": [
+            "C.A.R冲锋枪",
+            "复仇女神连发突击步枪"
+          ],
+          "en": [
+            "C.A.R.",
+            "Nemesis"
+          ],
+          "n": 1,
+          "pct": 1.9
         },
         {
           "zh": [
@@ -7500,23 +8152,7 @@ module.exports = {
             "Nemesis"
           ],
           "n": 1,
-          "pct": 2.9
-        },
-        {
-          "zh": [
-            "EVA-8自动",
-            "赫姆洛克"
-          ],
-          "zhFull": [
-            "EVA-8自动霰弹枪",
-            "赫姆洛克突击步枪"
-          ],
-          "en": [
-            "EVA-8",
-            "Hemlok"
-          ],
-          "n": 1,
-          "pct": 2.9
+          "pct": 1.9
         },
         {
           "zh": [
@@ -7532,7 +8168,7 @@ module.exports = {
             "Triple Take"
           ],
           "n": 1,
-          "pct": 2.9
+          "pct": 1.9
         },
         {
           "zh": [
@@ -7548,7 +8184,7 @@ module.exports = {
             "R-99"
           ],
           "n": 1,
-          "pct": 2.9
+          "pct": 1.9
         },
         {
           "zh": [
@@ -7564,7 +8200,7 @@ module.exports = {
             "Wingman"
           ],
           "n": 1,
-          "pct": 2.9
+          "pct": 1.9
         },
         {
           "zh": [
@@ -7580,23 +8216,7 @@ module.exports = {
             "R-99"
           ],
           "n": 1,
-          "pct": 2.9
-        },
-        {
-          "zh": [
-            "L-STAR",
-            "R-99"
-          ],
-          "zhFull": [
-            "L-STAR能量机枪",
-            "R-99冲锋枪"
-          ],
-          "en": [
-            "L-STAR",
-            "R-99"
-          ],
-          "n": 1,
-          "pct": 2.9
+          "pct": 1.9
         }
       ],
       "selfHeroes": [
@@ -7632,9 +8252,9 @@ module.exports = {
       "name": "lible_ace3",
       "tag": "",
       "role": "主播",
-      "source": "B站直播回放 · 第31赛季排位 · 44 帧",
+      "source": "B站直播回放 · 第31赛季排位 · 47 帧",
       "hours": 0,
-      "note": "英雄覆盖 31.9% · 未人工核验",
+      "note": "英雄覆盖 29.7% · 未人工核验",
       "heroes": [
         {
           "zh": "亡灵",
@@ -7679,36 +8299,36 @@ module.exports = {
           "zh": "C.A.R冲锋枪",
           "zhShort": "C.A.R",
           "en": "C.A.R.",
-          "n": 25,
-          "pct": 62.5
+          "n": 31,
+          "pct": 67.4
         },
         {
           "zh": "P2020手枪",
           "zhShort": "P2020",
           "en": "P2020",
           "n": 7,
-          "pct": 17.5
+          "pct": 15.2
         },
         {
           "zh": "R-301自动步枪",
           "zhShort": "R-301",
           "en": "R-301",
           "n": 4,
-          "pct": 10.0
+          "pct": 8.7
         },
         {
           "zh": "RE-45自动手枪",
           "zhShort": "RE-45",
           "en": "RE-45",
           "n": 3,
-          "pct": 7.5
+          "pct": 6.5
         },
         {
           "zh": "EVA-8自动霰弹枪",
           "zhShort": "EVA-8自动",
           "en": "EVA-8",
           "n": 1,
-          "pct": 2.5
+          "pct": 2.2
         }
       ],
       "weaponPairs": [
@@ -7795,6 +8415,216 @@ module.exports = {
           "zh": "恶灵*红",
           "n": 1,
           "pct": 0.3
+        }
+      ]
+    },
+    {
+      "id": "xiaolin",
+      "name": "Xiaolin小霖",
+      "tag": "",
+      "role": "主播",
+      "source": "B站直播回放 · 第31赛季排位 · 45 帧",
+      "hours": 0,
+      "note": "英雄覆盖 85.1% · 未人工核验",
+      "heroes": [
+        {
+          "zh": "亡灵",
+          "en": "Revenant",
+          "n": 33,
+          "pct": 38.4
+        },
+        {
+          "zh": "密客",
+          "en": "Crypto",
+          "n": 22,
+          "pct": 25.6
+        },
+        {
+          "zh": "动力小子",
+          "en": "Octane",
+          "n": 14,
+          "pct": 16.3
+        },
+        {
+          "zh": "命脉",
+          "en": "Lifeline",
+          "n": 10,
+          "pct": 11.6
+        },
+        {
+          "zh": "探路者",
+          "en": "Pathfinder",
+          "n": 7,
+          "pct": 8.1
+        }
+      ],
+      "combos": [
+        {
+          "heroes": [
+            "亡灵",
+            "动力小子",
+            "密客"
+          ],
+          "en": [
+            "Revenant",
+            "Octane",
+            "Crypto"
+          ],
+          "n": 4,
+          "pct": 57.1
+        },
+        {
+          "heroes": [
+            "亡灵",
+            "命脉",
+            "密客"
+          ],
+          "en": [
+            "Revenant",
+            "Lifeline",
+            "Crypto"
+          ],
+          "n": 2,
+          "pct": 28.6
+        },
+        {
+          "heroes": [
+            "亡灵",
+            "密客",
+            "探路者"
+          ],
+          "en": [
+            "Revenant",
+            "Crypto",
+            "Pathfinder"
+          ],
+          "n": 1,
+          "pct": 14.3
+        }
+      ],
+      "weapons": [
+        {
+          "zh": "赫姆洛克突击步枪",
+          "zhShort": "赫姆洛克",
+          "en": "Hemlok",
+          "n": 18,
+          "pct": 32.7
+        },
+        {
+          "zh": "C.A.R冲锋枪",
+          "zhShort": "C.A.R",
+          "en": "C.A.R.",
+          "n": 12,
+          "pct": 21.8
+        },
+        {
+          "zh": "R-301自动步枪",
+          "zhShort": "R-301",
+          "en": "R-301",
+          "n": 10,
+          "pct": 18.2
+        },
+        {
+          "zh": "L-STAR能量机枪",
+          "zhShort": "L-STAR",
+          "en": "L-STAR",
+          "n": 7,
+          "pct": 12.7
+        },
+        {
+          "zh": "电能冲锋枪",
+          "zhShort": "电能",
+          "en": "Volt",
+          "n": 3,
+          "pct": 5.5
+        },
+        {
+          "zh": "EVA-8自动霰弹枪",
+          "zhShort": "EVA-8自动",
+          "en": "EVA-8",
+          "n": 2,
+          "pct": 3.6
+        },
+        {
+          "zh": "VK-47平行步枪",
+          "zhShort": "VK-47平行",
+          "en": "VK-47 Flatline",
+          "n": 2,
+          "pct": 3.6
+        },
+        {
+          "zh": "R-99冲锋枪",
+          "zhShort": "R-99",
+          "en": "R-99",
+          "n": 1,
+          "pct": 1.8
+        }
+      ],
+      "weaponPairs": [
+        {
+          "zh": [
+            "C.A.R",
+            "赫姆洛克"
+          ],
+          "zhFull": [
+            "C.A.R冲锋枪",
+            "赫姆洛克突击步枪"
+          ],
+          "en": [
+            "C.A.R.",
+            "Hemlok"
+          ],
+          "n": 5,
+          "pct": 50.0
+        },
+        {
+          "zh": [
+            "R-301",
+            "电能"
+          ],
+          "zhFull": [
+            "R-301自动步枪",
+            "电能冲锋枪"
+          ],
+          "en": [
+            "R-301",
+            "Volt"
+          ],
+          "n": 3,
+          "pct": 30.0
+        },
+        {
+          "zh": [
+            "C.A.R",
+            "VK-47平行"
+          ],
+          "zhFull": [
+            "C.A.R冲锋枪",
+            "VK-47平行步枪"
+          ],
+          "en": [
+            "C.A.R.",
+            "VK-47 Flatline"
+          ],
+          "n": 2,
+          "pct": 20.0
+        }
+      ],
+      "selfHeroes": [
+        {
+          "zh": "亡灵",
+          "n": 77,
+          "pct": 66.4
+        },
+        {
+          "zh": "疯马吉",
+          "n": 10,
+          "pct": 8.6
+        },
+        {
+          "zh": "探路者",
+          "n": 1,
+          "pct": 0.9
         }
       ]
     },
@@ -8099,548 +8929,49 @@ module.exports = {
       ]
     },
     {
-      "id": "jackyar",
-      "name": "Jackyar",
-      "tag": "",
-      "role": "主播",
-      "source": "B站直播回放 · 第31赛季排位 · 40 帧",
-      "hours": 0,
-      "note": "英雄覆盖 89.3% · 未人工核验",
-      "heroes": [
-        {
-          "zh": "动力小子",
-          "en": "Octane",
-          "n": 34,
-          "pct": 37.0
-        },
-        {
-          "zh": "亡灵",
-          "en": "Revenant",
-          "n": 28,
-          "pct": 30.4
-        },
-        {
-          "zh": "命脉",
-          "en": "Lifeline",
-          "n": 28,
-          "pct": 30.4
-        },
-        {
-          "zh": "密客",
-          "en": "Crypto",
-          "n": 2,
-          "pct": 2.2
-        }
-      ],
-      "combos": [
-        {
-          "heroes": [
-            "亡灵",
-            "动力小子",
-            "命脉"
-          ],
-          "en": [
-            "Revenant",
-            "Octane",
-            "Lifeline"
-          ],
-          "n": 12,
-          "pct": 100.0
-        }
-      ],
-      "weapons": [
-        {
-          "zh": "C.A.R冲锋枪",
-          "zhShort": "C.A.R",
-          "en": "C.A.R.",
-          "n": 34,
-          "pct": 38.6
-        },
-        {
-          "zh": "VK-47平行步枪",
-          "zhShort": "VK-47平行",
-          "en": "VK-47 Flatline",
-          "n": 29,
-          "pct": 33.0
-        },
-        {
-          "zh": "R-301自动步枪",
-          "zhShort": "R-301",
-          "en": "R-301",
-          "n": 7,
-          "pct": 8.0
-        },
-        {
-          "zh": "复仇女神连发突击步枪",
-          "zhShort": "复仇女神",
-          "en": "Nemesis",
-          "n": 4,
-          "pct": 4.5
-        },
-        {
-          "zh": "转换者冲锋枪",
-          "zhShort": "转换者",
-          "en": "Alternator",
-          "n": 3,
-          "pct": 3.4
-        },
-        {
-          "zh": "辅助手枪",
-          "zhShort": "辅助",
-          "en": "Wingman",
-          "n": 3,
-          "pct": 3.4
-        },
-        {
-          "zh": "赫姆洛克突击步枪",
-          "zhShort": "赫姆洛克",
-          "en": "Hemlok",
-          "n": 2,
-          "pct": 2.3
-        },
-        {
-          "zh": "哈沃克步枪",
-          "zhShort": "哈沃克",
-          "en": "Havoc",
-          "n": 2,
-          "pct": 2.3
-        },
-        {
-          "zh": "电能冲锋枪",
-          "zhShort": "电能",
-          "en": "Volt",
-          "n": 2,
-          "pct": 2.3
-        },
-        {
-          "zh": "暴走轻机枪",
-          "zhShort": "暴走",
-          "en": "Rampage",
-          "n": 1,
-          "pct": 1.1
-        },
-        {
-          "zh": "专注轻机枪",
-          "zhShort": "专注",
-          "en": "Devotion",
-          "n": 1,
-          "pct": 1.1
-        }
-      ],
-      "weaponPairs": [
-        {
-          "zh": [
-            "C.A.R",
-            "VK-47平行"
-          ],
-          "zhFull": [
-            "C.A.R冲锋枪",
-            "VK-47平行步枪"
-          ],
-          "en": [
-            "C.A.R.",
-            "VK-47 Flatline"
-          ],
-          "n": 24,
-          "pct": 66.7
-        },
-        {
-          "zh": [
-            "C.A.R",
-            "复仇女神"
-          ],
-          "zhFull": [
-            "C.A.R冲锋枪",
-            "复仇女神连发突击步枪"
-          ],
-          "en": [
-            "C.A.R.",
-            "Nemesis"
-          ],
-          "n": 3,
-          "pct": 8.3
-        },
-        {
-          "zh": [
-            "C.A.R",
-            "赫姆洛克"
-          ],
-          "zhFull": [
-            "C.A.R冲锋枪",
-            "赫姆洛克突击步枪"
-          ],
-          "en": [
-            "C.A.R.",
-            "Hemlok"
-          ],
-          "n": 2,
-          "pct": 5.6
-        },
-        {
-          "zh": [
-            "VK-47平行",
-            "电能"
-          ],
-          "zhFull": [
-            "VK-47平行步枪",
-            "电能冲锋枪"
-          ],
-          "en": [
-            "VK-47 Flatline",
-            "Volt"
-          ],
-          "n": 2,
-          "pct": 5.6
-        },
-        {
-          "zh": [
-            "转换者",
-            "R-301"
-          ],
-          "zhFull": [
-            "转换者冲锋枪",
-            "R-301自动步枪"
-          ],
-          "en": [
-            "Alternator",
-            "R-301"
-          ],
-          "n": 1,
-          "pct": 2.8
-        },
-        {
-          "zh": [
-            "转换者",
-            "复仇女神"
-          ],
-          "zhFull": [
-            "转换者冲锋枪",
-            "复仇女神连发突击步枪"
-          ],
-          "en": [
-            "Alternator",
-            "Nemesis"
-          ],
-          "n": 1,
-          "pct": 2.8
-        },
-        {
-          "zh": [
-            "C.A.R",
-            "暴走"
-          ],
-          "zhFull": [
-            "C.A.R冲锋枪",
-            "暴走轻机枪"
-          ],
-          "en": [
-            "C.A.R.",
-            "Rampage"
-          ],
-          "n": 1,
-          "pct": 2.8
-        },
-        {
-          "zh": [
-            "转换者",
-            "哈沃克"
-          ],
-          "zhFull": [
-            "转换者冲锋枪",
-            "哈沃克步枪"
-          ],
-          "en": [
-            "Alternator",
-            "Havoc"
-          ],
-          "n": 1,
-          "pct": 2.8
-        },
-        {
-          "zh": [
-            "C.A.R",
-            "R-301"
-          ],
-          "zhFull": [
-            "C.A.R冲锋枪",
-            "R-301自动步枪"
-          ],
-          "en": [
-            "C.A.R.",
-            "R-301"
-          ],
-          "n": 1,
-          "pct": 2.8
-        }
-      ],
-      "selfHeroes": [
-        {
-          "zh": "动力小子",
-          "n": 96,
-          "pct": 19.8
-        },
-        {
-          "zh": "直布罗陀",
-          "n": 79,
-          "pct": 16.3
-        },
-        {
-          "zh": "恶灵",
-          "n": 73,
-          "pct": 15.0
-        },
-        {
-          "zh": "探路者",
-          "n": 73,
-          "pct": 15.0
-        },
-        {
-          "zh": "密客",
-          "n": 66,
-          "pct": 13.6
-        },
-        {
-          "zh": "亡灵",
-          "n": 56,
-          "pct": 11.5
-        },
-        {
-          "zh": "卡特莉丝",
-          "n": 12,
-          "pct": 2.5
-        },
-        {
-          "zh": "变换",
-          "n": 3,
-          "pct": 0.6
-        }
-      ]
-    },
-    {
-      "id": "xiaolin",
-      "name": "Xiaolin小霖",
-      "tag": "",
-      "role": "主播",
-      "source": "B站直播回放 · 第31赛季排位 · 39 帧",
-      "hours": 0,
-      "note": "英雄覆盖 88.4% · 未人工核验",
-      "heroes": [
-        {
-          "zh": "亡灵",
-          "en": "Revenant",
-          "n": 28,
-          "pct": 36.8
-        },
-        {
-          "zh": "密客",
-          "en": "Crypto",
-          "n": 20,
-          "pct": 26.3
-        },
-        {
-          "zh": "动力小子",
-          "en": "Octane",
-          "n": 13,
-          "pct": 17.1
-        },
-        {
-          "zh": "命脉",
-          "en": "Lifeline",
-          "n": 8,
-          "pct": 10.5
-        },
-        {
-          "zh": "探路者",
-          "en": "Pathfinder",
-          "n": 7,
-          "pct": 9.2
-        }
-      ],
-      "combos": [
-        {
-          "heroes": [
-            "亡灵",
-            "动力小子",
-            "密客"
-          ],
-          "en": [
-            "Revenant",
-            "Octane",
-            "Crypto"
-          ],
-          "n": 3,
-          "pct": 60.0
-        },
-        {
-          "heroes": [
-            "亡灵",
-            "密客",
-            "探路者"
-          ],
-          "en": [
-            "Revenant",
-            "Crypto",
-            "Pathfinder"
-          ],
-          "n": 1,
-          "pct": 20.0
-        },
-        {
-          "heroes": [
-            "亡灵",
-            "命脉",
-            "密客"
-          ],
-          "en": [
-            "Revenant",
-            "Lifeline",
-            "Crypto"
-          ],
-          "n": 1,
-          "pct": 20.0
-        }
-      ],
-      "weapons": [
-        {
-          "zh": "赫姆洛克突击步枪",
-          "zhShort": "赫姆洛克",
-          "en": "Hemlok",
-          "n": 14,
-          "pct": 32.6
-        },
-        {
-          "zh": "R-301自动步枪",
-          "zhShort": "R-301",
-          "en": "R-301",
-          "n": 9,
-          "pct": 20.9
-        },
-        {
-          "zh": "C.A.R冲锋枪",
-          "zhShort": "C.A.R",
-          "en": "C.A.R.",
-          "n": 8,
-          "pct": 18.6
-        },
-        {
-          "zh": "L-STAR能量机枪",
-          "zhShort": "L-STAR",
-          "en": "L-STAR",
-          "n": 6,
-          "pct": 14.0
-        },
-        {
-          "zh": "电能冲锋枪",
-          "zhShort": "电能",
-          "en": "Volt",
-          "n": 3,
-          "pct": 7.0
-        },
-        {
-          "zh": "EVA-8自动霰弹枪",
-          "zhShort": "EVA-8自动",
-          "en": "EVA-8",
-          "n": 2,
-          "pct": 4.7
-        },
-        {
-          "zh": "R-99冲锋枪",
-          "zhShort": "R-99",
-          "en": "R-99",
-          "n": 1,
-          "pct": 2.3
-        }
-      ],
-      "weaponPairs": [
-        {
-          "zh": [
-            "C.A.R",
-            "赫姆洛克"
-          ],
-          "zhFull": [
-            "C.A.R冲锋枪",
-            "赫姆洛克突击步枪"
-          ],
-          "en": [
-            "C.A.R.",
-            "Hemlok"
-          ],
-          "n": 3,
-          "pct": 50.0
-        },
-        {
-          "zh": [
-            "R-301",
-            "电能"
-          ],
-          "zhFull": [
-            "R-301自动步枪",
-            "电能冲锋枪"
-          ],
-          "en": [
-            "R-301",
-            "Volt"
-          ],
-          "n": 3,
-          "pct": 50.0
-        }
-      ],
-      "selfHeroes": [
-        {
-          "zh": "亡灵",
-          "n": 77,
-          "pct": 66.4
-        },
-        {
-          "zh": "疯马吉",
-          "n": 10,
-          "pct": 8.6
-        },
-        {
-          "zh": "探路者",
-          "n": 1,
-          "pct": 0.9
-        }
-      ]
-    },
-    {
       "id": "leamonhead",
       "name": "leamonhead",
       "tag": "",
       "role": "主播",
-      "source": "B站直播回放 · 第31赛季排位 · 27 帧",
+      "source": "B站直播回放 · 第31赛季排位 · 32 帧",
       "hours": 0,
-      "note": "英雄覆盖 66.7% · 未人工核验",
+      "note": "英雄覆盖 65.2% · 未人工核验",
       "heroes": [
         {
           "zh": "动力小子",
           "en": "Octane",
-          "n": 15,
-          "pct": 39.5
+          "n": 18,
+          "pct": 41.9
         },
         {
           "zh": "探路者",
           "en": "Pathfinder",
           "n": 9,
-          "pct": 23.7
+          "pct": 20.9
         },
         {
           "zh": "命脉",
           "en": "Lifeline",
           "n": 9,
-          "pct": 23.7
+          "pct": 20.9
         },
         {
           "zh": "亡灵",
           "en": "Revenant",
           "n": 4,
-          "pct": 10.5
+          "pct": 9.3
+        },
+        {
+          "zh": "暴雷",
+          "en": "Fuse",
+          "n": 2,
+          "pct": 4.7
         },
         {
           "zh": "罗芭",
           "en": "Loba",
           "n": 1,
-          "pct": 2.6
+          "pct": 2.3
         }
       ],
       "combos": [],
@@ -8650,56 +8981,77 @@ module.exports = {
           "zhShort": "和平捍卫者",
           "en": "Peacekeeper",
           "n": 14,
-          "pct": 28.6
+          "pct": 24.6
         },
         {
           "zh": "转换者冲锋枪",
           "zhShort": "转换者",
           "en": "Alternator",
           "n": 9,
-          "pct": 18.4
+          "pct": 15.8
         },
         {
           "zh": "G7侦查步枪",
           "zhShort": "G7",
           "en": "G7 Scout",
           "n": 9,
-          "pct": 18.4
+          "pct": 15.8
         },
         {
           "zh": "VK-47平行步枪",
           "zhShort": "VK-47平行",
           "en": "VK-47 Flatline",
-          "n": 7,
-          "pct": 14.3
+          "n": 8,
+          "pct": 14.0
         },
         {
           "zh": "R-301自动步枪",
           "zhShort": "R-301",
           "en": "R-301",
-          "n": 6,
-          "pct": 12.2
+          "n": 7,
+          "pct": 12.3
+        },
+        {
+          "zh": "电能冲锋枪",
+          "zhShort": "电能",
+          "en": "Volt",
+          "n": 3,
+          "pct": 5.3
+        },
+        {
+          "zh": "C.A.R冲锋枪",
+          "zhShort": "C.A.R",
+          "en": "C.A.R.",
+          "n": 2,
+          "pct": 3.5
         },
         {
           "zh": "RE-45自动手枪",
           "zhShort": "RE-45",
           "en": "RE-45",
           "n": 2,
-          "pct": 4.1
+          "pct": 3.5
         },
         {
-          "zh": "电能冲锋枪",
-          "zhShort": "电能",
-          "en": "Volt",
+          "zh": "三重式狙击枪",
+          "zhShort": "三重式",
+          "en": "Triple Take",
           "n": 1,
-          "pct": 2.0
+          "pct": 1.8
+        },
+        {
+          "zh": "辅助手枪",
+          "zhShort": "辅助",
+          "en": "Wingman",
+          "n": 1,
+          "pct": 1.8
         },
         {
           "zh": "复仇女神连发突击步枪",
           "zhShort": "复仇女神",
           "en": "Nemesis",
           "n": 1,
-          "pct": 2.0
+          "pct": 1.8
         }
       ],
       "weaponPairs": [
@@ -8717,7 +9069,7 @@ module.exports = {
             "Peacekeeper"
           ],
           "n": 8,
-          "pct": 40.0
+          "pct": 38.1
         },
         {
           "zh": [
@@ -8733,7 +9085,7 @@ module.exports = {
             "VK-47 Flatline"
           ],
           "n": 6,
-          "pct": 30.0
+          "pct": 28.6
         },
         {
           "zh": [
@@ -8749,7 +9101,23 @@ module.exports = {
             "R-301"
           ],
           "n": 5,
-          "pct": 25.0
+          "pct": 23.8
+        },
+        {
+          "zh": [
+            "三重式",
+            "辅助"
+          ],
+          "zhFull": [
+            "三重式狙击枪",
+            "辅助手枪"
+          ],
+          "en": [
+            "Triple Take",
+            "Wingman"
+          ],
+          "n": 1,
+          "pct": 4.8
         },
         {
           "zh": [
@@ -8765,7 +9133,7 @@ module.exports = {
             "Volt"
           ],
           "n": 1,
-          "pct": 5.0
+          "pct": 4.8
         }
       ],
       "selfHeroes": [
